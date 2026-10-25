@@ -14,7 +14,9 @@
       "!**/worker-configuration.d.ts",
       "!apps/worker/migrations",
       "!**/routeTree.gen.ts",
-      "!**/*.md"
+      "!**/*.md",
+      "!pnpm-lock.yaml",
+      "!pnpm-workspace.yaml"
     ]
   },
   "formatter": {
