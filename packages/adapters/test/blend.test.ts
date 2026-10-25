@@ -16,6 +16,10 @@ const usdc = lendingAsset('mainnet', 'USDC');
 const xlm = lendingAsset('mainnet', 'XLM');
 
 const SUPPLY: LendingRequest[] = [{ type: 'supply', contractId: usdc.contractId, amount: 1_000_000_000n }];
+const REPAY: LendingRequest[] = [{ type: 'repay', contractId: usdc.contractId, amount: 10_010_000_000n }];
+const WITHDRAW_COLLATERAL: LendingRequest[] = [
+  { type: 'withdrawCollateral', contractId: xlm.contractId, amount: 50_000_000_000n },
+];
 const BORROW: LendingRequest[] = [
   { type: 'supplyCollateral', contractId: xlm.contractId, amount: 120_000_000_000n },
   { type: 'borrow', contractId: usdc.contractId, amount: 10_000_000_000n },
@@ -67,7 +71,7 @@ function submitTransaction(base: LendingRequest[], o: Overrides = {}) {
   const call = new xdr.InvokeContractArgs({ contractAddress: new Address(pool).toScAddress(), functionName, args });
   const defaultTransfers = (target: string) =>
     base
-      .filter((request) => request.type !== 'borrow')
+      .filter((request) => ['supply', 'supplyCollateral', 'repay'].includes(request.type))
       .map((request) => transfer(request.contractId, user.publicKey(), target, request.amount));
   const credentials = o.addressCredentials
     ? xdr.SorobanCredentials.sorobanCredentialsAddress(
@@ -141,7 +145,33 @@ describe('inspectBlendSubmit', () => {
     expect(codeOf(() => inspectBlendSubmit(submitTransaction(BORROW), expectedFor(BORROW)))).toBe('ACCEPTED');
   });
 
+  it('accepts a repay that authorizes only the repaid transfer, and a withdrawal that authorizes none', () => {
+    expect(codeOf(() => inspectBlendSubmit(submitTransaction(REPAY), expectedFor(REPAY)))).toBe('ACCEPTED');
+    expect(
+      codeOf(() => inspectBlendSubmit(submitTransaction(WITHDRAW_COLLATERAL), expectedFor(WITHDRAW_COLLATERAL))),
+    ).toBe('ACCEPTED');
+  });
+
   it.each([
+    [
+      'a repay that moves more than the reviewed amount',
+      REPAY,
+      { transfers: (pool: string) => [transfer(usdc.contractId, user.publicKey(), pool, 10_010_000_001n)] },
+      'AUTH_UNEXPECTED',
+    ],
+    [
+      'a withdrawal that also spends the account’s tokens',
+      WITHDRAW_COLLATERAL,
+      { transfers: (pool: string) => [transfer(xlm.contractId, user.publicKey(), pool, 1n)] },
+      'AUTH_UNEXPECTED',
+    ],
+    ['a withdrawal paid to someone else', WITHDRAW_COLLATERAL, { to: stranger.publicKey() }, 'ACCOUNT_MISMATCH'],
+    [
+      'a withdrawal turned into a borrow',
+      WITHDRAW_COLLATERAL,
+      { requests: [{ type: 4, contractId: xlm.contractId, amount: 50_000_000_000n }] },
+      'REQUESTS_MISMATCH',
+    ],
     ['another registered pool', SUPPLY, { pool: YIELDBLOX }, 'CONTRACT_NOT_ALLOWED'],
     [
       'an unregistered contract',

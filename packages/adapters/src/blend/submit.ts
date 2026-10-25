@@ -17,8 +17,15 @@ import { NETWORK_PASSPHRASES } from '../stellar/networks.ts';
 import { VenueRefusal } from '../venue.ts';
 import { blendPool, LENDING_SYMBOLS, lendingAsset } from './markets.ts';
 
-/** Blend pool request types (blend-sdk RequestType). Withdraw and repay are not offered yet. */
-export const BLEND_REQUEST_TYPES = { supply: 0, supplyCollateral: 2, borrow: 4 } as const;
+/** Blend pool request types (blend-sdk RequestType). Auctions and flash loans are not offered. */
+export const BLEND_REQUEST_TYPES = {
+  supply: 0,
+  withdraw: 1,
+  supplyCollateral: 2,
+  withdrawCollateral: 3,
+  borrow: 4,
+  repay: 5,
+} as const;
 export type LendingRequestType = keyof typeof BLEND_REQUEST_TYPES;
 
 export interface LendingRequest {
@@ -34,7 +41,7 @@ const SUBMIT_FUNCTION = 'submit';
 
 /** Requests that move the user's tokens into the pool, which the user authorizes as a transfer. */
 function spends(request: LendingRequest): boolean {
-  return request.type === 'supply' || request.type === 'supplyCollateral';
+  return request.type === 'supply' || request.type === 'supplyCollateral' || request.type === 'repay';
 }
 
 function requestScVal(request: LendingRequest): xdr.ScVal {
@@ -76,9 +83,7 @@ export async function buildBlendSubmit(input: {
     spend: input.requests
       .filter(spends)
       .map((request) => ({ asset: classic(request.contractId), amount: request.amount })),
-    receive: input.requests
-      .filter((request) => request.type === 'borrow')
-      .map((request) => classic(request.contractId)),
+    receive: input.requests.filter((request) => !spends(request)).map((request) => classic(request.contractId)),
     feeStroops: 10_000_000n,
   });
 
@@ -119,7 +124,7 @@ export interface InspectedLending {
 /**
  * Accepts a built Blend transaction only when it is exactly the reviewed action: one `submit` on
  * the registered pool, the account as from, spender and receiver, exactly the reviewed requests,
- * and authorization only for transferring what is supplied, from the account to that pool.
+ * and authorization only for transferring what is supplied or repaid, from the account to that pool.
  */
 export function inspectBlendSubmit(
   xdrText: string,
@@ -223,7 +228,10 @@ function spend(
     left === undefined ||
     amount > left
   ) {
-    fail('AUTH_UNEXPECTED', 'The pool action authorizes moving more, or another token, than is being supplied.');
+    fail(
+      'AUTH_UNEXPECTED',
+      'The pool action authorizes moving more, or another token, than is being supplied or repaid.',
+    );
   }
   allowance.set(invocation.source, left - amount);
 }
