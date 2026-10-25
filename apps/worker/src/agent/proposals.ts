@@ -40,6 +40,8 @@ export function createProposalService(env: Env): ProposalService {
       const deps = executionDeps(env);
       const intent = await createLendingIntent(deps, { ...input, source: 'chat' });
       const base = { intentId: intent.id, kind: intent.kind, asset: intent.asset };
+      // Repay and withdraw are compared against the user's own position, which only the card can read.
+      if (intent.kind !== 'supply' && intent.kind !== 'borrow') return { ...base, offers: [], excluded: [] };
       try {
         const compared = await compareIntent(deps, intent.id);
         if (!('excluded' in compared)) throw new Error('No lending offers were returned.');

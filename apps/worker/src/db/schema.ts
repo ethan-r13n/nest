@@ -110,7 +110,7 @@ export const assetRegistry = sqliteTable(
   ],
 );
 
-export const INTENT_KINDS = ['swap', 'supply', 'borrow'] as const;
+export const INTENT_KINDS = ['swap', 'supply', 'borrow', 'repay', 'withdraw', 'withdraw_collateral'] as const;
 export const INTENT_SOURCES = ['chat', 'form'] as const;
 export const PLAN_STATUSES = [
   'policy_checked',
@@ -136,11 +136,13 @@ export const intents = sqliteTable(
     buyAsset: text('buy_asset').notNull(),
     sellAmountRaw: text('sell_amount_raw').notNull(),
     source: text('source', { enum: INTENT_SOURCES }).notNull(),
-    // Lending intents: sell_asset/sell_amount_raw hold the asset supplied or borrowed, buy_asset the same
-    // asset; the pool and any collateral live here.
+    // Lending intents: sell_asset/sell_amount_raw hold the asset supplied, borrowed, repaid or withdrawn,
+    // buy_asset the same asset; the pool and any collateral live here.
     marketId: text('market_id'),
     collateralAsset: text('collateral_asset'),
     collateralAmountRaw: text('collateral_amount_raw'),
+    // Repay and withdraw: 1 means the whole position, sized when compared; sell_amount_raw is then 0.
+    wholePosition: integer('whole_position').notNull().default(0),
     createdAtMs: integer('created_at_ms').notNull(),
   },
   () => [check('intents_network_ck', NETWORK_CHECK)],

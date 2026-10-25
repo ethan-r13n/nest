@@ -964,11 +964,11 @@ Output a versioned proposal requiring explicit human review, regression tests, a
 
 ## Experimental durable conversations
 
-Evaluate **Pi Durable** separately behind `NestAgentRuntime` only if restart-resumable agent conversations justify the additional runtime work. It is an experimental alternative to the embedded coding-agent runtime, not a storage toggle or another loop layered on top. Candidate experiment pins are `@earendil-works/pi-durable`, `@earendil-works/pi-ai`, and `@earendil-works/chord` 1.4.0; leave them out of P0 dependencies. [Durable runtime](https://github.com/earendil-works/pi/blob/v1.4.0/packages/durable/README.md)
+Evaluate **Pi Durable** separately behind `NestAgentRuntime` only if restart-resumable agent conversations justify the additional runtime work. It is an experimental alternative to the embedded agent-core runtime, not a storage toggle or another loop layered on top. Candidate experiment pins are `@earendil-works/pi-durable`, `@earendil-works/pi-ai`, and `@earendil-works/chord` 1.4.0; leave them out of P0 dependencies. [Durable runtime](https://github.com/earendil-works/pi/blob/v1.4.0/packages/durable/README.md)
 
 Use its own conversation store/ownership lease and the same restricted research/planning tool contract. Its request deduplication/checkpoints do not deduplicate blockchain transactions. A restarted phase or replay-safe tool may run again; no financial effect is made safe by conversation durability. Never replace authoritative D1 financial records, automatically repeat authorizations/submissions, or restore spend permissions from a transcript.
 
-Acceptance: kill/restart around model/tool checkpoints, duplicate admission IDs, verify tenant/store ownership, and confirm transaction counts and approval state remain unchanged. Pending financial reconciliation must continue independently. Resume re-reads live plans and requires new review when their validity changed. Durable Objects remain an optional conversation-hosting evaluation for the Cloudflare architecture. They cannot replace D1 transaction state or justify automatically replaying financial actions.
+Acceptance: kill/restart around model/tool checkpoints, duplicate admission IDs, verify tenant/store ownership, and confirm transaction counts and approval state remain unchanged. Pending financial reconciliation must continue independently. Resume re-reads live plans and requires new review when their validity changed. Cloudflare Durable Objects currently host conversations; Pi Durable remains a separate experimental runtime option. They cannot replace D1 transaction state or justify automatically replaying financial actions.
 
 ## Unattended limit and conditional orders
 

@@ -398,6 +398,6 @@ describe('propose_intent', () => {
     expect(proposalOf(end('propose_intent', false, { intentId: 'intent-2', kind: 'supply' }))).toMatchObject({
       kind: 'supply',
     });
-    expect(proposalOf(end('propose_intent', false, { intentId: 'intent-2', kind: 'withdraw' }))).toBeNull();
+    expect(proposalOf(end('propose_intent', false, { intentId: 'intent-2', kind: 'flash_loan' }))).toBeNull();
   });
 });

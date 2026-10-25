@@ -49,8 +49,9 @@ export async function loadBlendMarkets(network: StellarNetwork, rpcUrl: string, 
 }
 
 /**
- * The account's health in a pool before and after adding collateral and debt, using the pool's
- * own reserves, oracle and token conversions.
+ * The account's health in a pool before and after changing its collateral and debt, using the
+ * pool's own reserves, oracle and token conversions. Positive amounts add; negative amounts remove,
+ * rounded so the estimate never flatters the result.
  */
 export async function estimateBlendHealth(input: {
   network: StellarNetwork;
@@ -67,11 +68,21 @@ export async function estimateBlendHealth(input: {
   const next = new Positions(new Map(current.liabilities), new Map(current.collateral), new Map(current.supply));
   if (input.collateral) {
     const reserve = reserveOf(pool, input.collateral.contractId);
-    add(next.collateral, reserve.config.index, reserve.toBTokensFromAssetFloor(input.collateral.amountRaw));
+    const amount = input.collateral.amountRaw;
+    add(
+      next.collateral,
+      reserve.config.index,
+      amount >= 0n ? reserve.toBTokensFromAssetFloor(amount) : -reserve.toBTokensFromAssetCeil(-amount),
+    );
   }
   if (input.borrow) {
     const reserve = reserveOf(pool, input.borrow.contractId);
-    add(next.liabilities, reserve.config.index, reserve.toDTokensFromAssetCeil(input.borrow.amountRaw));
+    const amount = input.borrow.amountRaw;
+    add(
+      next.liabilities,
+      reserve.config.index,
+      amount >= 0n ? reserve.toDTokensFromAssetCeil(amount) : -reserve.toDTokensFromAssetFloor(-amount),
+    );
   }
   const before = PositionsEstimate.build(pool, oracle, current);
   const after = PositionsEstimate.build(pool, oracle, next);
@@ -81,6 +92,71 @@ export async function estimateBlendHealth(input: {
     collateralUsdAfter: after.totalEffectiveCollateral,
     liabilitiesUsdAfter: after.totalEffectiveLiabilities,
   };
+}
+
+export interface PositionView {
+  symbol: LendingSymbol;
+  contractId: string;
+  /** Lent to the pool, earning the supply rate; not collateral. */
+  suppliedRaw: bigint;
+  collateralRaw: bigint;
+  /** Owed, including interest accrued so far. */
+  debtRaw: bigint;
+  supplyApyPct: number;
+  borrowApyPct: number;
+}
+
+export interface PoolPositions {
+  poolId: string;
+  name: string;
+  statusLabel: string;
+  positions: PositionView[];
+  /** Blend's health factor, or null without debt. */
+  health: number | null;
+  observedAtMs: number;
+}
+
+/** The account's positions in every registered Blend pool where it holds any, in asset amounts. */
+export async function loadBlendPositions(
+  network: StellarNetwork,
+  rpcUrl: string,
+  account: string,
+  now = Date.now,
+): Promise<PoolPositions[]> {
+  const results = await Promise.all(
+    BLEND_POOLS[network].map(async (entry): Promise<PoolPositions | null> => {
+      const pool = await PoolV2.load(blendNetwork(network, rpcUrl), entry.id);
+      const user = await pool.loadUser(account);
+      const { supply, collateral, liabilities } = user.positions;
+      const positions = (['XLM', 'USDC'] as const).flatMap((symbol): PositionView[] => {
+        const asset = lendingAsset(network, symbol);
+        const reserve = pool.reserves.get(asset.contractId);
+        if (!reserve) return [];
+        const index = reserve.config.index;
+        const view = {
+          symbol,
+          contractId: asset.contractId,
+          suppliedRaw: reserve.toAssetFromBToken(supply.get(index) ?? 0n),
+          collateralRaw: reserve.toAssetFromBToken(collateral.get(index) ?? 0n),
+          debtRaw: reserve.toAssetFromDToken(liabilities.get(index) ?? 0n),
+          supplyApyPct: reserve.estSupplyApy * 100,
+          borrowApyPct: reserve.estBorrowApy * 100,
+        };
+        return view.suppliedRaw || view.collateralRaw || view.debtRaw ? [view] : [];
+      });
+      if (!positions.length) return null;
+      const oracle = await pool.loadOracle();
+      return {
+        poolId: entry.id,
+        name: entry.name,
+        statusLabel: poolStatusLabel(pool.metadata.status),
+        positions,
+        health: healthOf(PositionsEstimate.build(pool, oracle, user.positions)),
+        observedAtMs: now(),
+      };
+    }),
+  );
+  return results.filter((result) => result !== null);
 }
 
 async function loadMarket(
@@ -140,7 +216,9 @@ function reserveOf(pool: Pool, contractId: string) {
 }
 
 function add(map: Map<number, bigint>, index: number, amount: bigint): void {
-  map.set(index, (map.get(index) ?? 0n) + amount);
+  const total = (map.get(index) ?? 0n) + amount;
+  if (total > 0n) map.set(index, total);
+  else map.delete(index);
 }
 
 function healthOf(estimate: PositionsEstimate): number | null {

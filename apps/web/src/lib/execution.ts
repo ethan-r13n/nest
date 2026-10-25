@@ -71,13 +71,21 @@ export interface Plan extends PlanBase {
   received: AssetAmount | null;
 }
 
-export type LendingKind = 'supply' | 'borrow';
+export type LendingKind = 'supply' | 'borrow' | 'repay' | 'withdraw' | 'withdraw_collateral';
+type LendingRequestType = 'supply' | 'supplyCollateral' | 'borrow' | 'repay' | 'withdraw' | 'withdrawCollateral';
+
+/** Repay and withdraw act on a position the connected wallet already holds. */
+export function isExitKind(kind: LendingKind): kind is 'repay' | 'withdraw' | 'withdraw_collateral' {
+  return kind === 'repay' || kind === 'withdraw' || kind === 'withdraw_collateral';
+}
 
 export interface LendingIntent {
   id: string;
   network: 'mainnet' | 'testnet';
   kind: LendingKind;
+  /** `amount` is "all" when the whole position is repaid or withdrawn. */
   asset: AssetAmount;
+  wholePosition: boolean;
   collateral: (Partial<AssetAmount> & { symbol: string }) | null;
 }
 
@@ -93,6 +101,13 @@ export interface LendingOffer {
   available: AssetAmount;
   estimatedHealth: number | null;
   targetHealth: number | null;
+  /** Repay and withdraw: what the account holds in this pool now and what the request asks for. */
+  position: {
+    held: AssetAmount;
+    kind: 'debt' | 'supplied' | 'collateral';
+    health: number | null;
+    requested: AssetAmount;
+  } | null;
   withdrawalTiming: { lockup: string; cooldown: string; summary: string };
   nestFeeBps: number;
   expiresAt: string;
@@ -112,7 +127,7 @@ export interface LendingPlan extends PlanBase {
     hash: string;
     networkPassphrase: string;
     fee: AssetAmount;
-    requests: (AssetAmount & { type: 'supply' | 'supplyCollateral' | 'borrow' })[];
+    requests: (AssetAmount & { type: LendingRequestType })[];
     health: { before: number | null; after: number | null; warning: boolean };
     validUntil: string | null;
   } | null;
@@ -180,7 +195,11 @@ export const execution = {
   lendingIntent: (id: string) => call<LendingIntent>(`/api/intents/${id}`),
   createLending: (input: { kind: LendingKind; asset: 'USDC' | 'XLM'; amount: string; poolId?: string }) =>
     call<LendingIntent>('/api/intents', { method: 'POST', body: input }),
-  compareLending: (intentId: string) => call<LendingComparison>(`/api/intents/${intentId}/compare`, { method: 'POST' }),
+  compareLending: (intentId: string, accountId?: string) =>
+    call<LendingComparison>(`/api/intents/${intentId}/compare`, {
+      method: 'POST',
+      ...(accountId ? { body: { accountId } } : {}),
+    }),
   lendingMarkets: () => call<LendingMarkets>('/api/markets/lending'),
   trustline: (input: { accountId: string; use: TrustlineUse }) =>
     call<PreparedTrustline>('/api/trustlines', { method: 'POST', body: input }),
@@ -264,7 +283,7 @@ export function planProblem(plan: PlanBase): string | null {
     case 'NOT_INCLUDED':
       return 'The transaction expired without being included. Nothing changed.';
     case 'HEALTH_TOO_LOW':
-      return 'This loan would leave your position at or below liquidation. Add collateral or borrow less.';
+      return 'This would leave your loan at or below the point where Blend liquidates. Repay first, or use a smaller amount.';
     case 'POOL_STATUS':
       return 'The pool does not allow this action in its current status.';
     case 'LIQUIDITY_INSUFFICIENT':

@@ -1,4 +1,4 @@
-import type { HealthEstimate, MarketView } from '@nest/adapters/blend/reader';
+import type { HealthEstimate, MarketView, PoolPositions } from '@nest/adapters/blend/reader';
 import { buildBlendSubmit, type LendingRequest } from '@nest/adapters/blend/submit';
 import { createSoroswapVenue, SoroswapError } from '@nest/adapters/soroswap/client';
 import { createSdexVenue } from '@nest/adapters/stellar/sdex';
@@ -23,6 +23,7 @@ type IntentKind = (typeof INTENT_KINDS)[number];
 /** Blend reads and builds, injected so tests can run without a network. */
 interface LendingVenue {
   markets(): Promise<MarketView[]>;
+  positions(account: string): Promise<PoolPositions[]>;
   health(input: {
     poolId: string;
     account: string;
@@ -55,6 +56,7 @@ export function executionDeps(env: Env): ExecutionDeps {
       ? {
           // Blend's SDK is large, so it loads on the first lending read rather than with every request.
           markets: async () => (await blendReader()).loadBlendMarkets(config.network, rpcUrl),
+          positions: async (account) => (await blendReader()).loadBlendPositions(config.network, rpcUrl, account),
           health: async (input) =>
             (await blendReader()).estimateBlendHealth({ network: config.network, rpcUrl, ...input }),
           build: (input) => buildBlendSubmit({ network: config.network, rpcUrl, nowMs: Date.now(), ...input }),
@@ -93,6 +95,8 @@ export interface IntentRow {
   market_id: string | null;
   collateral_asset: string | null;
   collateral_amount_raw: string | null;
+  /** Repay and withdraw: 1 for the whole position. */
+  whole_position: number;
   created_at_ms: number;
 }
 
@@ -153,8 +157,8 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
   await deps.db
     .prepare(
       `INSERT INTO intents (id, network, kind, sell_asset, buy_asset, sell_amount_raw, source, market_id,
-         collateral_asset, collateral_amount_raw, created_at_ms)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         collateral_asset, collateral_amount_raw, whole_position, created_at_ms)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       row.id,
@@ -167,6 +171,7 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
       row.market_id,
       row.collateral_asset,
       row.collateral_amount_raw,
+      row.whole_position,
       row.created_at_ms,
     )
     .run();

@@ -1,12 +1,16 @@
 import type { AgentEvent } from '@earendil-works/pi-agent-core';
 
+/** Actions an agent proposal can carry; the browser picks the card by kind. */
+export const PROPOSAL_KINDS = ['swap', 'supply', 'borrow', 'repay', 'withdraw', 'withdraw_collateral'] as const;
+export type ProposalKind = (typeof PROPOSAL_KINDS)[number];
+
 /** The only agent events that reach the browser. Hidden reasoning, prompts and raw arguments never do. */
 export type PublicAgentEvent =
   | { type: 'text_delta'; delta: string }
   | { type: 'tool_started'; toolCallId: string; name: string }
   | { type: 'tool_completed'; toolCallId: string; name: string; isError: boolean }
   /** An application-created proposal the browser renders from its own records, never from model text. */
-  | { type: 'proposal'; kind: 'swap' | 'supply' | 'borrow'; intentId: string }
+  | { type: 'proposal'; kind: ProposalKind; intentId: string }
   | { type: 'settled' }
   /** `stopped`: the user stopped it. `lost`: the process running it went away. */
   | { type: 'interrupted'; reason: 'stopped' | 'lost' }
