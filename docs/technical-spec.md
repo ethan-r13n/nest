@@ -268,7 +268,7 @@ Configure app secrets and hosted model access through Worker secrets, complete R
 
 ## Runtime dependencies
 
-Pin the Pi packages below exactly and commit the resolved lockfile. Do not mix older namespaces or Pi forks. Add `pi-agent-core` directly only if Nest imports it; otherwise keep the SDK's matching transitive version. Use a maintained Node release satisfying the SDK minimum for local tooling, package resolution, collectors and CI. The engine declaration below is not proof that Pi runs in Workers; validate that hosting separately. [Pi release](https://github.com/earendil-works/pi/releases/tag/v1.4.0), [package manifest](https://github.com/earendil-works/pi/blob/v1.4.0/packages/coding-agent/package.json)
+Pin the Pi packages below exactly and commit the resolved lockfile. Do not mix older namespaces or Pi forks. Add `pi-agent-core` directly only if Nest imports it; otherwise keep the SDK's matching transitive version. Use a maintained Node release satisfying the SDK minimum for local tooling, package resolution, collectors and CI. The engine declaration below is not proof that Pi runs in Workers; validate that hosting separately. [Pi release](https://github.com/earendil-works/pi/releases/tag/v1.4.0), [package manifest](https://www.npmjs.com/package/@earendil-works/pi-agent-core/v/1.4.0)
 
 ```json
 {
@@ -353,51 +353,37 @@ Never expose prepare/approve/sign/submit, policy or registry writes, shell/files
 
 ## Embedded Pi runtime
 
-Construct every Pi session explicitly. Supply an app-owned logical/virtual runtime directory supported by the validated host, app-owned `ResourceLoader`, in-memory settings, selected model, scoped credential store, exact tools, and a `SessionManager` hydrated from approved conversation storage. Workers filesystem paths are not persistence. Resource loading returns no ambient extensions, AGENTS files, prompt templates, themes, or local MCP configuration. Startup must fail if the active tool set differs from Nest's approved registry. [SDK construction](https://github.com/earendil-works/pi/blob/v1.4.0/packages/coding-agent/src/core/sdk.ts)
+The deployed runtime uses `@earendil-works/pi-agent-core` with `pi-ai` and `pi-mcp`, pinned to compatible versions. `packages/agent-runtime/src/agent.ts` constructs `Agent` explicitly; it does not load the coding-agent facade, terminal tools, filesystem resources, CLI extensions, or ambient model configuration.
+
+The host supplies a selected model, a stream function, a scoped API-key callback, a fixed system prompt, approved tools, finalized messages, a conversation identifier, and turn limits. `assertExactTools` rejects an unexpected registry. The bridge's `beforeToolCall` blocks tools outside that registry and stops a turn that exceeds its tool-call allowance. The host bounds duration and model output.
 
 ```typescript
-import {
-  createAgentSession, ModelRuntime, SessionManager, SettingsManager
-} from '@earendil-works/pi-coding-agent';
+import { createNestAgent, DEFAULT_TURN_LIMITS, runTurn } from '@nest/agent-runtime/agent';
+import { assertExactTools } from '@nest/agent-runtime/tools';
 
-// Every input/helper below is implemented by Nest, not a Pi global default.
-const modelRuntime = await ModelRuntime.create({
-  credentials: credentialStore,
-  modelsPath: null,
-  allowModelNetwork: false
+// All values are supplied by the application host after validation.
+assertExactTools(approvedTools, approvedNames);
+const agent = createNestAgent({
+  model,
+  streamFn,
+  getApiKey,
+  systemPrompt,
+  tools: approvedTools,
+  messages: finalizedMessages,
+  limits: DEFAULT_TURN_LIMITS,
+  sessionId: conversationId,
 });
-const model = modelRuntime.getModel(config.provider, config.modelId);
-if (!model) throw new Error('Configured model unavailable');
-
-const sessionManager = SessionManager.inMemory(
-  runtimeDirectory, undefined, savedFileEntries
-);
-restoreActiveLeaf(sessionManager, savedLeafId);
-
-const { session } = await createAgentSession({
-  cwd: runtimeDirectory,
-  agentDir: applicationAgentDirectory,
-  modelRuntime, model, scopedModels: [{ model }],
-  resourceLoader: createExplicitResourceLoader(systemPrompt),
-  sessionManager,
-  settingsManager: SettingsManager.inMemory({
-    compaction: { enabled: true },
-    retry: { enabled: true, maxRetries: 2 }
-  }),
-  noTools: 'builtin',
-  tools: approvedTools.map(tool => tool.name),
-  customTools: approvedTools,
-  excludeTools: ['read', 'bash', 'edit', 'write', 'grep', 'find', 'ls', 'powershell']
-});
-assertExactActiveTools(session.getActiveToolNames(), approvedTools);
-const unsubscribe = session.subscribe(event => publishApprovedAgentEvent(event));
-await session.prompt(userText, { expandPromptTemplates: false });
-// At teardown: unsubscribe(); session.dispose(); await ravenClient.close();
+const unsubscribe = agent.subscribe(publishApprovedAgentEvent);
+try {
+  await runTurn(agent, userText, DEFAULT_TURN_LIMITS.deadlineMs);
+} finally {
+  unsubscribe();
+}
 ```
 
-`createExplicitResourceLoader` implements the pinned `ResourceLoader` interface: empty extensions/skills/prompts/themes/agents-file discovery results, a fixed system prompt, no appended ambient prompts, and no discovery in reload/extend operations. Use `createExtensionRuntime()` for the required empty extension-runtime value. Approved skill metadata is listed in that prompt; `read_skill(skillId)` returns only versioned bundled/database content by registry ID. Do not enable a general file reader to activate Pi's stock skill prompt. [Resource loader](https://github.com/earendil-works/pi/blob/v1.4.0/packages/coding-agent/src/core/resource-loader.ts), [skill prompt behavior](https://github.com/earendil-works/pi/blob/v1.4.0/packages/coding-agent/src/core/system-prompt.ts)
+SQLite-backed Durable Objects own conversation admission, finalized messages, application event IDs, cancellation and replay boundaries. Restore a generation from finalized messages without granting it financial approval authority. Tool definitions explicitly declare whether replay is safe; state-changing tools run sequentially. A generation's retry or cancellation cannot sign, submit, or cancel a financial transaction.
 
-Do not expose Pi's CLI/RPC command dispatcher or `executeBash`. Slash-looking chat is inert text under `expandPromptTemplates: false`. Serialize turns per conversation; subscribe before prompting, persist finalized messages, and treat `agent_settled` as settled after retry/queued work. Cancellation stops generation; it does not cancel or repeat financial actions. Basic SDK restoration resumes from the last stored conversation checkpoint and marks interrupted turns; it is not crash-proof mid-tool execution.
+The wider v1 contracts include registered skills, context compaction, saved authenticated history, and richer checkpoint inspection. These require explicit application integrations and their acceptance tests; they are not supplied by enabling a coding-agent CLI. Skills must be read by registered ID/version, never an arbitrary file path. Compaction must preserve factual provenance and leave financial D1 records untouched.
 
 ## Raven MCP connection
 
@@ -409,11 +395,11 @@ Preserve Raven's structured success/error envelopes, source timestamps, and cave
 
 ## Model and credential configuration
 
-Prefer Pi's current `openai` subscription OAuth for an operator-controlled local walkthrough if the actual account/provider flow and permitted usage work; do not select the separately labeled legacy `openai-codex` provider by default or import existing Codex auth files. Pi supports `ModelRuntime.login(providerId, 'oauth', interaction, { getDeviceId, agentName: 'Nest' })`; the current flow needs a stable installation UUID and operator browser/loopback interaction. Keep provider login outside the public tool/API surface. [Pi provider implementation](https://github.com/earendil-works/pi/blob/v1.4.0/packages/ai/src/providers/openai.ts)
+The implemented provider is OpenRouter with a server-held API key. `apps/worker/src/agent/models.ts` registers the provider explicitly and rejects unknown or paid models. The committed model is `thinkingmachines/inkling:free`; a provider's model must have a free identifier and zero configured input/output/cache prices. There is no automatic paid fallback.
 
-Use `openrouter` with a server-held API key as the configured fallback for a hosted app. Require an explicit supported model ID, allowed-provider list, request/token budget, and cost ceiling. Provider switches are recorded planning configuration changes; they cannot repeat financial submissions or alter signed plan payloads. Pi's subscription adapter establishes technical support, not a verified shared public-app entitlement. OpenAI documents subscription sign-in for local use and recommends API credentials for programmatic workflows. [OpenAI authentication](https://learn.chatgpt.com/docs/auth), [Pi OpenRouter](https://pi.dev/docs/latest/providers#openrouter)
+The Worker passes its own API-key callback into Pi. It does not import desktop authentication files, resolve credentials through shell commands, or expose credentials to browser code or tool output. Tests use a scripted provider with no live API calls. Provider failures remain explicit errors or unavailable states.
 
-Keep credentials in an app-owned `CredentialStore`, sanitize ambient provider variables, and never allow command-backed credential resolution. `allowModelNetwork: false` prevents ambient model-catalog discovery in the example; it does not block configured model inference. Configure any needed model metadata explicitly. Fail with a configuration error rather than silently selecting an unapproved model/provider.
+Additional provider/OAuth support is a future integration decision, subject to the same explicit model selection, request deadlines, output limits, bounded concurrency and credential isolation. Provider changes cannot expand financial permissions or repeat a submitted transaction.
 
 ## Wallet authentication
 
