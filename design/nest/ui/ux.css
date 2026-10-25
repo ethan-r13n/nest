@@ -1,0 +1,12 @@
+.ux-help{display:inline-flex;align-items:center;justify-content:center;vertical-align:middle;width:28px;height:28px;min-width:28px;padding:0;margin:0 0 0 5px;border:0;border-radius:50%;background:transparent;color:var(--text-muted,#a2ae97);cursor:help;font:inherit;letter-spacing:normal;line-height:1}
+.ux-help:hover,.ux-help[aria-expanded=true]{color:var(--accent,#ff5a00);background:rgba(255,90,0,.09)}
+.ux-help:focus-visible{outline:2px solid var(--accent,#ff5a00);outline-offset:2px}
+.ux-tooltip{position:fixed;inset:auto;box-sizing:border-box;margin:0;padding:14px 16px;max-width:calc(100vw - 24px);border:1px solid #65705c;border-radius:10px;background:#202c1b;color:#f1f0df;box-shadow:0 8px 28px #0006;font:400 13px/1.6 'IBM Plex Sans',sans-serif;letter-spacing:normal;text-transform:none;text-align:left;z-index:10000;white-space:normal;overflow-wrap:anywhere}
+.ux-field-error{display:block;margin:8px 0 0;flex-basis:100%;color:#ffb3a3;font:400 13px/1.5 'IBM Plex Sans',sans-serif;letter-spacing:normal;text-transform:none}
+.ux-field-error:empty{display:none}
+[data-ux-invalid=true]{border-color:#f28e7c!important;outline-color:#f28e7c}
+.ux-recovery-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:20px}
+.ux-recovery{max-width:760px;margin:40px auto}
+.ux-recovery p{max-width:60ch;margin:12px auto;color:var(--text-muted,#a2ae97)}
+@media(pointer:coarse){.ux-help{width:44px;height:44px;min-width:44px;margin:-8px 0 -8px 3px}}
+@media(prefers-reduced-motion:reduce){.ux-tooltip{scroll-behavior:auto}}

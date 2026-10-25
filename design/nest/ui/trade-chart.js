@@ -1,102 +1,139 @@
 (function () {
-  const periods = { '1m': 60, '5m': 300, '15m': 900, '1H': 3600, '4H': 14400, '1D': 86400 };
-  const end = Date.parse('2026-10-25T14:30:00Z') / 1000;
   let cleanup = () => {};
-
-  function fixture(interval) {
-    const step = periods[interval] || periods['1H'];
-    let seed = 7241 + step, previous = 1630000;
-    const random = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
-    const rows = Array.from({ length: 120 }, (_, i) => {
-      const open = previous, close = Math.max(1300000, open + Math.round((random() - .46) * 18000));
-      previous = close;
-      return { time: Math.floor(end / step) * step - (119 - i) * step, open, close,
-        high: Math.max(open, close) + Math.round(2000 + random() * 11000),
-        low: Math.min(open, close) - Math.round(2000 + random() * 11000),
-        volume: Math.round(20000 + random() * 160000) };
-    });
-    const offset = 1742800 - rows[119].close;
-    return rows.map(row => ({ ...row, open: row.open + offset, high: row.high + offset,
-      low: row.low + offset, close: row.close + offset }));
+  const intervals = ['1m', '5m', '15m', '1H', '4H', '1D'];
+  const format = value => Number(value).toLocaleString('en-US', { maximumFractionDigits: Number(value) < .01 ? 8 : Number(value) < 10 ? 5 : 2 });
+  const stamp = time => new Date(time * 1000).toLocaleString('en-GB', { timeZone: 'UTC', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
+  function normalize(payload, asset, interval) {
+    if (payload.asset !== asset || payload.quote !== 'USDC' || payload.interval !== interval || !['line', 'candles'].includes(payload.kind)) throw Error('History does not match this market');
+    const seen = new Map(), now = Date.now() / 1000, sampled = payload.kind === 'line';
+    for (const row of payload.rows || []) {
+      if (!Number.isInteger(row.time) || row.time > now + 60 || row.time <= 0) continue;
+      const values = sampled ? [row.value] : [row.open, row.high, row.low, row.close];
+      if (!values.every(v => typeof v === 'number' && Number.isFinite(v) && v > 0)) continue;
+      if (!sampled && (row.high < Math.max(row.open, row.close) || row.low > Math.min(row.open, row.close) || row.volume != null && (!Number.isFinite(row.volume) || row.volume < 0))) continue;
+      seen.set(row.time, row);
+    }
+    let rows = [...seen.values()].sort((a, b) => a.time - b.time);
+    if (sampled) {
+      const step = { '1m': 60, '5m': 300, '15m': 900, '1H': 3600, '4H': 14400, '1D': 86400 }[interval], buckets = new Map();
+      for (const point of rows) {
+        const time = Math.floor(point.time / step) * step;
+        if (!buckets.has(time)) buckets.set(time, { time, open: point.value, high: point.value, low: point.value, close: point.value, samples: 0 });
+        const row = buckets.get(time); row.high = Math.max(row.high, point.value); row.low = Math.min(row.low, point.value); row.close = point.value; row.samples++;
+      }
+      rows = [...buckets.values()];
+    }
+    if (!rows.length) throw Error('No valid history for this interval');
+    return { ...payload, kind: 'candles', candleBasis: sampled ? 'observations' : payload.candleBasis, note: sampled ? 'Sampled-price OHLC. ' + payload.note : payload.note, volumeAvailable: !sampled && payload.volumeAvailable !== false && rows.every(row => Number.isFinite(row.volume)), rows };
   }
-
-  const price = value => (value / 1e7).toFixed(5);
-  function mount(root) {
+  function mount(root, market = { asset: 'XLM', label: 'XLM' }) {
     cleanup();
-    const host = root.querySelector('[data-trade-chart]');
+    const host = root.querySelector('[data-trade-chart]'), L = window.LightweightCharts;
     if (!host) return;
-    host.innerHTML = `<div class="nest-candle-readout" data-candle-readout></div>
-      <div class="nest-candle-stage" tabindex="0" role="group" aria-label="XLM USDC candlestick chart. Use left and right arrows to inspect candles, plus and minus to zoom." data-candle-stage></div>
-      <div class="nest-candle-controls"><span>OHLC · volume · UTC</span><div role="group" aria-label="Chart navigation"><button type="button" data-chart-action="older" aria-label="Earlier candles">←</button><button type="button" data-chart-action="newer" aria-label="Later candles">→</button><button type="button" data-chart-action="out" aria-label="Zoom out">−</button><button type="button" data-chart-action="in" aria-label="Zoom in">+</button><button type="button" data-chart-action="reset">Fit</button></div></div><span class="sr-only" role="status" data-candle-announcement></span>`;
-    const stage = host.querySelector('[data-candle-stage]'), readout = host.querySelector('[data-candle-readout]');
-    let interval = '1H', rows = fixture(interval), count = 72, last = rows.length, selected = last - 1, metrics;
-    const stamp = row => new Date(row.time * 1000).toLocaleString('en-GB', { timeZone: 'UTC', month: 'short', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false });
-    function inspect(announce = false) {
-      const row = rows[selected];
-      readout.innerHTML = `<span>${stamp(row)}</span><span>O <b>${price(row.open)}</b></span><span>H <b>${price(row.high)}</b></span><span>L <b>${price(row.low)}</b></span><span>C <b class="${row.close >= row.open ? 'positive' : 'negative'}">${price(row.close)}</b></span><span>Vol <b>${row.volume.toLocaleString('en-US')} XLM</b></span>`;
-      const line = stage.querySelector('[data-crosshair]');
-      if (line && metrics) {
-        const x = metrics.left + (selected - metrics.first + .5) * metrics.cell;
-        const y = metrics.y(row.close);
-        line.innerHTML = `<path d="M${x} 12V${metrics.height - 28}M${metrics.left} ${y}H${metrics.width - 64}"/><circle cx="${x}" cy="${y}" r="3"/>`;
+    if (!L) { host.textContent = 'Chart library unavailable. Reload to retry.'; return; }
+    const events = new AbortController();
+    host.dataset.asset = market.asset; host.dataset.pointCount = '0';
+    root.querySelector('[data-market-price]').textContent = '—'; root.querySelector('[data-market-change]').textContent = '—'; root.querySelector('[data-market-source]').textContent = 'Loading…'; root.querySelector('[data-market-volume]').textContent = 'Loading…'; root.querySelector('[data-chart-source]').textContent = 'Loading timestamped market history…';
+    let controller, generation = 0, rows = [], series, volume, chartKind, interval = market.asset === 'EUTBL' ? '1D' : '1H', selected, disposed = false, timer, fetching = false;
+    host.innerHTML = `<div class="nest-candle-readout" data-candle-readout aria-live="off">Loading ${market.label} / USDC…</div><div class="nest-tv-shell"><div class="nest-tv-stage" data-candle-stage tabindex="0" role="group" aria-label="${market.label} / USDC interactive TradingView chart. Scroll or pinch to zoom, drag to pan. Plus and minus zoom; arrows pan."></div><div class="nest-tv-message" data-chart-message role="status">Loading market history…</div></div><div class="nest-candle-controls"><span data-chart-range>UTC · USDC</span><div role="group" aria-label="Chart navigation"><button type="button" data-chart-action="older" aria-label="Earlier prices">←</button><button type="button" data-chart-action="newer" aria-label="Later prices">→</button><button type="button" data-chart-action="out" aria-label="Zoom out">−</button><button type="button" data-chart-action="in" aria-label="Zoom in">+</button><button type="button" data-chart-action="fit">Fit</button><button type="button" data-chart-action="auto" aria-pressed="true">Auto</button><button type="button" data-chart-action="log" aria-pressed="false">Log</button><button type="button" data-chart-action="retry" aria-label="Refresh chart data">↻</button></div></div><span class="sr-only" role="status" data-candle-announcement></span>`;
+    const stage = host.querySelector('[data-candle-stage]'), readout = host.querySelector('[data-candle-readout]'), message = host.querySelector('[data-chart-message]');
+    const colors = getComputedStyle(root), theme = name => colors.getPropertyValue(name).trim();
+    const chart = L.createChart(stage, {
+      width: Math.max(240, stage.clientWidth), height: 390,
+      layout: { background: { type: L.ColorType.Solid, color: theme('--bg') || '#0d150c' }, textColor: theme('--dim') || '#9bab91', fontFamily: 'monospace', fontSize: 11, attributionLogo: true },
+      grid: { vertLines: { color: '#84927614' }, horzLines: { color: '#84927620' } },
+      rightPriceScale: { autoScale: true, borderColor: '#84927630', minimumWidth: 64 },
+      timeScale: { timeVisible: true, secondsVisible: false, rightOffset: 4, borderColor: '#84927630' },
+      crosshair: { mode: L.CrosshairMode.Normal, vertLine: { labelBackgroundColor: '#253020' }, horzLine: { labelBackgroundColor: '#253020' } },
+      handleScale: { mouseWheel: true, pinch: true, axisPressedMouseMove: true, axisDoubleClickReset: true },
+      handleScroll: { mouseWheel: false, pressedMouseMove: true, horzTouchDrag: true, vertTouchDrag: false },
+    });
+    const valueOf = row => row.close;
+    function inspect(row) {
+      if (!row) return;
+      selected = row;
+      readout.replaceChildren();
+      const text = `${stamp(row.time)} UTC   O ${format(row.open)}  H ${format(row.high)}  L ${format(row.low)}  C ${format(row.close)} USDC` + (Number.isFinite(row.volume) ? `   Vol ${format(row.volume)} ${market.label}` : '');
+      readout.textContent = text;
+    }
+    chart.subscribeCrosshairMove(event => { const bar = event.seriesData.get(series); if (bar) inspect(rows.find(r => r.time === event.time)); });
+    chart.timeScale().subscribeVisibleLogicalRangeChange(range => {
+      if (!range) return;
+      const count = Math.max(1, Math.round(range.to - range.from));
+      host.querySelector('[data-chart-range]').textContent = `${count} bars in view · UTC · USDC`;
+      host.dataset.visibleBars = String(count);
+    });
+    function auto() { chart.priceScale('right').applyOptions({ autoScale: true }); host.querySelector('[data-chart-action=auto]').setAttribute('aria-pressed', 'true'); }
+    function action(kind) {
+      const scale = chart.timeScale(), range = scale.getVisibleLogicalRange();
+      if (kind === 'retry') { load(false); return; }
+      if (kind === 'fit') { auto(); scale.fitContent(); return; }
+      if (kind === 'auto') { auto(); return; }
+      if (kind === 'log') { const button = host.querySelector('[data-chart-action=log]'), on = button.getAttribute('aria-pressed') !== 'true'; chart.priceScale('right').applyOptions({ mode: on ? L.PriceScaleMode.Logarithmic : L.PriceScaleMode.Normal, autoScale: true }); button.setAttribute('aria-pressed', String(on)); return; }
+      if (!range || !rows.length) return;
+      const width = range.to - range.from;
+      if (kind === 'older' || kind === 'newer') {
+        const shift = width * (kind === 'older' ? -.2 : .2); scale.setVisibleLogicalRange({ from: range.from + shift, to: range.to + shift });
+      } else {
+        const next = Math.max(5, Math.min(rows.length * 2, width * (kind === 'in' ? .75 : 1.333333))), center = (range.from + range.to) / 2;
+        auto(); scale.setVisibleLogicalRange({ from: center - next / 2, to: center + next / 2 });
       }
-      if (announce) host.querySelector('[data-candle-announcement]').textContent = `${stamp(row)} UTC. Open ${price(row.open)}, high ${price(row.high)}, low ${price(row.low)}, close ${price(row.close)} USDC. Volume ${row.volume} XLM.`;
     }
-    function draw() {
-      const width = Math.max(260, Math.round(stage.getBoundingClientRect().width)), height = 360, left = 8, right = 64;
-      const visibleCount = Math.min(count, width < 480 ? 42 : count), first = Math.max(0, last - visibleCount), visible = rows.slice(first, last);
-      selected = Math.max(first, Math.min(last - 1, selected));
-      const low = Math.min(...visible.map(r => r.low)), high = Math.max(...visible.map(r => r.high)), pad = (high - low) * .12;
-      const y = value => 18 + (high + pad - value) / (high - low + pad * 2) * 248;
-      const cell = (width - left - right) / visible.length, body = Math.max(1, Math.min(9, cell * .65));
-      const maxVolume = Math.max(...visible.map(r => r.volume));
-      metrics = { width, height, left, cell, first, y };
-      const grid = Array.from({ length: 5 }, (_, i) => {
-        const value = high + pad - (high - low + pad * 2) * i / 4, top = y(value);
-        return `<path class="nc-grid" d="M${left} ${top}H${width - right}"/><text x="${width - right + 8}" y="${top + 4}">${price(value)}</text>`;
-      }).join('');
-      const candles = visible.map((r, i) => {
-        const x = left + (i + .5) * cell, tone = r.close >= r.open ? 'nc-up' : 'nc-down';
-        return `<g class="${tone}" data-candle><path d="M${x} ${y(r.high)}V${y(r.low)}"/><rect x="${x - body / 2}" y="${Math.min(y(r.open), y(r.close))}" width="${body}" height="${Math.max(1, Math.abs(y(r.open) - y(r.close)))}"/><rect class="nc-volume" x="${x - body / 2}" y="${322 - r.volume / maxVolume * 44}" width="${body}" height="${r.volume / maxVolume * 44}"/></g>`;
-      }).join('');
-      const labels = [0, Math.floor((visible.length - 1) / 2), visible.length - 1].map((i, n) => `<text x="${left + (i + .5) * cell}" y="348" text-anchor="${n === 0 ? 'start' : n === 2 ? 'end' : 'middle'}">${stamp(visible[i])}</text>`).join('');
-      const current = y(rows[rows.length - 1].close);
-      stage.innerHTML = `<svg viewBox="0 0 ${width} ${height}" aria-hidden="true">${grid}${candles}<path class="nc-last" d="M${left} ${current}H${width - right}"/><rect class="nc-price-tag" x="${width - right}" y="${current - 10}" width="64" height="20"/><text class="nc-price-text" x="${width - right + 6}" y="${current + 4}">0.17428</text><g data-crosshair class="nc-crosshair"></g>${labels}</svg>`;
-      host.querySelector('[data-chart-action=older]').disabled = last <= visibleCount;
-      host.querySelector('[data-chart-action=newer]').disabled = last >= rows.length;
-      host.querySelector('[data-chart-action=in]').disabled = count <= 24;
-      host.querySelector('[data-chart-action=out]').disabled = count >= 120;
-      inspect();
+    host.querySelectorAll('[data-chart-action]').forEach(button => button.addEventListener('click', () => action(button.dataset.chartAction), { signal: events.signal }));
+    stage.addEventListener('keydown', event => {
+      const actions = { '+': 'in', '=': 'in', '-': 'out', ArrowLeft: 'older', ArrowRight: 'newer', Home: 'fit' };
+      if (actions[event.key]) { event.preventDefault(); action(actions[event.key]); host.querySelector('[data-candle-announcement]').textContent = host.querySelector('[data-chart-range]').textContent; }
+    }, { signal: events.signal });
+    const observer = new ResizeObserver(() => chart.applyOptions({ width: Math.max(240, stage.clientWidth) })); observer.observe(stage);
+    function intervalButtons() {
+      root.querySelectorAll('[data-time]').forEach(button => { button.disabled = market.asset === 'EUTBL' && button.dataset.time !== '1D'; button.classList.toggle('active', button.dataset.time === interval); button.setAttribute('aria-pressed', String(button.dataset.time === interval)); button.title = button.disabled ? 'The issuer publishes daily NAV' : ''; });
     }
-    function action(key) {
-      if (key === 'in') count = Math.max(24, count - 12);
-      if (key === 'out') count = Math.min(120, count + 12);
-      if (key === 'older') last = Math.max(Math.min(count, 42), last - 12);
-      if (key === 'newer') last = Math.min(rows.length, last + 12);
-      if (key === 'reset') { count = 72; last = rows.length; }
-      selected = last - 1; draw();
-    }
-    const pointer = event => {
-      selected = Math.max(metrics.first, Math.min(last - 1, metrics.first + Math.floor((event.clientX - stage.getBoundingClientRect().left - metrics.left) / metrics.cell)));
-      inspect();
-    };
-    const keys = event => {
-      if (['ArrowLeft', 'ArrowRight', '+', '=', '-'].includes(event.key)) {
-        event.preventDefault();
-        if (event.key === '+' || event.key === '=') action('in');
-        else if (event.key === '-') action('out');
-        else { selected = Math.max(metrics.first, Math.min(last - 1, selected + (event.key === 'ArrowLeft' ? -1 : 1))); inspect(true); }
+    root.querySelectorAll('[data-time]').forEach(button => button.addEventListener('click', () => { if (interval === button.dataset.time) return; interval = button.dataset.time; intervalButtons(); load(true); }, { signal: events.signal }));
+    async function load(reset) {
+      if (fetching && !reset) return;
+      controller?.abort(); controller = new AbortController();
+      const current = ++generation; fetching = true;
+      const requestController = controller, timeout = setTimeout(() => requestController.abort(), 60000);
+      if (reset || !rows.length) { rows = []; series?.setData([]); volume?.setData([]); message.hidden = false; message.textContent = 'Loading market history…'; }
+      root.querySelector('[data-chart-interval]').textContent = interval + ' history';
+      let payload, snapshot = false;
+      try {
+        const local = ['127.0.0.1', 'localhost'].includes(location.hostname);
+        const base = local ? `http://${location.hostname}:8766` : '';
+        const response = await fetch(`${base}/api/market-history?asset=${encodeURIComponent(market.asset)}&interval=${interval}`, { signal: requestController.signal });
+        if (!response.ok) throw Error('History provider unavailable');
+        payload = normalize(await response.json(), market.asset, interval);
+      } catch (error) {
+        if (disposed || current !== generation) { clearTimeout(timeout); return; }
+        try { const response = await fetch('trade-market-history.json', { signal: events.signal }); if (!response.ok) throw error; payload = normalize((await response.json())[market.asset], market.asset, interval); snapshot = true; }
+        catch (_) { if (!rows.length) { message.hidden = false; message.textContent = 'History is temporarily unavailable for this interval. Try another interval or refresh.'; readout.textContent = market.label + ' / USDC'; } root.querySelector('[data-chart-source]').textContent = 'History unavailable · refresh to retry'; fetching = false; clearTimeout(timeout); return; }
       }
-    };
-    host.querySelectorAll('[data-chart-action]').forEach(button => button.addEventListener('click', () => action(button.dataset.chartAction)));
-    root.querySelectorAll('[data-time]').forEach(button => button.addEventListener('click', () => {
-      interval = button.dataset.time; rows = fixture(interval); last = rows.length; selected = last - 1;
-      root.querySelectorAll('[data-time]').forEach(b => { b.classList.toggle('active', b === button); b.setAttribute('aria-pressed', String(b === button)); });
-      root.querySelector('[data-chart-interval]').textContent = interval + ' candles'; draw();
-    }));
-    stage.addEventListener('pointermove', pointer); stage.addEventListener('keydown', keys);
-    const observer = new ResizeObserver(draw); observer.observe(stage); draw();
-    cleanup = () => { observer.disconnect(); stage.removeEventListener('pointermove', pointer); stage.removeEventListener('keydown', keys); cleanup = () => {}; };
+      clearTimeout(timeout);
+      if (disposed || current !== generation) return;
+      fetching = false;
+      const changed = !series || Boolean(volume) !== payload.volumeAvailable;
+      if (changed) { if (series) chart.removeSeries(series); if (volume) chart.removeSeries(volume); volume = null; chartKind = 'candles';
+        const close = payload.rows.at(-1).close, precision = close < .01 ? 8 : close < 10 ? 5 : 2;
+        series = chart.addSeries(L.CandlestickSeries, { upColor: '#a6c794', downColor: '#f5827a', wickUpColor: '#a6c794', wickDownColor: '#f5827a', borderVisible: false, color: '#ff6b00', lineWidth: 2, priceFormat: { type: 'price', precision, minMove: 10 ** -precision } });
+        chart.priceScale('right').applyOptions({ scaleMargins: { top: .08, bottom: payload.volumeAvailable ? .25 : .08 } });
+        if (payload.volumeAvailable) { volume = chart.addSeries(L.HistogramSeries, { priceFormat: { type: 'volume' }, priceScaleId: 'volume', lastValueVisible: false, priceLineVisible: false }); volume.priceScale().applyOptions({ scaleMargins: { top: .82, bottom: 0 } }); chart.priceScale('right').applyOptions({ scaleMargins: { top: .08, bottom: .25 } }); }
+      }
+      const range = chart.timeScale().getVisibleLogicalRange(); rows = payload.rows; series.setData(rows);
+      if (volume) volume.setData(rows.map(r => ({ time: r.time, value: r.volume, color: r.close >= r.open ? '#a6c79450' : '#f5827a50' })));
+      message.hidden = true; inspect(rows.at(-1));
+      if (reset || changed || !range) chart.timeScale().fitContent(); else chart.timeScale().setVisibleLogicalRange(range);
+      host.dataset.chartKind = chartKind; host.dataset.candleBasis = payload.candleBasis || 'observations'; host.dataset.pointCount = String(rows.length); host.dataset.source = payload.source; host.dataset.asset = market.asset;
+      const at = rows.at(-1).time, reference = valueOf(rows.at(-1));
+      root.querySelector('[data-market-price]').textContent = format(payload.spot?.value || reference) + ' USDC';
+      root.querySelector('[data-market-source]').textContent = (payload.spot?.source || payload.source) + (snapshot ? ' · saved' : '');
+      root.querySelector('[data-market-volume]').textContent = `${rows.length} candles`;
+      const yesterday = [...rows].reverse().find(r => r.time <= at - 86400), change = root.querySelector('[data-market-change]');
+      change.textContent = yesterday ? ((reference / valueOf(yesterday) - 1) * 100).toFixed(2) + '%' : '—'; change.className = yesterday ? (reference >= valueOf(yesterday) ? 'positive' : 'negative') : '';
+      root.querySelector('[data-chart-source]').textContent = `${payload.source} · ${snapshot ? 'saved ' : ''}${stamp(at)} UTC · ${payload.note}`;
+      root.querySelector('[data-chart-interval]').textContent = interval + ' candles';
+    }
+    intervalButtons(); load(true); timer = setInterval(() => load(false), 60000);
+    cleanup = () => { disposed = true; generation++; events.abort(); controller?.abort(); clearInterval(timer); observer.disconnect(); chart.remove(); cleanup = () => {}; };
   }
-  window.NestTradeChart = { mount, dispose: () => cleanup(), fixture };
+  window.NestTradeChart = { mount, dispose: () => cleanup(), normalize, intervals };
 })();

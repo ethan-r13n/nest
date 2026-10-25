@@ -10,9 +10,9 @@
       "title": "Protocol detail",
       "group": "Research",
       "before": "Only a compact facts modal existed.",
-      "design": "Description, scoped metrics, markets, audit/admin/oracle coverage, source website and action entry points.",
+      "design": "Scoped metrics, protocol overview, exact-protocol Stellar yield pools where captured, Raven/Scout project context, side-by-side actions and compact dependencies sidebar.",
       "planned_api": "GET /api/research/protocols/:slug",
-      "states": "Unavailable history; research-only opportunity; partial source data"
+      "states": "Yield coverage present/absent; Scout matched/unmatched/unavailable; project-family context; dated source data"
     },
     {
       "route": "asset-detail",
@@ -39,34 +39,28 @@
       "before": "Borrow and positions existed; Supply mode was missing.",
       "design": "Amount/horizon comparison, rates and incentives separately, exclusions and withdrawal disclosure before review.",
       "planned_api": "POST /api/intents; POST /api/intents/:id/compare",
-      "states": "Changed input invalidates results; missing source; no comparable route"
+      "states": "Changed input invalidates results; missing source; no comparable route",
+      "layout": {
+        "max_width_px": 1180,
+        "columns": "Single centered column with a 24px gap",
+        "primary_panel": "Supply intent spans the same full bounded width as Supply comparison, with 24px padding, a 28px serif heading and two-column form fields",
+        "comparison": "Directly beneath Supply intent at the same width and left/right edges; contained horizontal scrolling on small screens",
+        "removed_panels": [
+          "How comparison works",
+          "Your supplied positions"
+        ],
+        "narrow": "At workspace width <=800px, both panels remain stacked in a single column capped at 640px",
+        "behavior": "Existing inputs, calculation, exclusions, withdrawal disclosure and shared review remain unchanged"
+      }
     },
     {
       "route": "portfolio",
       "title": "Portfolio overview",
       "group": "Portfolio",
       "before": "A sparse two-row overview needed expansion.",
-      "design": "Assets minus liabilities, wallet/supply/vault/credit groups, exits, pending workflows, valuation and cost-basis coverage.",
+      "design": "Compact net value, allocation breakdown and full-width positions with Manage links directly to native controls. Overview and Activity are the only tabs.",
       "planned_api": "GET /api/portfolio/:account",
       "states": "Partial valuations; unknown imported basis; no double counting"
-    },
-    {
-      "route": "fund",
-      "title": "Receive & funding",
-      "group": "Portfolio",
-      "before": "Missing.",
-      "design": "Account/network/memo, trustline/reserve/activation, external-provider availability, on-chain arrival verification.",
-      "planned_api": "Stellar account adapter; configured funding provider",
-      "states": "Unfunded account; pending arrival; missing trustline; provider unavailable"
-    },
-    {
-      "route": "transfer",
-      "title": "Send assets",
-      "group": "Portfolio",
-      "before": "Missing.",
-      "design": "Amount, destination and memo, receiver inspection, fee/reserve checks and shared review gate.",
-      "planned_api": "Typed transfer intent; receiver resolve; plans prepare",
-      "states": "Invalid amount/account/memo; insufficient spendable; network mismatch"
     },
     {
       "route": "activity",
@@ -85,24 +79,6 @@
       "design": "Signature/submission/reconciliation/next signature/external/partial/confirmed/error specimens with exact revision and separate recovery review.",
       "planned_api": "GET /api/plans/:id; GET /api/plans/:id/events",
       "states": "Awaiting signature; submitted; reconciling; partial completion; confirmed; failed; expired; cancelled"
-    },
-    {
-      "route": "vault-management",
-      "title": "Redemptions & campaign lots",
-      "group": "Vaults",
-      "before": "Product facts existed; owned-position management was incomplete.",
-      "design": "Request/settlement/claim, pending receivable accounting, per-lot selection and explicit unvested reward forfeiture.",
-      "planned_api": "Adapter request/redeem/claim; confirmed portfolio effects",
-      "states": "Pending settlement; claimable; lot amount invalid; rewards lost"
-    },
-    {
-      "route": "automation-history",
-      "title": "Automation detail & evaluations",
-      "group": "Lab",
-      "before": "Builder existed; durable history and proposal detail were missing.",
-      "design": "Pinned rule revision, true/false/unknown evaluations, dedup/cooldown evidence, proposal review, pause/resume.",
-      "planned_api": "GET /api/automations/:id; /evaluations; /triggers",
-      "states": "Source unavailable; unknown skip; dedup; proposed action; paused"
     },
     {
       "route": "connections",
@@ -150,22 +126,13 @@
       "states": "Guest; watched; unverified; challenge rejected; account/network mismatch"
     },
     {
-      "route": "backtest-run",
-      "title": "Backtest run inspection",
-      "group": "Lab / P1",
-      "before": "Runner existed; reproducibility and run-detail coverage incomplete.",
-      "design": "Pinned assumptions, same-dataset comparison, unsupported models and coverage; working runner remains linked.",
-      "planned_api": "P1 backtest run and event APIs",
-      "states": "Synthetic data; unavailable historical data; missing model"
-    },
-    {
-      "route": "learning-runs",
-      "title": "Learning-run draft",
-      "group": "Lab / P1",
-      "before": "Explicit deferred spec had no design.",
-      "design": "Bounded objective, tools, read/runtime budget, stop reasons, findings and explicit acceptance boundary.",
-      "planned_api": "P1 learning-run API contract",
-      "states": "Draft; budget exhausted; cancelled; complete; proposals unaccepted"
+      "route": "lab-history",
+      "title": "Strategy history",
+      "group": "Lab",
+      "before": "Backtests and automations had separate fixture surfaces.",
+      "design": "One history tab stores confirmed backtest requests and monitor setups, source inputs, assumptions and conversation, with saved strategy previews.",
+      "planned_api": "Application-owned strategy, backtest and monitor lifecycle services",
+      "states": "Empty; saved locally; awaiting historical data; not scheduled; filtered; restored"
     }
   ],
   "fixture_rules": [
@@ -186,5 +153,6 @@
     "Deposit/collateral disclosure visible before review.",
     "Policy save and financial action approval remain separate.",
     "Native venue risk and source scopes preserved."
-  ]
+  ],
+  "portfolio_feedback": "portfolio-feedback.json"
 }

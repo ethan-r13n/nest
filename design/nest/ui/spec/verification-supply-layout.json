@@ -1,0 +1,28 @@
+{
+  "date": "2026-10-25",
+  "scope": "Single-column Supply intent and comparison; supporting sidebar removed",
+  "responsive": [
+    {
+      "comparisonWidth": 328,
+      "intentWidth": 328,
+      "pass": true,
+      "sidebarAbsent": true,
+      "width": 360
+    },
+    {
+      "comparisonWidth": 961,
+      "intentWidth": 961,
+      "pass": true,
+      "sidebarAbsent": true,
+      "width": 1009
+    },
+    {
+      "comparisonWidth": 1180,
+      "intentWidth": 1180,
+      "pass": true,
+      "sidebarAbsent": true,
+      "width": 1425
+    }
+  ],
+  "comparisonBinderUnchanged": true
+}

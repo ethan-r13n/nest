@@ -5,28 +5,30 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    "./blend/markets": "./src/blend/markets.ts",
-    "./blend/reader": "./src/blend/reader.ts",
-    "./blend/submit": "./src/blend/submit.ts",
     "./soroswap/client": "./src/soroswap/client.ts",
     "./soroswap/contracts": "./src/soroswap/contracts.ts",
-    "./stellar/accounts": "./src/stellar/accounts.ts",
     "./stellar/assets": "./src/stellar/assets.ts",
     "./stellar/inspect": "./src/stellar/inspect.ts",
     "./stellar/networks": "./src/stellar/networks.ts",
     "./stellar/sdex": "./src/stellar/sdex.ts",
-    "./stellar/trustline": "./src/stellar/trustline.ts",
-    "./venue": "./src/venue.ts"
+    "./venue": "./src/venue.ts",
+    "./aquarius/client": "./src/aquarius/client.ts",
+    "./blend/markets": "./src/blend/markets.ts",
+    "./blend/reader": "./src/blend/reader.ts",
+    "./blend/submit": "./src/blend/submit.ts",
+    "./stellar/accounts": "./src/stellar/accounts.ts",
+    "./stellar/trustline": "./src/stellar/trustline.ts"
   },
   "scripts": {
     "typecheck": "tsc && tsc -p tsconfig.node.json",
     "test": "vitest run"
   },
   "dependencies": {
-    "@blend-capital/blend-sdk": "catalog:",
     "@nest/domain": "workspace:*",
     "@stellar/stellar-sdk": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@nest/data": "workspace:*",
+    "@blend-capital/blend-sdk": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "catalog:",

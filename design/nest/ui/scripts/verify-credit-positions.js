@@ -1,0 +1,40 @@
+const fs=require('node:fs');
+const vm=require('node:vm');
+const path=require('node:path');
+const assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const context=vm.createContext({location:{hash:''},URLSearchParams,window:{NestUI:{escape,logo:()=>''},NestScreens:{},NestBinders:{}}});
+for(const file of ['credit-position-model.js','screens/positions.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context);
+const M=context.window.NestCreditPositions,blend=M.find('blend-loan'),xoxno=M.find('xoxno-loan'),supply=M.find('blend-supply');
+assert.equal(M.actions(blend).length,4);assert.equal(M.actions(supply).length,2);
+assert.ok(Math.abs(M.balances(blend).hf-1.7)<0.00000001);assert.equal(M.balances(xoxno).hf,null);
+assert.equal(M.balances({...blend,threshold:null}).hf,null);
+assert.ok(Math.abs(M.balances(blend).ltv-47.0588235)<0.000001);
+const add=M.project(blend,'add-collateral','500');assert.equal(add.after.collateral,10500);assert.equal(add.after.debt,800);assert.equal(add.asset,'XLM');
+assert.ok(Math.abs(add.after.hf-1.785)<0.000001);
+assert.equal(M.project(blend,'withdraw-collateral','5000').after,null);
+assert.ok(M.project({...blend,threshold:null},'withdraw-collateral','1').errors.length);
+assert.equal(M.project(blend,'repay','801').after,null);
+assert.equal(M.project(blend,'repay','200').after.debt,600);
+const closed=M.project(blend,'close','ignored');assert.equal(closed.after.debt,0);assert.equal(closed.after.ltv,0);assert.equal(closed.after.hf,null);
+assert.equal(M.project(supply,'deposit','100').after.supplied,1100);
+assert.equal(M.project(supply,'withdraw','100').after.supplied,900);
+assert.equal(M.project(supply,'withdraw','1000').after.supplied,0);
+assert.equal(M.project(supply,'withdraw','1000.0000001').after,null);
+assert.equal(M.project(supply,'repay','10').after,null);
+for(const input of ['', '0','-1','1e2','NaN','1.00000001'])assert.ok(M.project(supply,'deposit',input).errors.length,input);
+assert.equal(M.project(supply,'deposit','0.0000001').after.supplied,1000.0000001);
+assert.equal(M.totals().net,2405);
+for(const position of M.positions){
+ context.window.NestCreditPositionDemo={position:position.id,action:M.actions(position)[0][0],amount:M.defaults(position,M.actions(position)[0][0])};
+ const html=context.window.NestScreens.positions();
+ for(const removed of ['Funding confirmed','Position activity','State study','credit-health','Venue-specific term'])assert.ok(!html.includes(removed),removed);
+ assert.match(html,/APR · borrow \/ lend/);assert.match(html,/LTV \/ HF/);
+ const manager=html.split('id="credit-management"')[1];
+ assert.equal((manager.match(/data-position-action=/g)||[]).length,position.kind==='supply'?2:4);
+ if(position.kind==='supply'){assert.ok(!/LTV|HF|Repay|collateral/.test(manager));assert.match(manager,/data-review="deposit"/);}
+ else assert.match(manager,/data-review="add-collateral"/);
+ const supplyRow=html.match(/<tr data-position-row="blend-supply"[^]*?<\/tr>/)[0];assert.ok(!/cp-risk-line|>LTV<|>HF</.test(supplyRow));
+}
+console.log(JSON.stringify({result:'passed',positions:3,loanActions:4,supplyActions:2,checks:['loan and supply projections','native risk availability','withdrawal boundaries','repayment limits','decimal input validity','supply hides risk metrics','removed sections absent']},null,2));

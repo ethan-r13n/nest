@@ -1,0 +1,57 @@
+{
+  "version": "portfolio1",
+  "date": "2026-10-25",
+  "status": "Implemented in the local design runtime",
+  "removed": [
+    "Wallet/spendable, direct-supply, vault-receipt and pending-exit summary cards",
+    "Gross-assets/debt summary block",
+    "Summary coverage timestamp and badges",
+    "Needs attention and Underlying exposure sidebar cards",
+    "Receive, Send and Redemptions tabs and their standalone screens"
+  ],
+  "retained": [
+    "Net portfolio value",
+    "Value breakdown",
+    "Positions & exits",
+    "Activity"
+  ],
+  "portfolio_tabs": [
+    "Overview",
+    "Activity"
+  ],
+  "position_action": {
+    "visible_label": "Manage",
+    "column_title": "No visible title; screen-reader label retained",
+    "destinations": {
+      "wallet": "Trade with the selected asset",
+      "supply": "Credit My positions with the exact supply position selected",
+      "borrow": "Credit My positions with the exact loan selected",
+      "vault": "Specific vault product management panel",
+      "lp": "Specific pool add/remove-liquidity panel"
+    },
+    "behavior": "Scroll and focus native management controls. No custom information page or financial review opens from the Portfolio row.",
+    "identity": "Unknown credit positions and vault products show unavailable states; they never select a different position."
+  },
+  "removed_routes": [
+    "fund",
+    "transfer",
+    "vault-management"
+  ],
+  "legacy_aliases": {
+    "fund": "portfolio",
+    "transfer": "portfolio",
+    "vault-management": "vault-detail?product=gami&view=manage"
+  },
+  "validation": [
+    "scripts/verify-portfolio-navigation.js",
+    "scripts/verify-credit-positions.js"
+  ],
+  "browser_evidence": "verification-portfolio-feedback.json",
+  "composition_header": {
+    "heading": "Portfolio composition",
+    "headline": "$24,760.00",
+    "placement": "Directly below the heading inside the composition panel",
+    "scope": "Net portfolio value · fixture",
+    "standalone_value_card": false
+  }
+}

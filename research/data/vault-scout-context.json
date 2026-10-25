@@ -1,0 +1,79 @@
+{
+  "capturedAt": "2026-10-25T20:35:48.564096Z",
+  "provider": "Raven Scout public upstream",
+  "mcpConnected": false,
+  "records": {
+    "gami-labs": {
+      "name": "Gami Labs",
+      "slug": "gami-labs",
+      "shortDescription": "Gami Labs runs institutional-grade curated DeFi vaults with active on-chain curation and dynamic risk management (a professional 'risk curator'). Stellar is one of its largest deployments — roughly $19.7M of curated TVL on Stellar as of 2026-07-16 (DefiLlama) — alongside Ethereum, Base, Avalanche and Flare.",
+      "links": {
+        "website": "https://gamilabs.io/"
+      },
+      "sourceUrl": "https://stellarlight.xyz/api/projects/search?q=Gami%20Labs&limit=10",
+      "retrievedAt": "2026-10-25T20:32:57.576477Z"
+    },
+    "defindex": {
+      "name": "DeFindex",
+      "slug": "defindex",
+      "shortDescription": "DeFindex (by PaltaLabs) is yield infrastructure on Stellar/Soroban. Non-custodial tokenized vaults let wallets, neobanks, and fintechs offer stablecoin savings: diversified yield strategies auto-rebalance USDC/EURC deposits across underlying protocols like Blend, abstracting lending and yield-vault primitives behind a single SDK and API.",
+      "links": {
+        "website": "https://defindex.io/",
+        "github": "https://github.com/paltalabs/defindex",
+        "twitter": "https://x.com/defindex_",
+        "discord": "https://discord.gg/cuc26qutw7"
+      },
+      "sourceUrl": "https://stellarlight.xyz/api/projects/search?q=defindex&limit=10",
+      "retrievedAt": "2026-10-25T20:32:58.314402Z"
+    },
+    "sentora": {
+      "name": "Sentora",
+      "slug": "sentora",
+      "shortDescription": "Sentora is the leading institutional DeFi platform providing curated vault infrastructure, risk management, and capital deployment tools for professional allocators. Non-custodial vaults with real-time analytics and $3B+ deployed across DeFi and real-world assets.",
+      "links": {
+        "website": "https://sentora.com/",
+        "twitter": "https://x.com/sentorahq"
+      },
+      "sourceUrl": "https://stellarlight.xyz/api/projects/search?q=sentora&limit=10",
+      "retrievedAt": "2026-10-25T20:32:59.081017Z"
+    },
+    "blend": {
+      "name": "Blend",
+      "slug": "blend",
+      "shortDescription": "Blend is a lending and borrowing protocol (money market) on Stellar Soroban. Anyone can deploy permissionless, isolated lending pools where suppliers earn yield (interest/APY) by depositing assets like USDC, XLM and EURC, and borrowers take over-collateralized loans. It is the base lending and yield primitive other Stellar DeFi apps build on.",
+      "links": {
+        "website": "https://blend.capital/",
+        "github": "https://github.com/blend-capital",
+        "twitter": "https://x.com/blend_capital"
+      },
+      "sourceUrl": "https://stellarlight.xyz/api/projects/search?q=blend&limit=10",
+      "retrievedAt": "2026-10-25T20:33:13.361102Z"
+    },
+    "templar-protocol": {
+      "name": "Templar Protocol",
+      "slug": "templar-protocol",
+      "shortDescription": "Templar is a decentralized 'cypher lending' protocol that lets Stellar users borrow USDC against XLM collateral directly from their Stellar wallets, without bridges or wrapped tokens. It uses NEAR's multi-party-computation (MPC) network and Chain Signatures to custody deposits and settle cross-chain. On Stellar the collateral asset is XLM; Bitcoin-collateral and Ethereum/NEAR markets exist on its other deployments. The Stellar integration was announced November 2025.",
+      "links": {
+        "website": "https://templarfi.org/",
+        "github": "https://github.com/templar-protocol",
+        "twitter": "https://x.com/templarprotocol",
+        "discord": "https://discord.gg/kavmtypbep"
+      },
+      "sourceUrl": "https://stellarlight.xyz/api/projects/search?q=templar&limit=10",
+      "retrievedAt": "2026-10-25T20:33:14.039373Z"
+    },
+    "xoxno": {
+      "name": "XOXNO",
+      "slug": "xoxno",
+      "shortDescription": "XOXNO is an enterprise-grade decentralized lending protocol built on Stellar's Soroban smart contract platform. It opens up advanced on-chain capital strategies to more market participants through a clean and intuitive UI/UX, with plans to integrate RWA markets. Core features include eMode-style capital efficiency optimizations for correlated assets, looping strategies, leveraged long/short exposure via native aggregator integrations, flash loans, isolated liquidity pools with independent risk profiles, NFT-based position management, and multi-source oracle protection. The team previously built and scaled the XOXNO DeFi platform on MultiversX since 2021, serving 100,000+ users and processing $40M in on-chain marketplace volume.",
+      "links": {
+        "website": "https://xoxno.com/",
+        "github": "https://github.com/xoxno",
+        "twitter": "https://x.com/xoxnonetwork",
+        "discord": "https://discord.gg/JV3qcK4HME"
+      },
+      "sourceUrl": "https://stellarlight.xyz/api/projects/search?q=xoxno&limit=10",
+      "retrievedAt": "2026-10-25T20:33:14.608410Z"
+    }
+  }
+}

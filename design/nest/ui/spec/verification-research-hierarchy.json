@@ -1,0 +1,75 @@
+{
+  "date": "2026-10-25",
+  "status": "passed",
+  "layoutChecks": [
+    {
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 375
+    },
+    {
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 375
+    },
+    {
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 375
+    },
+    {
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 1024
+    },
+    {
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 1024
+    },
+    {
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 1024
+    },
+    {
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 1440
+    },
+    {
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 1440
+    },
+    {
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 1440
+    }
+  ],
+  "interactionChecks": [
+    "MCP catalog page 8 shows 71–80 of 80 and disables Next",
+    "Changing catalog page size to 25 resets to page one",
+    "MCP search filters to one entry with both boundary controls disabled",
+    "Empty catalog search shows 0–0 and Clear filters recovery",
+    "Skills family filter and section disclosure show actual identifiers",
+    "DeFi page 4 contains final 3 of 33 protocol rows",
+    "Protocol search resets to page one",
+    "All protocols restores prior search and list scroll position",
+    "RWA page 11 contains final 9 of 109 asset rows",
+    "Changing RWA page size to 50 resets to page one",
+    "Empty RWA search shows 0–0 and disables boundaries",
+    "Map search Allbridge shows one project and selects its inspector",
+    "Map opens the correct Allbridge Core protocol research",
+    "Legacy blend-usdc market route resolves to Blend Pools V2 protocol detail",
+    "Applicable protocol detail includes assets, read groups, actions and withdrawal terms"
+  ],
+  "consoleErrors": [],
+  "evidence": [
+    "previews/research-defi-ui3.jpg",
+    "previews/research-rwa-ui3.jpg",
+    "previews/research-mcp.jpg",
+    "previews/protocol-markets-ui3.jpg"
+  ]
+}

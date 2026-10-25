@@ -187,13 +187,18 @@
       "production_route": "/credit?view=positions",
       "purpose": "Monitor lending positions and execute supported collateral, repayment and exit actions with venue-native validity and clear settlement state.",
       "layout": {
-        "summary": "Four metrics: confirmed collateral, outstanding debt, net credit value and separately tracked pending workflows, with valuation time.",
-        "desktop": "Flexible left content for open positions, selected-position health and details; 340px sticky action ticket right.",
-        "position_table": "Venue/market/account identity, collateral, debt, native risk, Manage action. Keep account IDs separate from wallet and market IDs.",
-        "health_panel": "Selected venue-native metric, liquidation boundary, valuation/debt/rate facts, actual maturity where supported, source/as-of time. Never present configured warnings as chain validity boundaries.",
-        "ticket": "Add collateral, withdraw collateral, repay, repay & close. Amount, before/after deltas, resulting native risk, withdrawal timing for additions, eligibility reason and shared-review action.",
-        "below": "Pending external workflow timeline, conditional term/close-out details and activity/receipt history.",
-        "responsive": "Below 1100px in the specimen (1024px production baseline), ticket stacks under context; below 768px metrics become 2 columns and timelines wrap in order."
+        "summary": "Confirmed collateral, supplied liquidity, outstanding debt and net position value. Supply is distinct from loan backing.",
+        "desktop": "Full-width position table above a management panel with matching width and horizontal edges.",
+        "position_table": "Venue/market, collateral or supplied amount, debt, position-specific borrow/lend APR, stacked LTV and native HF, Manage selection. Supply risk cells contain no LTV/HF labels or values.",
+        "ticket": "Four loan actions in one horizontal row; supply exposes only Add and Withdraw. Row selection changes units, actions and before/after fields together.",
+        "removed": [
+          "External settlement timeline",
+          "Venue-specific term disclosure block",
+          "Position activity table",
+          "Large native-risk summary and state selector",
+          "Current/projected balance chart"
+        ],
+        "responsive": "The management panel matches the position table width at every breakpoint. Bounded horizontal scrolling keeps the table and four loan actions on one row at narrow widths."
       },
       "management_actions": [
         {
@@ -260,6 +265,35 @@
             "Separate transaction/settlement steps"
           ],
           "rules": "A generic positive repayment must not silently become repay-all. Full close and collateral release may require multiple separately reviewed steps. Do not assume early repayment reduces term interest, nor assume full-term interest without market evidence."
+        },
+        {
+          "id": "deposit",
+          "intent_kind": "supply",
+          "inputs": [
+            "positionId",
+            "verified asset identity",
+            "exact amount"
+          ],
+          "preview": [
+            "Supplied balance before/after",
+            "Fees",
+            "Withdrawal timing"
+          ],
+          "rules": "Supply positions only. A live review requires current wallet balance, capacity, identity and fees."
+        },
+        {
+          "id": "withdraw",
+          "intent_kind": "withdraw_supply",
+          "inputs": [
+            "positionId",
+            "exact amount"
+          ],
+          "preview": [
+            "Supplied balance reduction",
+            "Fees",
+            "Withdrawal timing"
+          ],
+          "rules": "Supply positions only. The display fixture blocks more than the supplied balance; live withdrawable liquidity must come from the venue."
         }
       ],
       "capability_conditional_facts": {
@@ -289,7 +323,11 @@
         "Repay and close display actual venue costs rather than assuming IRIS mechanics.",
         "A Templar funding receipt cannot mark borrowing complete.",
         "XOXNO ownership, native amount semantics and protocol IDs are revalidated.",
-        "Every action uses the same prepared-plan review, expiry/policy binding and confirmed receipt reconciliation."
+        "Every action uses the same prepared-plan review, expiry/policy binding and confirmed receipt reconciliation.",
+        "APR is labeled Borrow or Lend for the row type.",
+        "Loan LTV and native HF share one stacked cell; an unreported HF remains unavailable.",
+        "Supply rows and management panels do not render loan risk metrics.",
+        "Selecting a row updates management actions and exact review inputs together."
       ]
     }
   ],

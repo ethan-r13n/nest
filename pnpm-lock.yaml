@@ -450,6 +450,9 @@ importers:
       '@blend-capital/blend-sdk':
         specifier: 'catalog:'
         version: 3.3.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+      '@nest/data':
+        specifier: workspace:*
+        version: link:../data
       '@nest/domain':
         specifier: workspace:*
         version: link:../domain

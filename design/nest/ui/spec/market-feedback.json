@@ -1,8 +1,9 @@
 {
-  "version": "0.6.0",
+  "version": "0.8.2",
   "date": "2026-10-25",
   "status": "Interactive design prototype; financial integrations pending",
   "scope": [
+    "Shared eight-asset catalog and real icon selectors",
     "Trade OHLC and positions",
     "Vault risk-profile filter",
     "Narrower Credit builder",
@@ -11,15 +12,18 @@
   "trade": {
     "implementation": [
       "trade-chart.js",
+      "trade-chart.css",
+      "vendor/lightweight-charts",
+      "scripts/market_data.py",
       "trade-positions.js"
     ],
     "chart": [
-      "Pair and USDC price units",
-      "1m / 5m / 15m / 1H / 4H / 1D candle intervals",
-      "OHLC readout, wicks/bodies and volume",
-      "Right price axis and last reference-price marker",
-      "UTC time axis, crosshair, keyboard inspection, zoom, pan and Fit",
-      "Clearly labeled deterministic OHLC fixtures; never construct real candles from sparse price samples"
+      "All seven base assets are quoted in USDC; USDC is fixed and excluded from the picker.",
+      "TradingView Lightweight Charts 5.2.1: wheel/pinch zoom, pan, draggable price/time axes, crosshair, Auto, Log and Fit.",
+      "Real timestamped underlying reference/oracle history; Aquarius swap OHLCV for AQUA and daily Spiko NAV with ECB FX for EUTBL.",
+      "Soroswap current price preferred; Aquarius price fallback. USDC normalization uses observed prices rather than a fixed dollar peg.",
+      "Every asset renders candlesticks; oracle OHLC aggregates finer observations and EUTBL uses labeled daily NAV candles. No invented observations, volume, empty-period or future candles.",
+      "Polling preserves zoom; changing assets/intervals cancels obsolete requests and removes old data. Saved fallback history is explicitly dated."
     ],
     "positions": [
       "My positions heading; positions / pending / history tabs",
@@ -33,7 +37,9 @@
       "candles": "Canonical pair/network, interval, UTC timestamp, OHLC decimal strings, base-asset volume, source and coverage gaps",
       "positions": "Account/network/asset identity, exact owned and spendable quantity, valuation in USD with price/fx timestamps, cost-basis method and fee coverage, unknown basis, pending actions",
       "close": "Prepare a fresh sale of exact spendable quantity; preserve fee/reserve constraints, route bounds, receiver, expiry and policy revision. Shared review and wallet signature required; reconcile only confirmed receipt."
-    }
+    },
+    "live_history_spec": "trade-chart-integration.md",
+    "live_history_verification": "verification-trade-candles.json"
   },
   "vaults": {
     "placement": "Above Exit availability",
@@ -82,14 +88,17 @@
   "invariants": [
     "No live wallet, signing or transaction path added",
     "No realized P&L inferred from current price",
-    "No line samples transformed into claimed real OHLC",
+    "Sampled-price OHLC remains labeled; unobserved intraperiod extremes and volume are never inferred",
     "Risk fixture labels do not establish actual safety",
     "RWA issuer access does not imply public or instant redemption",
     "DEX observations do not establish account authorization or executable size"
   ],
   "verification": [
     "verification-market-feedback.json",
-    "../scripts/verify-market-models.js"
+    "../scripts/verify-market-models.js",
+    "verification-assets.json",
+    "verification-trade-live.json",
+    "verification-trade-candles.json"
   ],
   "sources": {
     "circleKyc": "https://help.circle.com/support/en/know-your-customer-and-identity-verification?id=kb_article_view&sysparm_article=KB0010721",
@@ -99,5 +108,57 @@
     "ondoKyc": "https://docs.ondo.finance/ondo-stocks/onboarding-and-kyc",
     "ondoBasics": "https://docs.ondo.finance/general-access-products/usdy/basics",
     "benjiKyc": "https://www.franklintempleton.com/help/notice-of-identity-verification"
+  },
+  "asset_selection": {
+    "version": "0.7.0",
+    "network": "Stellar Mainnet",
+    "assets": [
+      {
+        "id": "XLM",
+        "label": "XLM",
+        "name": "Stellar Lumens"
+      },
+      {
+        "id": "USDC",
+        "label": "USDC",
+        "name": "USD Coin"
+      },
+      {
+        "id": "AQUA",
+        "label": "AQUA",
+        "name": "Aquarius"
+      },
+      {
+        "id": "EURC",
+        "label": "EURC",
+        "name": "Circle Euro"
+      },
+      {
+        "id": "USDT0",
+        "label": "USDT0",
+        "name": "USDT0"
+      },
+      {
+        "id": "PYUSD",
+        "label": "PYUSD",
+        "name": "PayPal USD"
+      },
+      {
+        "id": "SOLVBTC",
+        "label": "SolvBTC",
+        "name": "Solv Protocol Bitcoin"
+      },
+      {
+        "id": "EUTBL",
+        "label": "EUTBL",
+        "name": "Spiko EU T-Bills"
+      }
+    ],
+    "icons": "Real, locally bundled brand images; AQUA alias resolves Aquarius, SolvBTC image acquired through Chrome. Source URLs and hashes in logo-provenance.json.",
+    "vaults": "USDC and XLM retained; six requested assets added. Checkbox + icon + symbol in a compact two-column grid. Filters combine and reset; no matching fixture produces an empty state, not a fabricated vault.",
+    "trade": "Seven searchable base assets; fixed USDC quote, including after reversing the ticket. Escape/Close restores focus.",
+    "quotes": "Asset or direction changes clear quote amounts and review bounds. Sample execution quotes remain separate from the real chart/reference feeds.",
+    "chart_lifecycle": "Intervals and asset changes abort obsolete requests; chart/observer/listeners are disposed on unmount. Direction reversal preserves the base/USDC chart and zoom.",
+    "production": "Catalog entries must bind canonical network/issuer/SAC/contract and decimals; source availability, wallet eligibility and amount-specific routing are checked independently before review."
   }
 }

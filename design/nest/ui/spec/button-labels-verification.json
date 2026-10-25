@@ -1,0 +1,425 @@
+{
+  "date": "2026-10-25",
+  "prBase": "bcbc3630c712db3e68c19b5204dd366cb9e82d84",
+  "scope": "Action button and button-style link labels across Nest",
+  "routes": [
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "chat",
+      "width": 375
+    },
+    {
+      "buttons": 38,
+      "overflow": false,
+      "recovery": false,
+      "route": "research-mcp",
+      "width": 375
+    },
+    {
+      "buttons": 11,
+      "overflow": false,
+      "recovery": false,
+      "route": "protocol-detail",
+      "width": 375
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "asset-detail",
+      "width": 375
+    },
+    {
+      "buttons": 9,
+      "overflow": false,
+      "recovery": false,
+      "route": "saved",
+      "width": 375
+    },
+    {
+      "buttons": 8,
+      "overflow": false,
+      "recovery": false,
+      "route": "supply",
+      "width": 375
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "activity",
+      "width": 375
+    },
+    {
+      "buttons": 3,
+      "overflow": false,
+      "recovery": false,
+      "route": "plan",
+      "width": 375
+    },
+    {
+      "buttons": 5,
+      "overflow": false,
+      "recovery": false,
+      "route": "connections",
+      "width": 375
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "alerts",
+      "width": 375
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "conversations",
+      "width": 375
+    },
+    {
+      "buttons": 2,
+      "overflow": false,
+      "recovery": false,
+      "route": "policy-states",
+      "width": 375
+    },
+    {
+      "buttons": 5,
+      "overflow": false,
+      "recovery": false,
+      "route": "wallet-access",
+      "width": 375
+    },
+    {
+      "buttons": 31,
+      "overflow": false,
+      "recovery": false,
+      "route": "research-defi",
+      "width": 375
+    },
+    {
+      "buttons": 29,
+      "overflow": false,
+      "recovery": false,
+      "route": "research-rwa",
+      "width": 375
+    },
+    {
+      "buttons": 14,
+      "overflow": false,
+      "recovery": false,
+      "route": "vaults",
+      "width": 375
+    },
+    {
+      "buttons": 3,
+      "overflow": false,
+      "recovery": false,
+      "route": "liquidity",
+      "width": 375
+    },
+    {
+      "buttons": 1,
+      "overflow": false,
+      "recovery": false,
+      "route": "liquidity-detail",
+      "width": 375
+    },
+    {
+      "buttons": 4,
+      "overflow": false,
+      "recovery": false,
+      "route": "vault-detail",
+      "width": 375
+    },
+    {
+      "buttons": 33,
+      "overflow": false,
+      "recovery": false,
+      "route": "trade",
+      "width": 375
+    },
+    {
+      "buttons": 14,
+      "overflow": false,
+      "recovery": false,
+      "route": "borrow",
+      "width": 375
+    },
+    {
+      "buttons": 11,
+      "overflow": false,
+      "recovery": false,
+      "route": "positions",
+      "width": 375
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "lab-backtests",
+      "width": 375
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "lab-automation",
+      "width": 375
+    },
+    {
+      "buttons": 6,
+      "overflow": false,
+      "recovery": false,
+      "route": "lab-history",
+      "width": 375
+    },
+    {
+      "buttons": 11,
+      "overflow": false,
+      "recovery": false,
+      "route": "portfolio",
+      "width": 375
+    },
+    {
+      "buttons": 12,
+      "overflow": false,
+      "recovery": false,
+      "route": "chat",
+      "width": 1440
+    },
+    {
+      "buttons": 38,
+      "overflow": false,
+      "recovery": false,
+      "route": "research-mcp",
+      "width": 1440
+    },
+    {
+      "buttons": 11,
+      "overflow": false,
+      "recovery": false,
+      "route": "protocol-detail",
+      "width": 1440
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "asset-detail",
+      "width": 1440
+    },
+    {
+      "buttons": 9,
+      "overflow": false,
+      "recovery": false,
+      "route": "saved",
+      "width": 1440
+    },
+    {
+      "buttons": 8,
+      "overflow": false,
+      "recovery": false,
+      "route": "supply",
+      "width": 1440
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "activity",
+      "width": 1440
+    },
+    {
+      "buttons": 3,
+      "overflow": false,
+      "recovery": false,
+      "route": "plan",
+      "width": 1440
+    },
+    {
+      "buttons": 5,
+      "overflow": false,
+      "recovery": false,
+      "route": "connections",
+      "width": 1440
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "alerts",
+      "width": 1440
+    },
+    {
+      "buttons": 12,
+      "overflow": false,
+      "recovery": false,
+      "route": "conversations",
+      "width": 1440
+    },
+    {
+      "buttons": 2,
+      "overflow": false,
+      "recovery": false,
+      "route": "policy-states",
+      "width": 1440
+    },
+    {
+      "buttons": 5,
+      "overflow": false,
+      "recovery": false,
+      "route": "wallet-access",
+      "width": 1440
+    },
+    {
+      "buttons": 31,
+      "overflow": false,
+      "recovery": false,
+      "route": "research-defi",
+      "width": 1440
+    },
+    {
+      "buttons": 29,
+      "overflow": false,
+      "recovery": false,
+      "route": "research-rwa",
+      "width": 1440
+    },
+    {
+      "buttons": 16,
+      "overflow": false,
+      "recovery": false,
+      "route": "vaults",
+      "width": 1440
+    },
+    {
+      "buttons": 3,
+      "overflow": false,
+      "recovery": false,
+      "route": "liquidity",
+      "width": 1440
+    },
+    {
+      "buttons": 1,
+      "overflow": false,
+      "recovery": false,
+      "route": "liquidity-detail",
+      "width": 1440
+    },
+    {
+      "buttons": 4,
+      "overflow": false,
+      "recovery": false,
+      "route": "vault-detail",
+      "width": 1440
+    },
+    {
+      "buttons": 33,
+      "overflow": false,
+      "recovery": false,
+      "route": "trade",
+      "width": 1440
+    },
+    {
+      "buttons": 14,
+      "overflow": false,
+      "recovery": false,
+      "route": "borrow",
+      "width": 1440
+    },
+    {
+      "buttons": 11,
+      "overflow": false,
+      "recovery": false,
+      "route": "positions",
+      "width": 1440
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "lab-backtests",
+      "width": 1440
+    },
+    {
+      "buttons": 7,
+      "overflow": false,
+      "recovery": false,
+      "route": "lab-automation",
+      "width": 1440
+    },
+    {
+      "buttons": 6,
+      "overflow": false,
+      "recovery": false,
+      "route": "lab-history",
+      "width": 1440
+    },
+    {
+      "buttons": 11,
+      "overflow": false,
+      "recovery": false,
+      "route": "portfolio",
+      "width": 1440
+    }
+  ],
+  "history": [
+    {
+      "actions": [
+        {
+          "text": "Build A Backtest ↗",
+          "top": 964,
+          "width": 160
+        },
+        {
+          "text": "Build An Automation ↗",
+          "top": 1020,
+          "width": 181
+        }
+      ],
+      "overflow": false,
+      "width": 375
+    },
+    {
+      "actions": [
+        {
+          "text": "Build A Backtest ↗",
+          "top": 720,
+          "width": 174
+        },
+        {
+          "text": "Build An Automation ↗",
+          "top": 720,
+          "width": 198
+        }
+      ],
+      "overflow": false,
+      "width": 1440
+    }
+  ],
+  "backtestLinkVerified": true,
+  "automationLinkVerified": true,
+  "dynamicHistoryActionsVerified": true,
+  "dynamicDialogLabelsVerified": true,
+  "richDescriptionPreserved": "Compare XLM prices on Soroswap and Aquarius",
+  "identityLabels": [
+    {
+      "sourceActions": [
+        "Export Snapshot CSV ↗"
+      ],
+      "title": "Nest — Research / DeFi"
+    },
+    {
+      "sourceActions": [
+        "RWA.xyz Asset Record ↗"
+      ],
+      "title": "Nest — Research / Asset Detail"
+    }
+  ],
+  "browserErrors": []
+}

@@ -1,0 +1,234 @@
+{
+  "date": "2026-10-25",
+  "modelChecks": "scripts/verify-credit-positions.js",
+  "interactions": {
+    "unsafeCollateralBlocked": true,
+    "closeReadonly": true,
+    "supply": {
+      "actions": [
+        "Add",
+        "Withdraw"
+      ],
+      "managerHasRisk": false,
+      "riskCell": "—"
+    },
+    "overSupplyBlocked": true,
+    "supplyWithdraw": {
+      "action": "withdraw",
+      "amount": "50 USDC",
+      "enabled": true,
+      "focusRetained": true,
+      "preview": "After actionBeforeAfterSupplied balance1,000 USDC950 USDC"
+    },
+    "sharedReview": true
+  },
+  "layouts": [
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 328,
+      "matchingEdges": true,
+      "position": "blend-loan",
+      "requestedWidth": 375,
+      "tableWidth": 328
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 328,
+      "matchingEdges": true,
+      "position": "xoxno-loan",
+      "requestedWidth": 375,
+      "tableWidth": 328
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add",
+        "Withdraw"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 328,
+      "matchingEdges": true,
+      "position": "blend-supply",
+      "requestedWidth": 375,
+      "tableWidth": 328
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 709,
+      "matchingEdges": true,
+      "position": "blend-loan",
+      "requestedWidth": 768,
+      "tableWidth": 709
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 709,
+      "matchingEdges": true,
+      "position": "xoxno-loan",
+      "requestedWidth": 768,
+      "tableWidth": 709
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add",
+        "Withdraw"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 709,
+      "matchingEdges": true,
+      "position": "blend-supply",
+      "requestedWidth": 768,
+      "tableWidth": 709
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 961,
+      "matchingEdges": true,
+      "position": "blend-loan",
+      "requestedWidth": 1024,
+      "tableWidth": 961
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 961,
+      "matchingEdges": true,
+      "position": "xoxno-loan",
+      "requestedWidth": 1024,
+      "tableWidth": 961
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add",
+        "Withdraw"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 961,
+      "matchingEdges": true,
+      "position": "blend-supply",
+      "requestedWidth": 1024,
+      "tableWidth": 961
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 1369,
+      "matchingEdges": true,
+      "position": "blend-loan",
+      "requestedWidth": 1440,
+      "tableWidth": 1369
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add collateral",
+        "Withdraw collateral",
+        "Repay",
+        "Repay & close"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 1369,
+      "matchingEdges": true,
+      "position": "xoxno-loan",
+      "requestedWidth": 1440,
+      "tableWidth": 1369
+    },
+    {
+      "actionRows": 1,
+      "actions": [
+        "Add",
+        "Withdraw"
+      ],
+      "chartAbsent": true,
+      "documentOverflow": false,
+      "managerWidth": 1369,
+      "matchingEdges": true,
+      "position": "blend-supply",
+      "requestedWidth": 1440,
+      "tableWidth": 1369
+    }
+  ],
+  "fixturesOnly": true,
+  "prBase": "03122ab5abd8d495f869c86e0a343107c8e01df1",
+  "finalPrPreview": {
+    "layoutsRepeated": 12,
+    "chartRemoved": true,
+    "managerMatchesTableWidthAndEdges": true,
+    "documentOverflow": false,
+    "loanActionsInOneRow": true,
+    "supplyActions": [
+      "Add",
+      "Withdraw"
+    ],
+    "supplyManagerHasRisk": false,
+    "repayPreview": {
+      "amount": "250 USDC",
+      "debtAfter": "550 USDC"
+    },
+    "supplyWithdrawPreview": {
+      "amount": "50 USDC",
+      "suppliedAfter": "950 USDC"
+    },
+    "browserErrors": []
+  }
+}

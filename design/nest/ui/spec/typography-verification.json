@@ -1,0 +1,3398 @@
+{
+  "date": "2026-10-25",
+  "referenceObservations": {
+    "raven": {
+      "url": "https://raven.stellar.org/",
+      "heading": "IBM Plex Serif 700",
+      "body": "IBM Plex Sans 400",
+      "controls": "IBM Plex Mono 500"
+    },
+    "stellar": {
+      "url": "https://stellar.org/",
+      "heading": "Lora 400",
+      "body": "Inter 400/600",
+      "utility": "IBM Plex Mono"
+    },
+    "decision": "Use the exact Raven Plex families already licensed and bundled; harmonize hierarchy and weights across Nest."
+  },
+  "layouts": [
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ask Nest",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Do?",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "MCP Contents",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Venue Map 26 Of 26 Projects",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Spot7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Lending6",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Vaults & Yield7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Infrastructure6",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Soroswap",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Tools & Playbooks 80 Entries",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "subtitle": "Explore the ecosystem, then inspect the tools and sources behind the research.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": " Blend Pools V2",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Yield Opportunities",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Markets & Capabilities",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Protocol Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Raven Research",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Explore This Protocol",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Source Boundaries",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Dependencies & Controls",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "subtitle": "Lending markets created with Blend.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": " BENJI",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Asset Identity",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Value And Trading Coverage",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Price Or Liquidity Series Captured",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Access & Redemption",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Execution Unavailable",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "subtitle": "Source-reported identity, issuance facts, and access conditions.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Saved Research",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Blend Pools V2",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "BENJI",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Lending",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "subtitle": "Keep protocols, assets and reusable public filters together.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Liquidity To Work",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Supply Intent",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Supply Comparison",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "subtitle": "Compare the same asset, amount and horizon across registered lending venues.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Action History",
+          "transform": "none",
+          "weight": "700"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "subtitle": "Track the application plan separately from its transaction receipts.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Follow Every Step",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Reconciling",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Reviewed Effects & Fee Limits",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Plan Evidence",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Receipt",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "subtitle": "Track the reviewed revision, confirmed effects and remaining exposure.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Connections",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "X / Social Read Access",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Market & Protocol Sources",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "subtitle": "See granted access, health, entitlement and dependent rules.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Alerts",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Position Risk",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Settlement Pending",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Source Authorization",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "subtitle": "Source health, position risk and workflow updates.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ask Nest",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Do?",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Execution Preferences",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Saved Policy / Revision 7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Draft State Specimens",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Effective Rules",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Versioned Save",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "subtitle": "Wallet-scoped draft, explicit save and version-conflict handling.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Choose Your Access",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Explore As Guest",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Watch An Address",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Connect & Verify",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ownership Verification",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Mismatch & Cancellation",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "subtitle": "Read public data, watch an address, or verify wallet ownership.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar DeFi",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Total Value Locked",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Protocols 33 Results",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "subtitle": "Track network activity, compare protocols, and inspect their markets.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Real-World Assets",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Metrics",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "RWA League Table",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Assets On Stellar 109 Results",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "subtitle": "Explore tokenized assets, issuers, and capital on Stellar. Keep distributed and represented value distinct.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Your Capital In Context.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Filters",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Opportunities Match.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "subtitle": "Compare lending, vaults, campaigns and liquidity on Stellar.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Your Capital In Context.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Filters",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Opportunities Match.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "subtitle": "Compare lending, vaults, campaigns and liquidity on Stellar.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Pool Unavailable",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Gami USDC Vault",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Risk Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Market Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "System Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Execution Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Contract Addresses",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Manage Position",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Counterparties",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Published Fees",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "XLM / USDC",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "XLM / USDC 1H Candles",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Routes",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "My Positions",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Choose An Asset",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Borrow On Your Terms.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Terms",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Borrow?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Venue Comparison",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "subtitle": "Set the collateral, debt and constraints. Compare the same intent across integrated venues.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Keep The Position In View.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Open Positions",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Manage Position",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "subtitle": "Track loans and supplied liquidity, then choose a position to manage.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What’s Your Thesis?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Review Your Setup",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What’s Your Thesis?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Review Your Setup",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Strategy History",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Strategies, Kept Together.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Portfolio",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Portfolio Composition",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Positions & Exits",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Activity",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "subtitle": "Balances and positions, with direct access to each market.",
+      "width": 375
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ask Nest",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Do?",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "MCP Contents",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Venue Map 26 Of 26 Projects",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Spot7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Lending6",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Vaults & Yield7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Infrastructure6",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Soroswap",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Tools & Playbooks 80 Entries",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "subtitle": "Explore the ecosystem, then inspect the tools and sources behind the research.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": " Blend Pools V2",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Yield Opportunities",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Markets & Capabilities",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Protocol Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Raven Research",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Explore This Protocol",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Source Boundaries",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Dependencies & Controls",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "subtitle": "Lending markets created with Blend.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": " BENJI",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Asset Identity",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Value And Trading Coverage",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Price Or Liquidity Series Captured",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Access & Redemption",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Execution Unavailable",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "subtitle": "Source-reported identity, issuance facts, and access conditions.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Saved Research",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Blend Pools V2",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "BENJI",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Lending",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "subtitle": "Keep protocols, assets and reusable public filters together.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Liquidity To Work",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Supply Intent",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Supply Comparison",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "subtitle": "Compare the same asset, amount and horizon across registered lending venues.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Action History",
+          "transform": "none",
+          "weight": "700"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "subtitle": "Track the application plan separately from its transaction receipts.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Follow Every Step",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Reconciling",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Reviewed Effects & Fee Limits",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Plan Evidence",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Receipt",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "subtitle": "Track the reviewed revision, confirmed effects and remaining exposure.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Connections",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "X / Social Read Access",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Market & Protocol Sources",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "subtitle": "See granted access, health, entitlement and dependent rules.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Alerts",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Position Risk",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Settlement Pending",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Source Authorization",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "subtitle": "Source health, position risk and workflow updates.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ask Nest",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Do?",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Execution Preferences",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Saved Policy / Revision 7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Draft State Specimens",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Effective Rules",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Versioned Save",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "subtitle": "Wallet-scoped draft, explicit save and version-conflict handling.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Choose Your Access",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Explore As Guest",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Watch An Address",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Connect & Verify",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ownership Verification",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Mismatch & Cancellation",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "subtitle": "Read public data, watch an address, or verify wallet ownership.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar DeFi",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Total Value Locked",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Protocols 33 Results",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "subtitle": "Track network activity, compare protocols, and inspect their markets.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Real-World Assets",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Metrics",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "RWA League Table",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Assets On Stellar 109 Results",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "subtitle": "Explore tokenized assets, issuers, and capital on Stellar. Keep distributed and represented value distinct.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Your Capital In Context.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Filters",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Opportunities Match.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "subtitle": "Compare lending, vaults, campaigns and liquidity on Stellar.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Your Capital In Context.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Filters",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Opportunities Match.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "subtitle": "Compare lending, vaults, campaigns and liquidity on Stellar.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Pool Unavailable",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Gami USDC Vault",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Risk Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Market Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "System Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Execution Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Contract Addresses",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Manage Position",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Counterparties",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Published Fees",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "XLM / USDC",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "XLM / USDC 1H Candles",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Routes",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "My Positions",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Choose An Asset",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Borrow On Your Terms.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Terms",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Borrow?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Venue Comparison",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "subtitle": "Set the collateral, debt and constraints. Compare the same intent across integrated venues.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Keep The Position In View.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Open Positions",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Manage Position",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "subtitle": "Track loans and supplied liquidity, then choose a position to manage.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What’s Your Thesis?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Review Your Setup",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What’s Your Thesis?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Review Your Setup",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Strategy History",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Strategies, Kept Together.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Portfolio",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Portfolio Composition",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Positions & Exits",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Activity",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "subtitle": "Balances and positions, with direct access to each market.",
+      "width": 1024
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ask Nest",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Do?",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "MCP Contents",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Venue Map 26 Of 26 Projects",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Spot7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Lending6",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Vaults & Yield7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Infrastructure6",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Soroswap",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Tools & Playbooks 80 Entries",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "subtitle": "Explore the ecosystem, then inspect the tools and sources behind the research.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": " Blend Pools V2",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Yield Opportunities",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Markets & Capabilities",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Protocol Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Raven Research",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Explore This Protocol",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Source Boundaries",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Dependencies & Controls",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "subtitle": "Lending markets created with Blend.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": " BENJI",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Asset Identity",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Value And Trading Coverage",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Price Or Liquidity Series Captured",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Access & Redemption",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Execution Unavailable",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "subtitle": "Source-reported identity, issuance facts, and access conditions.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Saved Research",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Blend Pools V2",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "BENJI",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Lending",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "subtitle": "Keep protocols, assets and reusable public filters together.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Liquidity To Work",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Supply Intent",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Supply Comparison",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "subtitle": "Compare the same asset, amount and horizon across registered lending venues.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Action History",
+          "transform": "none",
+          "weight": "700"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "subtitle": "Track the application plan separately from its transaction receipts.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Follow Every Step",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Reconciling",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Reviewed Effects & Fee Limits",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Plan Evidence",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Receipt",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "subtitle": "Track the reviewed revision, confirmed effects and remaining exposure.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Connections",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "X / Social Read Access",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Market & Protocol Sources",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "subtitle": "See granted access, health, entitlement and dependent rules.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Alerts",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Position Risk",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Settlement Pending",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Source Authorization",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "subtitle": "Source health, position risk and workflow updates.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ask Nest",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Do?",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Execution Preferences",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Saved Policy / Revision 7",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Draft State Specimens",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Effective Rules",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Versioned Save",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "subtitle": "Wallet-scoped draft, explicit save and version-conflict handling.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Choose Your Access",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Explore As Guest",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Watch An Address",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Connect & Verify",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Ownership Verification",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Mismatch & Cancellation",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "subtitle": "Read public data, watch an address, or verify wallet ownership.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar DeFi",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Total Value Locked",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Protocols 33 Results",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "subtitle": "Track network activity, compare protocols, and inspect their markets.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Real-World Assets",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Stellar Metrics",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "RWA League Table",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Assets On Stellar 109 Results",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "subtitle": "Explore tokenized assets, issuers, and capital on Stellar. Keep distributed and represented value distinct.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Your Capital In Context.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Filters",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Opportunities Match.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "subtitle": "Compare lending, vaults, campaigns and liquidity on Stellar.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Put Your Capital In Context.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Filters",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "No Opportunities Match.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "subtitle": "Compare lending, vaults, campaigns and liquidity on Stellar.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Pool Unavailable",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Gami USDC Vault",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Risk Overview",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Market Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "System Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Execution Risks",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Contract Addresses",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Manage Position",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Counterparties",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Published Fees",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "XLM / USDC",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "XLM / USDC 1H Candles",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Routes",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "My Positions",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Choose An Asset",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Borrow On Your Terms.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Terms",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What Would You Like To Borrow?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Venue Comparison",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "subtitle": "Set the collateral, debt and constraints. Compare the same intent across integrated venues.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Keep The Position In View.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Open Positions",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Manage Position",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "subtitle": "Track loans and supplied liquidity, then choose a position to manage.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What’s Your Thesis?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Review Your Setup",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "What’s Your Thesis?",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Review Your Setup",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "From Thesis To Strategy.",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Strategy History",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Strategies, Kept Together.",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "subtitle": "Describe an idea. Test it against the past, or watch for it in the future.",
+      "width": 1440
+    },
+    {
+      "headings": [
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Your Portfolio",
+          "transform": "none",
+          "weight": "700"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Portfolio Composition",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Positions & Exits",
+          "transform": "none",
+          "weight": "600"
+        },
+        {
+          "font": "\"IBM Plex Serif\", Georgia, \"Times New Roman\", serif",
+          "text": "Activity",
+          "transform": "none",
+          "weight": "600"
+        }
+      ],
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "subtitle": "Balances and positions, with direct access to each market.",
+      "width": 1440
+    }
+  ],
+  "capitalization": "Heading, section title, card title, tab and table heading text uses Title Case. Descriptive subtitle paragraphs keep sentence case. Known financial acronyms, mixed-case assets and numbers are preserved.",
+  "currentBranchPackageLayouts": [
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 375
+    },
+    {
+      "heading": "MCP Contents",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 375
+    },
+    {
+      "heading": " Blend Pools V2",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "width": 375
+    },
+    {
+      "heading": " BENJI",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "width": 375
+    },
+    {
+      "heading": "Saved Research",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "width": 375
+    },
+    {
+      "heading": "Put Liquidity To Work",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "width": 375
+    },
+    {
+      "heading": "Action History",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "width": 375
+    },
+    {
+      "heading": "Follow Every Step",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "width": 375
+    },
+    {
+      "heading": "Connections",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "width": 375
+    },
+    {
+      "heading": "Alerts",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "width": 375
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 375
+    },
+    {
+      "heading": "Your Execution Preferences",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "width": 375
+    },
+    {
+      "heading": "Choose Your Access",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "width": 375
+    },
+    {
+      "heading": "Stellar DeFi",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 375
+    },
+    {
+      "heading": "Stellar Real-World Assets",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 375
+    },
+    {
+      "heading": "Put Your Capital In Context.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "width": 375
+    },
+    {
+      "heading": "Put Liquidity To Work.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "width": 375
+    },
+    {
+      "heading": "Pool Unavailable",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 375
+    },
+    {
+      "heading": "Gami USDC Vault",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 375
+    },
+    {
+      "heading": "XLM / USDC",
+      "headingsUsePlex": true,
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 375
+    },
+    {
+      "heading": "Borrow On Your Terms.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "width": 375
+    },
+    {
+      "heading": "Keep The Position In View.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "width": 375
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "width": 375
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "width": 375
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 375
+    },
+    {
+      "heading": "Your Portfolio",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "width": 375
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 1024
+    },
+    {
+      "heading": "MCP Contents",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 1024
+    },
+    {
+      "heading": " Blend Pools V2",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "width": 1024
+    },
+    {
+      "heading": " BENJI",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "width": 1024
+    },
+    {
+      "heading": "Saved Research",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "width": 1024
+    },
+    {
+      "heading": "Put Liquidity To Work",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "width": 1024
+    },
+    {
+      "heading": "Action History",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "width": 1024
+    },
+    {
+      "heading": "Follow Every Step",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "width": 1024
+    },
+    {
+      "heading": "Connections",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "width": 1024
+    },
+    {
+      "heading": "Alerts",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "width": 1024
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 1024
+    },
+    {
+      "heading": "Your Execution Preferences",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "width": 1024
+    },
+    {
+      "heading": "Choose Your Access",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "width": 1024
+    },
+    {
+      "heading": "Stellar DeFi",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 1024
+    },
+    {
+      "heading": "Stellar Real-World Assets",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 1024
+    },
+    {
+      "heading": "Put Your Capital In Context.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "width": 1024
+    },
+    {
+      "heading": "Put Liquidity To Work.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "width": 1024
+    },
+    {
+      "heading": "Pool Unavailable",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 1024
+    },
+    {
+      "heading": "Gami USDC Vault",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 1024
+    },
+    {
+      "heading": "XLM / USDC",
+      "headingsUsePlex": true,
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 1024
+    },
+    {
+      "heading": "Borrow On Your Terms.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "width": 1024
+    },
+    {
+      "heading": "Keep The Position In View.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "width": 1024
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "width": 1024
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "width": 1024
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 1024
+    },
+    {
+      "heading": "Your Portfolio",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "width": 1024
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 1440
+    },
+    {
+      "heading": "MCP Contents",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 1440
+    },
+    {
+      "heading": " Blend Pools V2",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "width": 1440
+    },
+    {
+      "heading": " BENJI",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "width": 1440
+    },
+    {
+      "heading": "Saved Research",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "width": 1440
+    },
+    {
+      "heading": "Put Liquidity To Work",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "width": 1440
+    },
+    {
+      "heading": "Action History",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "width": 1440
+    },
+    {
+      "heading": "Follow Every Step",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "width": 1440
+    },
+    {
+      "heading": "Connections",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "width": 1440
+    },
+    {
+      "heading": "Alerts",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "width": 1440
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 1440
+    },
+    {
+      "heading": "Your Execution Preferences",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "width": 1440
+    },
+    {
+      "heading": "Choose Your Access",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "width": 1440
+    },
+    {
+      "heading": "Stellar DeFi",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 1440
+    },
+    {
+      "heading": "Stellar Real-World Assets",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 1440
+    },
+    {
+      "heading": "Put Your Capital In Context.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "width": 1440
+    },
+    {
+      "heading": "Put Liquidity To Work.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "width": 1440
+    },
+    {
+      "heading": "Pool Unavailable",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 1440
+    },
+    {
+      "heading": "Gami USDC Vault",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 1440
+    },
+    {
+      "heading": "XLM / USDC",
+      "headingsUsePlex": true,
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 1440
+    },
+    {
+      "heading": "Borrow On Your Terms.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "width": 1440
+    },
+    {
+      "heading": "Keep The Position In View.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "width": 1440
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "width": 1440
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "width": 1440
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 1440
+    },
+    {
+      "heading": "Your Portfolio",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "width": 1440
+    }
+  ]
+}

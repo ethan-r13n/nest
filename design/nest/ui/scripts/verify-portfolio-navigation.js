@@ -1,0 +1,43 @@
+const fs=require('node:fs');
+const path=require('node:path');
+const vm=require('node:vm');
+const assert=require('node:assert/strict');
+const root=path.resolve(__dirname,'..');
+const escape=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const context=vm.createContext({window:{NestUI:{escape,logo:()=>'',stat:()=>'',badge:()=>'',icon:()=>''},NestScreens:{borrow:()=>''},NestBinders:{}},location:{hash:''},document:{addEventListener(){}},URLSearchParams});
+for(const file of ['credit-position-model.js','screens/positions.js','screens/markets.js','portfolio-navigation.js','screens/completion.js'])vm.runInContext(fs.readFileSync(path.join(root,file),'utf8'),context,{filename:file});
+const W=context.window,R=W.NestPortfolioNavigation;
+const portfolio=W.NestScreens.portfolio();
+for(const removed of ['n-portfolio-metrics','n-summary-facts','4 of 5 sources available','Needs attention','Underlying exposure','Mainnet · sample account'])assert.ok(!portfolio.includes(removed),removed);
+const positionsTable=portfolio.split('Positions & exits')[1].split('</table>')[0];
+assert.ok(!positionsTable.includes('>Action</th>'));
+assert.equal((portfolio.match(/>Manage<\/a>/g)||[]).length,5);
+assert.ok(!portfolio.includes('data-review='));
+assert.ok(!portfolio.includes('<aside'));
+for(const route of ['fund','transfer','vault-management']){assert.equal(W.NestScreens[route],undefined);assert.equal(W.NestBinders[route],undefined);}
+for(const kind of ['supply','borrow']){
+ const id=kind==='supply'?'blend-supply':'blend-loan';
+ const href=R.route({kind,positionId:id});assert.equal(href,`#positions?position=${id}&view=manage`);
+ context.location.hash=href;
+ const html=W.NestScreens.positions();
+ assert.ok(html.includes(`data-position-row="${id}" aria-selected="true"`));
+ const manager=html.split('id="credit-management"')[1];
+ assert.equal((manager.match(/data-position-action=/g)||[]).length,kind==='supply'?2:4);
+}
+assert.equal(R.route({kind:'supply',positionId:'blend-loan'}),null);
+assert.equal(R.route({kind:'borrow',positionId:'missing'}),null);
+assert.equal(R.route({kind:'wallet',asset:'USDC'}),'#trade?asset=USDC&view=manage');
+assert.equal(R.route({kind:'wallet',asset:'UNKNOWN'}),null);
+assert.equal(R.route({kind:'vault',productId:'gami'}),'#vault-detail?product=gami&view=manage');
+assert.equal(R.route({kind:'vault',productId:'unknown'}),null);
+context.location.hash=R.route({kind:'vault',productId:'defindex'});
+assert.match(W.NestScreens['vault-detail'](),/DeFindex USDC vault/);
+context.location.hash='#vault-detail?product=missing&view=manage';assert.match(W.NestScreens['vault-detail'](),/Vault unavailable/);
+context.location.hash='#positions?position=missing&view=manage';assert.match(W.NestScreens.positions(),/Position unavailable/);
+const pool=JSON.parse(fs.readFileSync(path.join(root,'aquarius-pools.json'),'utf8')).pools[0];
+assert.equal(R.route({kind:'lp',poolId:pool.id}),'#liquidity-detail?'+new URLSearchParams({pool:pool.id,view:'manage'}));
+assert.equal(R.route({kind:'lp',poolId:''}),null);
+assert.equal(R.legacy('#fund'),'#portfolio');assert.equal(R.legacy('#transfer'),'#portfolio');
+assert.equal(R.legacy('#vault-management'),'#vault-detail?product=gami&view=manage');
+assert.equal(R.legacy('#portfolio'),null);
+console.log(JSON.stringify({result:'passed',portfolioPositions:5,removedRoutes:3,checks:['requested blocks removed','one Manage link per position','exact loan/supply and vault selection','unknown identities do not select another position','canonical LP destination','legacy links use native management']},null,2));

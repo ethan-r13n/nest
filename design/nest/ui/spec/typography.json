@@ -1,0 +1,58 @@
+{
+  "version": "1.0",
+  "date": "2026-10-25",
+  "references": [
+    {
+      "url": "https://raven.stellar.org/",
+      "observed": "IBM Plex Serif 700 hero; IBM Plex Sans 400 body; IBM Plex Mono 500 navigation and controls"
+    },
+    {
+      "url": "https://stellar.org/",
+      "observed": "Editorial serif hierarchy, generous leading, restrained utility typography; current site uses Lora, Inter and IBM Plex Mono"
+    }
+  ],
+  "decision": "Use the exact Raven Plex families already bundled locally under the existing OFL license. Keep one consistent product hierarchy rather than adding a second serif family.",
+  "source": [
+    "../../typography.css",
+    "../../typography.js"
+  ],
+  "roles": {
+    "page_heading": "IBM Plex Serif 700, 30–42px, line-height 1.12, tracking -0.025em",
+    "section_heading": "IBM Plex Serif 600, existing section sizes, line-height 1.25",
+    "card_heading": "IBM Plex Serif 600, 18–19px",
+    "body_and_descriptive_subtitle": "IBM Plex Sans 400, sentence case, comfortable leading",
+    "navigation_tabs_buttons": "IBM Plex Mono 500; existing responsive sizes and touch targets",
+    "financial_values": "IBM Plex Mono, tabular figures",
+    "supporting_source_copy": "IBM Plex Sans 400, 12px / 1.65"
+  },
+  "capitalization": {
+    "include": [
+      "H1–H6 and ARIA headings",
+      "Tabs and navigation titles",
+      "Table column headings",
+      "Opportunity card titles",
+      "Explicit data-title-case text",
+      "Button and button-style link labels, disclosure actions and accessible action labels"
+    ],
+    "exclude": [
+      "Descriptive subtitle paragraphs",
+      "Body copy and tooltips",
+      "Input values, code, addresses and SVG chart labels",
+      "Descriptive paragraphs, small copy and explicit data-action-description content inside rich buttons"
+    ],
+    "behavior": "Capitalize the first letter of each word, including hyphenated words. Preserve financial acronyms, mixed-case asset names and numeric tokens. Uppercase source headings become Title Case.",
+    "example": {
+      "heading": "Borrow On Your Terms.",
+      "subtitle": "Set the collateral, debt and constraints. Compare the same intent across integrated venues.",
+      "buttons": [
+        "Build A Backtest",
+        "Build An Automation",
+        "Add Collateral",
+        "Connect Wallet"
+      ]
+    }
+  },
+  "implementation": "Shared stylesheet and heading normalizer cover app, asynchronously rendered views, dialogs, design review and specification pages. Native text nodes are updated without replacing elements or action bindings.",
+  "verification": "typography-verification.json",
+  "automated_check": "../scripts/verify-typography.js"
+}

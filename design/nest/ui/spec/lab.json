@@ -1,291 +1,131 @@
 {
-  "area": "Lab",
-  "version": "0.2.0",
-  "updated": "2026-10-25",
-  "status": "Local design prototype. Memory and automations are P0 product contracts; historical backtesting is a P1 backend capability.",
-  "reference_evidence": [
+  "section": "Lab",
+  "version": "0.8.1",
+  "status": "Functional buildless UI preview; market services unconnected",
+  "reference": "lab-chat.html",
+  "views": [
     {
-      "id": "pilot-memory",
-      "url": "https://pilot-two-delta.vercel.app/memory",
-      "inspection": "Browser inspected",
-      "observed": "Knowledge graph beside a note reader; searchable Markdown-note list; linked notes and context summary; separate execution-policy editor lower on the page.",
-      "adapt": "Nest keeps the graph, reader, note search and linked navigation. Accepted preferences and proposals remain distinct; policy editing moves to the existing Guardrails authority. Do not inherit Pilot's automatic-execution or mandatory caps."
+      "route": "lab-backtests",
+      "label": "Backtest",
+      "layout": "Strategy conversation, editable trigger presets, and conditional inline review",
+      "requires": [
+        "thesis",
+        "both venue and pool identities",
+        "same quoted pair",
+        "divergence threshold",
+        "fixed amount or capacity sizing",
+        "maximum impact per leg",
+        "historical period",
+        "round-trip fee assumption"
+      ],
+      "confirm": "Save a backtest request to unified History",
+      "saved_status": "Awaiting historical data"
     },
     {
-      "id": "pilot-backtests",
-      "url": "https://pilot-two-delta.vercel.app/research/backtests",
-      "inspection": "Resolved through the live Backtests navigation because the supplied backtest URL duplicated Memory and included a trailing comma.",
-      "observed": "Bounded configuration, sample/historical modes, post-cost equity and benchmark, drawdown/cost/fill metrics, event audit, saved-run comparison and frozen reproducibility evidence.",
-      "adapt": "Nest uses a compact configuration rail and dominant evidence/results area. Preview calculations use explicitly synthetic XLM/USDC observations. Real historical replay remains a separately implemented service."
+      "route": "lab-automation",
+      "label": "Set automation",
+      "layout": "Strategy conversation, editable trigger presets, and conditional inline review",
+      "requires": [
+        "thesis",
+        "both venue and pool identities",
+        "same quoted pair",
+        "divergence threshold",
+        "fixed amount or capacity sizing",
+        "maximum impact per leg",
+        "polling cadence",
+        "duration or until paused"
+      ],
+      "confirm": "Save a monitor setup to unified History",
+      "saved_status": "Not scheduled"
     },
     {
-      "id": "pilot-strategy",
-      "url": "https://pilot-two-delta.vercel.app/strategy",
-      "inspection": "Browser inspected after asynchronous content loaded",
-      "observed": "Strategy presets, editable bounds, review-first simulated lifecycle, per-event checks, portfolio effect and event timeline.",
-      "adapt": "Nest's P0 builder starts from arbitrary supported conditions, not a fixed strategy menu. Use Source→Condition→Action, one test, explicit revision review and activation. P0 actions notify or propose an action; no unattended signing."
-    }
-  ],
-  "screens": [
-    {
-      "id": "lab-memory",
-      "title": "Lab / Memory",
-      "route": "/lab?tab=memory",
-      "preview": "#lab-memory",
-      "layout": "Page title and Memory/Backtests/Automations tabs; graph and source-note reader in two columns; searchable note list; accepted/proposed preference and policy-boundary disclosure.",
-      "components": [
-        "LabTabs",
-        "MemoryOverview",
-        "MemoryGraph",
-        "MemoryNoteReader",
-        "MemorySearch",
-        "PreferenceProposal",
-        "MemoryExport",
-        "ResetMemoryScope"
-      ],
-      "content": [
-        "Note ID/type/title/body",
-        "Wallet and network ownership scope",
-        "Observed/updated timestamp",
-        "Source and linked record IDs",
-        "Accepted versus proposed status",
-        "Revision and acceptance provenance"
-      ],
-      "interactions": [
-        "Click graph node or list item to select a source note",
-        "Filter note list without changing stored memory",
-        "Inspect/edit accepted recommendation context under explicit owner control",
-        "Accept a preference proposal through its ID/revision",
-        "Reset a chosen personal-memory scope with confirmation",
-        "Export owned memory",
-        "Open Guardrails for policy; a memory edit cannot change policy"
-      ],
-      "states": [
-        "Guest transient context / connect to save",
-        "Loading",
-        "Owned notes",
-        "No matching notes",
-        "Proposed preference awaiting acceptance",
-        "Edit draft",
-        "Version conflict",
-        "Export/reset in progress",
-        "Source unavailable"
-      ],
-      "responsive": "Two columns on wide workspaces; graph, reader and list stack below 1024px or container width 850px. Graph can pan internally on narrow screens; the complete note list is the accessible alternative.",
-      "accessibility": [
-        "Native 44px note buttons and visible focus",
-        "Graph text/relationships described by the reader/list",
-        "Selection state uses aria-pressed and text",
-        "Editable body is labeled; reset scope and effect are explicit"
-      ],
-      "backend_bindings": [
-        {
-          "endpoint": "GET/PATCH /api/preferences",
-          "status": "Specified; service implementation pending",
-          "purpose": "Read and explicitly change soft preferences"
-        },
-        {
-          "endpoint": "POST /api/preferences/proposals/:id/accept",
-          "status": "Specified; service implementation pending",
-          "purpose": "Accept exact reviewed proposal"
-        },
-        {
-          "endpoint": "GET/POST/DELETE /api/bookmarks",
-          "status": "Specified; service implementation pending",
-          "purpose": "Saved research and strategy links"
-        },
-        {
-          "endpoint": null,
-          "status": "Schema to finalize",
-          "purpose": "Memory graph/note aggregation, notes editing, reset/export and pagination are not fully specified endpoints. Do not invent paths."
-        },
-        {
-          "endpoint": "GET /api/policy",
-          "status": "Specified; read-only in memory",
-          "purpose": "Policy reference only; writes remain explicit Guardrails Save"
-        }
-      ],
-      "acceptance": [
-        "Node/list selection shows the correct source note and timestamps",
-        "Proposals never appear accepted without explicit acceptance",
-        "Edit/reset/export is owner-scoped",
-        "No memory operation changes financial plans, policy, approvals or receipts",
-        "Guest context is not silently persisted"
-      ]
-    },
-    {
-      "id": "lab-backtests",
-      "title": "Lab / Backtests",
-      "route": "/lab?tab=backtests",
-      "preview": "#lab-backtests",
-      "layout": "320px experiment configuration rail beside post-cost results and benchmark chart; event audit; frozen evidence and compatible saved runs below.",
-      "components": [
-        "DatasetSelector",
-        "BoundedStrategyForm",
-        "CostAssumptions",
-        "CoverageDisclosure",
-        "RunProgress",
-        "EquityBenchmarkChart",
-        "BacktestMetricGrid",
-        "EventAuditTable",
-        "RunCompatibilityTable",
-        "ReproducibilityReport"
-      ],
-      "configuration": [
-        "Dataset/provider/version and observed coverage",
-        "Strategy DSL/version and asset identities",
-        "Window, interval, warm-up and out-of-sample boundary",
-        "Initial portfolio and quote currency",
-        "Sizing/position constraints",
-        "Spread, venue fee, slippage and fixed costs",
-        "Hypothesis frozen before results"
-      ],
-      "result_fields": [
-        "Run ID/state",
-        "Parameter and dataset hashes",
-        "Post-cost equity and hold benchmark",
-        "Net return, drawdown, turnover and costs",
-        "Signals, later fills and rejected events",
-        "Missing coverage/liquidation events when modeled",
-        "Source rights, assumptions and limits"
-      ],
-      "preview_behavior": "Run sample computes a deterministic allocation-band example over 16 fixed invented XLM/USDC prices. Signal at one observation, fill at the next, bounded notional, modeled costs. Page-session comparison/export only; not a historical run or permission to trade.",
-      "states": [
-        "No run",
-        "Validating inputs",
-        "Coverage unavailable",
-        "Queued/running",
-        "Completed",
-        "Partially covered",
-        "Failed/cancelled",
-        "Incompatible saved runs"
-      ],
-      "backend_bindings": [
-        {
-          "endpoint": "/api/backtests",
-          "status": "Specified P1 create/status/result family; methods and status/result path shapes to finalize",
-          "purpose": "Deterministic replay against immutable datasets"
-        }
-      ],
-      "responsive": "Configuration stacks before results below 768px/container 850px. Charts redraw at measured width with readable units; audit tables scroll inside their own region.",
-      "acceptance": [
-        "Identical frozen inputs reproduce results",
-        "UI never fabricates a historical candle or historical executable fill",
-        "Costs, benchmark and coverage stay visible",
-        "No look-ahead; dataset/source/rule versions recorded",
-        "Only compatible runs compare",
-        "No signing, policy mutation or financial action from a run"
-      ]
-    },
-    {
-      "id": "lab-automation",
-      "title": "Lab / Automations",
-      "route": "/lab?tab=automations",
-      "preview": "#lab-automation",
-      "layout": "260px owned-rule rail; natural-language draft at top; typed Source→Condition→Action editor beside human-readable rule and test/evaluation timeline.",
-      "components": [
-        "AutomationList",
-        "SourceHealth",
-        "NaturalLanguageRuleDraft",
-        "SignalPicker",
-        "ConditionEditor",
-        "ActionTemplate",
-        "CadenceExpiryBudget",
-        "TestEvaluation",
-        "RevisionReview",
-        "EvaluationHistory",
-        "TriggerEvidence",
-        "ProposalLink",
-        "ConnectX"
-      ],
-      "rule_fields": [
-        "Owner/network/revision/hash",
-        "Canonical entity/asset identity",
-        "Source operation/version and entitlement",
-        "Typed condition/units/window/transform",
-        "notify or propose_action template",
-        "UTC schedule and display timezone",
-        "Expiry, cooldown/rearm and one-shot semantics",
-        "Evidence, freshness/skew and evaluation budget"
-      ],
-      "flow": [
-        "Describe",
-        "Resolve supported sources and capabilities",
-        "Edit typed draft",
-        "Run one effect-free test",
-        "Review exact revision, coverage, cadence, expiry and costs",
-        "Explicitly activate",
-        "Evaluate and retain evidence",
-        "Notify or create expiring review proposal"
-      ],
-      "states": [
-        "Guest draft",
-        "Draft",
-        "Active",
-        "Paused",
-        "Expired",
-        "Blocked",
-        "Source disconnected",
-        "Evaluation true",
-        "Evaluation false",
-        "Evaluation unknown",
-        "Proposal expired",
-        "Delivery failed"
-      ],
-      "preview_behavior": "Test uses an explicitly labeled fixture observation. Disconnected X yields unknown. Preview activation changes only local visual state and starts no scheduler. Production crossing transforms require previous observations and freshness; the preview does not claim a real crossing.",
-      "backend_bindings": [
-        {
-          "endpoint": "GET /api/signals",
-          "status": "Specified; implementation pending",
-          "purpose": "Accessible source, field, transform, cadence and entitlement catalog"
-        },
-        {
-          "endpoint": "POST /api/connections/x/start; GET /api/connections/x/callback",
-          "status": "Specified; implementation pending",
-          "purpose": "Session-bound OAuth/PKCE; no activation from callback"
-        },
-        {
-          "endpoint": "GET /api/connections; DELETE /api/connections/:id",
-          "status": "Specified; implementation pending",
-          "purpose": "Access health/disconnect; pause dependent rules"
-        },
-        {
-          "endpoint": "GET/POST /api/automations; GET /api/automations/:id",
-          "status": "Specified; implementation pending",
-          "purpose": "Owned list/draft/detail"
-        },
-        {
-          "endpoint": "POST /api/automations/:id/revisions; /test; /activate; /pause",
-          "status": "Specified; implementation pending",
-          "purpose": "Versioned edit, effect-free test and explicit schedule changes"
-        },
-        {
-          "endpoint": "GET /api/automations/:id/evaluations; /triggers",
-          "status": "Specified; implementation pending",
-          "purpose": "Evidence and linked proposals"
-        },
-        {
-          "endpoint": "DELETE /api/automations/:id",
-          "status": "Specified; implementation pending",
-          "purpose": "Stop scheduling and apply retention"
-        }
-      ],
-      "responsive": "Rule rail becomes a compact list above the editor; typed form and evidence stack. Keep Create, source access, test and activation/review actions discoverable.",
-      "acceptance": [
-        "No fixed strategy menu limits arbitrary supported rules",
-        "Unknown/stale/missing observations never become zero or a trigger",
-        "One trigger per tenant/revision/event key; retries do not duplicate proposals",
-        "Pause/disconnect/expiry stop future evaluations",
-        "Real activation requires verified owner and exact revision acceptance",
-        "P0 evaluation never signs/submits",
-        "Triggered actions re-prepare fresh quotes/policy and require normal user review"
+      "route": "lab-history",
+      "label": "History",
+      "layout": "Saved setup cards with filters, original conversation, exact condition/source and configuration; no illustrative chart",
+      "persistence": "localStorage on this device in the preview",
+      "actions": [
+        "Inspect",
+        "Reuse as a new strategy",
+        "Remove with Undo"
       ]
     }
   ],
-  "open_decisions": [
-    "Finalize Lab URL aliases while retaining existing Research automation links",
-    "Historical replay/service and dataset rights remain P1 implementation gates",
-    "Finalize memory graph/note/reset/export service schemas",
-    "Production automation test must distinguish a threshold comparison from an actual crossing transform"
-  ]
+  "strategy_canvas": {
+    "removed": true,
+    "replacement": "Conversation only. An inline setup review appears after the required inputs are supplied."
+  },
+  "conversation": {
+    "preview": "Guided pool arbitrage and draft signal ideas for BTC EMA, volume breakouts and USDC yield gaps; signal rules and feeds require validation before a run.",
+    "production": "Restricted agent compiles a general thesis to an editable, typed strategy with validated sources",
+    "preserved_on_mode_switch": [
+      "Thesis",
+      "Shared source identities and parameters",
+      "Conversation"
+    ],
+    "required_followups_remain_explicit": true
+  },
+  "removed_from_lab": [
+    "Memory",
+    "Learning runs",
+    "Old synthetic allocation backtest",
+    "Old Source/Condition/Action rule builder",
+    "Separate run and evaluation screens",
+    "Connections UI",
+    "Generic assistant dock"
+  ],
+  "legacy_aliases": {
+    "lab-memory": "lab-backtests",
+    "learning-runs": "lab-backtests",
+    "backtest-run": "lab-history",
+    "automation-history": "lab-history"
+  },
+  "production_services_required": [
+    "Pool identity and common quote normalization",
+    "Historical prices, liquidity/depth, costs and replay jobs",
+    "Persistent polling lifecycle, source freshness, budgets and cadence",
+    "Alert crossing/rearm, deduplication and delivery evidence",
+    "Owner-scoped durable history"
+  ],
+  "boundaries": [
+    "Confirmation in this preview saves configuration locally only.",
+    "No historical result or profitability is invented.",
+    "No monitor is marked active or scheduled.",
+    "No transaction action is part of this Lab flow.",
+    "Signal drafts preserve the user condition and source but do not claim executable or validated rules.",
+    "A purchase condition creates only a reviewed proposal specification, never a trade."
+  ],
+  "files": [
+    "lab-model.js",
+    "screens/lab.js",
+    "lab.css",
+    "scripts/verify-lab-model.js"
+  ],
+  "verification": "verification-lab-trigger-feedback.json",
+  "trigger_presets": [
+    {
+      "id": "divergence",
+      "title": "Watch a pool divergence",
+      "rule": "Compare XLM/USDC on Soroswap and Aquarius; evaluate an upward crossing of a 1% price gap with size and impact constraints."
+    },
+    {
+      "id": "btc-ema",
+      "title": "Follow BTC momentum",
+      "rule": "BTC/USD daily close crosses from below to above its 20-day EMA; propose an XLM buy for user review once on the crossing."
+    },
+    {
+      "id": "volume-breakout",
+      "title": "Catch a volume breakout",
+      "rule": "XLM/USD daily close exceeds its previous 30-day high with daily volume above twice its previous 20-day average; alert once on a new breakout."
+    },
+    {
+      "id": "yield-gap",
+      "title": "Watch a better supply rate",
+      "rule": "Eligible USDC supply rate exceeds the current venue by 2 percentage points for 24 hours after fees, with enough exit and entry liquidity; alert only."
+    }
+  ],
+  "preset_behavior": "Fill the composer for editing; never auto-send, activate monitoring or trade.",
+  "strategy_requirements": {
+    "arbitrage": "Exact venues and pool identities, common quoted pair, threshold, sizing, maximum impact and mode-specific time inputs.",
+    "signal": "Original condition, named data source, alert versus reviewed proposal, fixed USDC amount for a purchase proposal, and mode-specific time inputs; rule validation remains pending."
+  }
 }

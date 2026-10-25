@@ -1,5 +1,10 @@
 {
   "$schema": "https://unpkg.com/knip@6/schema.json",
   "ignore": ["design/**", "research/**"],
-  "ignoreDependencies": ["cloudflare"]
+  "ignoreDependencies": ["cloudflare"],
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/collect-aquarius.mjs"]
+    }
+  }
 }

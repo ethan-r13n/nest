@@ -1,0 +1,557 @@
+{
+  "schemaVersion": "nest.aquarius.pools.v1",
+  "network": "mainnet",
+  "retrievedAt": "2026-10-25T21:16:15.199Z",
+  "upstreamAsOf": null,
+  "sourceUrl": "https://amm-api.aqua.network/api/external/v2/pools/?address__in=CCNXGPE4AQCSNEBZO3XJDKKDI3CRLYMVS6UWBBTVDLALLWMJEXBORQ2A,CDMH535JSD224YXPET3B4SJOLXTQQ24GRSCWACGYBKSH2DKFJYWI7SUW,CD2O2B6PWKXDVFXMHXHQMF25C4TWOSQAENA7DNFR5G27F5CHJ7AJP5F6,CA6PUJLBYKZKUEKLZJMKBZLEKP2OTHANDEOWSFF44FTSYLKQPIICCJBE,CCKGQSQG5JLZBMYMB4HT6M4H7FUC3NK5C75MIHN6627LRAY5B2SYL2AD,CCX2TYR4AQTPPMTZOIMP3YIBHAYLLSTXVP47PAGTL753PCQFSKV32MIA,CAFHLHGZXOVNCGFJ7DOXL7JDNMBCEZKDI3LS5NRQH3GXC7CSIMQZHUSM,CCJ3XJR5VODGJHH6BQHRUVOA3FWMQRQOPLUZNKLSKFKYELZF767P2DOR,CCYMZTOJIDZY45XGDBUNRMYUZWBUTNWOAMREAW4JYU7GEKDHLOEOJX25,CCY2PXGMKNQHO7WNYXEWX76L2C5BH3JUW3RCATGUYKY7QQTRILBZIFWV,CCFGZJTHQZGDZP5PK6WMLKHKJ72ACSVMJGCI2NFR7Q6EAVSKWLJB3ZH3,CCWNKTTMHZ4VRR3FYQT3G253MHOGRLUEVTO6YPENM7ZN65DGC345LHI6,CDOGKTAHIINHYDL3BUYDVKIQDDJI35IBMLOUHC3AZC6FNJFT5ZC7BYDJ,CBRGFMR6QBX7ASUBO534UDGOUB2SDGRL7AAFXFYBQ4DT4RJTWQG55W2T,CA6GAFOJCW4MGQQBUCQUSA3CLIH25G4SNKB2JHYKZCVWZTNW5VXMSC4O,CAC56QNJ2CX456TPC5S4MSOU3DBULG4TGN7AZ2SAYGBLD3GICFMZBIT2,CCOZA42SRNHEMT7SBPAX5BG7BJXTTCHJ56FYCQRYB35CP5WUVEXM7B3F,CAXYSVTPAU6JLPI7V6XJWLFWIYMFIHHFF7D7QCFH2YB2Z4BSI3BCGGH4,CD65EROVLTDU2DWM4ZUJF4NHK4A46DX2UAOGCV7YDFPCSLFYNH57KGIY,CAF63CNDJBATL376WDN5KUNN32JQKNYC26SQ62OLXYMAWBYE23P6M5WT,CAQODUH4XNX2NTFVACRMO4UR7MA5RLSZA5ZQTHILQYGYYCFQ3LUATIGM,CCZC4HGM2BW7TIIS4KBDQEZX67DFZLOL6TZXGUGD6SJZS6IJ5JUAEZZR,CDPF7GMA3OLVUBLEVKNKXKEFSS3EQAXN75RHT7DR4SYIHFS5LH5JOTD7,CAC3AUH3A3ZCABCOPDCXVJXSIL57WHAPGUPTKAOMSNFLAVE7CPPGNGZB,CARBT6Z25NNE7PD24BFXXXMSRYZUGFA5RHI23PMSIXBUVJZQLS56HJLP,CDNMOZVRXKZ2JCVTDTGXZRWH5EVGXBIR7NDUNMAME4ZYFRIU7DPBXLDF,CBMSBM6EABGBNZ47WZTLX6WJOB3ETO2GNPQYC2FX6LJXUL7TRQFZ3IA3,CAFLSXCYUBFW6ULNWTHQBVPECG3RCTFLGBHFW4SSQSE7KSHT7MKLHCXE,CBRURI3VNTEOTTSQ5NZEG4UMUSVEJRGP7UMBZ7WSZSM7DW6X77HSHBRU,CCCPRQ475IAG3SETBL5VTQDH7OPKW7PJMPDXN745QIPTQ2GDML34WFRS",
+  "statisticsUrl": "https://amm-api.aqua.network/pools/",
+  "indexedPoolCount": 368,
+  "excludedPoolCount": 48,
+  "eligiblePoolCount": 320,
+  "omittedPoolCount": 305,
+  "selection": "top_tvl",
+  "limit": 15,
+  "statisticsAvailable": true,
+  "pools": [
+    {
+      "id": "aquarius-ccnxgpe4aqcsnebzo3xjdkkdi3crlymvs6uwbbtvdlallwmjexborq2a",
+      "network": "mainnet",
+      "contractId": "CCNXGPE4AQCSNEBZO3XJDKKDI3CRLYMVS6UWBBTVDLALLWMJEXBORQ2A",
+      "poolHash": "f56e6f3b43d99643950956cf1dfdfccfc1abe825bef484484911c9f428ff4ba7",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "stable",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAUP7NFABXE5TJRL3FKTPMWRLC7IAXYDCTHQRFSCLR5TMGKHOOQO772J",
+          "identity": "xSolvBTC",
+          "symbol": "xSolvBTC"
+        },
+        {
+          "contractId": "CBIJBDNZNF4X35BJ4FFZWCDBSCKOP5NB4PLG4SNENRMLAPYG4P5FM6VN",
+          "identity": "Solv BTC",
+          "symbol": "Solv BTC"
+        }
+      ],
+      "shareContractId": "CDZ4QRNY63YKJY7FLBTJUVPX3Z3U56JY5KHNHQEYI5F5MYLMC5YNRIXE",
+      "shareDecimals": 7,
+      "tvlUsd": 13252464.005244683,
+      "volume24hUsd": 16206.436523149341,
+      "feeAprPct": 0.02197,
+      "aquaAprPct": 0,
+      "incentiveAprPct": 5.23855,
+      "totalAprPct": 5.26051,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-cdmh535jsd224yxpet3b4sjolxtqq24grscwacgybksh2dkfjywi7suw",
+      "network": "mainnet",
+      "contractId": "CDMH535JSD224YXPET3B4SJOLXTQQ24GRSCWACGYBKSH2DKFJYWI7SUW",
+      "poolHash": "766a7450f7311b888ad3ae2f3bbe455d5507c308a9ed6353cc1b9b80e9372924",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "stable",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CCCRWH6Q3FNP3I2I57BDLM5AFAT7O6OF6GKQOC6SSJNDAVRZ57SPHGU2",
+          "identity": "PYUSD:GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5",
+          "symbol": "PYUSD"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CD3EQXQGRYUKM7LZ6MZVTXSW74ROXU6YI2SXHJ6KTB5BQ425E5KXRDBC",
+      "shareDecimals": 7,
+      "tvlUsd": 8000568.9429802215,
+      "volume24hUsd": 192.15634315389008,
+      "feeAprPct": 0.00451,
+      "aquaAprPct": 0.08277999999999999,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.08729999999999999,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-cd2o2b6pwkxdvfxmhxhqmf25c4twosqaena7dnfr5g27f5chj7ajp5f6",
+      "network": "mainnet",
+      "contractId": "CD2O2B6PWKXDVFXMHXHQMF25C4TWOSQAENA7DNFR5G27F5CHJ7AJP5F6",
+      "poolHash": "b2e02fcfca6c96f8ad5cbd84e7784a777b36d9c96a2459402c4f458462aab7f0",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA",
+          "identity": "native",
+          "symbol": "XLM"
+        },
+        {
+          "contractId": "CBIJBDNZNF4X35BJ4FFZWCDBSCKOP5NB4PLG4SNENRMLAPYG4P5FM6VN",
+          "identity": "Solv BTC",
+          "symbol": "Solv BTC"
+        }
+      ],
+      "shareContractId": "CAPPL34NF6X7M3EQFIPDXZHQX2PT3EOE2LYCDORH3PF2LTRDSFGWV6NL",
+      "shareDecimals": 7,
+      "tvlUsd": 7533200.166455175,
+      "volume24hUsd": 4758.9347808766415,
+      "feeAprPct": 0.1271,
+      "aquaAprPct": 0.14974,
+      "incentiveAprPct": 1.02444,
+      "totalAprPct": 1.30129,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ca6pujlbykzkueklzjmkbzlekp2othandeowsff44ftsylkqpiiccjbe",
+      "network": "mainnet",
+      "contractId": "CA6PUJLBYKZKUEKLZJMKBZLEKP2OTHANDEOWSFF44FTSYLKQPIICCJBE",
+      "poolHash": "b2e02fcfca6c96f8ad5cbd84e7784a777b36d9c96a2459402c4f458462aab7f0",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA",
+          "identity": "native",
+          "symbol": "XLM"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CAVKLYY4RWFQBRA2YI5GTGGXKUKJQI3JLAHDGXMS7L5RDH6X6A47NMOZ",
+      "shareDecimals": 7,
+      "tvlUsd": 3284197.691031376,
+      "volume24hUsd": 101862.15266804787,
+      "feeAprPct": 1.11042,
+      "aquaAprPct": 0.11963,
+      "incentiveAprPct": 0,
+      "totalAprPct": 1.23006,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-cckgqsqg5jlzbmymb4ht6m4h7fuc3nk5c75mihn6627lray5b2syl2ad",
+      "network": "mainnet",
+      "contractId": "CCKGQSQG5JLZBMYMB4HT6M4H7FUC3NK5C75MIHN6627LRAY5B2SYL2AD",
+      "poolHash": "b2e02fcfca6c96f8ad5cbd84e7784a777b36d9c96a2459402c4f458462aab7f0",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAL6ER2TI6CTRAY6BFXWNWA7WTYXUXTQCHUBCIBU5O6KM3HJFG6Z6VXV",
+          "identity": "CETES:GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+          "symbol": "CETES"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CB2WUVUP2SKZVFZFNU33EZCISH65DKHQP4WBEHJ4WE3BF7QOABYGCQMS",
+      "shareDecimals": 7,
+      "tvlUsd": 2273154.3521246994,
+      "volume24hUsd": 0,
+      "feeAprPct": 0.04066,
+      "aquaAprPct": 0,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.04066,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ccx2tyr4aqtppmtzoimp3yibhayllstxvp47pagtl753pcqfskv32mia",
+      "network": "mainnet",
+      "contractId": "CCX2TYR4AQTPPMTZOIMP3YIBHAYLLSTXVP47PAGTL753PCQFSKV32MIA",
+      "poolHash": "9ac7a9cde23ac2ada11105eeaa42e43c2ea8332ca0aa8f41f58d7160274d718e",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 30,
+      "tokens": [
+        {
+          "contractId": "CBLV4ATSIWU67CFSQU2NVRKINQIKUZ2ODSZBUJTJ43VJVRSBTZYOPNUR",
+          "identity": "USTRY:GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+          "symbol": "USTRY"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CCLJBNY2KMUOSAW7URIZHREO5ORQREDX7NIHLFRAT6KAZ5GO7652OA4I",
+      "shareDecimals": 7,
+      "tvlUsd": 2155016.0671638926,
+      "volume24hUsd": 28.439025835201228,
+      "feeAprPct": 0.0005499999999999999,
+      "aquaAprPct": 0,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.0005499999999999999,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-cafhlhgzxovncgfj7doxl7jdnmbcezkdi3ls5nrqh3gxc7csimqzhusm",
+      "network": "mainnet",
+      "contractId": "CAFHLHGZXOVNCGFJ7DOXL7JDNMBCEZKDI3LS5NRQH3GXC7CSIMQZHUSM",
+      "poolHash": "b2e02fcfca6c96f8ad5cbd84e7784a777b36d9c96a2459402c4f458462aab7f0",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CB3YA656OYIHU57657I5KGSBRHE5I3OZU4VFC22PYAOANFZHEWNYGAGP",
+          "identity": "USDY:GAJMPX5NBOG6TQFPQGRABJEEB2YE7RFRLUKJDZAZGAD5GFX4J7TADAZ6",
+          "symbol": "USDY"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CCYD4C2WFWIIDF235SCDXEWL5RT6S53WQWLDHUTQ5USZ5VNF5NHJGVW7",
+      "shareDecimals": 7,
+      "tvlUsd": 1999867.4270574632,
+      "volume24hUsd": 0,
+      "feeAprPct": 0.00022,
+      "aquaAprPct": 0.048089999999999994,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.04831,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ccj3xjr5vodgjhh6bqhruvoa3fwmqrqopluznklskfkyelzf767p2dor",
+      "network": "mainnet",
+      "contractId": "CCJ3XJR5VODGJHH6BQHRUVOA3FWMQRQOPLUZNKLSKFKYELZF767P2DOR",
+      "poolHash": "b2e02fcfca6c96f8ad5cbd84e7784a777b36d9c96a2459402c4f458462aab7f0",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAC743NYRBMS76L2DCPAXZTOEF6EJPKPVEC5OX2SXY7HOWNXISSLUE2C",
+          "identity": "USDM1:GDM5QWWXCMDTQMZAKMYTCI52LA7FWBHAZMU5NJLMIFHDJISJRP2ZWPKC",
+          "symbol": "USDM1"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CAJV3HH7EIA4DDAMHXGZP3ZGNYAKX5MNELBMTF6VGCANWZZVJBY2UB6H",
+      "shareDecimals": 7,
+      "tvlUsd": 1506919.0318068326,
+      "volume24hUsd": 0,
+      "feeAprPct": 0,
+      "aquaAprPct": 0,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ccymztojidzy45xgdbunrmyuzwbutnwoamreaw4jyu7gekdhloeojx25",
+      "network": "mainnet",
+      "contractId": "CCYMZTOJIDZY45XGDBUNRMYUZWBUTNWOAMREAW4JYU7GEKDHLOEOJX25",
+      "poolHash": "bd3e48ef6f961d6f04d90483b868a93e8eeafd53f0010c061205595bceb44ef2",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "stable",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CBZ4DCE7PYMUTOAKKUTRSUPT3FJFVOWCSKWUM5A72D6SAVMUJE5JN2PJ",
+          "identity": "STBL_USST - USST Token",
+          "symbol": "STBL_USST - USST Token"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CAYIEHK5JCIC5ULGKFTKQEN2R4AYQQW2JWDC2B4IZVRRTL7XTZDAA6U2",
+      "shareDecimals": 7,
+      "tvlUsd": 1442262.0038701477,
+      "volume24hUsd": 0,
+      "feeAprPct": 0,
+      "aquaAprPct": 0,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ccy2pxgmknqho7wnyxewx76l2c5bh3juw3rcatguyky7qqtrilbzifwv",
+      "network": "mainnet",
+      "contractId": "CCY2PXGMKNQHO7WNYXEWX76L2C5BH3JUW3RCATGUYKY7QQTRILBZIFWV",
+      "poolHash": "9ac7a9cde23ac2ada11105eeaa42e43c2ea8332ca0aa8f41f58d7160274d718e",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 30,
+      "tokens": [
+        {
+          "contractId": "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA",
+          "identity": "native",
+          "symbol": "XLM"
+        },
+        {
+          "contractId": "CAUIKL3IYGMERDRUN6YSCLWVAKIFG5Q4YJHUKM4S4NJZQIA3BAS6OJPK",
+          "identity": "AQUA:GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA",
+          "symbol": "AQUA"
+        }
+      ],
+      "shareContractId": "CBOHAVUYKQD4C7FIVXEDJCVLUZYUO6RN3VIKEDOTIJGDDV3QN33Y4T4D",
+      "shareDecimals": 7,
+      "tvlUsd": 1329801.0632673374,
+      "volume24hUsd": 3705.564014826435,
+      "feeAprPct": 0.28929,
+      "aquaAprPct": 0.4039,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.6931999999999999,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ccfgzjthqzgdzp5pk6wmlkhkj72acsvmjgci2nfr7q6eavskwljb3zh3",
+      "network": "mainnet",
+      "contractId": "CCFGZJTHQZGDZP5PK6WMLKHKJ72ACSVMJGCI2NFR7Q6EAVSKWLJB3ZH3",
+      "poolHash": "347fcccaf70462dc3347a9377e865a739df45d2d60b5075c0db29af76277a904",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "stable",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA",
+          "identity": "native",
+          "symbol": "XLM"
+        },
+        {
+          "contractId": "CBZVSNVB55ANF24QVJL2K5QCLOAB6XITGTGXYEAF6NPTXYKEJUYQOHFC",
+          "identity": "yXLM:GARDNV3Q7YGT4AKSDF25LT32YSCCW4EV22Y2TV3I2PU2MMXJTEDL5T55",
+          "symbol": "yXLM"
+        }
+      ],
+      "shareContractId": "CAFEXSVTYRXJSAQWI6JZE5VL3US5XMDKDNQFACPYTKJNSHCHCU2ER4YE",
+      "shareDecimals": 7,
+      "tvlUsd": 996550.9484438391,
+      "volume24hUsd": 58.13071754169855,
+      "feeAprPct": 0.00703,
+      "aquaAprPct": 0.055119999999999995,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.06215,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ccwnkttmhz4vrr3fyqt3g253mhogrluevto6ypenm7zn65dgc345lhi6",
+      "network": "mainnet",
+      "contractId": "CCWNKTTMHZ4VRR3FYQT3G253MHOGRLUEVTO6YPENM7ZN65DGC345LHI6",
+      "poolHash": "6e2ee756cb105020cbd6589e761015198c4c85f2e85e1e4d37f280b62b78830e",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "stable",
+      "feeBps": 1,
+      "tokens": [
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        },
+        {
+          "contractId": "CDOFW7HNKLUZRLFZST4EW7V3AV4JI5IHMT6BPXXSY2IEFZ4NE5TWU2P4",
+          "identity": "yUSDC:GDGTVWSM4MGS4T7Z6W4RPWOCHE2I6RDFCIFZGS3DOA63LWQTRNZNTTFF",
+          "symbol": "yUSDC"
+        }
+      ],
+      "shareContractId": "CBYPRAIOURA7GE7RQZEACWBSRAH4A35MJEQJUIEEGMW7UUULCGCSSQE2",
+      "shareDecimals": 7,
+      "tvlUsd": 670872.5621598981,
+      "volume24hUsd": 1079.33230577077,
+      "feeAprPct": 0.0043,
+      "aquaAprPct": 0.17593,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.18023,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-cdogktahiinhydl3buydvkiqddji35ibmlouhc3azc6fnjft5zc7bydj",
+      "network": "mainnet",
+      "contractId": "CDOGKTAHIINHYDL3BUYDVKIQDDJI35IBMLOUHC3AZC6FNJFT5ZC7BYDJ",
+      "poolHash": "b2e02fcfca6c96f8ad5cbd84e7784a777b36d9c96a2459402c4f458462aab7f0",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAO7DDJNGMOYQPRYDY5JVZ5YEK4UQBSMGLAEWRCUOTRMDSBMGWSAATDZ",
+          "identity": "BTC:GDPJALI4AZKUU2W426U5WKMAT6CN3AJRPIIRYR2YM54TL2GDWO5O2MZM",
+          "symbol": "BTC"
+        },
+        {
+          "contractId": "CBH4M45TQBLDPXOK6L7VYKMEJWFITBOL64BN3WDAIIDT4LNUTWTTOCKF",
+          "identity": "ETH:GBFXOHVAS43OIWNIO7XLRJAHT3BICFEIKOJLZVXNT572MISM4CMGSOCC",
+          "symbol": "ETH"
+        }
+      ],
+      "shareContractId": "CBJGGZJTESHK3HZD3KVTGNKCUOEDZK653DYV7WLDOCWAAOYFLIBMZDYZ",
+      "shareDecimals": 7,
+      "tvlUsd": 538981.8312117988,
+      "volume24hUsd": 1070.019702167167,
+      "feeAprPct": 0.0239,
+      "aquaAprPct": 0,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.0239,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-cbrgfmr6qbx7asubo534udgoub2sdgrl7aafxfybq4dt4rjtwqg55w2t",
+      "network": "mainnet",
+      "contractId": "CBRGFMR6QBX7ASUBO534UDGOUB2SDGRL7AAFXFYBQ4DT4RJTWQG55W2T",
+      "poolHash": "64f1993aae38ef2b3f959d3554a30ffdf827cf575fde48591303b13df8e6fcae",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "stable",
+      "feeBps": 10,
+      "tokens": [
+        {
+          "contractId": "CAO7DDJNGMOYQPRYDY5JVZ5YEK4UQBSMGLAEWRCUOTRMDSBMGWSAATDZ",
+          "identity": "BTC:GDPJALI4AZKUU2W426U5WKMAT6CN3AJRPIIRYR2YM54TL2GDWO5O2MZM",
+          "symbol": "BTC"
+        },
+        {
+          "contractId": "CB2XMFB6BDIHFOSFB5IXHDOYV3SI3IXMNIZLPDZHC7ENDCXSBEBZAO2Y",
+          "identity": "yBTC:GBUVRNH4RW4VLHP4C5MOF46RRIRZLAVHYGX45MVSTKA2F6TMR7E7L6NW",
+          "symbol": "yBTC"
+        }
+      ],
+      "shareContractId": "CA456UUXMYXTX6AJ4NG5PXZA7KIEDYTQIMPWBLIWIZXGRP3QM5QCNBKD",
+      "shareDecimals": 7,
+      "tvlUsd": 458001.7479158173,
+      "volume24hUsd": 8.04674283610948,
+      "feeAprPct": 0.00785,
+      "aquaAprPct": 0,
+      "incentiveAprPct": 0,
+      "totalAprPct": 0.00785,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    },
+    {
+      "id": "aquarius-ca6gafojcw4mgqqbucqusa3clih25g4snkb2jhykzcvwztnw5vxmsc4o",
+      "network": "mainnet",
+      "contractId": "CA6GAFOJCW4MGQQBUCQUSA3CLIH25G4SNKB2JHYKZCVWZTNW5VXMSC4O",
+      "poolHash": "9ac7a9cde23ac2ada11105eeaa42e43c2ea8332ca0aa8f41f58d7160274d718e",
+      "routerContractId": "CBQDHNBFBZYE4MKPWBSJOPIYLW4SFSXAXUTSXJN76GNKYVYPCKWC6QUK",
+      "type": "volatile",
+      "feeBps": 30,
+      "tokens": [
+        {
+          "contractId": "CAUIKL3IYGMERDRUN6YSCLWVAKIFG5Q4YJHUKM4S4NJZQIA3BAS6OJPK",
+          "identity": "AQUA:GBNZILSTVQZ4R7IKQDGHYGY2QXL5QOFJYQMXPKWRRM5PAV7Y4M67AQUA",
+          "symbol": "AQUA"
+        },
+        {
+          "contractId": "CCW67TSZV3SSS2HXMBQ5JFGCKJNXKZM7UQUWUZPUTHXSTZLEO7SJMI75",
+          "identity": "USDC:GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+          "symbol": "USDC"
+        }
+      ],
+      "shareContractId": "CDOY7ILRR7PDGLBXZUPSENB6XOET77PR2JY3HXDGQS3TS4T764OYBUGO",
+      "shareDecimals": 7,
+      "tvlUsd": 448905.99631884735,
+      "volume24hUsd": 1847.9361699087804,
+      "feeAprPct": 0.57485,
+      "aquaAprPct": 0.96312,
+      "incentiveAprPct": 0,
+      "totalAprPct": 1.5379699999999998,
+      "measurementWindow": null,
+      "upstreamAsOf": null,
+      "retrievedAt": "2026-10-25T21:16:15.199Z",
+      "depositPaused": false,
+      "version": 220,
+      "executable": false,
+      "verification": "unverified"
+    }
+  ]
+}

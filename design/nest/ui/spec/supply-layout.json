@@ -1,0 +1,16 @@
+{
+  "date": "2026-10-25",
+  "route": "#supply",
+  "layout": {
+    "max_width_px": 1180,
+    "columns": "Single centered column with a 24px gap",
+    "primary_panel": "Supply intent spans the same full bounded width as Supply comparison, with 24px padding, a 28px serif heading and two-column form fields",
+    "comparison": "Directly beneath Supply intent at the same width and left/right edges; contained horizontal scrolling on small screens",
+    "removed_panels": [
+      "How comparison works",
+      "Your supplied positions"
+    ],
+    "narrow": "At workspace width <=800px, both panels remain stacked in a single column capped at 640px",
+    "behavior": "Existing inputs, calculation, exclusions, withdrawal disclosure and shared review remain unchanged"
+  }
+}

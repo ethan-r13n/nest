@@ -1,0 +1,25 @@
+{
+  "date": "2026-10-25",
+  "status": "passed",
+  "layouts": [
+    {
+      "alignedLeft": true,
+      "heading": "Portfolio composition",
+      "overflow": false,
+      "standaloneCard": false,
+      "total": "$24,760.00",
+      "valueBelowHeading": true,
+      "width": 375
+    },
+    {
+      "alignedLeft": true,
+      "heading": "Portfolio composition",
+      "overflow": false,
+      "standaloneCard": false,
+      "total": "$24,760.00",
+      "valueBelowHeading": true,
+      "width": 1440
+    }
+  ],
+  "screenshot": "previews/portfolio-composition.jpg"
+}

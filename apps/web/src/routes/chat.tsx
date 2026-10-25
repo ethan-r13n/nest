@@ -9,7 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@nest/ui/components/sheet';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import {
   ArrowUpRight,
   BookOpen,
@@ -20,7 +20,7 @@ import {
   PanelLeftOpen,
   Plus,
 } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ConversationDraft } from '../components/conversation-draft.tsx';
 import { PageHeader } from '../components/workspace.tsx';
@@ -32,9 +32,17 @@ const HISTORY_LINKS = [
   { to: '/research/markets', label: 'Market coverage', icon: ArrowUpRight },
 ] as const;
 
-export function ChatPage() {
+/** `ask` is a question carried from the landing page; it fills the composer once and is not sent. */
+export function ChatPage({ ask }: { ask?: string | undefined }) {
   const { setDraft, chat } = useWorkspaceSession();
   const [expanded, setExpanded] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!ask) return;
+    setDraft(ask);
+    void navigate({ to: '/chat', search: {}, replace: true });
+  }, [ask, setDraft, navigate]);
 
   function newConversation() {
     setDraft('');

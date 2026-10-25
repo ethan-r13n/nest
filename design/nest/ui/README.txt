@@ -1,4 +1,4 @@
-NEST UI DESIGN HANDOFF v0.6.0 — 25 OCTOBER 2026
+NEST UI DESIGN HANDOFF v0.8.1 — 25 OCTOBER 2026
 
 Start with designs.html for the visual index, index.html for the interactive
 preview, or spec/index.html for the complete implementation specification.
@@ -16,7 +16,7 @@ and are not tracked in Git; source, fonts, real logos and previews are included.
 
 Requested views
   Trade; Vault list; one combined Vault detail; Borrow; Manage positions;
-  Research DeFi; Research RWAs; Lab Memory; Lab Backtests; Lab Automations.
+  Research DeFi; Research RWAs; Lab Backtest; Lab Set automation; Lab History.
 17 supporting route designs and a complete Portfolio now fill the missing
 journeys. See spec/completion.html for the before/after audit and contracts.
 The existing Rain concept remains available for context.
@@ -27,9 +27,9 @@ Identity
 
 Scope
   Research embeds dated repository snapshots, retaining source scope and gaps.
-  Financial values in other views are explicit fixtures.
-  The sample backtest is a deterministic local calculation over synthetic prices.
-  No wallet connection, provider call, OAuth, live scheduling, signing, submission
+  Execution quotes, accounts and other financial values remain explicit fixtures; trading charts now use real timestamped provider history.
+  Lab saves strategy setups locally; historical replay and polling need data services.
+  No wallet connection, OAuth, live scheduling, signing, submission
   or historical backtest service is connected by this preview.
 
 Implementation handoff
@@ -91,3 +91,68 @@ Latest screenshot feedback (v0.6.0)
   exact same-tab RWA.xyz row links. Unknown access remains unverified.
   Read spec/market-feedback.html and its JSON contract.
   Run node ui/scripts/verify-market-models.js from the enclosing handoff.
+
+UI 3 / Research hierarchy (v0.7.1)
+  Research now has DeFi, RWAs and MCP Contents. MCP Contents starts with the
+  venue map, expanded to 26 Scout projects and eight integration targets, then
+  the published catalog. Venue markets and separate venue/market detail views
+  are removed; their read groups, roles, assets, actions and exit terms appear
+  on the applicable DeFi protocol detail. Legacy hashes migrate automatically.
+  Network metrics and charts are compact. Research tables share numbered
+  10/25/50 pagination and preserve filters and position when returning.
+  See spec/research-hierarchy.json and spec/verification-research-hierarchy.json.
+  Run node ui/scripts/verify-research-hierarchy.js from the enclosing handoff.
+
+
+Protocol source capture (v0.8.0)
+  Exact Stellar pool matches show source TVL and APY on protocol detail.
+  Scout project context retains match identity, source dates and family scope.
+  The public-upstream collector and yield projector now ship with the handoff
+  sources in research/data. Raven MCP remains unconnected in the preview.
+
+Lab trigger and logo follow-up (v0.8.1)
+  Lab has Backtest, Set automation and History. The Strategy canvas is
+  removed. Chat gathers missing inputs and shows an inline review only
+  when the draft is ready. Setups save their source, condition and original
+  conversation; actual replay and polling remain unconnected.
+  The arbitrage preset stays first. New editable presets cover BTC EMA
+  followed by an XLM buy proposal, an XLM volume breakout, and a sustained
+  USDC yield gap. Purchase proposals always require review.
+  All 26 map projects have real local logos, with seven Scout-name aliases.
+  Run scripts/verify-lab-model.js and scripts/verify-map-logos.js.
+
+Credit positions feedback
+  Open positions now combines loan and supply rows, adds variable borrow/lend
+  APR, and stacks LTV/HF in one cell. Supply rows omit loan risk metrics.
+  The selected position opens a full-width management panel matching the
+  position table above. The balance chart is removed. Loans show four actions
+  on one row; supply has
+  only Add and Withdraw. The old workflow, activity, term disclosure and large
+  risk summary are removed. No historical series or execution is fabricated.
+  Run node ui/scripts/verify-credit-positions.js and see
+  spec/verification-credit-positions.json for model and browser checks.
+
+Portfolio cleanup / 25 October 2026
+  Remove the requested summary cards, source badges, right sidebar, and
+  Receive / Send / Redemptions screens. Overview and Activity remain.
+  Every position row says Manage and opens its exact native management
+  controls. Credit supply and loan IDs, vault product IDs and LP pool IDs
+  are preserved. Wallet assets open Trade with that asset selected.
+  See spec/portfolio-feedback.json and its verification evidence.
+  Run node ui/scripts/verify-portfolio-navigation.js.
+
+Action button labels / 25 October 2026
+  Use Title Case for every word in action buttons and button-style links,
+  including dynamic views and dialogs. Preserve token symbols, asset names
+  and descriptive rich-button copy. Lab History offers Build A Backtest and
+  Build An Automation side by side, wrapping together on narrow screens.
+
+USDC market charts
+  All seven base assets have real timestamped reference history in locally bundled
+  TradingView Lightweight Charts. USDC is fixed as quote currency.
+  To enable live refresh alongside the UI server, from the repository root run:
+    python3 design/nest/ui/scripts/market_data.py
+  The read-only adapter binds 127.0.0.1:8766 and reads SOROSWAP_API_KEY only on the
+  server, from the environment or ignored root .dev.vars. The bundled dated history
+  remains usable when the adapter is offline. See spec/trade-chart-integration.md
+  for source mappings, underlying-reference scope, daily NAV and hosted API contract.

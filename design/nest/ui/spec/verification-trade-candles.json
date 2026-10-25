@@ -1,0 +1,76 @@
+{
+  "status": "passed",
+  "markets": [
+    {
+      "asset": "XLM",
+      "basis": "observations",
+      "kind": "candles",
+      "overflow": false,
+      "points": 179,
+      "readout": "25 Oct, 21:00 UTC   O 0.16852  H 0.16852  L 0.16767  C 0.16767 USDC"
+    },
+    {
+      "asset": "AQUA",
+      "basis": "trades",
+      "kind": "candles",
+      "overflow": false,
+      "points": 76,
+      "readout": "25 Oct, 21:00 UTC   O 0.00028733  H 0.00028733  L 0.0002849  C 0.0002849 USDC   Vol 979,478.66 AQUA"
+    },
+    {
+      "asset": "EURC",
+      "basis": "observations",
+      "kind": "candles",
+      "overflow": false,
+      "points": 180,
+      "readout": "25 Oct, 21:00 UTC   O 1.12213  H 1.12213  L 1.12176  C 1.12176 USDC"
+    },
+    {
+      "asset": "USDT0",
+      "basis": "observations",
+      "kind": "candles",
+      "overflow": false,
+      "points": 180,
+      "readout": "25 Oct, 22:00 UTC   O 0.99941  H 0.99941  L 0.99941  C 0.99941 USDC"
+    },
+    {
+      "asset": "PYUSD",
+      "basis": "observations",
+      "kind": "candles",
+      "overflow": false,
+      "points": 180,
+      "readout": "25 Oct, 21:00 UTC   O 1.00052  H 1.00054  L 1.00052  C 1.00054 USDC"
+    },
+    {
+      "asset": "SOLVBTC",
+      "basis": "observations",
+      "kind": "candles",
+      "overflow": false,
+      "points": 179,
+      "readout": "25 Oct, 21:00 UTC   O 80,424.56  H 80,443.29  L 80,172.24  C 80,172.24 USDC"
+    },
+    {
+      "asset": "EUTBL",
+      "basis": "nav",
+      "kind": "candles",
+      "overflow": false,
+      "points": 71,
+      "readout": "25 Oct, 00:00 UTC   O 1.18874  H 1.18874  L 1.18874  C 1.18874 USDC"
+    }
+  ],
+  "zoom": {
+    "before": 182,
+    "after": 137
+  },
+  "mobile": {
+    "kind": "candles",
+    "overflow": false,
+    "readout": "25 Oct, 21:00 UTC   O 0.16852  H 0.16852  L 0.16767  C 0.16767 USDC",
+    "width": 360
+  },
+  "previews": [
+    "previews/trade-candles.jpg",
+    "previews/trade-candles-mobile.jpg"
+  ],
+  "adapterTests": 6
+}

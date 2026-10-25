@@ -1,0 +1,74 @@
+{
+  "version": "0.6.1",
+  "date": "2026-10-25",
+  "route": "protocol-detail",
+  "layout": {
+    "removed": [
+      "Market access",
+      "History & coverage"
+    ],
+    "workspace": [
+      "Scoped TVL/category metrics",
+      "Exact-protocol Stellar yield pools when present",
+      "Protocol overview",
+      "Raven research"
+    ],
+    "sidebar": [
+      "Explore this protocol with two buttons on one row",
+      "Source boundaries",
+      "Compact Dependencies & controls"
+    ]
+  },
+  "yields": {
+    "source": "https://yields.llama.fi/pools",
+    "capture": "2026-10-25T14:35:18.412Z",
+    "match": [
+      "project === protocol.slug",
+      "chain === Stellar"
+    ],
+    "protocols_with_captured_pools": [
+      "blend-pools-v2",
+      "gami-labs",
+      "xoxno-lending"
+    ],
+    "columns": [
+      "Asset / pool",
+      "Pool TVL",
+      "APY",
+      "Base APY",
+      "30d mean APY"
+    ],
+    "absence": "Show available protocol facts and a concise yield coverage note.",
+    "nulls": "Retain missing values as unavailable, distinct from reported zero.",
+    "actions": "View opportunities scrolls to this protocol’s captured pools when present; otherwise opens the existing Vaults directory."
+  },
+  "raven_context": {
+    "provider": "Scout / Stellar Light",
+    "source_family": "Raven Scout",
+    "access": "public upstream API",
+    "mcp_connected": false,
+    "matched_protocols": 32,
+    "total_protocols": 44,
+    "fields": [
+      "Project description",
+      "Project lifecycle status and source date",
+      "Builder",
+      "Project focus",
+      "Reported SCF funding and source",
+      "Audit references",
+      "Repositories",
+      "Source-reported contracts"
+    ],
+    "identity": "Only exact provider slugs and reviewed project identities; exclude mere similarity matches.",
+    "scope": "Project-family context is explicit, especially for Blend versions and backstops.",
+    "unmatched": "Show no verified match from retrieved results; never claim the project is absent from the ecosystem."
+  },
+  "refresh": [
+    "python3 research/data/build-protocol-yields.py",
+    "python3 research/data/collect-raven-scout.py"
+  ],
+  "verification": [
+    "node design/nest/ui/scripts/verify-protocol-details.js",
+    "spec/verification-protocol-feedback.json"
+  ]
+}

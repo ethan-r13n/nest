@@ -1,0 +1,43 @@
+/* Protocol detail: source data in the workspace, compact references alongside. */
+.p-protocol-layout{grid-template-columns:minmax(0,1fr) 360px}
+.p-protocol-layout .panel-head{gap:16px;flex-wrap:wrap}
+.p-source-link{font-size:12px;color:var(--dim);white-space:nowrap}
+.p-yields{scroll-margin-top:86px}
+.p-yields .panel-head .eyebrow{font-size:10px;letter-spacing:.08em;margin-bottom:5px}
+.p-yield-table{min-width:680px}
+.p-yield-table th:not(:first-child),.p-yield-table td:not(:first-child){text-align:right;white-space:nowrap}
+.p-yield-table td:not(:first-child){font-family:var(--mono);font-size:12px;font-variant-numeric:tabular-nums}
+.p-yield-table td:first-child{min-width:140px}
+.p-yield-table td small,.p-overview-facts dd small{display:block;margin-top:5px;font-size:11px;color:var(--dim);font-family:var(--sans)}
+.p-panel-note{padding:16px 20px;border-top:1px solid var(--line);color:var(--dim);font-size:11px}
+.p-panel-note p{margin:0 0 6px}.p-panel-note p:last-child{margin:0}
+.p-overview-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 28px}
+.p-overview-facts>div{display:block;padding:14px 0;min-width:0}
+.p-overview-facts dt{font-size:11px;margin-bottom:7px}
+.p-overview-facts dd{text-align:left;margin:0;font-size:13px}
+.p-context-heading{display:flex;gap:12px;justify-content:space-between;align-items:baseline;flex-wrap:wrap;margin-bottom:14px}
+.p-context-heading .eyebrow{margin:0}.p-scope{padding-left:12px;border-left:2px solid var(--line-strong);margin-bottom:16px}
+.p-project-summary{font-size:14px;line-height:1.8;color:var(--dim)}
+.p-project-links,.p-source-links{display:flex;gap:16px;flex-wrap:wrap;font-size:12px}
+.p-project-links{padding:20px 0 8px}.p-source-links{gap:8px 16px}
+.p-references{padding:16px 0;border-bottom:1px solid var(--line);margin:0}
+.p-references summary{display:flex;align-items:center;gap:10px;cursor:pointer;font-size:13px}
+.p-references summary:before{content:'+';font-family:var(--mono);color:var(--dim)}
+.p-references[open] summary:before{content:'−'}.p-references summary span{font:400 10px var(--mono);color:var(--dim);margin-left:auto}
+.p-references ul{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:14px}
+.p-references li{font-size:12px;overflow-wrap:anywhere}.p-references li small{display:block;font-size:10px;color:var(--dim);margin-top:4px}
+.p-references>p{margin-top:14px;margin-bottom:0}.p-source-note{margin:18px 0 0}
+.p-protocol-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.p-protocol-actions .btn{padding:10px 8px;font-size:12px;min-width:0;white-space:normal;text-align:center}
+.p-protocol-sidebar .panel-body{padding:20px}
+.p-protocol-sidebar .panel-head{padding:18px 20px}
+.p-protocol-sidebar .panel-head h2{font-size:19px}
+.p-protocol-sidebar .muted{font-size:12px;line-height:1.7}
+.p-controls .panel-body{padding:14px 20px}
+.p-compact-facts>div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:10px;align-items:baseline;padding:9px 0}
+.p-compact-facts>div:first-child{padding-top:0}.p-compact-facts>div:last-child{padding-bottom:0}
+.p-compact-facts dt{font-size:11px;margin:0;line-height:1.55}
+.p-compact-facts dd{font-size:11px;line-height:1.55;text-align:right;margin:0}
+@container workspace (max-width:1100px){.p-protocol-layout{grid-template-columns:minmax(0,1fr) 320px}}
+@container workspace (max-width:1000px){.p-protocol-layout{grid-template-columns:1fr}.p-protocol-layout>aside{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@container workspace (max-width:650px){.p-protocol-layout>aside{grid-template-columns:1fr}.p-overview-facts{grid-template-columns:1fr}.p-yields .panel-head{align-items:flex-start}.p-protocol-actions .btn{font-size:12px}}

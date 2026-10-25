@@ -1,0 +1,105 @@
+{
+  "checkedAt": "2026-10-25T20:44:01.894Z",
+  "checks": [
+    {
+      "description": "USDC allocated by Gami Labs across Stellar lending and liquidity strategies. Deposits mint earnUSDC shares that track the value of the vault’s assets.",
+      "emptySections": 0,
+      "fakeHistory": false,
+      "headings": [
+        "Overview",
+        "Risk overview",
+        "Contract addresses",
+        "Manage position",
+        "Counterparties",
+        "Published fees"
+      ],
+      "id": "gami",
+      "overflow": false,
+      "reviewDisabled": true
+    },
+    {
+      "description": "A tokenized vault allocates deposits across its configured Soroban yield strategies. Each vault fixes its allowed strategies at creation and charges fees on gains.",
+      "emptySections": 0,
+      "fakeHistory": false,
+      "headings": [
+        "Overview",
+        "Risk overview",
+        "Manage position",
+        "Counterparties"
+      ],
+      "id": "defindex",
+      "overflow": false,
+      "reviewDisabled": true
+    },
+    {
+      "description": "Supply USDC to a Blend lending pool and earn interest paid by borrowers. Rates move with utilization; the position accrues through non-transferable supply accounting.",
+      "emptySections": 0,
+      "fakeHistory": false,
+      "headings": [
+        "Risk overview",
+        "Manage position",
+        "Counterparties"
+      ],
+      "id": "blend",
+      "overflow": false,
+      "reviewDisabled": true
+    },
+    {
+      "description": "Stellar deposits enter curated vaults that lend into selected markets and issue transferable shares. Exits use idle assets or a withdrawal queue while allocators recall funds.",
+      "emptySections": 0,
+      "fakeHistory": false,
+      "headings": [
+        "Risk overview",
+        "Manage position",
+        "Counterparties"
+      ],
+      "id": "templar",
+      "overflow": false,
+      "reviewDisabled": true
+    },
+    {
+      "description": "A Sentora-managed USDC vault on Stellar, built on Upshift. Deposits mint sentUSDC shares representing a proportional interest in the strategy.",
+      "emptySections": 0,
+      "fakeHistory": false,
+      "headings": [
+        "Overview",
+        "Risk overview",
+        "Contract addresses",
+        "Manage position",
+        "Counterparties",
+        "Published fees"
+      ],
+      "id": "sentora",
+      "overflow": false,
+      "reviewDisabled": true
+    },
+    {
+      "description": "Deposit XLM to accrue ecosystem-funded campaign rewards. Rewards depend on the amount and time deposited; early withdrawals forfeit rewards on the amount removed.",
+      "emptySections": 0,
+      "fakeHistory": false,
+      "headings": [
+        "Overview",
+        "Risk overview",
+        "Manage position",
+        "Counterparties",
+        "Published fees"
+      ],
+      "id": "campaign",
+      "overflow": false,
+      "reviewDisabled": true
+    },
+    {
+      "description": "Supply USDC to XOXNO’s lending pool to earn borrower interest. Supply shares track accrued value, while the account’s risk group defines its permitted markets.",
+      "emptySections": 0,
+      "fakeHistory": false,
+      "headings": [
+        "Risk overview",
+        "Manage position",
+        "Counterparties"
+      ],
+      "id": "xoxno",
+      "overflow": false,
+      "reviewDisabled": true
+    }
+  ]
+}
