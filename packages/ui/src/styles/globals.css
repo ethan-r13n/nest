@@ -1,0 +1,106 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "../../../../design/nest/assets/fonts/fonts.css";
+@import "../../../../design/nest/tokens.css";
+
+@source "../../../../apps/web/src";
+@source "../components";
+
+@custom-variant dark (&:is(.dark *));
+
+/* shadcn's variables, set from Nest's design tokens (design/nest/tokens.css). Nest is dark only. */
+:root {
+  --radius: var(--nest-radius-control);
+  --background: var(--nest-background);
+  --foreground: var(--nest-text);
+  --card: var(--nest-surface);
+  --card-foreground: var(--nest-text);
+  --popover: var(--nest-surface-raised);
+  --popover-foreground: var(--nest-text);
+  --primary: var(--nest-accent);
+  --primary-foreground: var(--nest-background);
+  --secondary: var(--nest-surface-raised);
+  --secondary-foreground: var(--nest-text);
+  --muted: var(--nest-surface);
+  --muted-foreground: var(--nest-text-secondary);
+  --accent: var(--nest-accent-tint);
+  --accent-foreground: var(--nest-text);
+  --destructive: var(--nest-error);
+  --border: var(--nest-border);
+  --input: var(--nest-input-border);
+  --ring: var(--nest-accent);
+  --chart-1: var(--nest-series-1);
+  --chart-2: var(--nest-series-2);
+  --chart-3: var(--nest-series-3);
+  --chart-4: var(--nest-series-4);
+  --chart-5: var(--nest-accent);
+  --sidebar: var(--nest-surface);
+  --sidebar-foreground: var(--nest-text);
+  --sidebar-primary: var(--nest-accent);
+  --sidebar-primary-foreground: var(--nest-background);
+  --sidebar-accent: var(--nest-accent-tint);
+  --sidebar-accent-foreground: var(--nest-text);
+  --sidebar-border: var(--nest-border);
+  --sidebar-ring: var(--nest-accent);
+}
+
+@theme inline {
+  --font-sans: var(--nest-font-sans);
+  --font-serif: var(--nest-font-display);
+  --font-mono: var(--nest-font-mono);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-success: var(--nest-success);
+  --color-warning: var(--nest-warning);
+  --color-info: var(--nest-info);
+  --color-subtle: var(--nest-text-subtle);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: var(--nest-radius-card);
+  --radius-2xl: calc(var(--nest-radius-card) * 1.25);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+  h1,
+  h2,
+  h3 {
+    @apply font-serif;
+  }
+}

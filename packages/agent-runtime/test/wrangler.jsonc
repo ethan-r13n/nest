@@ -1,0 +1,6 @@
+// Same compatibility date as apps/worker and no Node.js compatibility flag: whatever passes here
+// runs as Nest deploys it.
+{
+  "name": "nest-agent-runtime-test",
+  "compatibility_date": "2026-10-15"
+}
