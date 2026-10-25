@@ -17,6 +17,7 @@ import {
 } from '../lib/execution.ts';
 import { shortAddress, useWallet } from '../lib/wallet.tsx';
 import { Fact, useCountdown } from './swap-proposal.tsx';
+import { TrustlineStep } from './trustline-step.tsx';
 
 type Phase = 'comparing' | 'compared' | 'preparing' | 'review' | 'signing' | 'confirming' | 'done' | 'stopped';
 
@@ -52,32 +53,39 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
     );
   }, []);
 
-  const compare = useCallback(async () => {
-    setPhase('comparing');
-    setError(null);
-    setPlan(null);
-    try {
-      setIntent(await execution.lendingIntent(intentId));
-      const compared = await execution.compareLending(intentId);
-      setComparison(compared);
-      setSelectedId(compared.selectedQuoteId);
-      setPhase('compared');
-    } catch (caught) {
-      fail(caught);
-      setPhase('stopped');
-    }
-  }, [intentId, fail]);
+  /** Compares again; returns the fresh offer from `poolId` when given, else the best one. */
+  const compare = useCallback(
+    async (poolId?: string): Promise<string | null> => {
+      setPhase('comparing');
+      setError(null);
+      setPlan(null);
+      try {
+        setIntent(await execution.lendingIntent(intentId));
+        const compared = await execution.compareLending(intentId);
+        const chosen = compared.quotes.find((quote) => quote.pool.id === poolId)?.id ?? compared.selectedQuoteId;
+        setComparison(compared);
+        setSelectedId(chosen);
+        setPhase('compared');
+        return chosen;
+      } catch (caught) {
+        fail(caught);
+        setPhase('stopped');
+        return null;
+      }
+    },
+    [intentId, fail],
+  );
 
   useEffect(() => {
     void compare();
   }, [compare]);
 
-  async function review() {
-    if (!offer || !wallet.address) return;
+  async function review(quoteId = offer?.id) {
+    if (!quoteId || !wallet.address) return;
     setError(null);
     setPhase('preparing');
     try {
-      const created = await execution.plan<LendingPlan>({ intentId, quoteId: offer.id, accountId: wallet.address });
+      const created = await execution.plan<LendingPlan>({ intentId, quoteId, accountId: wallet.address });
       const prepared = created.status === 'policy_checked' ? await execution.prepare<LendingPlan>(created.id) : created;
       setPlan(prepared);
       setPhase(prepared.status === 'awaiting_review' ? 'review' : 'stopped');
@@ -85,6 +93,11 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
       fail(caught);
       setPhase('compared');
     }
+  }
+
+  async function continueAfterTrustline(poolId: string) {
+    const quoteId = await compare(poolId);
+    if (quoteId) await review(quoteId);
   }
 
   async function sign() {
@@ -232,6 +245,9 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
       {plan && phase === 'stopped' ? (
         <p className="text-destructive">{planProblem(plan) ?? 'This action stopped.'}</p>
       ) : null}
+      {plan && phase === 'stopped' && plan.errorCode === 'TRUSTLINE_MISSING' ? (
+        <TrustlineStep use="lending" onAdded={() => continueAfterTrustline(plan.offer.pool.id)} />
+      ) : null}
       {error ? <p className="text-destructive">{error}</p> : null}
       {plan?.explorerUrl ? (
         <a
@@ -249,7 +265,7 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
           <span className="text-xs text-subtle">Valid for {secondsLeft}s</span>
         ) : null}
         {((phase === 'compared' || phase === 'review') && expired) || (phase === 'stopped' && !error) ? (
-          <Button variant="outline" size="sm" onClick={compare}>
+          <Button variant="outline" size="sm" onClick={() => compare()}>
             <RefreshCw /> Compare again
           </Button>
         ) : null}
@@ -259,7 +275,7 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
           </Button>
         ) : null}
         {phase === 'compared' && offer && !expired && wallet.address ? (
-          <Button size="sm" onClick={review}>
+          <Button size="sm" onClick={() => review()}>
             Review {verb.toLowerCase()}
           </Button>
         ) : null}

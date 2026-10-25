@@ -92,6 +92,9 @@ function createFixture(overrides: Partial<ExecutionConfig> = {}): ExecutionFixtu
       build: async (request) => aggregatorSwap(request.from, clock.now, build.minOut).toXDR(),
     },
     lending: null,
+    buildTrustline: async () => {
+      throw new Error('not used');
+    },
     rpc,
     now: () => clock.now,
     sleep: async (ms) => {

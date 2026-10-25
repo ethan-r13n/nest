@@ -15,6 +15,7 @@
     "./stellar/inspect": "./src/stellar/inspect.ts",
     "./stellar/networks": "./src/stellar/networks.ts",
     "./stellar/sdex": "./src/stellar/sdex.ts",
+    "./stellar/trustline": "./src/stellar/trustline.ts",
     "./venue": "./src/venue.ts"
   },
   "scripts": {

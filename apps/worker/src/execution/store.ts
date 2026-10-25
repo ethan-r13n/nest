@@ -2,6 +2,7 @@ import type { HealthEstimate, MarketView } from '@nest/adapters/blend/reader';
 import { buildBlendSubmit, type LendingRequest } from '@nest/adapters/blend/submit';
 import { createSoroswapVenue, SoroswapError } from '@nest/adapters/soroswap/client';
 import { createSdexVenue } from '@nest/adapters/stellar/sdex';
+import { buildTrustline } from '@nest/adapters/stellar/trustline';
 import type { SwapVenue } from '@nest/adapters/venue';
 import { formatRawAmount, rawFromText } from '@nest/domain/amount';
 import { AppError } from '@nest/domain/errors';
@@ -37,6 +38,7 @@ export interface ExecutionDeps {
   /** Where swaps are quoted and built on this network, or null when it is not configured. */
   venue: SwapVenue | null;
   lending: LendingVenue | null;
+  buildTrustline: typeof buildTrustline;
   rpc: SwapRpc | null;
   now(): number;
   sleep(ms: number): Promise<void>;
@@ -58,6 +60,7 @@ export function executionDeps(env: Env): ExecutionDeps {
           build: (input) => buildBlendSubmit({ network: config.network, rpcUrl, nowMs: Date.now(), ...input }),
         }
       : null,
+    buildTrustline,
     rpc: rpcUrl ? createSwapRpc(rpcUrl) : null,
     now: Date.now,
     sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),

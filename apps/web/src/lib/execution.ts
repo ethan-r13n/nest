@@ -138,6 +138,16 @@ export interface LendingMarkets {
   }[];
 }
 
+/** On Testnet, swaps and Blend list different USDC issuers, so the trustline depends on the feature. */
+export type TrustlineUse = 'swap' | 'lending';
+
+interface PreparedTrustline {
+  asset: { code: string; issuer: string };
+  xdr: string;
+  hash: string;
+  networkPassphrase: string;
+}
+
 export class ExecutionRequestError extends Error {
   override name = 'ExecutionRequestError';
   readonly code: string | undefined;
@@ -172,6 +182,13 @@ export const execution = {
     call<LendingIntent>('/api/intents', { method: 'POST', body: input }),
   compareLending: (intentId: string) => call<LendingComparison>(`/api/intents/${intentId}/compare`, { method: 'POST' }),
   lendingMarkets: () => call<LendingMarkets>('/api/markets/lending'),
+  trustline: (input: { accountId: string; use: TrustlineUse }) =>
+    call<PreparedTrustline>('/api/trustlines', { method: 'POST', body: input }),
+  submitTrustline: (input: { accountId: string; use: TrustlineUse; signedXdr: string }) =>
+    call<{ status: 'confirmed' | 'pending'; txHash: string }>('/api/trustlines/submit', {
+      method: 'POST',
+      body: input,
+    }),
   quote: async (intentId: string) =>
     (await call<{ quotes: Quote[] }>(`/api/intents/${intentId}/compare`, { method: 'POST' })).quotes[0],
   plan: <T extends PlanBase = Plan>(input: { intentId: string; quoteId: string; accountId: string }) =>
@@ -253,7 +270,7 @@ export function planProblem(plan: PlanBase): string | null {
     case 'LIQUIDITY_INSUFFICIENT':
       return 'The pool does not have enough liquidity for this loan right now.';
     case 'TRUSTLINE_MISSING':
-      return 'Your account needs a trustline for this asset first. Add it in Freighter and try again.';
+      return 'Your account needs a trustline for this asset first.';
     case 'INSUFFICIENT_BALANCE':
       return 'Your balance does not cover this, including the network reserve and fee.';
     case 'REQUESTS_MISMATCH':

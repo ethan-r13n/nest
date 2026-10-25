@@ -10,6 +10,7 @@ import { describe, expect, it } from 'vitest';
 import { createLendingIntent } from '../src/execution/lending.ts';
 import { approvePlan, compareIntent, createPlan, preparePlan, submitPlan } from '../src/execution/lifecycle.ts';
 import type { ExecutionDeps } from '../src/execution/store.ts';
+import { prepareTrustline, submitTrustline } from '../src/execution/trustline.ts';
 
 const START_MS = 1_800_000_000_000;
 const [FIXED, YIELDBLOX] = BLEND_POOLS.mainnet.map((pool) => pool.id) as [string, string];
@@ -125,6 +126,9 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
       rpcUrl: 'https://rpc.test',
     },
     venue: null,
+    buildTrustline: async () => {
+      throw new Error('not used');
+    },
     lending: {
       markets: async () => [
         market(FIXED, 'Blend Fixed', 0, { supplyApyPct: 5.88, borrowApyPct: 10.15 }),
@@ -302,5 +306,37 @@ describe('lending lifecycle', () => {
     if (!plan.prepared) throw new Error('not prepared');
     await approvePlan(h.deps, plan.id, { digest: plan.digest, preparedHash: plan.prepared.hash });
     await expect(submitPlan(h.deps, plan.id, plan.prepared.xdr)).rejects.toThrow('turned off');
+  });
+});
+
+describe('trustline step', () => {
+  it('builds the Blend USDC trustline, then submits only that signed trustline', async () => {
+    const h = createFixture();
+    const blendUsdc = lendingAsset('mainnet', 'USDC').classic;
+    h.deps.buildTrustline = async ({ account, asset, nowMs }) => {
+      const tx = new TransactionBuilder(new Account(account, '9'), {
+        fee: '10000',
+        networkPassphrase: NETWORK_PASSPHRASES.mainnet,
+        timebounds: { minTime: 0, maxTime: Math.floor(nowMs / 1000) + 180 },
+      })
+        .addOperation(Operation.changeTrust({ asset }))
+        .build();
+      return { xdr: tx.toXDR(), hash: Buffer.from(tx.hash()).toString('hex') };
+    };
+    const prepared = await prepareTrustline(h.deps, { accountId: h.user.publicKey(), use: 'lending' });
+    expect(prepared.asset).toEqual({ code: 'USDC', issuer: blendUsdc.getIssuer() });
+
+    const unsigned = submitTrustline(h.deps, {
+      accountId: h.user.publicKey(),
+      use: 'lending',
+      signedXdr: prepared.xdr,
+    });
+    await expect(unsigned).rejects.toThrow('not signed by the reviewed account');
+
+    const tx = TransactionBuilder.fromXDR(prepared.xdr, NETWORK_PASSPHRASES.mainnet);
+    tx.sign(h.user);
+    expect(
+      await submitTrustline(h.deps, { accountId: h.user.publicKey(), use: 'lending', signedXdr: tx.toXDR() }),
+    ).toMatchObject({ status: 'confirmed', ledger: 321 });
   });
 });

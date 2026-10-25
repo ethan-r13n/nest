@@ -15,6 +15,7 @@ import {
   venueName,
 } from '../lib/execution.ts';
 import { shortAddress, useWallet } from '../lib/wallet.tsx';
+import { TrustlineStep } from './trustline-step.tsx';
 
 type Phase = 'quoting' | 'quoted' | 'preparing' | 'review' | 'signing' | 'confirming' | 'done' | 'stopped';
 
@@ -46,18 +47,22 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
     );
   }, []);
 
-  const requote = useCallback(async () => {
+  /** Quotes again and returns the new quote's ID, or null. */
+  const requote = useCallback(async (): Promise<string | null> => {
     setPhase('quoting');
     setError(null);
     setPlan(null);
     try {
       // The request itself always shows, even when no live quote can be had.
       setIntent(await execution.intent(intentId));
-      setQuote((await execution.quote(intentId)) ?? null);
+      const fresh = (await execution.quote(intentId)) ?? null;
+      setQuote(fresh);
       setPhase('quoted');
+      return fresh?.id ?? null;
     } catch (caught) {
       fail(caught);
       setPhase('stopped');
+      return null;
     }
   }, [intentId, fail]);
 
@@ -65,12 +70,12 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
     void requote();
   }, [requote]);
 
-  async function review() {
-    if (!quote || !wallet.address) return;
+  async function review(quoteId = quote?.id) {
+    if (!quoteId || !wallet.address) return;
     setError(null);
     setPhase('preparing');
     try {
-      const created = await execution.plan({ intentId, quoteId: quote.id, accountId: wallet.address });
+      const created = await execution.plan({ intentId, quoteId, accountId: wallet.address });
       const prepared = await execution.prepare(created.id);
       setPlan(prepared);
       setPhase(prepared.status === 'awaiting_review' ? 'review' : 'stopped');
@@ -78,6 +83,11 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
       fail(caught);
       setPhase('quoted');
     }
+  }
+
+  async function continueAfterTrustline() {
+    const quoteId = await requote();
+    if (quoteId) await review(quoteId);
   }
 
   async function sign() {
@@ -186,6 +196,9 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
       {plan && phase === 'stopped' ? (
         <p className="text-destructive">{planProblem(plan) ?? 'This swap stopped.'}</p>
       ) : null}
+      {plan && phase === 'stopped' && plan.errorCode === 'TRUSTLINE_MISSING' ? (
+        <TrustlineStep use="swap" onAdded={continueAfterTrustline} />
+      ) : null}
       {error ? <p className="text-destructive">{error}</p> : null}
       {plan?.explorerUrl ? (
         <a
@@ -203,12 +216,12 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
           <span className="text-xs text-subtle">Valid for {secondsLeft}s</span>
         ) : null}
         {(phase === 'quoted' || phase === 'review') && expired ? (
-          <Button variant="outline" size="sm" onClick={requote}>
+          <Button variant="outline" size="sm" onClick={() => requote()}>
             <RefreshCw /> New quote
           </Button>
         ) : null}
         {phase === 'stopped' && !error ? (
-          <Button variant="outline" size="sm" onClick={requote}>
+          <Button variant="outline" size="sm" onClick={() => requote()}>
             <RefreshCw /> Try again
           </Button>
         ) : null}
@@ -218,7 +231,7 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
           </Button>
         ) : null}
         {phase === 'quoted' && !expired && wallet.address ? (
-          <Button size="sm" onClick={review}>
+          <Button size="sm" onClick={() => review()}>
             Review swap
           </Button>
         ) : null}

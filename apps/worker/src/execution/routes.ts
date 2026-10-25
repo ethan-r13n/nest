@@ -9,6 +9,7 @@ import { createLendingIntent } from './lending.ts';
 import { approvePlan, compareIntent, createPlan, preparePlan, readIntent, readPlan, submitPlan } from './lifecycle.ts';
 import { executionDeps } from './store.ts';
 import { createSwapIntent } from './swap.ts';
+import { prepareTrustline, submitTrustline } from './trustline.ts';
 
 const SwapIntentSchema = z.strictObject({
   kind: z.literal('swap'),
@@ -30,6 +31,11 @@ const ApproveSchema = z.strictObject({
   digest: z.string().regex(/^[0-9a-f]{64}$/),
   preparedHash: z.string().regex(/^[0-9a-f]{64}$/),
 });
+const TrustlineSchema = z.strictObject({
+  accountId: z.string().min(1).max(64),
+  use: z.enum(['swap', 'lending']),
+});
+const TrustlineSubmitSchema = TrustlineSchema.extend({ signedXdr: z.string().min(1).max(10_000) });
 const SubmitSchema = z.strictObject({ signedXdr: z.string().min(1).max(60_000) });
 const IdempotencyKeySchema = z
   .string()
@@ -110,6 +116,21 @@ export function createExecutionRoutes() {
       'Send the wallet-signed transaction as signedXdr.',
     );
     return c.json(await submitPlan(executionDeps(c.env), uuid(c.req.param('id')), body.signedXdr));
+  });
+
+  /** Builds the one trustline a swap or lending plan may need first; the user signs it in their wallet. */
+  routes.post('/trustlines', async (c) => {
+    const body = parse(TrustlineSchema, await c.req.json().catch(() => null), 'Send accountId and use.');
+    return c.json(await prepareTrustline(executionDeps(c.env), body));
+  });
+
+  routes.post('/trustlines/submit', async (c) => {
+    const body = parse(
+      TrustlineSubmitSchema,
+      await c.req.json().catch(() => null),
+      'Send accountId, use and the signed trustline as signedXdr.',
+    );
+    return c.json(await submitTrustline(executionDeps(c.env), body));
   });
 
   return routes;
