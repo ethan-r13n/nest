@@ -134,3 +134,5 @@ The exact requested URLs and HTTP observations are stored in `provenance`. Worki
 - [DefiLlama free API documentation](https://api-docs.defillama.com/llms-free.txt)
 - [DefiLlama Pro API documentation](https://api-docs.defillama.com/llms-pro.txt)
 - [DefiLlama yield server](https://github.com/DefiLlama/yield-server)
+
+Source URLs and capture times identify the underlying observations. Display summaries and excerpts may be condensed; monetary figures, asset identities and provider definitions retain their source semantics.

@@ -18,3 +18,6 @@ coverage/
 .nest/
 *.log
 .pnpm-store/
+
+# Generated design archive.
+design/nest/ui/nest-ui-handoff.zip

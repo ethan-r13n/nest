@@ -54,3 +54,7 @@ allowBuilds:
   # Pulled in by Pi's provider SDKs; their install scripts are not needed at runtime.
   "@google/genai": false
   protobufjs: false
+  "@reown/appkit": false
+  "bufferutil": false
+  "secp256k1": false
+  "utf-8-validate": false
