@@ -1,0 +1,194 @@
+[
+  {
+    "route": "trade",
+    "title": "Trade",
+    "description": "OHLC candles, route comparison and spot positions with close review.",
+    "new": false
+  },
+  {
+    "route": "vaults",
+    "title": "Vault navigation",
+    "description": "Asset, risk-profile and exit filters across fixture opportunities.",
+    "new": false
+  },
+  {
+    "route": "vault-detail",
+    "title": "Per-vault page",
+    "description": "Metrics, fees, counterparties, process and risks.",
+    "new": false
+  },
+  {
+    "route": "borrow",
+    "title": "Borrow",
+    "description": "Bounded intent builder with a wider terms rail and narrower editor.",
+    "new": false
+  },
+  {
+    "route": "positions",
+    "title": "Manage positions",
+    "description": "Native risk, repayment and collateral management.",
+    "new": false
+  },
+  {
+    "route": "research-defi",
+    "title": "Research / DeFi",
+    "description": "Dated DefiLlama metrics and protocol rankings.",
+    "new": false
+  },
+  {
+    "route": "research-rwa",
+    "title": "Research / RWAs",
+    "description": "Source-linked assets with issuer KYC, mint/redeem and DEX indicators.",
+    "new": false
+  },
+  {
+    "route": "lab-memory",
+    "title": "Memory",
+    "description": "Linked notes, source reader and explicit preferences.",
+    "new": false
+  },
+  {
+    "route": "lab-backtests",
+    "title": "Backtests",
+    "description": "Deterministic synthetic sample runner and audit.",
+    "new": false
+  },
+  {
+    "route": "lab-automation",
+    "title": "Automations",
+    "description": "Typed Source → Condition → Action builder.",
+    "new": false
+  },
+  {
+    "route": "protocol-detail",
+    "title": "Protocol detail",
+    "description": "Description, scoped metrics, markets, audit/admin/oracle coverage, source website and action entry points.",
+    "new": true
+  },
+  {
+    "route": "asset-detail",
+    "title": "RWA asset detail",
+    "description": "Issuer/platform, source identity, regulatory facts, eligibility/redemption unknown states and execution eligibility.",
+    "new": true
+  },
+  {
+    "route": "saved",
+    "title": "Saved research",
+    "description": "Search, remove and export bookmarked protocols, assets and saved filters; guest persistence boundary.",
+    "new": true
+  },
+  {
+    "route": "supply",
+    "title": "Direct supply",
+    "description": "Amount/horizon comparison, rates and incentives separately, exclusions and withdrawal disclosure before review.",
+    "new": true
+  },
+  {
+    "route": "portfolio",
+    "title": "Portfolio overview",
+    "description": "Assets minus liabilities, wallet/supply/vault/credit groups, exits, pending workflows, valuation and cost-basis coverage.",
+    "new": true
+  },
+  {
+    "route": "fund",
+    "title": "Receive & funding",
+    "description": "Account/network/memo, trustline/reserve/activation, external-provider availability, on-chain arrival verification.",
+    "new": true
+  },
+  {
+    "route": "transfer",
+    "title": "Send assets",
+    "description": "Amount, destination and memo, receiver inspection, fee/reserve checks and shared review gate.",
+    "new": true
+  },
+  {
+    "route": "activity",
+    "title": "Action history",
+    "description": "Search/filter/export history and links from actions to plan lifecycle.",
+    "new": true
+  },
+  {
+    "route": "plan",
+    "title": "Plan lifecycle & recovery",
+    "description": "Signature/submission/reconciliation/next signature/external/partial/confirmed/error specimens with exact revision and separate recovery review.",
+    "new": true
+  },
+  {
+    "route": "vault-management",
+    "title": "Redemptions & campaign lots",
+    "description": "Request/settlement/claim, pending receivable accounting, per-lot selection and explicit unvested reward forfeiture.",
+    "new": true
+  },
+  {
+    "route": "automation-history",
+    "title": "Automation detail & evaluations",
+    "description": "Pinned rule revision, true/false/unknown evaluations, dedup/cooldown evidence, proposal review, pause/resume.",
+    "new": true
+  },
+  {
+    "route": "connections",
+    "title": "Connections",
+    "description": "Granted scopes, entitlement, budgets, dependent paused rules and reconnect/disconnect consequences.",
+    "new": true
+  },
+  {
+    "route": "alerts",
+    "title": "Alerts inbox",
+    "description": "Risk/source/workflow alerts, inspect targets and mark-read specimen.",
+    "new": true
+  },
+  {
+    "route": "chat",
+    "title": "Chat & inline execution cards",
+    "description": "Clean transcript, persistent composer, typed action cards and shared owner review.",
+    "new": true
+  },
+  {
+    "route": "policy-states",
+    "title": "Guardrails state review",
+    "description": "Revision/draft distinction, validation errors, preserved conflict draft and scope changes.",
+    "new": true
+  },
+  {
+    "route": "wallet-access",
+    "title": "Wallet access & verification",
+    "description": "Guest, read-only watch, provider connection, ownership challenge, mismatch and cancelled/expired session.",
+    "new": true
+  },
+  {
+    "route": "backtest-run",
+    "title": "Backtest run inspection",
+    "description": "Pinned assumptions, same-dataset comparison, unsupported models and coverage; working runner remains linked.",
+    "new": true
+  },
+  {
+    "route": "learning-runs",
+    "title": "Learning-run draft",
+    "description": "Bounded objective, tools, read/runtime budget, stop reasons, findings and explicit acceptance boundary.",
+    "new": true
+  },
+  {
+    "route": "research-markets",
+    "title": "Markets & MCP read catalog",
+    "description": "Four source-family cards, catalog counts, venue market table and searchable/paginated MCP operation/skill cards.",
+    "new": true
+  },
+  {
+    "route": "research-map",
+    "title": "Venue map",
+    "description": "Grouped network or grid for Spot/Lending/Vaults, eight venue identity cards, source-family trunk, contextual inspector.",
+    "new": true
+  },
+  {
+    "route": "venue-detail",
+    "title": "Venue detail",
+    "description": "Identity, network availability, read groups, supported design actions, exit disclosure, source boundaries and references.",
+    "new": true
+  },
+  {
+    "route": "market-detail",
+    "title": "Market detail & read inspector",
+    "description": "Market header, policy context, amount presets, comparable route bars or lending/vault terms, underlying composition, assets/identity and read inspector.",
+    "new": true
+  }
+]

@@ -1,0 +1,213 @@
+{
+  "version": "0.5.1",
+  "date": "2026-10-25",
+  "status": "Interactive buildless design prototype; workflow backend integrations pending",
+  "reference_preset": {
+    "url": "https://ui.shadcn.com/create?preset=buFznsW",
+    "observed": {
+      "style": "Lyra",
+      "base": "Base UI",
+      "base_color": "Neutral",
+      "theme": "Neutral",
+      "chart_color": "Neutral",
+      "heading_font": "JetBrains Mono",
+      "font": "JetBrains Mono",
+      "icons": "Phosphor",
+      "radius": "None"
+    },
+    "adaptation": "Borrow compact layout and component patterns while retaining the selected Nest identity, Raven-derived tokens and IBM Plex fonts."
+  },
+  "production_foundation": {
+    "style": "base-nova",
+    "base": "Base UI",
+    "icons": "Lucide",
+    "framework": "Vite + React with TanStack Router/Query",
+    "config": [
+      "apps/web/components.json",
+      "packages/ui/components.json"
+    ],
+    "components_target": "packages/ui/src/components",
+    "theme_target": "packages/ui/src/styles/globals.css",
+    "rule": "Keep the existing workspace and aliases. Add only required Base UI components. Adapt template navigation to TanStack Router and Nest tokens. Do not initialize a replacement project or overwrite the Nest theme."
+  },
+  "delivery_boundary": "These patterns are implemented as HTML/CSS/JavaScript interactions in the existing design prototype. No React dependency install or production component port is claimed. Component mappings below are the implementation handoff.",
+  "patterns": [
+    {
+      "area": "Chat",
+      "sources": [
+        "https://ui.shadcn.com/docs/components/base/message",
+        "https://ui.shadcn.com/docs/components/base/message-scroller",
+        "https://ui.shadcn.com/docs/components/base/trace"
+      ],
+      "implemented": [
+        "Stable message DOM, role=log and additions-only announcements; preparation updates preserve existing transcript nodes.",
+        "Only follow the live edge when the reader is already at it; sending explicitly resumes following. Latest returns to the end.",
+        "Separate persistent composer, compact application-owned action card and expandable preparation trace.",
+        "Trace labels distinguish local fixtures from backend checks. Stop response stays separate from plan dismissal."
+      ],
+      "react_components": [
+        "Message",
+        "MessageScroller",
+        "InputGroup",
+        "Trace"
+      ],
+      "target": "apps/web/src/routes/chat.tsx; shared chat presentation in apps/web/src/components"
+    },
+    {
+      "area": "Research tables",
+      "sources": [
+        "https://ui.shadcn.com/docs/components/base/data-table"
+      ],
+      "implemented": [
+        "Shared density and column chooser for DeFi, RWA assets and venue market tables.",
+        "Identity stays visible during horizontal scrolling. Header stays visible inside a bounded table viewport.",
+        "10/25/50 page sizes for DeFi and RWA assets; page ranges and ranks follow the selected size.",
+        "Column preferences survive row rendering and route navigation within the session; required identity columns remain visible.",
+        "Existing source definitions, filters, sorting, exports and unavailable values are preserved."
+      ],
+      "react_components": [
+        "Table",
+        "DropdownMenu",
+        "Select",
+        "Checkbox",
+        "Pagination",
+        "TanStack Table"
+      ],
+      "target": "apps/web/src/routes/research.tsx; area-specific column definitions"
+    },
+    {
+      "area": "Portfolio",
+      "sources": [
+        "https://ui.shadcn.com/blocks#dashboard-01"
+      ],
+      "implemented": [
+        "Net value, gross assets, debt and coverage appear together.",
+        "Four restrained metrics lead into an allocation breakdown and existing positions/activity.",
+        "Asset mix and net-value controls switch views using the same labeled fixture accounting.",
+        "Wallet $8,260 + supply $10,000 + vault receipts $10,000 = assets $28,260; debt $3,500 gives net $24,760.",
+        "No fabricated price history or P&L. Cost basis remains unavailable; backing and collateral are not counted twice."
+      ],
+      "react_components": [
+        "Card",
+        "ToggleGroup",
+        "Table",
+        "Tooltip"
+      ],
+      "target": "apps/web/src/routes/portfolio.tsx"
+    },
+    {
+      "area": "Borrow and vault tickets",
+      "sources": [
+        "https://ui.shadcn.com/docs/components/base/field",
+        "https://ui.shadcn.com/docs/components/base/input-group"
+      ],
+      "implemented": [
+        "Unified amount groups attach units to decimal inputs and connect source/help descriptions.",
+        "Borrow invalid amounts show an inline field error, aria-invalid, associated error text and focus on the invalid field.",
+        "Existing exact-input comparison, quote refresh, source-derived Max requirements and withdrawal disclosures remain.",
+        "Compact controls and quieter borders reduce nesting without reducing touch targets."
+      ],
+      "react_components": [
+        "Field",
+        "FieldError",
+        "InputGroup",
+        "Input",
+        "Select",
+        "Slider"
+      ],
+      "target": "Credit and Earn route forms; shared amount-field composition"
+    },
+    {
+      "area": "Conversation history",
+      "sources": [
+        "https://ui.shadcn.com/blocks#sidebar-07"
+      ],
+      "implemented": [
+        "Desktop rail collapses to labeled icon actions and retains access to new conversation, memory, activity and coverage.",
+        "Narrow layouts reveal conversation history inline from an explicit toggle.",
+        "Global top navigation and Guardrails beside Wallet remain."
+      ],
+      "react_components": [
+        "Sidebar",
+        "SidebarTrigger",
+        "Tooltip"
+      ],
+      "target": "Chat route conversation rail"
+    },
+    {
+      "area": "Context assistant",
+      "sources": [
+        "https://ui.shadcn.com/docs/components/base/resizable",
+        "https://ui.shadcn.com/docs/components/base/sheet"
+      ],
+      "implemented": [
+        "Desktop assistant opens as a resizable adjacent panel at 1200px and above.",
+        "Pointer resize and ArrowLeft/ArrowRight adjust width; Home/End reach limits; double-click restores 380px.",
+        "Width is bounded to 320–560px while preserving workspace room; resize separator has name, orientation and current bounds.",
+        "Below 1200px the assistant uses the existing focus-managed modal sheet.",
+        "Continue in chat carries the draft in session memory and opens the full chat composer."
+      ],
+      "react_components": [
+        "ResizablePanelGroup",
+        "ResizablePanel",
+        "ResizableHandle",
+        "Sheet"
+      ],
+      "target": "apps/web/src/components/app-shell.tsx and agent-panel.tsx"
+    }
+  ],
+  "preserved": [
+    "Original solid circular egg logo and real logo assets",
+    "Forest, cream and orange tokens; IBM Plex Serif/Sans/Mono hierarchy",
+    "Research DeFi/RWAs/Markets/Venue map navigation",
+    "Exact economic inputs, shared owner review, expiry and network/account checks",
+    "User wallet signature for every financial action",
+    "Dated snapshots, explicit fixture labels and unavailable performance"
+  ],
+  "acceptance": [
+    "All 32 routes at 375,1024,1440px without document overflow",
+    "Search, pagination, density and column changes with new rows",
+    "Invalid borrow input and recovery",
+    "Chat exact amount handoff and review, collapsed history, reader-controlled scrolling",
+    "Portfolio allocation/net views with identical accounting",
+    "Assistant pointer and keyboard bounds, modal breakpoint and draft handoff",
+    "No page console errors and no new live financial capability"
+  ],
+  "evidence": [
+    "verification-v05.json",
+    "layout-checks-v05.json",
+    "verification-allocation.json"
+  ],
+  "allocation_prompt": {
+    "version": "0.5.1",
+    "date": "2026-10-25",
+    "source": "User screenshot feedback",
+    "placement": "Chat welcome state, replacing Compare lending venues and Understand withdrawal timing",
+    "removed_from": "Research / DeFi capital, asset and horizon strip",
+    "retained_prompts": [
+      "Swap 1,000 XLM for USDC",
+      "Supply 1,000 USDC on Blend"
+    ],
+    "fields": {
+      "capital": "Positive decimal string; commas accepted and normalized without floating-point conversion",
+      "assets": [
+        "USDC",
+        "XLM",
+        "USDT0"
+      ],
+      "horizons": [
+        "30 days",
+        "90 days",
+        "1 year"
+      ]
+    },
+    "behavior": [
+      "Compare with Nest submits a read-only comparison prompt using the exact selected amount, asset and horizon.",
+      "Invalid or zero amounts stay in the form with an associated error and focus.",
+      "The comparison creates no financial action card and cannot sign or submit a transaction.",
+      "Selections persist during this page session and return when starting a new conversation.",
+      "Private amounts remain out of URLs. Production binds the comparison context to canonical network/asset identity and current source observations."
+    ],
+    "production": "Keep comparison intent separate from financial preparation; connect Chat to validated application comparison results."
+  }
+}

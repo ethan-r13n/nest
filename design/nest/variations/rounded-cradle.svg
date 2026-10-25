@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 164" role="img" aria-labelledby="rounded-title rounded-desc">
+  <title id="rounded-title">Nest — Rounded Cradle</title>
+  <desc id="rounded-desc">A compact two-band orange cradle holds a circular outlined seed crossed by a diagonal orange band. The egg remains fully round.</desc>
+  <defs>
+    <clipPath id="rounded-seed-boundary"><circle cx="120" cy="62" r="23"/></clipPath>
+  </defs>
+  <g fill="#ff5500">
+    <path d="M40 59C51 84 86 101 122 101C159 101 193 82 203 57C225 77 213 99 182 114C148 131 91 132 58 116C30 102 21 78 40 59Z"/>
+    <path d="M26 94C47 119 83 135 121 135C160 135 196 119 216 94C214 126 175 150 122 151C69 152 30 129 26 94Z"/>
+    <path fill-rule="evenodd" d="M143 62A23 23 0 1 1 97 62A23 23 0 1 1 143 62ZM136 62A16 16 0 1 0 104 62A16 16 0 1 0 136 62Z"/>
+    <path d="M94 72L145 43L150 52L99 81Z" clip-path="url(#rounded-seed-boundary)"/>
+  </g>
+</svg>

@@ -1,0 +1,497 @@
+{
+  "section": "Research",
+  "version": "0.6.0",
+  "status": "Local design prototype; no live backend or wallet connection",
+  "reference_evidence": [
+    {
+      "id": "defillama-stellar",
+      "url": "https://defillama.com/chain/stellar",
+      "inspected": "2026-10-25",
+      "patterns": [
+        "Chain summary beside a dominant history chart",
+        "Metric, denomination and time controls",
+        "Dense protocol ranking with search, configurable columns and CSV",
+        "Distinct chain-specific values and protocol-wide attributes"
+      ],
+      "keep": [
+        "Hierarchy and table density",
+        "Wide chart",
+        "Direct metric controls",
+        "Numeric alignment"
+      ],
+      "adapt": [
+        "Nest forest, cream, orange and IBM Plex typography",
+        "Only Stellar scope rather than a multi-chain navigation catalogue",
+        "Four Research tabs per latest explicit user instruction",
+        "Explicit snapshot/source coverage and execution separation"
+      ]
+    },
+    {
+      "id": "rwaxyz-stellar",
+      "url": "https://app.rwa.xyz/networks/stellar",
+      "inspected": "2026-10-25",
+      "patterns": [
+        "Network description and metric overview",
+        "Distributed/represented/all source views",
+        "Metrics and composition controls",
+        "League hierarchy by platform, asset class and manager",
+        "Asset screener with identity and classification"
+      ],
+      "keep": [
+        "Network metrics",
+        "Source taxonomy",
+        "League table modes",
+        "Asset-level value, holders and identity"
+      ],
+      "adapt": [
+        "Nest visual system",
+        "Current composition from available collected source rows",
+        "Honest no-history state until authorized historical data exists",
+        "No discovery-row execution or implied redemption eligibility"
+      ]
+    }
+  ],
+  "decisions": [
+    {
+      "decision": "Research has four top-level tabs: DeFi, RWAs, Markets, and Venue map.",
+      "source": "Latest explicit user request",
+      "supersedes": "Earlier two-tab design; Saved remains a utility and Automations remains in Lab"
+    },
+    {
+      "decision": "DeFi and RWA source totals remain separate and attributed.",
+      "reason": "Their definitions, capture methods, denominators and timestamps differ."
+    },
+    {
+      "decision": "Use existing dated provider snapshots for reviewable content.",
+      "reason": "The repository already holds collected observations; the prototype does not imply a live backend."
+    },
+    {
+      "decision": "Render RWA composition rather than fabricate a historical series.",
+      "reason": "The captured RWA dataset explicitly lacks historical series and individual asset detail-page coverage."
+    },
+    "The capital/asset/horizon comparison strip is removed from Research and lives in the Chat welcome allocation form."
+  ],
+  "data_sources": {
+    "projection": "research/data/stellar-research-ui.json",
+    "defillama": {
+      "raw": "research/data/defillama-stellar.json",
+      "captured_at": "2026-10-25T14:35:20.829Z",
+      "protocol_rows": 44,
+      "yield_pools": 12,
+      "stablecoin_assets": 13,
+      "history": [
+        "TVL",
+        "DEX volume",
+        "Stablecoin USD value"
+      ],
+      "note": "Captured time is not a uniformly supplied source observation/as-of time. Keep per-feed provenance and cache headers."
+    },
+    "rwa": {
+      "raw": "research/data/rwa-stellar.json",
+      "captured_at": "2026-10-25T14:40:20.074Z",
+      "source_as_of_display": "10/25/2026",
+      "asset_rows": 109,
+      "network_metric_cards": 8,
+      "league_views": 9,
+      "populated_league_views": 8,
+      "collected_league_rows": 62,
+      "provider_rwa_count": 84,
+      "missing": [
+        "Historical series",
+        "Individual asset detail pages",
+        "Verified execution identities",
+        "Eligibility and redemption terms"
+      ],
+      "refresh": "Operator-driven ordinary rendered collection. Do not use hidden authenticated endpoints or bypass export access."
+    }
+  },
+  "screens": [
+    {
+      "id": "research-defi",
+      "title": "Stellar DeFi",
+      "route": "/research?tab=defi",
+      "prototype_hash": "#research-defi",
+      "purpose": "Inspect capital and protocol activity with dated definitions and source coverage. Amount-based allocation comparisons start in Chat.",
+      "layout": {
+        "top_navigation": [
+          "DeFi",
+          "RWAs",
+          "Markets",
+          "Venue map"
+        ],
+        "header": "Research / Stellar network eyebrow, 36px Serif page title, one-sentence description, dated source badge",
+        "overview": "280px chain summary rail and remaining-width chart; 20–24px gap",
+        "chain_summary": [
+          "Network identity and watchlist control",
+          "Provider chain DeFi TVL",
+          "Stablecoin value across USD-converted peg categories",
+          "24h DEX volume",
+          "Tracked 24h fees",
+          "Captured yield-pool and stablecoin counts",
+          "Source capture and source-time coverage"
+        ],
+        "history": "Dominant panel: metric title, latest recorded point, 1M/3M/1Y/All controls, TVL/DEX volume/Stablecoins, USD daily series, keyboard-accessible point inspection, visible source and caveat",
+        "ranking": "Immediately below the overview: full-width search/category/columns toolbar, dense protocol table, pagination and export"
+      },
+      "table": {
+        "columns": [
+          "Rank",
+          "Protocol and token/chain metadata",
+          "Category",
+          "Stellar TVL USD",
+          "1d change with scope note",
+          "7d change with scope note",
+          "Optional protocol-wide TVL",
+          "Research-only availability",
+          "Details"
+        ],
+        "default_sort": "Stellar TVL descending",
+        "default_filter": "CEX excluded; retain all eligible DeFi categories",
+        "pagination": "10 rows per page in preview; production uses server pagination",
+        "identity": "Protocol slug and source ID, not display name alone",
+        "scope": "The supplied percentage changes are protocol-wide across all chains. Do not relabel them Stellar-only.",
+        "aggregation": "Never sum overlapping parent/child, vault or access-route rows into chain TVL.",
+        "unavailable": "Nulls remain unavailable; do not infer market cap, per-protocol fees or missing periods."
+      },
+      "interactions": [
+        {
+          "control": "Research tabs",
+          "result": "Switch between DeFi, RWAs, Markets and Venue map, preserving relevant local filters"
+        },
+        {
+          "control": "Metric and period",
+          "result": "Re-render actual collected historical series. Preserve date/units. Do not normalize to XLM without a verified matching historical price series."
+        },
+        {
+          "control": "Point inspection slider",
+          "result": "Keyboard/touch/pointer choice shows the exact date and USD value and moves a visible point marker"
+        },
+        {
+          "control": "Protocol search/category/sort",
+          "result": "Update rows and result count, retain explicit empty state"
+        },
+        {
+          "control": "Columns",
+          "result": "Toggle protocol-wide TVL while keeping Stellar TVL and scope distinct"
+        },
+        {
+          "control": "Details",
+          "result": "Open read-only protocol panel with exact values, scope, source and verified outbound reference; financial action needs a supported registered market"
+        },
+        {
+          "control": "Export",
+          "result": "Download only current filtered snapshot rows with source timestamp and change scope"
+        },
+        {
+          "control": "Watchlist",
+          "result": "Preview-local toggle; production persistent save requires wallet ownership verification"
+        }
+      ],
+      "states": {
+        "loading": "Keep page/metric dimensions stable with labelled skeletons; no placeholder zero values",
+        "empty": "Explain filter result and offer Reset or broader filters",
+        "partial": "Keep successful metric/table sections and enumerate source gaps",
+        "stale": "Readable last-known data with its actual source as-of/capture time; no fresh-quote claim",
+        "history_missing": "Keep metric panel and labelled unavailable chart state",
+        "error": "Show provider/retry reason at affected scope without replacing all successful rows",
+        "source_disagreement": "Show source, definition and time of each differing total; never average incompatible totals",
+        "wallet_disconnected": "Research and transient assistant remain available; persistent saves explain verification requirement"
+      },
+      "responsive": {
+        "desktop": "280px overview rail, wide chart, full table",
+        "tablet": "240px overview rail when space permits; stack below 800px",
+        "mobile": "Single column, chart redraws to actual width with fixed readable labels, ranking scrolls horizontally inside its container"
+      },
+      "accessibility": [
+        "Semantic table headers and numeric alignment",
+        "Explicit control labels and source units",
+        "Native inputs/selects/buttons",
+        "Keyboard-operable date-point slider",
+        "Dialog names, Escape and focus restoration",
+        "Signs and words accompany financial colors",
+        "No motion required to read data"
+      ],
+      "backend_bindings": [
+        {
+          "contract": "GET /api/research/overview",
+          "status": "Specified in technical guide; application integration pending",
+          "fields": [
+            "network",
+            "metric definition",
+            "value and units",
+            "source ID",
+            "upstream observation/as-of where supplied",
+            "captured/retrieved time",
+            "coverage",
+            "transformation version",
+            "historical points and range"
+          ]
+        },
+        {
+          "contract": "GET /api/research/protocols",
+          "status": "Target interface contract; see the application README for implemented capabilities.",
+          "fields": [
+            "slug",
+            "canonical network identity",
+            "name",
+            "category",
+            "Stellar TVL",
+            "all-chain TVL",
+            "percentage changes and scope",
+            "source provenance",
+            "available registered actions or exclusion reasons"
+          ]
+        },
+        {
+          "contract": "GET /api/markets",
+          "status": "Specified; integration pending",
+          "purpose": "Resolve actual registered market capabilities before offering an action"
+        },
+        {
+          "contract": "GET/POST/DELETE /api/bookmarks",
+          "status": "Specified; integration pending",
+          "purpose": "Ownership-scoped persistent research saving"
+        }
+      ],
+      "acceptance": [
+        "Four top Research tabs",
+        "Search/category/sort/pagination alter real visible rows",
+        "CSV carries timestamp/scope",
+        "Protocol-wide changes are labelled as such",
+        "Source totals are not row sums",
+        "Actual historical points drive the chart",
+        "No discovery data becomes an executable quote",
+        "Works at 375/1024/1440px without page overflow"
+      ]
+    },
+    {
+      "id": "research-rwa",
+      "title": "Stellar real-world assets",
+      "route": "/research?tab=rwa",
+      "prototype_hash": "#research-rwa",
+      "purpose": "Inspect the Stellar RWA universe and its source-defined classifications without implying tradability.",
+      "layout": {
+        "top_navigation": [
+          "DeFi",
+          "RWAs",
+          "Markets",
+          "Venue map"
+        ],
+        "header": "Network-scoped heading and source/as-of badge",
+        "metrics": "Eight provider network metric cells in a four-column/two-row grid",
+        "composition_and_league": "Two balanced panels: current distributed asset-class composition and the league table. Stack below 1100px.",
+        "composition_controls": [
+          "Composition/History presentation control",
+          "Include stablecoins visibility control"
+        ],
+        "league_controls": [
+          "Distributed/Represented/All",
+          "Platform/Asset class/Manager grouping"
+        ],
+        "assets": "Full-width search/filter/sort toolbar with 10-row asset table pages and CSV"
+      },
+      "metric_definitions": [
+        "Distributed Asset Value",
+        "Represented Asset Value",
+        "RWA Holders",
+        "RWA 30D Transfer Volume",
+        "RWA Count",
+        "Stablecoin Market Cap",
+        "Stablecoin Holders",
+        "Stablecoin 30D Transfer Volume"
+      ],
+      "table": {
+        "columns": [
+          "Asset name / ticker / network",
+          "Platform",
+          "Asset class",
+          "Provider total-value display",
+          "Provider holders display",
+          "Independent access badges: issuer KYC / mint-redeem / Stellar DEX observation",
+          "Distributed/represented type",
+          "Source-reported Stellar identity"
+        ],
+        "sort": [
+          "Total value descending",
+          "Name A–Z",
+          "Holders descending"
+        ],
+        "search": [
+          "Asset",
+          "Ticker",
+          "Platform/issuer context",
+          "Asset class",
+          "Source contract label"
+        ],
+        "identity": "Preserve exact source assetUrl and contractExplorerUrl. Asset names and non-interactive row cells navigate in the current tab to the same assetUrl linked on RWA.xyz. Explorer identity retains its own anchor.",
+        "precision": "Retain raw source display precision and absent values. Provider rounded league values are not exact transaction amounts.",
+        "counts": "109 collected table rows and source RWA Count 84 are distinct coverage measures, never silently reconciled."
+      },
+      "interactions": [
+        {
+          "control": "Distributed/Represented/All",
+          "result": "Use the matching collected league view and denominator"
+        },
+        {
+          "control": "Group by",
+          "result": "Switch platform, asset-class or manager source grouping; an empty represented-manager view is not a zero total"
+        },
+        {
+          "control": "Composition",
+          "result": "Plot source-reported current market shares, preserving rounded source precision"
+        },
+        {
+          "control": "Hide stablecoins",
+          "result": "Hide the stablecoin row without recomputing the source percentage denominator; disclose this behavior"
+        },
+        {
+          "control": "History",
+          "result": "Show explicit unavailable-history coverage state; no fabricated curve"
+        },
+        {
+          "control": "Asset search/class/sort/pages",
+          "result": "Filter actual captured rows and update result range"
+        },
+        {
+          "control": "Asset row / name / identity",
+          "result": "Asset row and name open the exact RWA.xyz asset URL in the current tab. Source contract anchor opens its exact explorer URL. No financial action is created."
+        },
+        {
+          "control": "CSV",
+          "result": "Export filtered snapshot asset rows with access statuses, source URL, identity and observation time."
+        }
+      ],
+      "states": {
+        "loading": "Stable metric/table geometry with labelled placeholders",
+        "empty_filtered": "Explain search/filter mismatch and preserve controls",
+        "empty_provider_view": "Say no rows in that selected source view; do not infer value zero",
+        "no_history": "Explain that this snapshot captured metrics/assets/league views but no historical series",
+        "partial_coverage": "List unavailable fields/sections, keep available content",
+        "stale_snapshot": "Show source as-of date and capture timestamp, not a live pulse",
+        "unverified_identity": "Source explorer reference available, execution action disabled",
+        "source_error": "Preserve previous snapshot with failure reason and last-good capture time",
+        "eligibility_unknown": "Explain missing issuer/venue terms; no fabricated deposit or redemption CTA"
+      },
+      "responsive": {
+        "desktop": "Four metric columns, paired composition/league panels, full asset table",
+        "tablet": "Panels stack; two metric columns as needed",
+        "mobile": "Two metric columns, readable labels, no squeezed data; tables scroll in bounded containers and detail dialog fills available width"
+      },
+      "accessibility": [
+        "Semantic ranking and asset tables",
+        "Text/symbol changes supplement color",
+        "Direct category/percentage labels on composition marks",
+        "Native labelled filters",
+        "Read-only named detail dialog with Escape and trigger focus restoration",
+        "No meaning relies on hover"
+      ],
+      "backend_bindings": [
+        {
+          "contract": "GET /api/research/overview",
+          "status": "Specified; integration pending",
+          "purpose": "Serve dated RWA network metrics, source definitions and coverage from the approved snapshot projection"
+        },
+        {
+          "contract": "GET /api/research/assets",
+          "status": "Target interface contract; see the application README for implemented capabilities.",
+          "fields": [
+            "name",
+            "ticker",
+            "asset class",
+            "platform and manager",
+            "source-reported identity",
+            "network",
+            "distributed/represented classification",
+            "provider value display",
+            "holders",
+            "domicile",
+            "regulatory context",
+            "source URL",
+            "capture time",
+            "eligibility/redemption facts when verified",
+            "identity verification state"
+          ]
+        },
+        {
+          "contract": "League view and composition schema",
+          "status": "Response extension to research overview/assets needs confirmation",
+          "fields": [
+            "assetType",
+            "groupBy",
+            "source row/rank",
+            "provider RWA count",
+            "raw value/market-share displays",
+            "coverage note",
+            "source denominator definition"
+          ]
+        },
+        {
+          "contract": "Historical RWA series",
+          "status": "Unavailable in captured dataset; no endpoint invented",
+          "purpose": "Add only after authorized data availability and display schema are verified"
+        },
+        {
+          "contract": "GET /api/markets",
+          "status": "Specified; integration pending",
+          "purpose": "Any future executable RWA action must resolve a verified registry asset and eligible venue first"
+        }
+      ],
+      "acceptance": [
+        "Exactly DeFi/RWAs top tabs",
+        "All eight metric definitions stay distinct",
+        "All 109 asset rows are searchable and paginated",
+        "League controls select the actual collected view",
+        "No-history and empty-provider views do not invent zeros or curves",
+        "Source precision and count differences remain visible",
+        "No source listing implies eligibility or redemption access",
+        "No page overflow at 375/1024/1440px",
+        "Each of 109 rows retains its exact original source URL",
+        "Row clicks and asset anchors navigate in the same tab",
+        "Access indicators remain independent and unknowns are explicit",
+        "Badge screen-reader text is contained inside each chip to preserve mobile scroll containment"
+      ],
+      "access_indicators": {
+        "classification": "Three independent dimensions, never mutually exclusive. Distributed/Represented is not access metadata.",
+        "known_kyc": "Issuer access requirement supported by issuer documentation; does not label every secondary trade as KYC-gated.",
+        "mint_redeem": "Reported issuer subscription and redemption capability, with settlement timing and eligibility still source-bound. Not an executable Nest route.",
+        "dex": "Two-sided public Stellar XLM orderbook observed for the exact classic asset code and issuer. Not an amount-specific quote or authorization check.",
+        "unknown": "No verified evidence remains ?, not false/no. Empty XLM books do not exclude other markets or AMMs.",
+        "date": "2026-10-25",
+        "coverage": {
+          "source_rows": 109,
+          "unique_asset_pages": 101,
+          "classic_orderbooks_checked": 75,
+          "issuer_kyc_required": 13,
+          "mint_redeem_reported": 50,
+          "dex_markets_observed": 13
+        },
+        "evidence": [
+          "rwa-access.json",
+          "rwa-access-observations.json",
+          "rwa-dex-observations.json"
+        ]
+      }
+    }
+  ],
+  "shared_components": [
+    "ResearchSectionTabs",
+    "SourceSnapshotBadge",
+    "CapitalContextBar",
+    "MetricDefinitionTile",
+    "HistoricalSeriesPanel",
+    "HistoricalPointInspector",
+    "ProtocolRankingsTable",
+    "ProtocolSourceDetail",
+    "RWACompositionPanel",
+    "RWALeagueTable",
+    "AssetIdentityTable",
+    "SnapshotCSVExport",
+    "SourceCoverageDisclosure"
+  ],
+  "implementation_notes": [
+    "Design preview uses embedded dated observations for deterministic local review; production should use typed same-origin services and query state.",
+    "No live provider fetch or financial submission occurs in these preview files.",
+    "Production sorting/filtering/pagination must use the actual backend contract, not client recomputation of execution terms.",
+    "The root application must retain the original solid-egg Nest logo, global Guardrails, and the shared ActionReviewSheet for any supported action."
+  ]
+}

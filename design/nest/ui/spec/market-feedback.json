@@ -1,0 +1,103 @@
+{
+  "version": "0.6.0",
+  "date": "2026-10-25",
+  "status": "Interactive design prototype; financial integrations pending",
+  "scope": [
+    "Trade OHLC and positions",
+    "Vault risk-profile filter",
+    "Narrower Credit builder",
+    "Independent RWA access indicators and exact same-tab source links"
+  ],
+  "trade": {
+    "implementation": [
+      "trade-chart.js",
+      "trade-positions.js"
+    ],
+    "chart": [
+      "Pair and USDC price units",
+      "1m / 5m / 15m / 1H / 4H / 1D candle intervals",
+      "OHLC readout, wicks/bodies and volume",
+      "Right price axis and last reference-price marker",
+      "UTC time axis, crosshair, keyboard inspection, zoom, pan and Fit",
+      "Clearly labeled deterministic OHLC fixtures; never construct real candles from sparse price samples"
+    ],
+    "positions": [
+      "My positions heading; positions / pending / history tabs",
+      "Quantity as exact asset decimal",
+      "USD notional with valuation timestamp and currency assumption",
+      "Average entry, mark and signed unrealized P&L / percentage",
+      "Unavailable cost basis remains unavailable",
+      "Full-position close enters the shared exact-input swap review"
+    ],
+    "production_contract": {
+      "candles": "Canonical pair/network, interval, UTC timestamp, OHLC decimal strings, base-asset volume, source and coverage gaps",
+      "positions": "Account/network/asset identity, exact owned and spendable quantity, valuation in USD with price/fx timestamps, cost-basis method and fee coverage, unknown basis, pending actions",
+      "close": "Prepare a fresh sale of exact spendable quantity; preserve fee/reserve constraints, route bounds, receiver, expiry and policy revision. Shared review and wallet signature required; reconcile only confirmed receipt."
+    }
+  },
+  "vaults": {
+    "placement": "Above Exit availability",
+    "prototype": "Explicit illustrative profiles for visual filtering; not validated product ratings. Unavailable product is Unrated.",
+    "production": "Return versioned product-risk methodology, evidence, observation time and an unclassified state. Never infer safety from yield or exit timing.",
+    "removed_sidebar_sections": [
+      "Yield composition",
+      "Before you deposit"
+    ],
+    "preserved": "Underlying yield breakdown and pre-action withdrawal terms on product detail/review."
+  },
+  "credit": {
+    "page_header": "Credit label, serif title, concise purpose and contextual Ask Nest action",
+    "secondary_navigation": [
+      "Borrow",
+      "My positions",
+      "Supply opportunities link"
+    ],
+    "desktop": "Centered two-panel builder with maximum combined width 1180px and 24px gap. Left term rail / right editor use 1.15fr / 0.85fr. The comparison table retains the workspace width.",
+    "term_rail": "Five 68px selection controls, 12px radius, active orange outline; selected values remain visible. Compare and Reset follow the rail.",
+    "editor": "Minimum 540px desktop study, 24px padding. Field-specific asset identity, amount and explanatory content. Apply action at the bottom.",
+    "comparison": "Dense table preserving all three venue results and exclusion reasons. Numeric values right aligned, provenance/assumptions below.",
+    "mobile": "Below 801px of workspace, stack the term rail and editor with a maximum width of 640px. Comparison retains contained horizontal scrolling."
+  },
+  "rwa": {
+    "classification": "Three independent dimensions, never mutually exclusive. Distributed/Represented is not access metadata.",
+    "known_kyc": "Issuer access requirement supported by issuer documentation; does not label every secondary trade as KYC-gated.",
+    "mint_redeem": "Reported issuer subscription and redemption capability, with settlement timing and eligibility still source-bound. Not an executable Nest route.",
+    "dex": "Two-sided public Stellar XLM orderbook observed for the exact classic asset code and issuer. Not an amount-specific quote or authorization check.",
+    "unknown": "No verified evidence remains ?, not false/no. Empty XLM books do not exclude other markets or AMMs.",
+    "date": "2026-10-25",
+    "coverage": {
+      "source_rows": 109,
+      "unique_asset_pages": 101,
+      "classic_orderbooks_checked": 75,
+      "issuer_kyc_required": 13,
+      "mint_redeem_reported": 50,
+      "dex_markets_observed": 13
+    },
+    "evidence": [
+      "rwa-access.json",
+      "rwa-access-observations.json",
+      "rwa-dex-observations.json"
+    ]
+  },
+  "invariants": [
+    "No live wallet, signing or transaction path added",
+    "No realized P&L inferred from current price",
+    "No line samples transformed into claimed real OHLC",
+    "Risk fixture labels do not establish actual safety",
+    "RWA issuer access does not imply public or instant redemption",
+    "DEX observations do not establish account authorization or executable size"
+  ],
+  "verification": [
+    "verification-market-feedback.json",
+    "../scripts/verify-market-models.js"
+  ],
+  "sources": {
+    "circleKyc": "https://help.circle.com/support/en/know-your-customer-and-identity-verification?id=kb_article_view&sysparm_article=KB0010721",
+    "circleMint": "https://www.circle.com/multi-chain-usdc/stellar",
+    "spikoKyc": "https://docs.spiko.io/documentation/account_management/account_creation/individuals/",
+    "spikoTransfer": "https://docs.spiko.io/documentation/tokenization/transfers/",
+    "ondoKyc": "https://docs.ondo.finance/ondo-stocks/onboarding-and-kyc",
+    "ondoBasics": "https://docs.ondo.finance/general-access-products/usdy/basics",
+    "benjiKyc": "https://www.franklintempleton.com/help/notice-of-identity-verification"
+  }
+}

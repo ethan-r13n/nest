@@ -1,0 +1,182 @@
+[
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "trade",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "vaults",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "vault-detail",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "borrow",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "positions",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "research-defi",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "research-rwa",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "lab-memory",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "lab-backtests",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "lab-automation",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "trade",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "vaults",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "vault-detail",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "borrow",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "positions",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "research-defi",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "research-rwa",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "lab-memory",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "lab-backtests",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "lab-automation",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "trade",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "vaults",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "vault-detail",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "borrow",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "positions",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "research-defi",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "research-rwa",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "lab-memory",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "lab-backtests",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "lab-automation",
+    "overflow": []
+  }
+]

@@ -1,0 +1,41 @@
+{
+  "date": "2026-10-25",
+  "layout_checks": 84,
+  "layout_issues": [],
+  "interaction_checks": [
+    {
+      "check": "Transfer rejects incomplete account",
+      "pass": true
+    },
+    {
+      "check": "New conversation safely renders text",
+      "pass": true
+    },
+    {
+      "check": "Version conflict preserves draft",
+      "pass": true
+    },
+    {
+      "check": "Protocol rows open full detail route",
+      "pass": true
+    },
+    {
+      "check": "Exact supply amount reaches shared review with exit disclosure",
+      "pass": true
+    },
+    {
+      "check": "Partial completion exposes separate recovery review",
+      "pass": true
+    },
+    {
+      "check": "Campaign lot fixture shows forfeiture and gated settlement claim",
+      "pass": true
+    }
+  ],
+  "console": "No app errors in IAB. Chrome emitted an unrelated wallet-extension provider conflict.",
+  "logos": {
+    "assets": 179,
+    "unavailable_dedicated_rwa_marks": 16
+  },
+  "scope": "Local design specimens; no backend financial actions"
+}

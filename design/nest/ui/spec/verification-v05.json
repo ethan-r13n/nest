@@ -1,0 +1,172 @@
+{
+  "version": "0.5.0",
+  "date": "2026-10-25",
+  "scope": "Buildless UI design prototype; no connected wallet, submission or financial service",
+  "layoutChecks": 96,
+  "interactionChecks": [
+    {
+      "name": "RWA 50-row pagination",
+      "pass": true,
+      "detail": {
+        "range": "Showing 1–50 of 109 source rows",
+        "rows": 50
+      }
+    },
+    {
+      "name": "RWA second-page range",
+      "pass": true,
+      "detail": {
+        "range": "Showing 51–100 of 109 source rows",
+        "rows": 50
+      }
+    },
+    {
+      "name": "Columns survive filtering and page reset",
+      "pass": true,
+      "detail": {
+        "hidden": true,
+        "range": "Showing 1–5 of 5 source rows",
+        "rows": 5
+      }
+    },
+    {
+      "name": "Chat exact amount and accessible transcript",
+      "pass": true,
+      "detail": {
+        "amount": "1000",
+        "composerBottom": 906,
+        "height": 1000,
+        "relevant": "additions",
+        "role": "log"
+      }
+    },
+    {
+      "name": "Shared review retains amount and backend boundary",
+      "pass": true,
+      "detail": {
+        "amount": "1000",
+        "blocked": true
+      }
+    },
+    {
+      "name": "Expired chat plan cannot open review",
+      "pass": true,
+      "detail": {
+        "refresh": "Create fresh preview",
+        "reviewButtons": 0
+      }
+    },
+    {
+      "name": "Preparation update preserves reader position",
+      "pass": true,
+      "detail": {
+        "latestVisible": true,
+        "messages": 20,
+        "top": 0
+      }
+    },
+    {
+      "name": "Latest resumes transcript following",
+      "pass": true,
+      "detail": {
+        "latestHidden": true,
+        "remaining": -0.5
+      }
+    },
+    {
+      "name": "Pointer assistant resizing",
+      "pass": true,
+      "detail": {
+        "aria": 460,
+        "width": 460
+      }
+    },
+    {
+      "name": "Keyboard assistant minimum",
+      "pass": true,
+      "detail": 320
+    },
+    {
+      "name": "Keyboard assistant maximum",
+      "pass": true,
+      "detail": 560
+    },
+    {
+      "name": "Assistant composer stays inside viewport",
+      "pass": true,
+      "detail": {
+        "bottom": 1000,
+        "composerBottom": 1000,
+        "height": 1000
+      }
+    },
+    {
+      "name": "Tablet assistant uses a modal sheet",
+      "pass": true,
+      "detail": {
+        "dockHidden": true,
+        "modal": true
+      }
+    },
+    {
+      "name": "Assistant draft handoff to full chat",
+      "pass": true,
+      "detail": {
+        "draft": "Explain the withdrawal timing for Blend",
+        "modal": false
+      }
+    },
+    {
+      "name": "Mobile chat composer clears navigation",
+      "pass": true,
+      "detail": {
+        "bottom": 714,
+        "navTop": 836,
+        "overflow": 0
+      }
+    },
+    {
+      "name": "Application console errors",
+      "pass": true,
+      "detail": []
+    },
+    {
+      "name": "Borrow inline validation and focus",
+      "pass": true,
+      "detail": {
+        "described": "credit-debt-amount-help credit-debt-amount-error",
+        "error": "Enter a positive decimal amount.",
+        "focus": "credit-debt-amount",
+        "invalid": "true"
+      }
+    },
+    {
+      "name": "Borrow valid recovery retains exact input",
+      "pass": true,
+      "detail": {
+        "debt": "900",
+        "error": null,
+        "terms": "01\nCollateral\n10,000 XLM ›\n02\nDebt\n900 USDC ›\n03\nHorizon\n30 days · comparison ›\n04\nMax rate\nUp to 8% APR ›\n05\nVenue\nBest available ›"
+      }
+    },
+    {
+      "name": "Portfolio switches views with consistent accounting",
+      "pass": true,
+      "detail": {
+        "mixHidden": true,
+        "netVisible": true,
+        "values": "Gross assets\n$28,260\n−\nLiabilities\n$3,500\n=\nNet value\n$24,760",
+        "xlmRow": true
+      }
+    },
+    {
+      "name": "Column chooser Escape restores trigger focus",
+      "pass": true,
+      "detail": {
+        "closed": true,
+        "focus": "SUMMARY"
+      }
+    }
+  ],
+  "consoleErrors": []
+}

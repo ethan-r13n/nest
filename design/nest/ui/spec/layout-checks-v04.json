@@ -1,0 +1,578 @@
+[
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "research-markets",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "research-map",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "venue-detail",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "market-detail",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "protocol-detail",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "asset-detail",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "saved",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "supply",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "portfolio",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "fund",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "transfer",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "activity",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "plan",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "vault-management",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "automation-history",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "connections",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "alerts",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "conversations",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "policy-states",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "wallet-access",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "backtest-run",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "learning-runs",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "trade",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "vaults",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "vault-detail",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "borrow",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "positions",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "research-defi",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "research-rwa",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "lab-memory",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "lab-backtests",
+    "overflow": []
+  },
+  {
+    "width": 375,
+    "pageWidth": 360,
+    "route": "lab-automation",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "research-markets",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "research-map",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "venue-detail",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "market-detail",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "protocol-detail",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "asset-detail",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "saved",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "supply",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "portfolio",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "fund",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "transfer",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "activity",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "plan",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "vault-management",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "automation-history",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "connections",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "alerts",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "conversations",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "policy-states",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "wallet-access",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "backtest-run",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "learning-runs",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "trade",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "vaults",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "vault-detail",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "borrow",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "positions",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "research-defi",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "research-rwa",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "lab-memory",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "lab-backtests",
+    "overflow": []
+  },
+  {
+    "width": 1024,
+    "pageWidth": 1009,
+    "route": "lab-automation",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "research-markets",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "research-map",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "venue-detail",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "market-detail",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "protocol-detail",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "asset-detail",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "saved",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "supply",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "portfolio",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "fund",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "transfer",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "activity",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "plan",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "vault-management",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "automation-history",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "connections",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "alerts",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "conversations",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "policy-states",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "wallet-access",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "backtest-run",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "learning-runs",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "trade",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "vaults",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "vault-detail",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "borrow",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "positions",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "research-defi",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "research-rwa",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "lab-memory",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "lab-backtests",
+    "overflow": []
+  },
+  {
+    "width": 1440,
+    "pageWidth": 1425,
+    "route": "lab-automation",
+    "overflow": []
+  }
+]

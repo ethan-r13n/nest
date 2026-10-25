@@ -1,0 +1,62 @@
+{
+  "version": "0.4.0",
+  "date": "2026-10-25",
+  "distinct_views": 32,
+  "layout_checks": 96,
+  "layout_issues": [],
+  "chat_refinement_checks": [
+    {
+      "width": 375,
+      "pageWidth": 360,
+      "route": "conversations",
+      "overflow": []
+    },
+    {
+      "width": 1024,
+      "pageWidth": 1009,
+      "route": "conversations",
+      "overflow": []
+    },
+    {
+      "width": 1440,
+      "pageWidth": 1425,
+      "route": "conversations",
+      "overflow": []
+    }
+  ],
+  "interaction_checks": [
+    {
+      "check": "Market amount carried into chat without URL amount",
+      "pass": true
+    },
+    {
+      "check": "Published catalog search and family filters",
+      "pass": true
+    },
+    {
+      "check": "Map search and venue inspector",
+      "pass": true
+    },
+    {
+      "check": "Comma-formatted exact chat amount is canonicalized without reduction",
+      "pass": true
+    },
+    {
+      "check": "Expired card cannot open financial review",
+      "pass": true
+    },
+    {
+      "check": "Ambiguous Sentora product requests clarification before plan",
+      "pass": true
+    }
+  ],
+  "catalog": {
+    "operations": 60,
+    "skills": 20,
+    "sections": 202,
+    "generatedAt": "2026-10-08T17:41:07Z",
+    "runtimeVerified": false
+  },
+  "console": "No application errors observed. Chrome wallet-extension provider conflict is unrelated to the preview.",
+  "scope": "Local fixtures; no wallet signing, policy save, OAuth or transaction submission"
+}

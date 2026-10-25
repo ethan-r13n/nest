@@ -1,0 +1,966 @@
+{
+  "version": "0.5.0",
+  "date": "2026-10-25",
+  "checks": [
+    {
+      "route": "trade",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Trade",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "vaults",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Vaults",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "vault-detail",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Vault / USDC",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "borrow",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Credit / Borrow",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "positions",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Credit / Positions",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "research-defi",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / DeFi",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "research-rwa",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / RWAs",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "lab-memory",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Lab / Memory",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "lab-backtests",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Lab / Backtests",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "lab-automation",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Lab / Automations",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "protocol-detail",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / Protocol detail",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "asset-detail",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / Asset detail",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "saved",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / Saved",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "supply",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Credit / Supply",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "portfolio",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Portfolio",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "fund",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Portfolio / Receive",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "transfer",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Portfolio / Send",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "activity",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Portfolio / Activity",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "plan",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Execution / Plan status",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "vault-management",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Vault / Redemptions & rewards",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "automation-history",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Lab / Automation history",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "connections",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Connections",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "alerts",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Alerts",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "chat",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Chat",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "policy-states",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Guardrails / State review",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "wallet-access",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Wallet / Access",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "backtest-run",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Lab / Backtest run",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "learning-runs",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Lab / Learning runs · P1",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "research-markets",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / Markets",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "research-map",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / Venue map",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "venue-detail",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / Venue detail",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "market-detail",
+      "clientWidth": 360,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 360,
+      "title": "Nest — Research / Market detail",
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "trade",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Trade",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "vaults",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Vaults",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "vault-detail",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Vault / USDC",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "borrow",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Credit / Borrow",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "positions",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Credit / Positions",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "research-defi",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / DeFi",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "research-rwa",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / RWAs",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "lab-memory",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Lab / Memory",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "lab-backtests",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Lab / Backtests",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "lab-automation",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Lab / Automations",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "protocol-detail",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / Protocol detail",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "asset-detail",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / Asset detail",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "saved",
+      "clientWidth": 1024,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1024,
+      "title": "Nest — Research / Saved",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "supply",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Credit / Supply",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "portfolio",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Portfolio",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "fund",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Portfolio / Receive",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "transfer",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Portfolio / Send",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "activity",
+      "clientWidth": 1024,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1024,
+      "title": "Nest — Portfolio / Activity",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "plan",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Execution / Plan status",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "vault-management",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Vault / Redemptions & rewards",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "automation-history",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Lab / Automation history",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "connections",
+      "clientWidth": 1024,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1024,
+      "title": "Nest — Connections",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "alerts",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Alerts",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "chat",
+      "clientWidth": 1024,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1024,
+      "title": "Nest — Chat",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "policy-states",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Guardrails / State review",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "wallet-access",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Wallet / Access",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "backtest-run",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Lab / Backtest run",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "learning-runs",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Lab / Learning runs · P1",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "research-markets",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / Markets",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "research-map",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / Venue map",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "venue-detail",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / Venue detail",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "market-detail",
+      "clientWidth": 1009,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1009,
+      "title": "Nest — Research / Market detail",
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "trade",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Trade",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "vaults",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Vaults",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "vault-detail",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Vault / USDC",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "borrow",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Credit / Borrow",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "positions",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Credit / Positions",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "research-defi",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / DeFi",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "research-rwa",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / RWAs",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "lab-memory",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Lab / Memory",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "lab-backtests",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Lab / Backtests",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "lab-automation",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Lab / Automations",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "protocol-detail",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / Protocol detail",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "asset-detail",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / Asset detail",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "saved",
+      "clientWidth": 1440,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1440,
+      "title": "Nest — Research / Saved",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "supply",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Credit / Supply",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "portfolio",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Portfolio",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "fund",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Portfolio / Receive",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "transfer",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Portfolio / Send",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "activity",
+      "clientWidth": 1440,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1440,
+      "title": "Nest — Portfolio / Activity",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "plan",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Execution / Plan status",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "vault-management",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Vault / Redemptions & rewards",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "automation-history",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Lab / Automation history",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "connections",
+      "clientWidth": 1440,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1440,
+      "title": "Nest — Connections",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "alerts",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Alerts",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "chat",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Chat",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "policy-states",
+      "clientWidth": 1440,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1440,
+      "title": "Nest — Guardrails / State review",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "wallet-access",
+      "clientWidth": 1440,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1440,
+      "title": "Nest — Wallet / Access",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "backtest-run",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Lab / Backtest run",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "learning-runs",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Lab / Learning runs · P1",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "research-markets",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / Markets",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "research-map",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / Venue map",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "venue-detail",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / Venue detail",
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "market-detail",
+      "clientWidth": 1425,
+      "hasContent": true,
+      "missingImages": [],
+      "scrollWidth": 1425,
+      "title": "Nest — Research / Market detail",
+      "width": 1440,
+      "pass": true
+    }
+  ]
+}

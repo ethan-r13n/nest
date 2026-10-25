@@ -1,0 +1,193 @@
+{
+  "version": "0.5.1",
+  "date": "2026-10-25",
+  "scope": "Move the Research allocation strip to Chat; replace the two lower suggestion cards.",
+  "interactions": [
+    {
+      "name": "Research strip removed; chart preserved",
+      "pass": true,
+      "detail": {
+        "capital": 0,
+        "chart": true,
+        "heading": "Stellar DeFi"
+      }
+    },
+    {
+      "name": "Only Swap and Supply cards remain",
+      "pass": true,
+      "detail": {
+        "assets": [
+          "USDC",
+          "XLM",
+          "USDT0"
+        ],
+        "horizons": [
+          "30 days",
+          "90 days",
+          "1 year"
+        ],
+        "prompts": [
+          "Swap 1000 XLM for USDC using the best eligible route",
+          "Supply 1000 USDC on Blend"
+        ]
+      }
+    },
+    {
+      "name": "Original asset and horizon options moved intact",
+      "pass": true,
+      "detail": {
+        "assets": [
+          "USDC",
+          "XLM",
+          "USDT0"
+        ],
+        "horizons": [
+          "30 days",
+          "90 days",
+          "1 year"
+        ],
+        "prompts": [
+          "Swap 1000 XLM for USDC using the best eligible route",
+          "Supply 1000 USDC on Blend"
+        ]
+      }
+    },
+    {
+      "name": "Zero amount stays in form with associated error",
+      "pass": true,
+      "detail": {
+        "error": "Enter a positive decimal amount, such as 10,000 or 0.5.",
+        "focus": "d-allocation-amount",
+        "invalid": "true",
+        "messages": 0
+      }
+    },
+    {
+      "name": "Comparison preserves exact selected inputs without execution",
+      "pass": true,
+      "detail": {
+        "actionCards": 0,
+        "reply": "Your comparison is set to 25000.125 USDT0 over 1 year. Compare yield, fees, risk and withdrawal conditions using those same inputs. This preview uses dated research; live rates, capacity and eligibility remain unavailable.",
+        "request": "I want to allocate 25000.125 USDT0 for 1 year. Compare eligible opportunities for these inputs.",
+        "url": "http://127.0.0.1:8765/ui/#chat"
+      }
+    },
+    {
+      "name": "Allocation selections survive a new conversation",
+      "pass": true,
+      "detail": {
+        "amount": "25,000.125",
+        "asset": "USDT0",
+        "horizon": "1 year"
+      }
+    },
+    {
+      "name": "Malformed thousands separators rejected",
+      "pass": true,
+      "detail": {
+        "invalid": "true",
+        "messages": 0
+      }
+    },
+    {
+      "name": "Keyboard submission preserves fractional allocation",
+      "pass": true,
+      "detail": {
+        "actionCards": 0,
+        "request": "I want to allocate 0.5 XLM for 90 days. Compare eligible opportunities for these inputs."
+      }
+    },
+    {
+      "name": "Retained Swap card still fills the composer",
+      "pass": true,
+      "detail": {
+        "draft": "Swap 1000 XLM for USDC using the best eligible route",
+        "messages": 0
+      }
+    }
+  ],
+  "layouts": [
+    {
+      "route": "chat",
+      "allocationForms": 1,
+      "client": 360,
+      "researchStrip": 0,
+      "scroll": 360,
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "conversations",
+      "allocationForms": 1,
+      "client": 360,
+      "researchStrip": 0,
+      "scroll": 360,
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "research-defi",
+      "allocationForms": 0,
+      "client": 360,
+      "researchStrip": 0,
+      "scroll": 360,
+      "width": 375,
+      "pass": true
+    },
+    {
+      "route": "chat",
+      "allocationForms": 1,
+      "client": 1024,
+      "researchStrip": 0,
+      "scroll": 1024,
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "conversations",
+      "allocationForms": 1,
+      "client": 1024,
+      "researchStrip": 0,
+      "scroll": 1024,
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "research-defi",
+      "allocationForms": 0,
+      "client": 1009,
+      "researchStrip": 0,
+      "scroll": 1009,
+      "width": 1024,
+      "pass": true
+    },
+    {
+      "route": "chat",
+      "allocationForms": 1,
+      "client": 1425,
+      "researchStrip": 0,
+      "scroll": 1425,
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "conversations",
+      "allocationForms": 1,
+      "client": 1425,
+      "researchStrip": 0,
+      "scroll": 1425,
+      "width": 1440,
+      "pass": true
+    },
+    {
+      "route": "research-defi",
+      "allocationForms": 0,
+      "client": 1425,
+      "researchStrip": 0,
+      "scroll": 1425,
+      "width": 1440,
+      "pass": true
+    }
+  ],
+  "consoleErrors": []
+}

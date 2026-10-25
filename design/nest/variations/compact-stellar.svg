@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 164" role="img" aria-labelledby="compact-title compact-desc">
+  <title id="compact-title">Nest — Compact Stellar</title>
+  <desc id="compact-desc">Three broad orange woven ribbons cradle a circular seed with two rising diagonal transparent cuts inspired by Stellar.</desc>
+  <defs>
+    <mask id="compact-seed-cut" maskUnits="userSpaceOnUse" x="96" y="40" width="48" height="48">
+      <circle cx="120" cy="64" r="23" fill="white"/>
+      <path d="M94 78L148 47" fill="none" stroke="black" stroke-width="6"/>
+      <path d="M96 87L151 55" fill="none" stroke="black" stroke-width="3"/>
+    </mask>
+  </defs>
+  <g fill="#ff5500">
+    <path d="M88 20C56 27 32 42 37 56C40 62 44 66 50 69C43 53 65 43 88 36Q92 35 92 31V24Q92 19 88 20ZM152 20C184 27 208 42 203 56C200 63 195 68 189 71C197 53 175 43 152 36Q148 35 148 31V24Q148 19 152 20Z"/>
+    <path d="M213 61C234 80 224 96 190 112C149 132 76 142 37 113C26 105 22 96 21 88C44 110 85 116 121 107C162 97 202 81 213 61Z"/>
+    <path d="M16 92C34 119 74 137 118 137C164 137 204 119 225 92C226 122 190 149 139 153C84 160 26 141 16 92Z"/>
+    <circle cx="120" cy="64" r="23" mask="url(#compact-seed-cut)"/>
+  </g>
+</svg>

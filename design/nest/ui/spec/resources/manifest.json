@@ -1,0 +1,14 @@
+[
+  {
+    "source": "docs/technical-spec.md",
+    "artifact": "technical-spec.md",
+    "sha256": "095a0ee7dfd05b032e0dfe5685ff782632fa6a582b1a258b268b755e5b44823f",
+    "captured": "2026-10-25"
+  },
+  {
+    "source": "README.md",
+    "artifact": "repository-readme.md",
+    "sha256": "587884efe887f050173a2028a32e75f437303b874c229422293dc5b6bd9f9aee",
+    "captured": "2026-10-25"
+  }
+]

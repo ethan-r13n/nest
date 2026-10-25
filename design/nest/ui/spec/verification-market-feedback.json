@@ -1,0 +1,249 @@
+{
+  "version": "0.6.0",
+  "date": "2026-10-25",
+  "interactions": [
+    {
+      "check": "Interval changes OHLC and candle times",
+      "pass": true
+    },
+    {
+      "check": "Zoom changes visible candle count",
+      "pass": true
+    },
+    {
+      "check": "Keyboard candle inspection announces OHLC",
+      "pass": true
+    },
+    {
+      "check": "Close review retains exact full quantity and minimum",
+      "pass": true
+    },
+    {
+      "check": "Close preview leaves holding unchanged",
+      "pass": true
+    },
+    {
+      "check": "Missing cost basis never fabricates P&L",
+      "pass": true
+    },
+    {
+      "check": "Disconnected account shows wallet entry",
+      "pass": true
+    },
+    {
+      "check": "Risk-profile filter matches three fixture vaults",
+      "pass": true
+    },
+    {
+      "check": "Risk and exit filters combine",
+      "pass": true
+    },
+    {
+      "check": "Reset restores all seven opportunities",
+      "pass": true
+    },
+    {
+      "check": "Removed sidebar sections absent",
+      "pass": true
+    },
+    {
+      "check": "Credit builder bounded with left panel wider",
+      "pass": true
+    },
+    {
+      "check": "RWA access chips show three independent known statuses for USDC",
+      "pass": true
+    },
+    {
+      "check": "RWA asset anchors preserve exact same-tab source URL",
+      "pass": true
+    },
+    {
+      "check": "Clicking a non-link row cell navigates in the current tab",
+      "pass": true
+    },
+    {
+      "check": "Mobile filter disclosure and risk selection work",
+      "pass": true
+    },
+    {
+      "check": "Candle chart resizes with the adjacent assistant",
+      "pass": true
+    },
+    {
+      "check": "Expired state blocks the position-close review",
+      "pass": true
+    }
+  ],
+  "responsive": [
+    {
+      "route": "trade",
+      "width": 375,
+      "pass": true,
+      "bodyWidth": 360,
+      "candles": 42,
+      "credit": [],
+      "documentWidth": 360,
+      "pageWidth": 360
+    },
+    {
+      "route": "vaults",
+      "width": 375,
+      "pass": true,
+      "bodyWidth": 360,
+      "candles": 0,
+      "credit": [],
+      "documentWidth": 360,
+      "pageWidth": 360
+    },
+    {
+      "route": "borrow",
+      "width": 375,
+      "pass": true,
+      "bodyWidth": 360,
+      "candles": 0,
+      "credit": [
+        {
+          "width": 328,
+          "x": 16,
+          "y": 446.6875
+        },
+        {
+          "width": 328,
+          "x": 16,
+          "y": 1093.2734375
+        }
+      ],
+      "documentWidth": 360,
+      "pageWidth": 360
+    },
+    {
+      "route": "research-rwa",
+      "width": 375,
+      "pass": true,
+      "bodyWidth": 360,
+      "candles": 0,
+      "credit": [],
+      "documentWidth": 360,
+      "pageWidth": 360,
+      "fix": "Screen-reader badge text positioned inside its badge to preserve table scrolling containment"
+    },
+    {
+      "route": "trade",
+      "width": 1024,
+      "pass": true,
+      "bodyWidth": 1009,
+      "candles": 72,
+      "credit": [],
+      "documentWidth": 1009,
+      "pageWidth": 1009
+    },
+    {
+      "route": "vaults",
+      "width": 1024,
+      "pass": true,
+      "bodyWidth": 1009,
+      "candles": 0,
+      "credit": [],
+      "documentWidth": 1009,
+      "pageWidth": 1009
+    },
+    {
+      "route": "borrow",
+      "width": 1024,
+      "pass": true,
+      "bodyWidth": 1009,
+      "candles": 0,
+      "credit": [
+        {
+          "width": 538.7734375,
+          "x": 24,
+          "y": 316.4921875
+        },
+        {
+          "width": 398.21875,
+          "x": 586.7734375,
+          "y": 316.4921875
+        }
+      ],
+      "documentWidth": 1009,
+      "pageWidth": 1009
+    },
+    {
+      "route": "research-rwa",
+      "width": 1024,
+      "pass": true,
+      "bodyWidth": 1009,
+      "candles": 0,
+      "credit": [],
+      "documentWidth": 1009,
+      "pageWidth": 1009
+    },
+    {
+      "route": "trade",
+      "width": 1440,
+      "pass": true,
+      "bodyWidth": 1425,
+      "candles": 72,
+      "credit": [],
+      "documentWidth": 1425,
+      "pageWidth": 1425
+    },
+    {
+      "route": "vaults",
+      "width": 1440,
+      "pass": true,
+      "bodyWidth": 1425,
+      "candles": 0,
+      "credit": [],
+      "documentWidth": 1425,
+      "pageWidth": 1425
+    },
+    {
+      "route": "borrow",
+      "width": 1440,
+      "pass": true,
+      "bodyWidth": 1425,
+      "candles": 0,
+      "credit": [
+        {
+          "width": 664.6953125,
+          "x": 122.5,
+          "y": 325.09375
+        },
+        {
+          "width": 491.3046875,
+          "x": 811.1953125,
+          "y": 325.09375
+        }
+      ],
+      "documentWidth": 1425,
+      "pageWidth": 1425
+    },
+    {
+      "route": "research-rwa",
+      "width": 1440,
+      "pass": true,
+      "bodyWidth": 1425,
+      "candles": 0,
+      "credit": [],
+      "documentWidth": 1425,
+      "pageWidth": 1425
+    }
+  ],
+  "modelVerification": {
+    "command": "node ui/scripts/verify-market-models.js",
+    "result": "passed",
+    "candles": 720,
+    "intervals": 6,
+    "identities": 109
+  },
+  "consoleErrors": [],
+  "externalSourceErrors": [
+    {
+      "url": "https://app.rwa.xyz/_next/static/immutable/chunks/30frnsgxb1qud.js",
+      "timestamp": "2026-10-25T18:37:07.133Z",
+      "note": "RWA.xyz profile request during same-tab source-navigation test; not a Nest page error"
+    }
+  ]
+}

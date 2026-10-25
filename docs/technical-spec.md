@@ -18,13 +18,13 @@ Pi's embedded TypeScript SDK owns the agent runtime: provider access, conversati
 | Automations | Connect X; create custom conditions over approved MCP/API data, inspect evaluation history, and receive alerts or expiring execution proposals. |
 | Trade | Exact-input market swaps for eligible venue assets through Soroswap, with charts, real routes, fee/output bounds, wallet approval, and confirmed fills. |
 | Credit | Compare Blend, Templar, and XOXNO at the same inputs. Supply, borrow, repay, withdraw, and manage collateral using venue-native capabilities and risk measures. |
-| Earn | Compare direct lending with approved DeFindex, Upshift/Gami, and Sentora vault products; deposit, redeem or withdraw using the actual product model, claim eligible rewards, and show exit conditions. |
+| Earn | Compare direct lending and approved vaults; complete their deposit/exit and supported reward lifecycles. Liquidity supports adding to, removing from, and monitoring existing two-asset Aquarius volatile/stable pools, with explicit LP-share and per-token bounds. |
 | Portfolio | Wallet/receipt positions, collateral, debt, net value, performance coverage, pending workflows, funding, exits, and action history. |
 | Spend preview | Portfolio card concept for Stellar USDC using Rain as the intended provider; UI only, with no issuance, funding or payment execution. |
 | Agent | Pi SDK with approved research/planning tools, Raven access, streamed responses, compacted conversation context, and wallet-bound saved history. |
 | Execution | Deterministic services with immutable plans, versioned policy, simulation, exact approval binding, durable claims, and receipt reconciliation. |
 
-P0 execution coverage includes **Soroswap, Blend, Templar, XOXNO, DeFindex, Upshift/Gami, and Sentora**. Gami Labs and Stake Capital curate vaults on Upshift. Sentora's evergreen USDC product also uses Upshift; its XLM, USDC, and PYUSD campaign deposit vaults are separate deployments. Reuse a verified contract/interface adapter across curators and access providers instead of counting every listing as a distinct protocol. The registry contains specific approved markets and vaults rather than enabling every permissionless deployment by protocol name.
+P0 execution coverage includes **Soroswap, Aquarius LP, Blend, Templar, XOXNO, DeFindex, Upshift/Gami, and Sentora**. Aquarius is the only P0 venue for LP execution; Soroswap remains the aggregated-swap integration. Soroswap and Sushi LP execution are outside P0. Gami Labs and Stake Capital curate vaults on Upshift. Sentora's evergreen USDC product also uses Upshift; its XLM, USDC, and PYUSD campaign deposit vaults are separate deployments. Reuse a verified contract/interface adapter across curators and access providers instead of counting every listing as a distinct protocol. The registry contains specific approved markets and vaults rather than enabling every permissionless deployment by protocol name.
 
 Support any asset available through the integrated market/vault deployments when canonical identity, metadata, account eligibility, and execution checks pass. Do not hardcode an XLM/USDC-only execution universe. XLM/USDC and USDT0 are the primary walkthrough/default-selection assets where live venue routes exist. Resolve issuer/SAC/contract identity and decimals from verified registries, never from ticker alone or model-generated addresses. Respect venue restrictions, unsupported pairs, and user policy; show explicit exclusion reasons.
 
@@ -38,7 +38,7 @@ All required adapters must implement their complete supported lifecycle before v
 
 3. **Credit:** specify collateral and desired debt → compare cost and collateral terms → supply collateral and borrow using the venue's actual workflow → monitor → repay and withdraw.
 
-4. **Earn:** choose the asset and liquidity needs → compare direct supply and vaults → deposit → track shares and net asset value → redeem into the supported asset.
+4. **Earn:** choose the asset and liquidity needs → compare direct supply and vaults → deposit → track shares and net asset value → redeem into the supported asset. For Liquidity, choose an existing eligible Aquarius pool → enter both asset amounts → review expected consumption, unused inputs and minimum LP shares → simulate and sign → monitor the confirmed position → review and sign a partial or full share withdrawal with separate minimum amounts for both underlying assets.
 
 5. **Fund and exit:** connect or watch an address, copy the funding address and required memo where applicable, show XLM reserve/fee needs, link to an existing supported funding provider, and verify arrival onchain. Wallet transfers require an amount, destination, relevant memo, preview, and signature.
 
@@ -87,7 +87,9 @@ Fonts: serif for titles only; sans for controls/prose; mono/tabular numbers for 
 
 ## Research
 
-Routes: `/research`, `/research/protocols/:slug`, `/research/assets/:assetId`, `/research/saved`, `/research/automations`, and `/research/automations/:id`. Secondary tabs: Overview, Protocols, Markets, RWAs, Automations, Saved. The agent composer stays available without replacing the tables.
+Routes: `/research`, `/research/protocols/:slug`, `/research/assets/:assetId`, `/research/venues/:id`, `/research/markets/:id`, and `/research/saved`. The current design has four Research tabs: DeFi, RWAs, Markets, and Venue map. Saved is a utility route; Automations lives in Lab, retaining the older `/research/automations` and `/research/automations/:id` aliases. The agent composer stays available without replacing the tables.
+
+Markets exposes the venue/market directory and an inspectable Raven catalog of source families, operations and skills. Venue map links every integration target to its read surfaces, network-specific availability, supported action capabilities, exit conditions and market details. Preserve separate protocol, curator, platform and canonical-product identities. Published catalog metadata, runtime-readable data and amount-specific executable quotes are distinct states. Display catalog revision, upstream snapshot time, retrieval time and verification status; never mark an adapter live because a research source mentions it. The local design uses the published Raven catalog (60 operations, 20 skills, 202 sections, generated 8 October 2026), not an authenticated runtime inventory.
 
 The first screen contains an asset/amount/horizon input, a chain metric summary and history chart, and the protocol table. A small opportunity strip uses the user's preferences and actual capital amount. Do not show personalized alpha or certainty labels unsupported by data.
 
@@ -109,6 +111,22 @@ Routes: `/earn` and `/earn/:opportunityId`. Use a filter rail and horizontal opp
 
 Compare Blend/Templar/XOXNO direct supply with DeFindex, Upshift/Gami, and Sentora vault products, keeping exposure, incentives, and withdrawal differences visible. Sentora includes the Upshift evergreen USDC vault and separate XLM/USDC/PYUSD campaign deposit vaults. Detail pages show product type, curator, underlying protocols, fee schedule, reward methodology, deadlines, redemption mechanics, and a sticky action panel. Use Deposit/Withdraw/Claim only when supported; show share-price history only for products that actually issue shares. For campaigns, display each deposit lot, accrued versus claimable rewards, and the rewards forfeited by the selected withdrawal. For delayed redemptions, show requested amount, pending state, earliest availability and claim/settlement step. No placeholder APYs, assumed share decimals, or invented instant exits appear as live data.
 
+### Liquidity — Aquarius P0
+
+Add a **Liquidity** section within Earn, beside the vault/direct-supply views; do not add another primary navigation item. Use `/earn/liquidity` for pool discovery and `/earn/liquidity/:poolId` for pool detail, the Add/Remove ticket and the connected position. If the application keeps `/vaults` as the current Earn entry, expose Liquidity from that group and retain these canonical routes. `poolId` is an application registry ID, not a user-supplied contract address. Keep vault receipts and LP shares visually distinct.
+
+P0 covers existing, registered **two-asset volatile and stable Aquarius pools**, two-asset deposit budgets, partial/full LP-share withdrawals and position monitoring. There is no pool creation, concentrated position or price-range editor, one-asset zap, automatic swap-to-balance or automatic rebalancing in this flow. Do not display Soroswap or Sushi as LP execution alternatives. Their pools may still appear as source-labelled research, and Soroswap may route swaps through underlying venues.
+
+| Surface | Implementation contract |
+| --- | --- |
+| Pool list | Search/filter by canonical asset pair, pool type, fee tier and availability. Show verified pool/router identity, reserves/TVL where priced, trading-fee yield separately from incentive yield, measurement window, withdrawal conditions and freshness. Loading, no eligible pool, unverified deployment, stale state and paused/unavailable actions have explicit states. Research APY alone is not an executable opportunity. |
+| Add ticket | Two asset pickers are fixed to the selected pool, with two exact decimal amount inputs and verified spendable balances. A user-entered amount is a maximum desired contribution for that token. A ratio suggestion never edits the other amount without explicit acceptance. Preview expected actual amounts consumed, expected unused amounts, LP shares minted, **minimum LP shares**, all maximum fees, expiry, network and source ledger. Keep withdrawal timing beside the inputs and in the shared owner review. |
+| Remove ticket | Load an owned LP position; enter exact shares or select a user-requested fraction/full balance. Server-derived Max excludes shares reserved by unresolved actions. Show shares to burn, expected receipt of each underlying token and a **separate minimum for each token**, fees, expiry, trustline/authorization requirements and withdrawal timing. Display outcomes in asset units before any optional USD conversion. No single-asset exit or implicit reward claim. |
+| Review and status | Use the existing `ActionReviewSheet` and persistent state machine for both actions. Label simulation results as expected; only confirmed effects are actual. A changed pool, amount, fee, economic bound or expiry requires a new review. Show rejection, slippage failure, pending confirmation, ambiguous receipt and reconciled success without inferring an outcome from an SDK return or stale indexer row. |
+| Position | Show LP-share balance, underlying exposure, fresh simulated redeemable amounts and verified valuation where available; keep unavailable fields explicit. Separate pool fee statistics, position-attributable observations, pending incentive rewards and actually claimed rewards. Display pool/position changes with their observation times. Monitoring can alert or propose an action, never sign, withdraw, claim or rebalance. |
+
+The [deposit guide](https://docs.aqua.network/developers/code-examples/deposit-liquidity) describes desired amounts versus consumed amounts and simulation-based minimum shares. The [withdrawal guide](https://docs.aqua.network/developers/code-examples/withdraw-liquidity) documents burning shares for token outputs with per-token minimums. Nest must preserve those economic distinctions rather than treating an LP deposit as a single-asset vault subscription.
+
 ## Trade
 
 Route: `/trade?pair=:pairId`. The default pair is XLM/USDC, with USDT0 available where an executable route exists. Pair selection covers all technically eligible venue assets. Use a market header and interval selector, chart on the left, a market-swap ticket on the right, and wallet activity below. The route panel identifies venues, expected output, minimum received, fees, price impact, route timestamp, and expiry. Quote both input directions. P0 uses exact-input swaps; expose additional trade modes only after adapter capability tests.
@@ -120,6 +138,8 @@ Use **TradingView Lightweight Charts**, with crosshairs, interval controls and a
 Portfolio contains wallet balances, collateral/debt, direct supply positions, vault positions, action history, and funding/withdraw controls. Show total assets, liabilities, net value, and valuation time. Claim actions appear only where the adapter supports them.
 
 Chat, recommendation cards, and buttons all create the same typed intents. The agent drawer explains proposed actions, shows alternatives and excluded venues, asks for genuinely missing inputs, and presents the shared review component. A prose response cannot create a separate execution path.
+
+Provide `/chat` as the full conversation workspace as well as the contextual drawer. Use the shared conversation layout: a restrained transcript, persistent composer, compact application-owned action card and a separate owner-review sheet. Inline cards show exact requested amounts, selected venue, economic bounds, maximum fees and state; deposits keep exit timing visible. Expose preparation activity on demand. Stop response cancels generation only; dismissal/cancellation of an eligible plan is separate. Request missing amounts, assets or ambiguous products before preparing. Wallet signing, submission and confirmation still follow Nest's application state machine; keep delegation and runtime behavior outside financial authority. The UI behavior and source evidence are specified in `design/nest/ui/spec/discovery.json` and `discovery.html`.
 
 ## Rain card spending preview
 
@@ -162,7 +182,9 @@ Markets: ProtocolTable, MarketComparisonTable, OpportunityRow, ChartPanel
 Execution: PlanSummary, AssetDeltaList, FeeBreakdown, RiskFacts,
            WalletApprovalStatus, ExecutionTimeline, ReceiptLink,
            WithdrawalTimingDisclosure, GuardrailWarning
-Portfolio: PositionSummary, PositionActions, MemoryInspector
+Liquidity: PoolIdentity, LiquidityPoolTable, TwoAssetAmountInputs, LpShareInput,
+           LpBoundsPreview, LpPositionExposure, PoolYieldBreakdown
+Portfolio: PositionSummary, PositionActions, LpPositionSummary, MemoryInspector
 ```
 
 All form amounts remain decimal strings in the client. The server validates, resolves canonical assets, and converts to raw units. `Max` comes from server capacity/balance/fee/reserve calculations. Asset selection shows network, ticker, and issuer/contract identity where ambiguous. Never silently substitute an asset, debt amount, venue, or network.
@@ -260,7 +282,7 @@ Pin the Pi packages below exactly and commit the resolved lockfile. Do not mix o
 }
 ```
 
-Use Zod at application boundaries and TypeBox only for the pinned Pi tool-schema interface. Keep conversions explicit. Pin application/UI/database package versions in the implementation lockfile after compatibility tests rather than copying a reference app's package manifest.
+Use Zod at application boundaries and TypeBox only for the pinned Pi tool-schema interface. Keep conversions explicit. Pin application/UI/database package versions in the implementation lockfile after compatibility tests rather than copying a reference app's package manifest. The Aquarius LP adapter may reuse the official `@aquariusdefi/sdk` for signer-free reads and verified unsigned-building utilities if available. Before adding it to the runtime, select and pin an exact release in the workspace catalog, test it with the pinned Stellar SDK and Worker runtime, and contract-test its decoded results. Do not add a key-bearing SDK client or depend on its automatic transaction helpers. If its read surface cannot run in Workers, use the documented Aquarius REST API and existing Stellar SDK; keep the same thin adapter contract.
 
 ### Pi hosting compatibility gate
 
@@ -275,7 +297,7 @@ packages/domain             identities, strict intents, plans, positions
 packages/agent-runtime      Pi sessions/providers/skills/streaming and Pi MCP Raven client
 packages/execution          deterministic comparison, plan lifecycle, preparation and submission
 packages/policy             pure versioned financial rules and reason codes
-packages/adapters           Soroswap, Blend, Templar, XOXNO, DeFindex, Upshift, Sentora campaign vaults, Stellar
+packages/adapters           Soroswap swaps, Aquarius LP, Blend, Templar, XOXNO, DeFindex, Upshift, Sentora, Stellar
 packages/jobs               durable job claims, ingestion/evaluation/reconciliation handlers
 packages/data               public DefiLlama, dated RWA snapshot, X, signals, prices and provenance
 packages/automations        rule schemas, capability validation, evaluation, triggers and delivery
@@ -294,6 +316,7 @@ flowchart TD
   E --> C[Deterministic venue comparison]
   C --> P[Typed plan and versioned policy]
   P --> B[Build inspect and simulate]
+  B <--> AQ[Thin Aquarius LP adapter: reads and unsigned router calls]
   B --> W[Application review and wallet signature]
   W --> S[Exact signed-payload verification and submission]
   S --> REC[Independent bounded reconciliation jobs]
@@ -477,6 +500,9 @@ type Intent = IntentBase & (
   | { kind: 'repay'; accountId: string; positionId: string; input: Amount }
   | { kind: 'add_collateral'; accountId: string; marketId: string; input: Amount }
   | { kind: 'remove_collateral'; accountId: string; positionId: string; amount: Amount }
+  | { kind: 'liquidity_add'; accountId: string; poolId: string;
+      desiredAmounts: [Amount, Amount] }
+  | { kind: 'liquidity_remove'; accountId: string; positionId: string; sharesRaw: string }
   | { kind: 'vault_deposit'; accountId: string; vaultId: string; input: Amount }
   | { kind: 'vault_redeem'; accountId: string; positionId: string; sharesRaw: string }
   | { kind: 'vault_claim'; accountId: string; positionId: string;
@@ -517,7 +543,21 @@ These are application contracts, not claims about upstream API shapes. Implement
 
 An execution plan contains intent/quote IDs, ordered steps, exact raw bounds, target contracts/accounts, network, expiry, policy version, registry version, assumptions, user-visible deltas, execution mode, warning facts, approved maximum fees by asset, execution-source freshness facts, and a withdrawal-timing disclosure for every deposit step. The policy version binds the user's explicitly accepted guardrail settings. Its immutable revision has a canonical digest. Build before presenting the final signing review; bind approval to the reviewed payload hashes and economic bounds. Any material change creates a new revision and review.
 
+### Aquarius LP market, quote and position contracts
+
+These are Nest contracts. Decode SDK/API/contract values as unknown before validating them; do not assume upstream fields have the same names or that an indexed amount is current.
+
+- **Pool registry:** `venueId = aquarius`, network, application pool ID, router contract ID, pool contract ID, pool hash/index, `poolType = volatile | stable`, fee configuration, exactly two canonical token identities in verified contract order, the verified share-token identity/decimals, ABI/code version and registry revision. Pool hash, pool address and share-token address are separate identifiers. Admission requires confirmed existing deployment and a verified standard-pool interface; unknown or concentrated types are not writable.
+- **Add intent:** desired amounts for the exact two pool assets, account and pool ID. Decode decimal text to raw units with asset-specific decimals. The quote extends `Quote` with `expectedConsumed: [Amount, Amount]`, `expectedUnused: [Amount, Amount]`, expected share output and `minSharesRaw`. The final plan binds both maximum token spends, the share asset and minimum share output. Reject silent asset/pool substitution or a swap leg introduced by a helper.
+- **Remove intent:** owned position ID and positive exact `sharesRaw`. Resolve its pool and share asset server-side. The quote contains expected underlying amounts and `minAmounts: [Amount, Amount]`, plus the share burn, fees and timing. The plan binds the exact share amount and both asset-specific lower bounds.
+- **Position snapshot:** discriminant `aquarius_lp`; owner/account, network, pool ID, pool/share identities, `sharesRaw`, nullable underlying exposure, nullable simulated redeemable amounts, nullable priced valuation, separately sourced pool-fee statistics and pending/claimed reward observations, state and per-field freshness. Use existing strict `Amount`/valuation/source envelopes; missing data is null with a reason, never zero. Record the ledger of chain reads, indexer as-of/retrieval times and price times separately. A partial price set produces partial coverage, not a complete USD value.
+- **Receipt:** network and transaction hash, reviewed plan/step/digest, success/failure ledger, actual token movements, actual share mint/burn, actual fees and independent reward movements. Persist actual results under `ledger_effects`/`execution_events` before deriving the confirmed position. A simulation estimate or indexer observation is not a confirmed receipt.
+
+Require two positive, exact desired input amounts for P0 adds; single-asset input is not an implicit zap. The two displayed token amounts must map by canonical asset ID into the router's token order. Quote and preparation results include a pool-state ledger, intent/registry/policy versions, timing disclosure and expiry. Minimums come from the exact operation simulation using accepted slippage and integer arithmetic; the final bounded payload is simulated and inspected again before approval. An estimation-only simulation may use permissive minima to discover outputs, but that probe is not an approvable/signable/submittable prepared payload; rebuild with the final bounds before review. For a positive expected output, compute `floor(expectedRaw * (10000 - slippageBps) / 10000)` or a stricter user-requested bound, checking range and rounding. Never accept an all-zero/placeholder minimum; reject dust when a positive accepted bound cannot be represented. SDK example defaults do not replace the user's saved settings or activate unconfirmed suggestions.
+
 ## Database
+
+LP pools reuse `markets` with kind `liquidity_pool` and versioned Aquarius registry metadata. Store typed LP snapshots in `position_snapshots` and immutable source envelopes in `data_snapshots`; use the existing plans, approvals, transactions, effects, jobs and outbox for LP actions. Do not create a second LP execution ledger or store financial position state in Pi history. Any schema additions follow additive D1 migrations.
 
 Required financial tables are users, wallet_accounts, auth_sessions, protocol_registry, asset_registry, markets, execution_policies, policy_versions, data_snapshots, price_samples, candles, intents, quote_sets, plan_revisions, plan_steps, approvals, transactions, workflow_receipts, execution_events, budget_reservations, sequence_leases, position_snapshots, ledger_effects, cash_flows, preferences, preference_proposals, bookmarks, paper_strategies, alerts, connector_accounts, connector_credentials, signal_definitions, signal_observations, automation_rules, automation_revisions, automation_evaluations, automation_triggers, automation_deliveries, outbox, and jobs.
 
@@ -541,7 +581,8 @@ Use authoritative/consistent reads for auth, policy, claims, approvals and submi
 | --- | --- |
 | `GET /api/research/overview` | Cached chain metrics with provenance. |
 | `GET /api/research/protocols` and `/assets` | Filtered lists and details. |
-| `GET /api/markets` | Current registered capabilities and market state. |
+| `GET /api/markets` | Current registered capabilities and market state; `kind=liquidity_pool&venue=aquarius` returns registered LP pools with supported actions and freshness. |
+| `GET /api/markets/:poolId` | Verified pool identities, state, type, fee/yield definitions and source coverage. |
 | `POST /api/intents` | Strictly validate inputs and persist intent. |
 | `POST /api/intents/:id/compare` | Obtain a bounded concurrent quote set and rank eligible results. |
 | `POST /api/plans` | Create immutable proposal from an intent and selected quote. |
@@ -549,12 +590,14 @@ Use authoritative/consistent reads for auth, policy, claims, approvals and submi
 | `POST /api/plans/:id/approve` | Record explicit review of the current revision and digest. |
 | `POST /api/plans/:id/submit` | Verify returned signed payloads and submit through a durable claim. |
 | `GET /api/plans/:id/events` | Server-sent events with persisted event IDs and reconnect support. |
-| `GET /api/portfolio/:account` | Positions, liabilities, valuations, and freshness. |
+| `GET /api/portfolio/:account` | Positions, including typed Aquarius LP shares/exposure/redeemable observations, liabilities, valuations, and freshness. |
 | `GET/PATCH /api/preferences` | Read or explicitly change soft preferences. |
 | `GET /api/policy` and `POST /api/policy/revisions` | Read saved guardrail preferences, unconfirmed suggestions and non-overridable effective requirements; explicitly save an authenticated wallet/network-scoped revision with expected version and idempotency. Return field errors or a version conflict; invalidate affected prepared plans. The agent has no write capability. |
 | `POST /api/preferences/proposals/:id/accept` | Accept a proposed preference change. |
 | `GET/POST/DELETE /api/bookmarks` | Manage saved research and strategies. |
 | `GET/POST/PATCH /api/alerts` | Read and acknowledge in-app alerts; acknowledgement does not execute. |
+
+Liquidity add/remove use the existing intent → comparison/quote → plan → prepare → approve → submit endpoints. Do not expose an alternate SDK transaction endpoint. Pool listing can be public; owned positions, preparation and financial mutations require the existing account authorization. An optional watched address grants read-only access, never approval authority.
 
 Use strict request/response schemas, stable error codes, authenticated ownership checks, request IDs, and idempotency headers on financial mutations. A plan ID never substitutes for authorization. SSE carries research/action progress, not permission requests that execute automatically.
 
@@ -573,6 +616,7 @@ Hard constraints include network and asset identity, the user's approved intent 
 | Swap | Highest net output after explicit fees at the same input size, within accepted slippage and any explicitly enabled hard price-impact bound. Show warnings above the accepted impact-warning threshold; a warning alone does not exclude a route. Delegate candidate DEX routing to Soroswap. |
 | Borrow | Compare the requested debt amount against the same collateral amount, available liquidity, initial LTV, liquidation parameters, rate type, fees, and estimated horizon cost. Show collateral yield separately. |
 | Supply or earn | Compare net yield estimates for the same asset, amount, and horizon after known fees, with base return and incentives separated and withdrawal requirements enforced. |
+| Liquidity add/remove | P0 executes only on Aquarius. The user chooses a verified existing pool; compare eligible same-pair pools by pool type, fees, verified state, current deposit/exit outcomes and incentive dependence, without claiming that unlike LP shares are interchangeable or that yield predicts execution quality. Removal always targets the owned position's pool. |
 | Withdraw or repay | Use the existing position's venue; select permitted funding/conversion actions only when required and explicitly included in the plan. |
 
 Normalize APR/APY only when the compounding convention is known. Horizon estimates state the assumption that variable rates persist; display current and trailing rates separately. Do not turn one APY snapshot into a historical backtest. Unknown fees, redemption restrictions, or missing critical state exclude a route from a best-execution claim.
@@ -594,6 +638,7 @@ Nest charges no execution fee in v1. Set `nestFeeBps = 0` in every quote/build p
 | DefiLlama | Chain/protocol TVL, historical series, DEX volumes, and available yield context. | Discovery only; protocol adapters supply executable state. |
 | RWA.xyz | Attributed dated Stellar asset/metric/league-table snapshot; manual refresh with explicit coverage limits. | Discovery only; eligibility and tradability need explicit venue/issuer confirmation. |
 | Raven | Documentation, ecosystem research, implementation context, and cited explanations. | Research context only. |
+| Aquarius public API / signer-free SDK | Candidate LP pools, indexed pool statistics and position discovery, with explicit source times and lag. | Discovery/read context; fresh verified chain state, final simulation and confirmed receipts govern financial actions. |
 | Protocol SDK/API plus Stellar RPC with Classic compatibility reads | Current balances, market capacity, rates, transaction construction, simulation, and confirmed effects. | Authoritative within each adapter's verified scope. |
 | X plus approved MCP/API signal connectors | Authorized social observations and other typed metrics/events with scope, timestamps, provenance, and quality. | Monitoring inputs only; never signing or execution authority. |
 | Price history adapter | Timestamped reference-price samples or observed pair trades. | Charting and valuations; never a replacement for a live quote. |
@@ -618,9 +663,27 @@ Store raw provider payloads only as permitted, plus normalized records and trans
 
 ## Soroswap
 
-Use the documented Aggregator API for quote → build → wallet sign → submit. Include eligible `soroswap`, `aqua`, `sushi`, `comet`, and `sdex` protocols when obtaining market-swap quotes. Aquarius, Sushi V3, and Classic SDEX/AMM are routing coverage rather than additional swap adapters. [Supported venues](https://docs.soroswap.finance/aggregator/supported-amms)
+Use the documented Aggregator API for quote → build → wallet sign → submit. Include eligible `soroswap`, `aqua`, `sushi`, `comet`, and `sdex` protocols when obtaining market-swap quotes. Aquarius, Sushi V3, and Classic SDEX/AMM are routing coverage rather than additional swap adapters. Aquarius LP entry/exit is a separate P0 adapter and does not follow from swap aggregation; Soroswap and Sushi LP execution remain outside P0. [Supported venues](https://docs.soroswap.finance/aggregator/supported-amms)
 
 Soroban routes can combine venues atomically. SDEX returns a separate Classic path payment. With P0 `G...` accounts the API supports both paths; direct `C...` contract execution supports Soroban venues and requires a separate SDEX path. Account capability filtering must happen before quoting. Decode and validate API-built XDR, target/receiver, token identities, spend bounds, fees, and network before review. [Quickstart](https://docs.soroswap.finance/api/quickstart)
+
+## Aquarius LP
+
+Implement `packages/adapters/src/aquarius/` as a thin `VenueAdapter` for `liquidity_add` and `liquidity_remove`, plus pool/position reads. P0 has no Aquarius swap adapter requirement; swaps continue through Soroswap. Do not add Soroswap or Sushi LP actions.
+
+**Read path.** Use the official signer-free SDK client or the public Aquarius API for candidate discovery and indexed history. The documented mainnet API base is `https://amm-api.aqua.network/api/external/v2`; Testnet has a separate base. Read `/pools/`, `/pools/user/<address>` and applicable statistics through bounded, paginated ingestion with schema validation and source times. Public access currently needs no key. Discover candidate identities, then verify network, router/pool mapping, type, asset order, reserves, share metadata and account shares against the approved registry and fresh chain reads before financial preview. The API/indexer is not authorization or settlement authority. [API reference](https://docs.aqua.network/developers/reference/backend-api), [network/deployment reference](https://docs.aqua.network/developers/reference/addresses-and-networks)
+
+**SDK boundary.** `@aquariusdefi/sdk` documents `pools.forPair`, `reserves`, `totalShares`, `shareBalance`, `positions` and `pendingRewards` for reads without a signer. Its high-level `deposit`/`withdraw` helpers also handle signing/submission. Do not invoke those automatic write flows in Nest's execution path, supply a user secret, or give SDK retries authority to repeat a financial action. Reuse only independently verified read/encoding/unsigned-building functions. The dependable write path is an unsigned Stellar SDK invocation of the registered router, passed back to Nest's existing engine. [Integration guide](https://docs.aqua.network/developers/integrating-with-aquarius), [position/read guide](https://docs.aqua.network/developers/code-examples/get-pools-info)
+
+**Unsigned operation mapping.** Build the reviewed account's router `deposit(user, tokens, pool_index, desired_amounts, min_shares)` or `withdraw(user, tokens, pool_index, share_amount, min_amounts)` call. Encode the ordered token vector, pool hash and u128 arguments with the verified ABI. The deposited token amounts actually consumed can differ from desired budgets; the contract result and confirmed effects must agree. Reject a non-standard/concentrated pool before building. [Router contract reference](https://docs.aqua.network/developers/reference/router-and-pool-contracts)
+
+**Execution ownership.** Nest performs deterministic quote math, balance/XLM-reserve/authorization checks, policy evaluation, final bounded-payload simulation, resource/fee preparation and review. Freighter signs the frozen network-bound transaction and any required authorization entries only after explicit user approval. Nest verifies returned signed bytes, claims submission idempotently, submits once and reconciles the original hash after timeouts. Do not install another job queue, signer, transaction store or SDK retry loop. Neither Raven nor Pi receives build/sign/submit authority.
+
+**Entry/exit gates.** Preserve both user token budgets on add, minimum shares, exact share burn on remove, both minimum underlying receipts, receiver, expiry, maximum fees, registry/code versions and pool pause/withdrawal state. Check both tokens' transfer eligibility, required trustlines/authorization and verified share balance. A required setup transaction is its own reviewed prerequisite; never create trustlines, swap an input or change the desired ratio silently. Pool/capability changes invalidate the review. Disclose lockups, issuer restrictions and variable/unknown exit timing; permissionless trading or a successful simulation does not prove an instant exit.
+
+**Reconciliation.** Parse actual router return values and token/share movements from a confirmed successful transaction; verify each economic bound before marking the action confirmed. Keep a submitted or ambiguous result pending/reconciling and reserve the relevant spend/share availability until its outcome is established. Refresh the registered pool and owned position after confirmation. Indexer lag cannot erase the confirmed entry, duplicate a deposit or temporarily turn a known share balance into zero. A confirmed economic mismatch is a reconciliation exception requiring investigation and a new user-approved recovery action, not an automatic second operation.
+
+**Rewards.** Monitor supported pending rewards separately from fee yield. Only pool-specific fee observations can support a pool fee-yield estimate; never allocate chain-wide aggregate fees to an individual pool or call them realized account income. A normal LP withdrawal does not implicitly claim rewards, and fees incorporated in pool value are not a second wallet balance. Standalone LP reward claiming is deferred from this initial LP action set; existing vault reward-claim scope is unchanged. A future claim is a separate reviewed action. [LP reward mechanics](https://docs.aqua.network/developers/code-examples/claim-lp-rewards)
 
 ## Blend
 
@@ -727,7 +790,7 @@ Simulation reports expected effects, authorization, and resource needs. It canno
 
 ## Deposit withdrawal disclosure
 
-Before **every** supply, collateral addition, vault/campaign deposit or deposit leg of a composed plan, place a prominent **Withdrawal timing** summary next to the amount/action area and repeat it in the shared review before signing. Include hard lockups, when any cooldown starts, request/queue/settlement or claim steps, estimated duration/range and earliest availability where known. Explain dependencies such as liquidity, campaign terms, repayment or collateral health. Display **Variable** or **Unknown** explicitly when timing cannot be guaranteed; never infer instant withdrawal from a missing field.
+Before **every** supply, collateral addition, Aquarius liquidity addition, vault/campaign deposit or deposit leg of a composed plan, place a prominent **Withdrawal timing** summary next to the amount/action area and repeat it in the shared review before signing. Include hard lockups, when any cooldown starts, request/queue/settlement or claim steps, estimated duration/range and earliest availability where known. Explain dependencies such as liquidity, campaign terms, repayment or collateral health. Display **Variable** or **Unknown** explicitly when timing cannot be guaranteed; never infer instant withdrawal from a missing field.
 
 Define `WithdrawalTiming` as a validated adapter result containing `status: immediate | scheduled | variable | unknown`, lockup/cooldown facts with known/none/unknown status, nullable earliest-availability and estimated-range fields, ordered request/queue/settlement steps, conditions, and source/observation/as-of/evidence-version references. Each deposit quote/plan step must carry one; non-deposit actions may use null. An immediate label requires affirmative venue evidence. A liquidity-dependent queue estimate is not a promise.
 
@@ -753,9 +816,11 @@ For multi-step workflows, record exactly which steps completed and the remaining
 
 # Portfolio memory and monitoring
 
-Calculate net value as confirmed assets and position value minus debt, with a valuation timestamp and source. Decompose vault/receipt positions to show underlying exposure without adding both receipt value and backing value to the user's total. Do not count collateralized assets twice.
+Calculate net value as confirmed assets and position value minus debt, with a valuation timestamp and source. Decompose vault/receipt positions to show underlying exposure without adding both receipt value and backing value to the user's total. Do not count collateralized assets twice. Aquarius LP shares contribute their verified position value once; underlying exposure is a decomposition of that value, not additional wallet holdings. Keep unclaimed incentive rewards distinct from LP backing and from confirmed claimed transfers.
 
-Treat only funding/cash-out across the tracked portfolio boundary as external cash flows. Lending/vault deposits, redemptions, collateral movements, borrowing, and repayment are internal asset/liability transformations. Record actual fills from confirmed token movements, interest/debt changes, rewards, and fees separately. Show since-tracking performance with the coverage start date. Historical cost basis unavailable before import remains unknown; the UI cannot infer full lifetime realized PnL from current balances. Simulation values never become realized performance.
+Poll enabled Aquarius LP positions at the configured roughly one-minute monitoring cadence, with bounded pool/position reads and per-source freshness. Compare share balance, reserves, redeemable estimates, pool pause/version state and reward observations with the prior snapshot. Record uncertainty and indexer lag. Read-only monitoring may produce an alert or expiring reviewed proposal through existing automation services; it never authorizes an automatic LP deposit, withdrawal, reward claim or rebalance.
+
+Treat only funding/cash-out across the tracked portfolio boundary as external cash flows. Lending/vault/LP deposits, redemptions, collateral movements, borrowing, and repayment are internal asset/liability transformations. Record actual fills from confirmed token movements, interest/debt changes, rewards, and fees separately. Show since-tracking performance with the coverage start date. Historical cost basis unavailable before import remains unknown; the UI cannot infer full lifetime realized PnL from current balances. Simulation values never become realized performance.
 
 P0 memory stores accepted asset/protocol preferences, horizon, liquidity needs, bookmarks, rejected recommendations, and decision/action notes. Users can inspect, edit, reset, and export it. New inferred preferences are proposals awaiting acceptance. Memory does not grant signing authority or modify execution rules.
 
@@ -836,7 +901,7 @@ Acceptance covers OAuth rejection/expiry/refresh/disconnect and tenant isolation
 | Agent | Implement Pi session/checkpoint/SSE APIs, restricted skills, Raven OAuth/tools, proposal idempotency, and provider fallback configuration. |
 | Automations | Complete X OAuth/read access, signal catalog, natural-language and form authoring, accepted rule revisions, durable evaluation, alerts/proposals, expiry and replay tests. |
 | Swap lifecycle | Complete quote → typed plan → policy → prepare/simulate → review/sign → submit → reconcile → actual effects. |
-| Credit and Earn | Complete all supported lifecycles across Blend, Templar, XOXNO, DeFindex, Upshift/Gami, and Sentora; include campaign withdrawal/reward claims and evergreen redemption settlement; integrate common comparison/exit UI. |
+| Credit and Earn | Complete all supported lifecycles across Blend, Templar, XOXNO, DeFindex, Upshift/Gami, and Sentora; complete Aquarius two-asset LP add/remove/monitor; include campaign withdrawal/reward claims and evergreen redemption settlement; integrate common comparison/exit UI. |
 | Network validation | Pass the required Testnet profile using the same application services, plus separate mainnet validation for each enabled adapter. |
 | Release | Pass failure/recovery, isolation, accounting, UI/accessibility, dependency/license, and upgrade tests; verify every required adapter capability and vault product lifecycle. |
 
@@ -856,17 +921,30 @@ Use meaningful tests around economic correctness and trust boundaries: decimal/s
 
 Execution tests must reject tampered destinations/amounts, altered signed payloads, wrong network, expired quotes/approvals, changed wallet/policy/registry, unsupported nested authorization, and simulated effects outside the plan. Test two concurrent submissions, per-account sequence contention, restart while pending, unknown receipts, and partial Templar settlement without duplicate exposure. Test explicit-only guardrail saves, agent write denial, wallet/network isolation, concurrent-save conflicts and invalidation of prepared plans on a policy change. Verify unconfirmed suggestions never activate silently; warning-only thresholds do not become hard caps; provider-shorter expiry wins over the proposed 30 seconds; fee maxima and optional custom ceilings are enforced; stale source observations fail quote and preview generation. An approved P0 intent must work without global funding/spending/daily-turnover/borrowing caps. Optional enabled caps remain race-safe, and mandatory chain/venue constraints cannot be relaxed. Run D1-backed race/crash tests for zero-row compare-and-swap, expired/fenced leases, overlapping scheduled invocations, atomic trigger/outbox creation and optional-cap reservations. Confirm a lost claim cannot append a submitted event or cause an external call; ambiguous receipts reconcile by the original hash.
 
-End-to-end tests cover research/transient chat without a wallet, wallet-required saved history, amount-aware comparison, stale/partial sources, funding, swap, supply/withdraw, borrow/repay/collateral release on all three credit venues, deposit/redeem on DeFindex and Upshift vaults, Sentora evergreen redemption settlement, and Sentora campaign deposit/partial withdrawal/reward claims, actual position accounting, memory inspection/reset, X connection/disconnection, and the complete author → validate → test evaluation → activate → trigger → review workflow. Cover custom rules from multiple signal categories rather than a fixed strategy menu. Use the same code against isolated mainnet/Testnet configurations; use explicit user signatures for approved minimal mainnet round trips. Verify prominent pre-deposit withdrawal disclosures for direct supply, collateral additions, vault/campaign deposits and each deposit leg of a composed plan, including fixed, variable, queued and unknown timing. An unknown duration must never render as instant; a failed liquidity-deadline check must not be silently waived.
+End-to-end tests cover Aquarius LP add/partial-remove/full-remove with confirmed positions and the tests below, research/transient chat without a wallet, wallet-required saved history, amount-aware comparison, stale/partial sources, funding, swap, supply/withdraw, borrow/repay/collateral release on all three credit venues, deposit/redeem on DeFindex and Upshift vaults, Sentora evergreen redemption settlement, and Sentora campaign deposit/partial withdrawal/reward claims, actual position accounting, memory inspection/reset, X connection/disconnection, and the complete author → validate → test evaluation → activate → trigger → review workflow. Cover custom rules from multiple signal categories rather than a fixed strategy menu. Use the same code against isolated mainnet/Testnet configurations; use explicit user signatures for approved minimal mainnet round trips. Verify prominent pre-deposit withdrawal disclosures for direct supply, collateral additions, Aquarius liquidity additions, vault/campaign deposits and each deposit leg of a composed plan, including fixed, variable, queued and unknown timing. An unknown duration must never render as instant; a failed liquidity-deadline check must not be silently waived.
+
+### Aquarius LP acceptance tests
+
+| Contract | Required proof |
+| --- | --- |
+| Discovery and admission | Validate pagination and schema failures, network isolation, exact asset/issuer/SAC mapping, pool hash versus contract/share identity, fee/type/version checks and fresh chain verification. Two-asset volatile/stable pools are eligible only after admission. Reject concentrated, multi-asset, unverified and substituted pools; no Sushi/Soroswap LP execution is exposed. |
+| Add accounting | Exercise both token display orders, distinct token/share decimals, non-ratio desired budgets, simulated actual consumption, unused funds and exact minimum shares. Verify integer rounding/dust behavior. The final bounded payload cannot consume more of either input or mint fewer shares than approved. No float-derived economic bounds or hidden swap/zap. |
+| Remove accounting | Partial and full share withdrawal use the owned pool and verified available shares. Test both per-token minimums independently, decimals, dust, trustline/authorization failure, paused exits, stale pool state and unknown timing. Withdrawal does not silently claim rewards. |
+| Approval and idempotency | Fake SDK signers/automatic submit methods must be absent or unreachable. Verify explicit Freighter review, signed-payload inspection, rejected/expired signatures, policy/registry/pool changes, concurrent requests, worker restart and ambiguous RPC acceptance. Exactly one confirmed effect set is associated with the original transaction hash. |
+| Positions and monitoring | Test stale/lagging indexer responses after a confirmed action, partial valuations, missing/zero reward distinction, fee versus incentive attribution, LP/underlying double-count prevention and monitoring without write authority. Current redeemable amounts require current source evidence. |
+| UI | Add/Remove tickets show exact assets, desired versus expected/unused amounts, minimum shares or both minimum receipts, fees, timing and expiry. Loading/stale/blocked states cannot show an enabled signing control. Verify the shared review and confirmation/error states at the existing responsive/accessibility targets. |
+
+Record a real isolated Testnet Aquarius add → confirmed share/position read → partial remove → confirmed remaining position → full remove sequence for each enabled standard pool class, using existing verified test pools and exact test asset identities. Missing Testnet pools/state is an unmet integration gate, not a fixture success or permission to create pools through the P0 product. Before enabling a mainnet class, validate the same full lifecycle on that network with explicit user-approved small transactions.
 
 ## Network validation profile
 
-Run an actual Testnet path through Raven-supported intent → real Soroswap quote/swap → confirmed effects → supported Blend supply → confirmed position → withdrawal. Verify compatible test asset identities and current contract deployments first. Record transaction/network/adapter evidence and one blocked or expired plan with recovery. A mock, recording, or SDK network flag does not establish a functioning Testnet integration. Mainnet remains the primary product network, with its own validated registry and live-quote coverage. Testnet routes and liquidity must not inherit mainnet claims.
+Run an actual Testnet path through Raven-supported intent → real Soroswap quote/swap → confirmed effects → supported Blend supply → confirmed position → withdrawal. Verify compatible test asset identities and current contract deployments first. Record transaction/network/adapter evidence and one blocked or expired plan with recovery. A mock, recording, or SDK network flag does not establish a functioning Testnet integration. Mainnet remains the primary product network, with its own validated registry and live-quote coverage. Testnet routes and liquidity must not inherit mainnet claims. Validate Aquarius LP independently; its additional proof does not replace or relax the required Raven → Soroswap → Blend Testnet path.
 
 UI tests cover Nest's Raven-derived theme, workspace-first agent panel, functional table/search/filter/sort controls, asset identity, IRIS-style Credit inputs, vault navigation, shared review/signing, top-right Guardrails placement beside the wallet control, draft/save/cancel/conflict states, warning-versus-blocking labels, prominent withdrawal timing, and all loading/partial/stale/error states. Verify guest-versus-saved history behavior, keyboard navigation, responsive breakpoints, and accessible status signals. Initial configurable targets are cached research p95 below 1 second and quote-set timeout around 10 seconds, with partial coverage shown. Treat settlement time as observed protocol state rather than an application SLA.
 
 ## Launch dependencies
 
-Configure Pi provider/model credentials, Raven OAuth, Soroswap and DeFindex API access, the attributed RWA snapshot and any separately enabled live-data entitlement, protocol deployments/ABIs, verified Sentora campaign/escrow deployments, optional yield.xyz API entitlement if selected, wallet capabilities, a truthful chart source, and X developer-app credentials with entitled read endpoints. X connection and a working social-data rule are P0 acceptance requirements; an iframe or mock account connection does not satisfy them. Validate Templar settlement/auth and XOXNO market ownership/licensing before enabling writes. Rain remains a UI-only preview and needs no provider credentials. Funding uses a validated external provider link; embedded cross-chain funding execution is outside P0.
+Configure Pi provider/model credentials, Raven OAuth, Soroswap and DeFindex API access, the attributed RWA snapshot and any separately enabled live-data entitlement, protocol deployments/ABIs, verified Aquarius router/pool/share registries and its read/unsigned-builder compatibility checks, verified Sentora campaign/escrow deployments, optional yield.xyz API entitlement if selected, wallet capabilities, a truthful chart source, and X developer-app credentials with entitled read endpoints. X connection and a working social-data rule are P0 acceptance requirements; an iframe or mock account connection does not satisfy them. Validate Templar settlement/auth and XOXNO market ownership/licensing before enabling writes. Rain remains a UI-only preview and needs no provider credentials. Funding uses a validated external provider link; embedded cross-chain funding execution is outside P0.
 
 Required configuration includes per-environment D1 bindings/resource IDs and Wrangler migrations, private-demo wallet access controls, `APP_ORIGIN`, app encryption/session secrets and a distinct server-only authentication-challenge signing key, provider/model IDs, configured OpenRouter key or operator subscription store, Raven client/callback settings, per-network RPC/registry settings, per-adapter write flags, X OAuth client/callback settings, connector entitlement/usage caps, automation cadence/quotas, and operational model/API request/cost budgets. Do not require global user funding/spending/daily-turnover/borrowing caps in environment configuration; additional financial caps are optional saved preferences. Configure production OAuth callbacks from the stable app origin and prevent preview deployments from running production cron jobs or using mainnet write credentials. Secrets live in Cloudflare Worker secrets and ignored `.dev.vars` locally; neither provider keys nor signing material enter frontend `VITE_*` configuration. Native scheduled events need no public cron HTTP endpoint or shared cron secret. Store no user wallet signing keys. Optional RWA/DefiLlama Pro/yield.xyz credentials are not prerequisites for their public/snapshot paths.
 
@@ -932,9 +1010,13 @@ Offer a reviewed target leverage or debt amount using permitted XLM/USDC markets
 
 Add a maximum iteration count, liquidity/cap checks, minimum safety buffer, partial-unwind plan, and explicit collateral withdrawal constraints. Acceptance requires a working full unwind and failure recovery before enabling new leveraged entries. Leverage cannot exceed policy even if the planner proposes it.
 
+## Advanced liquidity management
+
+Keep concentrated-range management, single-asset zaps, automatic rebalancing, pool creation and standalone LP reward claiming outside the initial Aquarius LP action set. A zap needs an explicit reviewed swap-plus-deposit plan with separate budgets, quotes and failure recovery; the two-asset ticket must never invoke one implicitly. Auto-rebalancing additionally needs the scoped automation permissions and revocation gates above. SDK support or an indexer listing does not enable these features.
+
 ## LP range orders
 
-Support selected concentrated-liquidity markets only after a dedicated position adapter exists. Input buy/sell objective, asset, amount, price range, and exit rule. Preview inventory at boundaries, fees, minimum amounts, and position risks. An LP range is a position with changing asset composition; crossing the range does not automatically mean a resting order is fully and permanently executed.
+Support selected concentrated-liquidity markets only after a dedicated position adapter exists. These are P1 positions and must not reuse the P0 volatile/stable LP-share model or appear as enabled P0 pools. Input buy/sell objective, asset, amount, price range, and exit rule. Preview inventory at boundaries, fees, minimum amounts, and position risks. An LP range is a position with changing asset composition; crossing the range does not automatically mean a resting order is fully and permanently executed.
 
 Add position/tick accounting, liquidity insertion/removal, fee collection, and optional monitoring/removal. Acceptance includes exact venue-specific range math, withdrawal/claim, out-of-range states, and accurate inventory tracking. Soroswap swap aggregation alone does not provide this capability.
 

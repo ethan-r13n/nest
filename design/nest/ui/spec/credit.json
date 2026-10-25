@@ -1,0 +1,395 @@
+{
+  "area": "Credit",
+  "version": "0.6.0",
+  "updated": "2026-10-25",
+  "status": "Reviewable design prototype; backend APIs and execution remain specified, not implemented by this artifact",
+  "prototype": "../screens/credit.js",
+  "authoritative_product_contract": "../../../../docs/technical-spec.md",
+  "reference_evidence": [
+    {
+      "id": "borrow-images-6-8",
+      "source": "User-supplied screenshots 6–8",
+      "observed": "Two-column IRIS intent builder. Left rail selects Collateral, Debt, Maturity, Max Rate and Venue; the right panel edits the current choice. Debt shows asset, amount and LTV slider. Maximum-rate view shows an exact input plus Tight/Mid/Wide choices.",
+      "keep": [
+        "Progressive term selection",
+        "Full context remains visible while a field is edited",
+        "Asset/amount emphasis",
+        "Comparable rate presets"
+      ],
+      "adapt": [
+        "Nest forest/cream/orange and IBM Plex families",
+        "Horizon replaces universal Maturity; actual term/maturity is market-capability dependent",
+        "Comparison works before wallet connection",
+        "Blend, Templar and XOXNO compared at identical inputs",
+        "Presets are illustrative until generated from verified current quotes"
+      ]
+    },
+    {
+      "id": "iris-managing-positions",
+      "url": "https://docs.iris.credit/home/user-guide/managing-positions",
+      "inspected": "2026-10-25",
+      "observed": "Position management includes venue-sourced health, adding collateral, withdrawing permitted excess collateral and repayment/close-out. IRIS describes venue-specific liquidation boundaries and separate fixed-term/solver behavior.",
+      "keep": [
+        "Monitor venue-native health",
+        "Add collateral",
+        "Withdraw excess collateral only when valid",
+        "Repay and close with explicit cost and collateral-release preview"
+      ],
+      "do_not_generalize": [
+        "A universal health-factor threshold for incompatible venue metrics",
+        "IRIS solver migrations",
+        "Full-term fixed interest for all Nest loans",
+        "IRIS maturity and grace rules on markets that do not expose them"
+      ]
+    },
+    {
+      "id": "iris-term-lifecycle",
+      "url": "https://docs.iris.credit/home/user-guide/maturity-and-overdue",
+      "inspected": "2026-10-25",
+      "observed": "IRIS documents Active, Grace period and Liquidatable phases; quote-bound overdue rates/grace periods and fixed-term early-close interest. These inform a conditional term-loan panel, not generic assumptions about Nest venues."
+    }
+  ],
+  "theme": {
+    "logo": "Original woven Nest with plain circular egg",
+    "tokens": "../../tokens.json",
+    "display": "IBM Plex Serif 600 for page/section titles",
+    "controls": "IBM Plex Sans; sentence case",
+    "data": "IBM Plex Mono with tabular numerals",
+    "orange": "Action and selection only",
+    "status": "Independent semantic colors with text and symbols"
+  },
+  "screens": [
+    {
+      "id": "borrow",
+      "prototype_route": "#borrow",
+      "production_route": "/credit",
+      "purpose": "Capture a complete borrowing intent and compare integrated venues at the same collateral, debt, horizon and constraints.",
+      "layout": {
+        "page_header": "Credit label, serif title, concise purpose and contextual Ask Nest action",
+        "secondary_navigation": [
+          "Borrow",
+          "My positions",
+          "Supply opportunities link"
+        ],
+        "desktop": "Centered two-panel builder with maximum combined width 1180px and 24px gap. Left term rail / right editor use 1.15fr / 0.85fr. The comparison table retains the workspace width.",
+        "term_rail": "Five 68px selection controls, 12px radius, active orange outline; selected values remain visible. Compare and Reset follow the rail.",
+        "editor": "Minimum 540px desktop study, 24px padding. Field-specific asset identity, amount and explanatory content. Apply action at the bottom.",
+        "comparison": "Dense table preserving all three venue results and exclusion reasons. Numeric values right aligned, provenance/assumptions below.",
+        "mobile": "Below 801px of workspace, stack the term rail and editor with a maximum width of 640px. Comparison retains contained horizontal scrolling."
+      },
+      "fields": [
+        {
+          "id": "collateral",
+          "label": "Collateral",
+          "type": "AssetRef + decimal string",
+          "required": true,
+          "content": [
+            "Asset identity and network",
+            "Exact amount",
+            "Observed valuation and price source",
+            "WithdrawalTiming disclosure"
+          ],
+          "validation": "Positive decimal, registry-resolved canonical asset, account balance/reserves/capacity at preparation. No silent asset substitution."
+        },
+        {
+          "id": "debt",
+          "label": "Debt",
+          "type": "AssetRef + decimal string",
+          "required": true,
+          "content": [
+            "Desired debt amount",
+            "Native initial LTV derived from adapter terms",
+            "Amount-aware capacity"
+          ],
+          "validation": "Do not reduce requested debt to make a venue fit. Exclude unsupported pairs, insufficient capacity and invalid health separately."
+        },
+        {
+          "id": "horizon",
+          "label": "Horizon",
+          "type": "Integer comparison days",
+          "required": true,
+          "content": [
+            "Comparison horizon",
+            "Rate type and actual maturity if supported"
+          ],
+          "validation": "A comparison horizon does not promise a fixed rate, fixed maturity or guaranteed exit."
+        },
+        {
+          "id": "maxRate",
+          "label": "Max rate",
+          "type": "Decimal APR ceiling / normalized strict constraint",
+          "required": false,
+          "content": [
+            "Exact ceiling",
+            "Current-quote-derived presets when available"
+          ],
+          "validation": "Preserve APR/APY semantics. Editing this form does not write saved Guardrails."
+        },
+        {
+          "id": "venue",
+          "label": "Venue",
+          "type": "best or registered venue ID",
+          "required": true,
+          "default": "Best available",
+          "content": [
+            "Blend",
+            "Templar",
+            "XOXNO"
+          ],
+          "validation": "Eligibility is specific to account, network, asset, market and current capability, not protocol name alone."
+        }
+      ],
+      "comparison_columns": [
+        "Venue / market identity",
+        "Borrow APR and fixed/floating type",
+        "Estimated horizon interest and cost methodology",
+        "Fees separately by asset",
+        "Initial LTV, maximum initial LTV and liquidation parameters",
+        "Native risk metric and units/direction",
+        "Debt capacity and settlement mode",
+        "Observation time, expiry and execution availability",
+        "Review terms action or explicit exclusion reason"
+      ],
+      "interaction": [
+        "Selecting a term focuses the corresponding right editor without dropping the other selected terms.",
+        "A field-specific Apply validates its draft and updates the intent. Invalid text remains visible with an inline error and cannot poison the last valid comparison.",
+        "Changing any applied input invalidates the old executable quote set. A real implementation immediately disables stale Review actions while recomputing.",
+        "Compare venues requests a bounded concurrent quote set for the exact inputs. Timeouts and exclusions remain visible.",
+        "Picking a venue result creates a typed proposal; it does not sign or submit.",
+        "Supply opportunities navigate to the direct-supply/vault discovery view rather than changing a borrow into a supply silently.",
+        "Reset clears only the local form/comparison draft; it does not alter saved policy or positions."
+      ],
+      "prototype_behavior": "All financial values are explicit fixtures. Local rate/amount editing recalculates illustrative interest/capacity and native-risk displays only; no wallet/API/model calls are made. JavaScript Number is used only for fixture presentation. Real financial math must use exact raw-unit/fixed-point services.",
+      "states": {
+        "initial": "Editable terms and comparison explanation before wallet connection",
+        "validating": "Inline field errors; preserve draft and last valid comparison",
+        "loading": "Skeleton result rows and bounded progress; no previous quote remains actionable",
+        "partial": "Successful venues retained, unavailable venues show reasons and observed coverage",
+        "no_eligible_venue": "Explain capacity/pair/constraint failures; offer explicit input changes",
+        "quote_expired": "Disable review and request a new revision",
+        "wallet_required": "Allow research comparison; connect and verify wallet before preparing a real plan",
+        "network_or_wallet_change": "Invalidate old prepared review and load new account/network context",
+        "provider_failure": "Manual form remains available; show retry or partial coverage"
+      },
+      "acceptance": [
+        "The five intent terms stay visible while any editor is open.",
+        "Guest users can compare without supplying a fabricated account ID.",
+        "Blend, Templar and XOXNO use identical requested collateral/debt/horizon inputs.",
+        "Insufficient capacity produces an exclusion instead of silently changing debt.",
+        "Rates, fees, horizon assumptions, source timestamps and exit conditions are explicit.",
+        "No common health number is invented across incompatible native metrics.",
+        "Review uses the shared immutable-plan review with Guardrails revision and deposit withdrawal timing."
+      ]
+    },
+    {
+      "id": "positions",
+      "prototype_route": "#positions",
+      "production_route": "/credit?view=positions",
+      "purpose": "Monitor lending positions and execute supported collateral, repayment and exit actions with venue-native validity and clear settlement state.",
+      "layout": {
+        "summary": "Four metrics: confirmed collateral, outstanding debt, net credit value and separately tracked pending workflows, with valuation time.",
+        "desktop": "Flexible left content for open positions, selected-position health and details; 340px sticky action ticket right.",
+        "position_table": "Venue/market/account identity, collateral, debt, native risk, Manage action. Keep account IDs separate from wallet and market IDs.",
+        "health_panel": "Selected venue-native metric, liquidation boundary, valuation/debt/rate facts, actual maturity where supported, source/as-of time. Never present configured warnings as chain validity boundaries.",
+        "ticket": "Add collateral, withdraw collateral, repay, repay & close. Amount, before/after deltas, resulting native risk, withdrawal timing for additions, eligibility reason and shared-review action.",
+        "below": "Pending external workflow timeline, conditional term/close-out details and activity/receipt history.",
+        "responsive": "Below 1100px in the specimen (1024px production baseline), ticket stacks under context; below 768px metrics become 2 columns and timelines wrap in order."
+      },
+      "management_actions": [
+        {
+          "id": "add-collateral",
+          "intent_kind": "add_collateral",
+          "inputs": [
+            "accountId",
+            "marketId",
+            "input AssetRef + exact amount"
+          ],
+          "preview": [
+            "Collateral before/after",
+            "Native health before/after",
+            "Approved fee maxima",
+            "WithdrawalTiming"
+          ],
+          "rules": "Check ownership, asset/network identity, balance/reserves, market capability and post-action health. Show that collateral release remains conditional on debt, health and liquidity."
+        },
+        {
+          "id": "withdraw-collateral",
+          "intent_kind": "remove_collateral",
+          "inputs": [
+            "accountId",
+            "positionId",
+            "amount AssetRef + exact amount"
+          ],
+          "preview": [
+            "Collateral reduction",
+            "Debt unchanged",
+            "Post-action native risk",
+            "Withdrawable amount and source"
+          ],
+          "rules": "Disable when liquidatable or a venue/grace restriction applies, or when the projected action breaches chain/venue validity. Available amount comes from the adapter; a generic Max cannot introduce an unsupported withdraw-all sentinel."
+        },
+        {
+          "id": "repay",
+          "intent_kind": "repay",
+          "inputs": [
+            "accountId",
+            "positionId",
+            "input AssetRef + exact amount"
+          ],
+          "preview": [
+            "Spend",
+            "Debt reduction",
+            "Debt rounding",
+            "Native health improvement",
+            "Accrued interest/fees"
+          ],
+          "rules": "Support partial repayment only where the market supports it. Adapter determines exact rounding and close-out behavior."
+        },
+        {
+          "id": "close",
+          "intent_kind": "repay followed by supported collateral release steps",
+          "inputs": [
+            "accountId",
+            "positionId",
+            "explicit full-close objective"
+          ],
+          "preview": [
+            "Exact total repayment",
+            "Principal/accrued/term/overdue cost breakdown where applicable",
+            "Collateral release amount and timing",
+            "Separate transaction/settlement steps"
+          ],
+          "rules": "A generic positive repayment must not silently become repay-all. Full close and collateral release may require multiple separately reviewed steps. Do not assume early repayment reduces term interest, nor assume full-term interest without market evidence."
+        }
+      ],
+      "capability_conditional_facts": {
+        "Blend": "Use pool-native accounting and risk/receipt conversions. No backstop or recursive leverage in P0.",
+        "XOXNO": "Bind wallet, NFT-backed lending account, spoke, hub and market IDs separately. Reverify current account ownership before prepare and submit. No P0 migration, NFT transfer, flash loan or looping.",
+        "Templar": "Preserve Stellar-origin funding, protocol authorization, external settlement and debt delivery as distinct receipts. Funding confirmation does not mean borrowing completed. Queued supply withdrawals have actual request/queue/execution/cancellation states.",
+        "term_market": "Only when returned by the adapter: fixed/floating type, maturity, overdue rate, grace end, liquidation phase, full-term interest/early-close rule and settlement/repayment state. IRIS reference values do not supply Nest terms."
+      },
+      "states": {
+        "healthy": "Show native metric and actual venue boundary; provide supported actions",
+        "warning": "Show an accepted policy warning independently of any blocking minimum; require fresh preview",
+        "liquidatable": "Withdrawal disabled with reason; surface supported add-collateral and repay/exit paths",
+        "matured_or_grace": "Only for supported terms; show exact deadlines/costs and permitted actions",
+        "pending_signature": "Keep reviewed exact changes visible; stale/mutated response rejected",
+        "submitted_reconciling": "Show receipt/hash and progress without claiming success",
+        "partial_completion": "Retain completed effects and remaining exposure; new review for a permitted recovery action",
+        "confirmed": "Display actual token/debt/collateral effects and refresh positions",
+        "no_positions": "Explain wallet/ownership requirements and link Borrow/Supply without fabricated balances",
+        "stale_position": "Show last observation and disable execution until refreshed"
+      },
+      "acceptance": [
+        "Confirmed collateral, liabilities and net value use one valuation time and do not count receipts plus backing twice.",
+        "Pending funding/workflows are tracked separately from confirmed borrowed assets and collateral totals.",
+        "Every position exposes supported exit actions and explicit unavailable reasons.",
+        "Liquidatable and unsafe post-action withdrawals cannot reach signing.",
+        "Collateral additions show withdrawal duration/restrictions before approval.",
+        "Repay and close display actual venue costs rather than assuming IRIS mechanics.",
+        "A Templar funding receipt cannot mark borrowing complete.",
+        "XOXNO ownership, native amount semantics and protocol IDs are revalidated.",
+        "Every action uses the same prepared-plan review, expiry/policy binding and confirmed receipt reconciliation."
+      ]
+    }
+  ],
+  "backend_bindings": {
+    "status": "Existing technical specification defines these contracts. The UI artifact does not prove deployed services or completed adapters.",
+    "markets": {
+      "endpoint": "GET /api/markets",
+      "purpose": "Registered assets/markets, native risk parameters, current capabilities and availability; resolve canonical identities and supported lifecycle."
+    },
+    "comparison": {
+      "endpoints": [
+        "POST /api/intents",
+        "POST /api/intents/:id/compare"
+      ],
+      "purpose": "Strict amount/asset/horizon/constraint intent and amount-aware quote set with eligible/excluded venues, observations, costs, validity, risk and exit facts."
+    },
+    "portfolio": {
+      "endpoint": "GET /api/portfolio/:account",
+      "purpose": "Owned positions, native IDs, collateral/debt amounts, valuation/freshness, supported actions and pending workflow receipts."
+    },
+    "planning": {
+      "endpoints": [
+        "POST /api/plans",
+        "POST /api/plans/:id/prepare"
+      ],
+      "purpose": "Immutable revision, exact raw-unit bounds, nested authorization/payload inspection, simulation scope, policy/registry/account versions, withdrawal timing, maximum fees and expiry."
+    },
+    "approval_submission": {
+      "endpoints": [
+        "POST /api/plans/:id/approve",
+        "POST /api/plans/:id/submit"
+      ],
+      "purpose": "Explicit revision/digest-bound review and wallet signature; durable claim and signed-payload validation. No independent credit-specific signing path."
+    },
+    "events": {
+      "endpoint": "GET /api/plans/:id/events",
+      "purpose": "Reconnectable persisted execution events and confirmed effects; submitted, reconciling and partially complete remain distinct."
+    },
+    "policy": {
+      "endpoints": [
+        "GET /api/policy",
+        "POST /api/policy/revisions"
+      ],
+      "purpose": "Read accepted Guardrails and effective requirements. The form cannot silently save policy; explicit global drawer save creates the version."
+    },
+    "required_position_fields": [
+      "accountId",
+      "walletId",
+      "network",
+      "venueId",
+      "marketId",
+      "positionId",
+      "lendingAccountId when applicable",
+      "collateral AssetRef/raw amount/valuation",
+      "debt AssetRef/raw amount/accrual",
+      "rate type and source",
+      "native risk metric ID/value/direction/units",
+      "initial and liquidation limits",
+      "ownership/capability state",
+      "maturity/overdue/grace facts when supported",
+      "withdrawable capacity",
+      "pending receipts/workflow state",
+      "observedAt/providerAsOf/ledger/valuation time"
+    ],
+    "required_review_fields": [
+      "plan ID/revision/digest",
+      "asset deltas and receiver",
+      "maximum spend/minimum received where applicable",
+      "displayed fee maxima by charged asset",
+      "saved policy revision and warning facts",
+      "position/native health before and after",
+      "withdrawal timing for every deposit leg",
+      "expiry",
+      "transaction/settlement step count",
+      "expandable verified contract/issuer details"
+    ]
+  },
+  "accessibility": [
+    "Term selections are native buttons with aria-pressed and a named target editor; keyboard order follows visual order.",
+    "Every amount, asset and range control has an accessible name plus unit; errors are associated and announced.",
+    "44px targets, visible focus and readable subdued labels; no status relies on color alone.",
+    "Comparison and position tables use header scopes, right-aligned financial values and contained overflow on narrow screens.",
+    "Review and assistant modal focus are supplied by the shared shell with focus restoration.",
+    "State changes announce summaries without announcing every slider tick; reduced motion disables smooth scrolling."
+  ],
+  "open_decisions": [
+    {
+      "id": "guest-credit-comparison-contract",
+      "issue": "Product requires comparison before wallet connection, while the current typed borrow Intent requires accountId and comparison is specified through POST /api/intents.",
+      "required_resolution": "Target interface contract; see the application README for implemented capabilities."
+    },
+    {
+      "id": "native-risk-display-contract",
+      "issue": "Each adapter must supply metric ID, direction, units and threshold semantics; there is no universal health-factor conversion.",
+      "required_resolution": "Bind selected-position visualization and Guardrails warnings to the actual native-risk schema."
+    },
+    {
+      "id": "term-loan-availability",
+      "issue": "IRIS fixed-term/solver mechanics are reference behavior, not verified Nest venue capabilities.",
+      "required_resolution": "Render maturity, grace, overdue and early-close terms only from registered adapter results."
+    }
+  ]
+}

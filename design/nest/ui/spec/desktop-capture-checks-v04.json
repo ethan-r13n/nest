@@ -1,0 +1,226 @@
+[
+  {
+    "route": "trade",
+    "broken": [],
+    "heading": "XLM / USDC",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "vaults",
+    "broken": [],
+    "heading": "Put your capital in context.",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "vault-detail",
+    "broken": [],
+    "heading": "Gami USDC vault",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "borrow",
+    "broken": [],
+    "heading": "Borrow on your terms.",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "positions",
+    "broken": [],
+    "heading": "Keep the position in view.",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "research-defi",
+    "broken": [],
+    "heading": "Stellar DeFi",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "research-rwa",
+    "broken": [],
+    "heading": "Stellar real-world assets",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "lab-memory",
+    "broken": [],
+    "heading": "Your working memory",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "lab-backtests",
+    "broken": [],
+    "heading": "Test an idea before acting.",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "lab-automation",
+    "broken": [],
+    "heading": "Watch conditions. Review actions.",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "protocol-detail",
+    "broken": [],
+    "heading": " Blend Pools V2",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "asset-detail",
+    "broken": [],
+    "heading": " BENJI",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "saved",
+    "broken": [],
+    "heading": "Saved research",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "supply",
+    "broken": [],
+    "heading": "Put liquidity to work",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "portfolio",
+    "broken": [],
+    "heading": "Your portfolio",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "fund",
+    "broken": [],
+    "heading": "Receive on Stellar",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "transfer",
+    "broken": [],
+    "heading": "Send assets",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "activity",
+    "broken": [],
+    "heading": "Action history",
+    "pageWidth": 1728,
+    "width": 1728
+  },
+  {
+    "route": "plan",
+    "broken": [],
+    "heading": "Follow every step",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "vault-management",
+    "broken": [],
+    "heading": "Redemptions & rewards",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "automation-history",
+    "broken": [],
+    "heading": "XLM price watch",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "connections",
+    "broken": [],
+    "heading": "Connections",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "alerts",
+    "broken": [],
+    "heading": "Alerts",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "chat",
+    "broken": [],
+    "heading": "Ask Nest",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "policy-states",
+    "broken": [],
+    "heading": "Your execution preferences",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "wallet-access",
+    "broken": [],
+    "heading": "Choose your access",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "backtest-run",
+    "broken": [],
+    "heading": "Inspect the run",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "learning-runs",
+    "broken": [],
+    "heading": "Learning runs",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "research-markets",
+    "broken": [],
+    "heading": "Know what Nest can read.",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "research-map",
+    "broken": [],
+    "heading": "See how it connects.",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "venue-detail",
+    "broken": [],
+    "heading": " Soroswap",
+    "pageWidth": 1713,
+    "width": 1713
+  },
+  {
+    "route": "market-detail",
+    "broken": [],
+    "heading": " XLM / USDC",
+    "pageWidth": 1713,
+    "width": 1713
+  }
+]

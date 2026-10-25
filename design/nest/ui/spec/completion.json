@@ -1,0 +1,190 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-25",
+  "scope": "17 additional route designs plus expanded Portfolio; existing ten reference screens retained",
+  "source": "docs/technical-spec.md",
+  "precedence": "Current Research navigation: DeFi, RWAs, Markets and Venue map. The original solid-egg Nest logo remains selected. Saved/detail are utility routes; Automations remains in Lab. See discovery.json for the v0.4 additions.",
+  "records": [
+    {
+      "route": "protocol-detail",
+      "title": "Protocol detail",
+      "group": "Research",
+      "before": "Only a compact facts modal existed.",
+      "design": "Description, scoped metrics, markets, audit/admin/oracle coverage, source website and action entry points.",
+      "planned_api": "GET /api/research/protocols/:slug",
+      "states": "Unavailable history; research-only opportunity; partial source data"
+    },
+    {
+      "route": "asset-detail",
+      "title": "RWA asset detail",
+      "group": "Research",
+      "before": "Only an identity modal existed.",
+      "design": "Issuer/platform, source identity, regulatory facts, eligibility/redemption unknown states and execution eligibility.",
+      "planned_api": "GET /api/research/assets/:assetId",
+      "states": "Unverified identity; unknown eligibility; no executable liquidity"
+    },
+    {
+      "route": "saved",
+      "title": "Saved research",
+      "group": "Research",
+      "before": "Watch star had no library.",
+      "design": "Search, remove and export bookmarked protocols, assets and saved filters; guest persistence boundary.",
+      "planned_api": "GET/POST/DELETE /api/bookmarks",
+      "states": "Guest; no matches; empty library"
+    },
+    {
+      "route": "supply",
+      "title": "Direct supply",
+      "group": "Credit",
+      "before": "Borrow and positions existed; Supply mode was missing.",
+      "design": "Amount/horizon comparison, rates and incentives separately, exclusions and withdrawal disclosure before review.",
+      "planned_api": "POST /api/intents; POST /api/intents/:id/compare",
+      "states": "Changed input invalidates results; missing source; no comparable route"
+    },
+    {
+      "route": "portfolio",
+      "title": "Portfolio overview",
+      "group": "Portfolio",
+      "before": "A sparse two-row overview needed expansion.",
+      "design": "Assets minus liabilities, wallet/supply/vault/credit groups, exits, pending workflows, valuation and cost-basis coverage.",
+      "planned_api": "GET /api/portfolio/:account",
+      "states": "Partial valuations; unknown imported basis; no double counting"
+    },
+    {
+      "route": "fund",
+      "title": "Receive & funding",
+      "group": "Portfolio",
+      "before": "Missing.",
+      "design": "Account/network/memo, trustline/reserve/activation, external-provider availability, on-chain arrival verification.",
+      "planned_api": "Stellar account adapter; configured funding provider",
+      "states": "Unfunded account; pending arrival; missing trustline; provider unavailable"
+    },
+    {
+      "route": "transfer",
+      "title": "Send assets",
+      "group": "Portfolio",
+      "before": "Missing.",
+      "design": "Amount, destination and memo, receiver inspection, fee/reserve checks and shared review gate.",
+      "planned_api": "Typed transfer intent; receiver resolve; plans prepare",
+      "states": "Invalid amount/account/memo; insufficient spendable; network mismatch"
+    },
+    {
+      "route": "activity",
+      "title": "Action history",
+      "group": "Portfolio",
+      "before": "Only a short activity section existed.",
+      "design": "Search/filter/export history and links from actions to plan lifecycle.",
+      "planned_api": "Persisted plans/receipts and portfolio activity",
+      "states": "No results; pending receipt; failed or cancelled action"
+    },
+    {
+      "route": "plan",
+      "title": "Plan lifecycle & recovery",
+      "group": "Execution",
+      "before": "Shared review existed; no persistent execution-status screen.",
+      "design": "Signature/submission/reconciliation/next signature/external/partial/confirmed/error specimens with exact revision and separate recovery review.",
+      "planned_api": "GET /api/plans/:id; GET /api/plans/:id/events",
+      "states": "Awaiting signature; submitted; reconciling; partial completion; confirmed; failed; expired; cancelled"
+    },
+    {
+      "route": "vault-management",
+      "title": "Redemptions & campaign lots",
+      "group": "Vaults",
+      "before": "Product facts existed; owned-position management was incomplete.",
+      "design": "Request/settlement/claim, pending receivable accounting, per-lot selection and explicit unvested reward forfeiture.",
+      "planned_api": "Adapter request/redeem/claim; confirmed portfolio effects",
+      "states": "Pending settlement; claimable; lot amount invalid; rewards lost"
+    },
+    {
+      "route": "automation-history",
+      "title": "Automation detail & evaluations",
+      "group": "Lab",
+      "before": "Builder existed; durable history and proposal detail were missing.",
+      "design": "Pinned rule revision, true/false/unknown evaluations, dedup/cooldown evidence, proposal review, pause/resume.",
+      "planned_api": "GET /api/automations/:id; /evaluations; /triggers",
+      "states": "Source unavailable; unknown skip; dedup; proposed action; paused"
+    },
+    {
+      "route": "connections",
+      "title": "Connections",
+      "group": "Workspace",
+      "before": "Connect X stub existed; access/health management missing.",
+      "design": "Granted scopes, entitlement, budgets, dependent paused rules and reconnect/disconnect consequences.",
+      "planned_api": "GET /api/connections; POST /api/connections/x/start; DELETE /api/connections/:id",
+      "states": "Expired; revoked; unauthorized endpoint; reconnect does not activate"
+    },
+    {
+      "route": "alerts",
+      "title": "Alerts inbox",
+      "group": "Workspace",
+      "before": "Missing.",
+      "design": "Risk/source/workflow alerts, inspect targets and mark-read specimen.",
+      "planned_api": "GET/POST/PATCH /api/alerts; acknowledgement never executes",
+      "states": "Unread/read; native-risk warning; pending settlement; source auth"
+    },
+    {
+      "route": "conversations",
+      "title": "Conversation workspace",
+      "group": "Agent",
+      "before": "Only a static assistant drawer existed.",
+      "design": "History switcher, source-linked messages, typed proposals, streaming/progress/stop/retry, provider/quota states.",
+      "planned_api": "Agent conversation + turn APIs; application plan events",
+      "states": "Guest; verified history; streaming; stopped; provider error; quota"
+    },
+    {
+      "route": "policy-states",
+      "title": "Guardrails state review",
+      "group": "Guardrails",
+      "before": "Drawer existed; conflict/saved/scope states were missing.",
+      "design": "Revision/draft distinction, validation errors, preserved conflict draft and scope changes.",
+      "planned_api": "GET /api/policy; POST /api/policy/revisions with expected revision and idempotency",
+      "states": "Dirty; invalid; conflict; saved; wallet/network change"
+    },
+    {
+      "route": "wallet-access",
+      "title": "Wallet access & verification",
+      "group": "Wallet",
+      "before": "Only a connection stub existed.",
+      "design": "Guest, read-only watch, provider connection, ownership challenge, mismatch and cancelled/expired session.",
+      "planned_api": "Wallet challenge/verify/session contracts",
+      "states": "Guest; watched; unverified; challenge rejected; account/network mismatch"
+    },
+    {
+      "route": "backtest-run",
+      "title": "Backtest run inspection",
+      "group": "Lab / P1",
+      "before": "Runner existed; reproducibility and run-detail coverage incomplete.",
+      "design": "Pinned assumptions, same-dataset comparison, unsupported models and coverage; working runner remains linked.",
+      "planned_api": "P1 backtest run and event APIs",
+      "states": "Synthetic data; unavailable historical data; missing model"
+    },
+    {
+      "route": "learning-runs",
+      "title": "Learning-run draft",
+      "group": "Lab / P1",
+      "before": "Explicit deferred spec had no design.",
+      "design": "Bounded objective, tools, read/runtime budget, stop reasons, findings and explicit acceptance boundary.",
+      "planned_api": "P1 learning-run API contract",
+      "states": "Draft; budget exhausted; cancelled; complete; proposals unaccepted"
+    }
+  ],
+  "fixture_rules": [
+    "No live wallet, server session, policy save, OAuth, scheduler, submission or claim is executed.",
+    "Decimal inputs remain strings. Number use in illustrative return and forfeiture math is for specimen only; production uses server fixed-point.",
+    "No valid funding address, QR or fabricated receipt hash is supplied.",
+    "Real brand logos are visual identity only, never evidence of registered assets, capability or endorsement."
+  ],
+  "deferred_not_new_primary_routes": [
+    "Perps and synthetic orderbooks: adapter capability tests first.",
+    "Unattended orders, smart-account delegation, leverage loops, LP range orders and chart actions remain P1 capability-gated extensions to existing screens.",
+    "Experimental durable conversations extend the conversation workspace; no separate P0 execution authority."
+  ],
+  "acceptance": [
+    "28 total routed views reachable through design index and workspace search.",
+    "Mobile/desktop layouts checked at 375, 1024 and 1440 CSS pixels.",
+    "Loading/empty/partial/stale/error state selector retained on all routes.",
+    "Deposit/collateral disclosure visible before review.",
+    "Policy save and financial action approval remain separate.",
+    "Native venue risk and source scopes preserved."
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-25",
+  "scope": "Local prototype only; no external financial effects",
+  "layout": {
+    "views": 10,
+    "widths": [
+      375,
+      1024,
+      1440
+    ],
+    "checks": 30,
+    "page_overflow_failures": 0,
+    "report": "layout-checks.json"
+  },
+  "interactions": [
+    {
+      "case": "Changed trade input",
+      "result": "Review stayed disabled until fixture refresh, then matched 2000 XLM → 348.04 USDC with 346.2998 USDC minimum."
+    },
+    {
+      "case": "Reverse direction",
+      "result": "Review matched 1000 USDC → 5729.00 XLM with 5700.3550 XLM minimum."
+    },
+    {
+      "case": "Loading recovery",
+      "result": "Loading replaced the screen without calling removed-control binders; Default restored the route."
+    },
+    {
+      "case": "Stale agent proposal",
+      "result": "Central review guard rejected an agent proposal and kept review closed."
+    },
+    {
+      "case": "Guardrails unsaved draft",
+      "result": "Cancel after editing prompted Keep editing or Discard changes."
+    },
+    {
+      "case": "Sample backtest",
+      "result": "Synthetic deterministic run produced finite returns, drawdown, cost and event-audit values with benchmark comparison; no provider or order calls."
+    }
+  ],
+  "static_checks": [
+    "All JS files parse",
+    "All area and aggregate JSON files parse",
+    "Local HTML links and anchors resolve",
+    "Source image and document manifests retained",
+    "ZIP integrity checked"
+  ]
+}

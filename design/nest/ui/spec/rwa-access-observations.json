@@ -1,0 +1,612 @@
+{
+  "date": "2026-10-25",
+  "method": "Ordinary rendered RWA.xyz asset pages; no hidden endpoints",
+  "pages": [
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nDaily\nMin.\nInvestment\n1 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n1 EUR\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Spiko Amundi Overnight Swap Fund (EUR)",
+      "url": "https://app.rwa.xyz/assets/eurSAFO"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nUSD\nUSDC\nSubscription Time\nDaily\nMin.\nInvestment\n100,000 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n100,000 USD\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Ondo U.S. Dollar Yield",
+      "url": "https://app.rwa.xyz/assets/USDY"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nBase Assets\nUSD\nSubscription Time\nInstant\nMin.\nInvestment\n100,000 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nOnly at maturity\nMinimum Redemption Amount\n0 USD\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "VuMe Bond 2030",
+      "url": "https://app.rwa.xyz/assets/TPT30"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n20 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "BENJI",
+      "url": "https://app.rwa.xyz/assets/BENJI"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\nU.S. Qualified Institutional Buyer (QIB)\nBase Assets\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\nAssessments & Ratings\n\nProvider\nRating\nDocument\nS&P Global Ratings\n2 - Strong\nView on spglobal.com\n\n",
+      "title": "USDC",
+      "url": "https://app.rwa.xyz/assets/USDC"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nEURC\nSubscription Time\nDaily\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\nCut-off at 10:30am CET; executed on last known NAV; min. subscription amount only applies to the first order\nRedemption Time\nDaily\nMinimum Redemption Amount\n1 EUR\nRedemption\nFees\n0%\nRedemption Description\nCut-off at 10:30am CET\nKYC Description\n—\n\n",
+      "title": "Spiko EU T-Bills Money Market Fund",
+      "url": "https://app.rwa.xyz/assets/EUTBL"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Investor\nBase Assets\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n1 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n1 USD\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Spiko Amundi Overnight Swap Fund",
+      "url": "https://app.rwa.xyz/assets/SAFO"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\nU.S. Qualified Institutional Buyer (QIB)\nBase Assets\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\nSubject to bank wire minimums charged by the account’s bank\nRedemption Time\nDaily\nMinimum Redemption Amount\n25 USD\nRedemption\nFees\n0%\nRedemption Description\nSubject to bank wire minimums charged by the account’s bank\nKYC Description\n—\n\n",
+      "title": "Paypal USD",
+      "url": "https://app.rwa.xyz/assets/PYUSD"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\n+ 2 More\nBase Assets\nUSDC\n+ 2 More\nSubscription Time\nInstant\nMin.\nInvestment\n1,000,000 USDC\nSubscription\nFees\n0%\nSubscription Description\nThe minimum initial subscription to the Fund is $5,000,000 for entity investors and $1,000,000 for individual/natural person investors. An Investor may make additional subscriptions to the Fund in any amount.\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "State Street Galaxy OnChain Liquidity Sweep Fund",
+      "url": "https://app.rwa.xyz/assets/SWEEP"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\n—\nSubscription Time\nDaily\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\ngBENJI: $1,000,000 USD initial subscription. grBENJI: $20 USD initial subscription.\nRedemption Time\nDaily\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "gBENJI",
+      "url": "https://app.rwa.xyz/assets/gBENJI"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nGBP\nSubscription Time\nDaily\nMin.\nInvestment\n1 GBP\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n1 GBP\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Spiko Amundi Overnight Swap Fund (GBP)",
+      "url": "https://app.rwa.xyz/assets/gbpSAFO"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n20 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n0 USD\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "sgBENJI",
+      "url": "https://app.rwa.xyz/assets/sgBENJI"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nU.S. Investor\nBase Assets\nUSDC\n+ 2 More\nSubscription Time\nDaily\nMin.\nInvestment\n1,000 USDC\nSubscription\nFees\n0%\nSubscription Description\nDaily\nRedemption Time\nDaily\nMinimum Redemption Amount\n1 USDC\nRedemption\nFees\n0%\nRedemption Description\nTo redeem their shares, investors make an on-chain transfer to a redemption smart contract. The Spiko platform UI abstracts this on-chain transfer for investors who want to. Redemption orders must be received prior to the daily cutoff time (10:30 AM CET each business day) in order to be executed on the same day. Redemption orders received after the daily cutoff time are executed on the next business day.\nKYC Description\n—\n\n",
+      "title": "Spiko US T-Bills Money Market Fund",
+      "url": "https://app.rwa.xyz/assets/USTBL"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "SpaceX Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/SPX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Investor\nU.S. Investor\nBase Assets\nUSD\n+ 2 More\nSubscription Time\nInstant\nMin.\nInvestment\n0 USD\nSubscription\nFees\n0%\nSubscription Description\nInvestors may initiate a purchase of Certificates directly from FCC by completing an account application available through FCC’s web platform at https://www.figuremarkets.com/c/ylds\nRedemption Time\nInstant\nMinimum Redemption Amount\n0 USD\nRedemption\nFees\n0%\nRedemption Description\nBoth Figure Transferable Certificates (the tokenized YLDS) and Figure Installment Certificates can be redeemed (“surrendered”) at any time. Redemption value equals the face amount plus accrued interest. Redemption can be initiated in three ways, all through FCC-controlled channels: Via the Figure online portal (https://www.figuremarkets.com/c/ylds ) using the wallet interface. By wire transfer request through the portal. By ACH transfer or via the Figure Payments Corporation account (a linked stored-value account).\nKYC Description\n—\n\n",
+      "title": "YLDS",
+      "url": "https://app.rwa.xyz/assets/YLDS"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n0 USD\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree 500 Digital Fund",
+      "url": "https://app.rwa.xyz/assets/SPXUX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Professional Investor\nU.S. Accredited Investor\nBase Assets\nEUR\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\nAssessments & Ratings\n\nProvider\nRating\nLog in to unlock\nDocument\nLog in to unlock\nS&P Global Ratings\nLogin to Unlock\nLogin to Unlock\n\n",
+      "title": "EUR CoinVertible",
+      "url": "https://app.rwa.xyz/assets/EURCV"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\n—\nSubscription Time\nInstant\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\nMint programmatically via our SDK or at app.etherfuse.com\nRedemption Time\nInstant\nMinimum Redemption Amount\n0\nRedemption\nFees\n0%\nRedemption Description\nRedeem programmatically via our SDK or at app.etherfuse.com\nKYC Description\n—\n\n",
+      "title": "Etherfuse USTRY",
+      "url": "https://app.rwa.xyz/assets/USTRY"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Investor\nU.S. Investor\nBase Assets\nGBP\nEUR\nSubscription Time\nDaily\nMin.\nInvestment\n1,000 GBP\nSubscription\nFees\n0%\nSubscription Description\nCut-off at 10:30am CET; executed on last known NAV; min. subscription amount only applies to the first order\nRedemption Time\nDaily\nMinimum Redemption Amount\n0 GBP\nRedemption\nFees\n0%\nRedemption Description\nCut-off at 10:30am CET\nKYC Description\n—\n\n",
+      "title": "Spiko UK T-Bills Money Market Fund",
+      "url": "https://app.rwa.xyz/assets/UKTBL"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nU.S. Accredited Investor\nBase Assets\nBRL\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 BRL\nSubscription\nFees\n0%\nSubscription Description\nSubscriptions are not open to the general public. Eligible investors access the offering through Rivool’s private onboarding process, subject to KYC verification, suitability checks, and approval by Rivool. Once approved and after funds are received in USDC, the corresponding tokens are minted and allocated to the investor according to the terms of the specific offering. This offering is structured as a conditional (all-or-nothing) closed-end subscription: the underlying senior note (CCB) is originated only upon the close of the subscription window (December 17, 2026). If the offering is not completed by the close date, all committed funds are returned to investors and the operation is canceled.\nRedemption Time\nInstant\nMinimum Redemption Amount\n0 BRL\nRedemption\nFees\n0%\nRedemption Description\nRedemptions are processed directly through Rivool according to the terms of the specific offering. Investors may request redemption through Rivool’s private investor process, subject to KYC status, eligibility, liquidity availability, and the asset’s maturity or repayment schedule. When applicable, tokens are burned and redemption proceeds are settled in USDC.\nKYC Description\n—\n\n",
+      "title": "Rivool Agriculture Notes High Grade - RVL5",
+      "url": "https://app.rwa.xyz/assets/RVL5"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Professional Investor\nU.S. Accredited Investor\nBase Assets\nBRL\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 BRL\nSubscription\nFees\n0%\nSubscription Description\nSubscriptions are not open to the general public. Eligible investors access the offering through Rivool’s private onboarding process, subject to KYC verification, suitability checks, and approval by Rivool. Once approved and after funds are received, the corresponding tokens are minted and allocated to the investor according to the terms of the specific offering. This offering is structured as a conditional (all-or-nothing) closed-end subscription: the underlying CRA is originated only upon the close of the subscription window (December 17, 2028). If the offering is not completed by the close date, all committed funds are returned to investors and the operation is canceled.\nRedemption Time\nInstant\nMinimum Redemption Amount\n0 BRL\nRedemption\nFees\n0%\nRedemption Description\nRedemptions are processed directly through Rivool according to the terms of the specific offering. Investors may request redemption through Rivool’s private investor process, subject to KYC status, eligibility, liquidity availability, and the asset’s maturity or repayment schedule. When applicable, tokens are burned and redemption proceeds are settled in USDC.\nKYC Description\n—\n\n",
+      "title": "Rivool Agriculture Notes High Yield - RVL4",
+      "url": "https://app.rwa.xyz/assets/RVL4"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Investor\n+ 2 More\nBase Assets\nUSDC\nUSD\nSubscription Time\nWeekly\nMin.\nInvestment\n50,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "R&B Oak Park - Equity Tranche 1",
+      "url": "https://app.rwa.xyz/assets/RSRB"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nBase Assets\nUSDC\nSubscription Time\nDaily\nMin.\nInvestment\n1,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n1,000 USDC\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "JAAA deRWA",
+      "url": "https://app.rwa.xyz/assets/deJAAA"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\n+ 2 More\nBase Assets\nUSDC\nUSD\nSubscription Time\nWeekly\nMin.\nInvestment\n50,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Sedona Ranch - Equity Tranche 1",
+      "url": "https://app.rwa.xyz/assets/RSR"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nBase Assets\nUSDC\nSubscription Time\nDaily\nMin.\nInvestment\n1,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n1,000 USDC\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "JTRSY deRWA",
+      "url": "https://app.rwa.xyz/assets/deJTRSY"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\n+ 2 More\nBase Assets\nUSD\nUSDC\nSubscription Time\nWeekly\nMin.\nInvestment\n50,000 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "LDV at the Maidstone - Equity Tranche 1",
+      "url": "https://app.rwa.xyz/assets/LDVM"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\nUSD\nSubscription Time\nInstant\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Technology & Innovation 100 Digital Fund",
+      "url": "https://app.rwa.xyz/assets/TECHX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Professional Investor\nBase Assets\nUSDC\nSubscription Time\nDaily\nMin.\nInvestment\n100,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n100,000 USDC\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "TermMax Fixed Income LP Deal",
+      "url": "https://app.rwa.xyz/assets/LIQVID1037_S"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Investor\nBase Assets\nCHF\nSubscription Time\nDaily\nMin.\nInvestment\n1 CHF\nSubscription\nFees\n0%\nSubscription Description\nSubscriptions are processed daily (T+2 settlement) via Spiko Finance. Investors must complete KYC/AML onboarding and be whitelisted before subscribing. Minimum subscription is 1 CHF equivalent.\nRedemption Time\nDaily\nMinimum Redemption Amount\n1 CHF\nRedemption\nFees\n0%\nRedemption Description\nRedemptions are processed daily (T+2 settlement) via Spiko Finance. Investors must be whitelisted and KYC-approved. Minimum redemption is 1 CHF. No redemption fee applies.\nKYC Description\n—\n\n",
+      "title": "Spiko Amundi Overnight Swap Fund (CHF)",
+      "url": "https://app.rwa.xyz/assets/chfSAFO"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\n—\nSubscription Time\nDaily\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\nOnce an investor completes onboarding and is authorized by the fund administrator, their wallet address is whitelisted in the Centrifuge app and they can invest in the pool.\nRedemption Time\nDaily\nMinimum Redemption Amount\n0\nRedemption\nFees\n0%\nRedemption Description\nRedemptions submitted via the Centrifuge app\nKYC Description\n—\n\n",
+      "title": "Janus Henderson AAA CLO Fund",
+      "url": "https://app.rwa.xyz/assets/JAAA"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nBase Assets\nUSDC\nSubscription Time\nDaily\nMin.\nInvestment\n500,000 USDC\nSubscription\nFees\n0%\nSubscription Description\nonchain 24/7/365 with execution on the next US banking day\nRedemption Time\nDaily\nMinimum Redemption Amount\n0 USDC\nRedemption\nFees\n0%\nRedemption Description\nonchain 24/7/365 with execution on the next US banking day\nKYC Description\n—\n\n",
+      "title": "Janus Henderson Treasury Fund",
+      "url": "https://app.rwa.xyz/assets/JTRSY"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\n+ 3 More\nBase Assets\nEUR\nSubscription Time\nDaily\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\nAssessments & Ratings\n\nProvider\nRating\nDocument\nS&P Global Ratings\n2 - Strong\nView on spglobal.com\n\n",
+      "title": "EURC",
+      "url": "https://app.rwa.xyz/assets/EURC"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Professional Investor\nU.S. Accredited Investor\nBase Assets\nBRL\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 BRL\nSubscription\nFees\n0%\nSubscription Description\nSubscriptions are not open to the general public. Eligible investors access the offering through Rivool’s private onboarding process, subject to KYC verification, suitability checks, and approval by Rivool. Once approved and after funds are received in Brazilian Real (BRL), the corresponding tokens are minted and allocated to the investor according to the terms of the specific offering.\nRedemption Time\nInstant\nMinimum Redemption Amount\n0 BRL\nRedemption\nFees\n0%\nRedemption Description\nRedemptions are processed directly through Rivool according to the terms of the specific offering. Investors may request redemption through Rivool’s private investor process, subject to KYC status, eligibility, liquidity availability, and the asset’s maturity or repayment schedule. When applicable, tokens are burned and redemption proceeds are settled in Brazilian Real (BRL).\nKYC Description\n—\n\n",
+      "title": "Rivool Institucional Nagro Agro - RVL2",
+      "url": "https://app.rwa.xyz/assets/RVL2"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Professional Investor\nU.S. Accredited Investor\nBase Assets\nUSDC\nSubscription Time\nDaily\nMin.\nInvestment\n100,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nWeekly\nMinimum Redemption Amount\n100,000 USDC\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Zynk TVL Provision Deal",
+      "url": "https://app.rwa.xyz/assets/LIQVID1041_S"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nBase Assets\nEUR\nEURC\nSubscription Time\nDaily\nMin.\nInvestment\n100,000 EUR\nSubscription\nFees\n0%\nSubscription Description\nOrders cut-off at 11:00am CET; settled at D+2; priced at NAV D+1\nRedemption Time\nDaily\nMinimum Redemption Amount\n0 EUR\nRedemption\nFees\n0%\nRedemption Description\nOrders cut-off at 11:00am CET; payment at D+2 (subject to gates - 10% of NAV net redemption cap that can be applied for a maximum of 20 net asset values within a one-month period)\nKYC Description\n—\n\n",
+      "title": "Spiko Cash & Carry Euro",
+      "url": "https://app.rwa.xyz/assets/eurSPKCC"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n10,000 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n10,000 USD\nRedemption\nFees\n0.25%\nRedemption Description\n$10k for redemption into stablecoins, 32.148 XAUm for physical redemption\nKYC Description\n—\n\n",
+      "title": "Matrixdock Gold",
+      "url": "https://app.rwa.xyz/assets/XAUm"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\n+ 2 More\nBase Assets\nUSD\nUSDC\nSubscription Time\nQuarterly\nMin.\nInvestment\n50,000 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Sea Horse Resort - Equity Tranche 1",
+      "url": "https://app.rwa.xyz/assets/SHR"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\n+ 2 More\nBase Assets\nUSDC\nUSD\nSubscription Time\nWeekly\nMin.\nInvestment\n50,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Capri Hotel Southampton - Equity Tranche 1",
+      "url": "https://app.rwa.xyz/assets/CHS"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\n—\nSubscription Time\nInstant\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\nMint programmatically via our SDK or at app.etherfuse.com\nRedemption Time\nInstant\nMinimum Redemption Amount\n0\nRedemption\nFees\n0%\nRedemption Description\nRedeem programmatically via our SDK or at app.etherfuse.com\nKYC Description\n—\n\n",
+      "title": "Etherfuse CETES",
+      "url": "https://app.rwa.xyz/assets/CETES"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\n+ 2 More\nBase Assets\nUSD\nUSDC\nSubscription Time\nWeekly\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "The Carmen Hotel - Equity Tranche 1",
+      "url": "https://app.rwa.xyz/assets/RSC"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Bitbond BB1 tokenized bond",
+      "url": "https://app.rwa.xyz/assets/BB1"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n1 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Treasury Money Market Digital Fund",
+      "url": "https://app.rwa.xyz/assets/WTGXX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "BRPL01 - BP EDUCACAO E ENTRETENIMENTO S.A.",
+      "url": "https://app.rwa.xyz/assets/BRPL01"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\nUSD\nXPT\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\nPurchase on WisdomTree Prime. Users may set up an account and complete the onboarding process with WisdomTree Digital via WisdomTree Prime. Users must purchase, hold, sell or transfer their Gold Tokens through WisdomTree Prime. For an order to be valid, the order must: (i) specify the number of Gold Tokens or dollar amount to be transacted; (ii) provide all forms of documentation required for the purposes of any compliance and identification checks; and (iii) comply with any additional requirements specified in any notice made by WisdomTree Digital.\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\nSell on WisdomTree Prime. Users may set up an account and complete the onboarding process with WisdomTree Digital via WisdomTree Prime. Users must purchase, hold, sell or transfer their Gold Tokens through WisdomTree Prime. For an order to be valid, the order must: (i) specify the number of Gold Tokens or dollar amount to be transacted; (ii) provide all forms of documentation required for the purposes of any compliance and identification checks; and (iii) comply with any additional requirements specified in any notice made by WisdomTree Digital.\nKYC Description\n—\n\n",
+      "title": "WisdomTree Gold Token",
+      "url": "https://app.rwa.xyz/assets/WTGOLD"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\n+ 3 More\nBase Assets\nAUD\nSubscription Time\nInstant\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n—\nRedemption\nFees\n0.20%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Australian Digital Dollar",
+      "url": "https://app.rwa.xyz/assets/AUDD"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Floating Rate Treasury Digital Fund",
+      "url": "https://app.rwa.xyz/assets/FLTTX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nU.S. Accredited Investor\nBase Assets\nBRL\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 BRL\nSubscription\nFees\n0%\nSubscription Description\nSubscriptions are not open to the general public. Eligible investors access the offering through Rivool’s private onboarding process, subject to KYC verification, suitability checks, and approval by Rivool. Once approved and after funds are received in Brazilian Real (BRL), the corresponding tokens are minted and allocated to the investor according to the terms of the specific offering.\nRedemption Time\nInstant\nMinimum Redemption Amount\n0 BRL\nRedemption\nFees\n0%\nRedemption Description\nRedemptions are processed directly through Rivool according to the terms of the specific offering. Investors may request redemption through Rivool’s private investor process, subject to KYC status, eligibility, liquidity availability, and the asset’s maturity or repayment schedule. When applicable, tokens are burned and redemption proceeds are settled in Brazilian Real (BRL).\nKYC Description\n—\n\n",
+      "title": "Rivool Institucional Nagro Agro - RVL1",
+      "url": "https://app.rwa.xyz/assets/RVL1"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "JEITTO36 -",
+      "url": "https://app.rwa.xyz/assets/JEITTO36"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Investor\n+ 2 More\nBase Assets\nUSDC\nUSD\nSubscription Time\nWeekly\nMin.\nInvestment\n50,000 USDC\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Maidstone New Orleans - Equity Tranche 1",
+      "url": "https://app.rwa.xyz/assets/MNO"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\nUSD\nSubscription Time\nInstant\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Short-Duration Income Digital Fund",
+      "url": "https://app.rwa.xyz/assets/WTSIX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\nUSD\nSubscription Time\nInstant\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Siegel Global Equity Digital Fund",
+      "url": "https://app.rwa.xyz/assets/EQTYX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nU.S. Accredited Investor\nBase Assets\nUSDC\nUSD\nSubscription Time\nInstant\nMin.\nInvestment\n1 USDC\nSubscription\nFees\n0%\nSubscription Description\nAtomic subscriptions at uncapped size\nRedemption Time\nInstant\nMinimum Redemption Amount\n1 USDC\nRedemption\nFees\n0%\nRedemption Description\nAtomic USDC redemptions capped by collateral held in USDC, thereafter settlement is T+1\nKYC Description\n—\n\n",
+      "title": "USDM1",
+      "url": "https://app.rwa.xyz/assets/USDM1"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nU.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Stasis Euro",
+      "url": "https://app.rwa.xyz/assets/EURS"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\n—\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Short-Term Treasury Digital Fund",
+      "url": "https://app.rwa.xyz/assets/WTSYX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree 3-7 Year Treasury Digital Fund",
+      "url": "https://app.rwa.xyz/assets/WTTSX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree TIPS Digital Fund",
+      "url": "https://app.rwa.xyz/assets/TIPSX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree 7-10 Year Treasury Digital Fund",
+      "url": "https://app.rwa.xyz/assets/WTSTX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "CARTAO56 -",
+      "url": "https://app.rwa.xyz/assets/CARTAO56"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Long Term Treasury Digital Fund",
+      "url": "https://app.rwa.xyz/assets/WTLGX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "ACREDIT05 -",
+      "url": "https://app.rwa.xyz/assets/ACREDIT05"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "ACREDIT04 -",
+      "url": "https://app.rwa.xyz/assets/ACREDIT04"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "ACREDIT06 - TRAVESSIA ASSESSORIA FINANCEIRA LTDA.",
+      "url": "https://app.rwa.xyz/assets/ACREDIT06"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\n—\nBase Assets\nUSD\nSubscription Time\nInstant\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Siegel Longevity Digital Fund",
+      "url": "https://app.rwa.xyz/assets/LNGVX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Professional Investor\nBase Assets\nUSD\nUSDC\nSubscription Time\nDaily\nMin.\nInvestment\n115,460 USD\nSubscription\nFees\n0%\nSubscription Description\nOrders cut-off at 11:00am CET; settled at D+2; priced at NAV D+1\nRedemption Time\nDaily\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\nOrders cut-off at 11:00am CET; payment at D+2 (subject to gates - 10% of NAV net redemption cap that can be applied for a maximum of 20 net asset values within a one-month period)\nKYC Description\n—\n\n",
+      "title": "Spiko Cash and Carry Dollar",
+      "url": "https://app.rwa.xyz/assets/SPKCC"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\nUSD\nSubscription Time\nInstant\nMin.\nInvestment\n25 USD\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Siegel Moderate Digital Fund",
+      "url": "https://app.rwa.xyz/assets/MODRX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\nNon-U.S. Institutional Investor\n+ 2 More\nBase Assets\n—\nSubscription Time\nDaily\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n0\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "WisdomTree Equity Premium Income Digital Fund",
+      "url": "https://app.rwa.xyz/assets/WTPIX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\n—\nSubscription Time\nInstant\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\nMint programatically via our SDK or app.etherfuse.com\nRedemption Time\nInstant\nMinimum Redemption Amount\n0\nRedemption\nFees\n0%\nRedemption Description\nRedeem programatically via our SDK or at app.etherfuse.com\nKYC Description\n—\n\n",
+      "title": "Etherfuse TESOURO",
+      "url": "https://app.rwa.xyz/assets/TESOURO"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\nInstant\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nDaily\nMinimum Redemption Amount\n1\nRedemption\nFees\n0%\nRedemption Description\nmZAR holders may redeem tokens for ZAR fiat subject to applicable KYC/AML requirements. Redemptions are processed via Mesh Trade SA or authorized partners through controlled off-chain settlement. Redemption requests follow established operational procedures, with fiat funds returned to the verified bank account of the holder.\nKYC Description\n—\n\n",
+      "title": "mZAR",
+      "url": "https://app.rwa.xyz/assets/mZAR"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\nU.S. Qualified Institutional Buyer (QIB)\nBase Assets\nUSD\nUSDC\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Glo Dollar",
+      "url": "https://app.rwa.xyz/assets/USDGLO"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nU.S. Investor\nBase Assets\nUSDC\nUSD\nSubscription Time\nDaily\nMin.\nInvestment\n0 USDC\nSubscription\nFees\n0%\nSubscription Description\nThe fund does not require a minimum investment amount. Subscriptions and redemptions are accepted daily in USD or USDC via WisdomTree Prime or Connect.\nRedemption Time\nDaily\nMinimum Redemption Amount\n0 USDC\nRedemption\nFees\n0%\nRedemption Description\nThe fund does not require a minimum investment amount. Subscriptions and redemptions are accepted daily in USD or USDC via WisdomTree Prime or Connect.\nKYC Description\n—\n\n",
+      "title": "WisdomTree Private Credit and Alternative Income Digital Fund",
+      "url": "https://app.rwa.xyz/assets/CRDYX"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "GMO JPY",
+      "url": "https://app.rwa.xyz/assets/GYEN"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Z.com USD",
+      "url": "https://app.rwa.xyz/assets/ZUSD"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\nU.S. Qualified Institutional Buyer (QIB)\nBase Assets\nUSDC\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Stable Coin",
+      "url": "https://app.rwa.xyz/assets/SBC"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\nU.S. Qualified Institutional Buyer (QIB)\nBase Assets\nEUR\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nInstant\nMinimum Redemption Amount\n0 EUR\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "AllUnity EUR",
+      "url": "https://app.rwa.xyz/assets/EURAU"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "MBCREDSB10 -",
+      "url": "https://app.rwa.xyz/assets/MBCREDSB10"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nLog in to Unlock\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "MBCREDIT10 -",
+      "url": "https://app.rwa.xyz/assets/MBCREDIT10"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\n+ 4 More\nBase Assets\nEUR\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\nCustomers who registered on the VNX platform, passed the KYC and entered into a FRT Minting contract with VNX.\nKYC Description\n—\n\n",
+      "title": "VNX Euro",
+      "url": "https://app.rwa.xyz/assets/VEUR"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\n+ 4 More\nBase Assets\nCHF\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "VNX Swiss Franc",
+      "url": "https://app.rwa.xyz/assets/VCHF"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Canadian Dollar Digital Money",
+      "url": "https://app.rwa.xyz/assets/QCAD"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "CARTAO57 -",
+      "url": "https://app.rwa.xyz/assets/CARTAO57"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Institutional Investor\nU.S. Qualified Institutional Buyer (QIB)\nBase Assets\nUSDC\nUSD\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\nPrimary mint available only to approved U.S. business accounts (KYB) via USDC/USDP (instant) or ACH/wire (typically 1–2 business days). No fees and no minimums\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\nRedeem 1:1 to USDC/USDP or to USD via bank wire from a KYB’d business account. No fees; ACH/wire typically 1–2 business days.\nKYC Description\n—\n\n",
+      "title": "Real MXN",
+      "url": "https://app.rwa.xyz/assets/MXNe"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\n—\nSubscription Time\nInstant\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\nMint programatically via our SDK or at app.etherfuse.com\nRedemption Time\nInstant\nMinimum Redemption Amount\n0\nRedemption\nFees\n0%\nRedemption Description\nRedeem programmatically via our SDK or at app.etherfuse.com\nKYC Description\n—\n\n",
+      "title": "Etherfuse EUROB",
+      "url": "https://app.rwa.xyz/assets/EUROB"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nUSDC\nSubscription Time\nInstant\nMin.\nInvestment\n0 USDC\nSubscription\nFees\n0%\nSubscription Description\nKTB tokens are minted following execution of Korean Treasury Bond purchases through Shinhan Securities. Settlement occurs T+0 to T+1. Purchases are processed on a weekly cycle.\nRedemption Time\nInstant\nMinimum Redemption Amount\n0 USDC\nRedemption\nFees\n0%\nRedemption Description\nRedemptions are fulfilled through orderly liquidation of underlying Korean Treasury Bonds via Shinhan Securities. Standard settlement T+0 to T+1 during market hours.\nKYC Description\n—\n\n",
+      "title": "Etherfuse KTB",
+      "url": "https://app.rwa.xyz/assets/KTB"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "CHILLI10 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.",
+      "url": "https://app.rwa.xyz/assets/CHILLI10"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "JEITTO37 -",
+      "url": "https://app.rwa.xyz/assets/JEITTO37"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "POOLCP02 -",
+      "url": "https://app.rwa.xyz/assets/POOLCP02"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "MEDTKN04 -",
+      "url": "https://app.rwa.xyz/assets/MEDTKN04"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "CHILLI11 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.",
+      "url": "https://app.rwa.xyz/assets/CHILLI11"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "DUX30 - DUX COMPANY LTDA",
+      "url": "https://app.rwa.xyz/assets/DUX30"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nOnly at maturity\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "PerplexityAI Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/PRXAI"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Polymarket Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/POLY"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Anduril Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/ANDU"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Kraken Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/KRKN"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Mistral AI Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/MISTR"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Neuralink Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/NEUR"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Stripe Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/STRIPE"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Higgsfield AI Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/HIGAI"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "OpenAI Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/OAI"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "ShieldAI Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/SHIELD"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\nNon-U.S. Investor\nBase Assets\nEUR\nSubscription Time\nInstant\nMin.\nInvestment\n1,000 EUR\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\nOnly at maturity\nMinimum Redemption Amount\n1,000 EUR\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "Anthropic Bond (Cometum)",
+      "url": "https://app.rwa.xyz/assets/ANTH"
+    },
+    {
+      "hasStellar": true,
+      "primary": "Primary Market\n\nEligible Investors\n—\nBase Assets\n—\nSubscription Time\n—\nMin.\nInvestment\n—\nSubscription\nFees\n0%\nSubscription Description\n—\nRedemption Time\n—\nMinimum Redemption Amount\n—\nRedemption\nFees\n0%\nRedemption Description\n—\nKYC Description\n—\n\n",
+      "title": "CHILLI09 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.",
+      "url": "https://app.rwa.xyz/assets/CHILLI09"
+    }
+  ]
+}
