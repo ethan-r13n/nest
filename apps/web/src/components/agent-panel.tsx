@@ -84,7 +84,7 @@ function AssistantContents() {
       >
         Continue in chat
       </Link>
-      <p className="text-center text-xs text-subtle">Your unsaved draft carries over in this session.</p>
+      <p className="text-center text-xs text-subtle">This conversation carries over in this session.</p>
     </div>
   );
 }
