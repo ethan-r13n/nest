@@ -1814,6 +1814,16 @@
       "downloaded_with": "Chrome DOM SVG export",
       "retrieved_at": "2026-10-25",
       "rights": "X brand mark."
+    },
+    {
+      "file": "assets/logos/solvbtc-363fd727.png",
+      "display_name": "SolvBTC",
+      "source_page": "https://coinpaprika.com/coin/solvbtc-solv-protocol-solvbtc/",
+      "source_asset_url": "https://static.coinpaprika.com/coin/solvbtc-solv-protocol-solvbtc/logo.png",
+      "sha256": "363fd7279ab5f915c37ece6de1fc199dd03ea8d52fdc52ed6c5b615aac315c49",
+      "downloaded_with": "Chrome pageAssets bundle",
+      "retrieved_at": "2026-10-25",
+      "rights": "Brand asset owned by its respective project; no redistribution license inferred."
     }
   ],
   "name_map": {
@@ -2082,7 +2092,16 @@
     "higai": "assets/logos/perplexityaibondcometum-e2d8b051.png",
     "oai": "assets/logos/perplexityaibondcometum-e2d8b051.png",
     "shield": "assets/logos/perplexityaibondcometum-e2d8b051.png",
-    "anth": "assets/logos/perplexityaibondcometum-e2d8b051.png"
+    "anth": "assets/logos/perplexityaibondcometum-e2d8b051.png",
+    "AQUA": "assets/logos/aquariusstellar-d0a259b7.webp",
+    "SolvBTC": "assets/logos/solvbtc-363fd727.png",
+    "sushi": "assets/logos/sushistellar-2482d964.webp",
+    "untangled": "assets/logos/untangledrwa-86a95382.webp",
+    "peridotfinance": "assets/logos/peridot-dd15dd35.webp",
+    "phoenix": "assets/logos/phoenixdefihub-643b0235.webp",
+    "balanced": "assets/logos/balancedexchange-b12b7ba2.webp",
+    "spectrafinance": "assets/logos/spectrav2-e9186ba9.webp",
+    "vaquita": "assets/logos/vaquitaprotocol-8012a913.webp"
   },
   "missing": [
     {
@@ -2167,5 +2186,18 @@
     }
   ],
   "generic_icons": "Functional UI symbols are code-native line icons. They do not represent third-party brands.",
-  "fallback_policy": "No fabricated brand marks or initials. Missing brand assets leave the identity text visible; issuer/platform marks are used only when labeled as issuer/platform."
+  "fallback_policy": "No fabricated brand marks or initials. Missing brand assets leave the identity text visible; issuer/platform marks are used only when labeled as issuer/platform.",
+  "map_identity_aliases": {
+    "date": "2026-10-25",
+    "note": "Scout display names resolve to the existing canonical protocol logos. No new or invented artwork.",
+    "aliases": [
+      "Sushi",
+      "Untangled",
+      "Peridot Finance",
+      "Phoenix",
+      "Balanced",
+      "Spectra Finance",
+      "Vaquita"
+    ]
+  }
 }

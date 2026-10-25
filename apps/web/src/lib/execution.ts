@@ -36,18 +36,27 @@ type PlanStatus =
   | 'failed'
   | 'expired';
 
-export interface Plan {
+interface PlanBase {
   id: string;
   status: PlanStatus;
   network: 'mainnet' | 'testnet';
   account: string;
   digest: string;
-  quote: Quote;
   policy: {
     verdict: 'allow' | 'warn' | 'block';
     reasons: { pass: boolean; code: string; detail: string; severity: 'block' | 'warn' }[];
   };
   maxFee: AssetAmount;
+  prepared: { xdr: string; hash: string; networkPassphrase: string; validUntil: string | null } | null;
+  txHash: string | null;
+  ledger: number | null;
+  errorCode: string | null;
+  explorerUrl: string | null;
+}
+
+export interface Plan extends PlanBase {
+  kind: 'swap';
+  quote: Quote;
   prepared: {
     xdr: string;
     hash: string;
@@ -59,10 +68,84 @@ export interface Plan {
     providerFee: AssetAmount & { bps: number };
     validUntil: string | null;
   } | null;
-  txHash: string | null;
   received: AssetAmount | null;
-  errorCode: string | null;
-  explorerUrl: string | null;
+}
+
+export type LendingKind = 'supply' | 'borrow';
+
+export interface LendingIntent {
+  id: string;
+  network: 'mainnet' | 'testnet';
+  kind: LendingKind;
+  asset: AssetAmount;
+  collateral: (Partial<AssetAmount> & { symbol: string }) | null;
+}
+
+export interface LendingOffer {
+  id: string;
+  kind: LendingKind;
+  pool: { id: string; name: string; status: string };
+  asset: AssetAmount;
+  collateral: AssetAmount | null;
+  supplyApyPct: number;
+  borrowApyPct: number;
+  utilizationPct: number;
+  available: AssetAmount;
+  estimatedHealth: number | null;
+  targetHealth: number | null;
+  withdrawalTiming: { lockup: string; cooldown: string; summary: string };
+  nestFeeBps: number;
+  expiresAt: string;
+}
+
+export interface LendingComparison {
+  quotes: LendingOffer[];
+  selectedQuoteId: string | null;
+  excluded: { poolId: string; name: string; reason: string }[];
+}
+
+export interface LendingPlan extends PlanBase {
+  kind: LendingKind;
+  offer: LendingOffer;
+  prepared: {
+    xdr: string;
+    hash: string;
+    networkPassphrase: string;
+    fee: AssetAmount;
+    requests: (AssetAmount & { type: 'supply' | 'supplyCollateral' | 'borrow' })[];
+    health: { before: number | null; after: number | null; warning: boolean };
+    validUntil: string | null;
+  } | null;
+}
+
+export interface LendingMarkets {
+  network: 'mainnet' | 'testnet';
+  markets: {
+    poolId: string;
+    name: string;
+    statusLabel: string;
+    canSupply: boolean;
+    canBorrow: boolean;
+    reserves: {
+      symbol: 'USDC' | 'XLM';
+      supplyApyPct: number;
+      borrowApyPct: number;
+      utilizationPct: number;
+      availableRaw: string;
+      collateralFactor: number;
+    }[];
+    observedAtMs: number;
+  }[];
+}
+
+/** On Testnet, swaps and Blend list different USDC issuers, so the trustline depends on the feature. */
+export type TrustlineUse = 'swap' | 'lending';
+
+interface PreparedTrustline {
+  asset: { code: string; issuer: string };
+  xdr: string;
+  hash: string;
+  networkPassphrase: string;
 }
 
 export class ExecutionRequestError extends Error {
@@ -78,7 +161,7 @@ export class ExecutionRequestError extends Error {
 async function call<T>(
   path: string,
   init?: { method?: string; body?: unknown; headers?: Record<string, string> },
-): Promise<T> {
+): Promise<NoInfer<T>> {
   const response = await fetch(path, {
     method: init?.method ?? 'GET',
     headers: { ...(init?.body === undefined ? {} : { 'content-type': 'application/json' }), ...init?.headers },
@@ -94,23 +177,74 @@ async function call<T>(
 
 export const execution = {
   intent: (id: string) => call<Intent>(`/api/intents/${id}`),
+  lendingIntent: (id: string) => call<LendingIntent>(`/api/intents/${id}`),
+  createLending: (input: { kind: LendingKind; asset: 'USDC' | 'XLM'; amount: string; poolId?: string }) =>
+    call<LendingIntent>('/api/intents', { method: 'POST', body: input }),
+  compareLending: (intentId: string) => call<LendingComparison>(`/api/intents/${intentId}/compare`, { method: 'POST' }),
+  lendingMarkets: () => call<LendingMarkets>('/api/markets/lending'),
+  trustline: (input: { accountId: string; use: TrustlineUse }) =>
+    call<PreparedTrustline>('/api/trustlines', { method: 'POST', body: input }),
+  submitTrustline: (input: { accountId: string; use: TrustlineUse; signedXdr: string }) =>
+    call<{ status: 'confirmed' | 'pending'; txHash: string }>('/api/trustlines/submit', {
+      method: 'POST',
+      body: input,
+    }),
   quote: async (intentId: string) =>
     (await call<{ quotes: Quote[] }>(`/api/intents/${intentId}/compare`, { method: 'POST' })).quotes[0],
-  plan: (input: { intentId: string; quoteId: string; accountId: string }) =>
-    call<Plan>('/api/plans', { method: 'POST', body: input, headers: { 'idempotency-key': crypto.randomUUID() } }),
-  prepare: (planId: string) => call<Plan>(`/api/plans/${planId}/prepare`, { method: 'POST' }),
-  approve: (plan: Plan) =>
-    call<Plan>(`/api/plans/${plan.id}/approve`, {
+  plan: <T extends PlanBase = Plan>(input: { intentId: string; quoteId: string; accountId: string }) =>
+    call<T>('/api/plans', { method: 'POST', body: input, headers: { 'idempotency-key': crypto.randomUUID() } }),
+  prepare: <T extends PlanBase = Plan>(planId: string) => call<T>(`/api/plans/${planId}/prepare`, { method: 'POST' }),
+  approve: <T extends PlanBase>(plan: T) =>
+    call<T>(`/api/plans/${plan.id}/approve`, {
       method: 'POST',
       body: { digest: plan.digest, preparedHash: plan.prepared?.hash },
     }),
-  submit: (planId: string, signedXdr: string) =>
-    call<Plan>(`/api/plans/${planId}/submit`, { method: 'POST', body: { signedXdr } }),
-  read: (planId: string) => call<Plan>(`/api/plans/${planId}`),
+  submit: <T extends PlanBase = Plan>(planId: string, signedXdr: string) =>
+    call<T>(`/api/plans/${planId}/submit`, { method: 'POST', body: { signedXdr } }),
+  read: <T extends PlanBase = Plan>(planId: string) => call<T>(`/api/plans/${planId}`),
 };
 
+const POLL_MS = 2_000;
+const POLL_LIMIT_MS = 90_000;
+
+/**
+ * Approves a prepared plan, has the wallet sign exactly its transaction, submits it and follows it
+ * until it settles or the wait runs out. Reports each plan state it sees.
+ */
+export async function signAndSubmit<T extends PlanBase>(
+  plan: T,
+  options: {
+    sign(xdr: string, networkPassphrase: string): Promise<string>;
+    onSigned(): void;
+    onUpdate(plan: NoInfer<T>): void;
+    stillWatching(): boolean;
+  },
+): Promise<NoInfer<T>> {
+  if (!plan.prepared) return plan;
+  const approved = await execution.approve(plan);
+  if (approved.status !== 'awaiting_signature') return approved;
+  const signedXdr = await options.sign(plan.prepared.xdr, plan.prepared.networkPassphrase);
+  options.onSigned();
+  let current = await execution.submit<T>(plan.id, signedXdr);
+  const started = Date.now();
+  while (
+    (current.status === 'submitted' || current.status === 'confirming') &&
+    Date.now() - started < POLL_LIMIT_MS &&
+    options.stillWatching()
+  ) {
+    options.onUpdate(current);
+    await new Promise((resolve) => setTimeout(resolve, POLL_MS));
+    current = await execution.read<T>(plan.id);
+  }
+  return current;
+}
+
+export function isPending(plan: PlanBase): boolean {
+  return plan.status === 'submitted' || plan.status === 'confirming';
+}
+
 /** Plain-language reasons for the stable codes a plan can stop with. */
-export function planProblem(plan: Plan): string | null {
+export function planProblem(plan: PlanBase): string | null {
   switch (plan.errorCode) {
     case null:
       return null;
@@ -120,17 +254,30 @@ export function planProblem(plan: Plan): string | null {
     case 'MIN_OUT_TOO_LOW':
       return 'The built transaction accepted less than the reviewed minimum, so Nest stopped it.';
     case 'SIMULATION_FAILED':
-      return 'The swap failed in simulation. Your balance or trustline may not cover it.';
+      return 'It failed in simulation. Your balance or trustline may not cover it.';
     case 'SIMULATED_OUTPUT_TOO_LOW':
       return 'Simulation returned less than the minimum. Get a new quote.';
     case 'REJECTED':
-      return 'The network rejected the transaction. Nothing was swapped.';
+      return 'The network rejected the transaction. Nothing changed.';
     case 'FAILED_ON_CHAIN':
-      return 'The transaction failed on chain. Nothing was swapped except the network fee.';
+      return 'The transaction failed on chain. Nothing changed except the network fee.';
     case 'NOT_INCLUDED':
-      return 'The transaction expired without being included. Nothing was swapped.';
+      return 'The transaction expired without being included. Nothing changed.';
+    case 'HEALTH_TOO_LOW':
+      return 'This loan would leave your position at or below liquidation. Add collateral or borrow less.';
+    case 'POOL_STATUS':
+      return 'The pool does not allow this action in its current status.';
+    case 'LIQUIDITY_INSUFFICIENT':
+      return 'The pool does not have enough liquidity for this loan right now.';
+    case 'TRUSTLINE_MISSING':
+      return 'Your account needs a trustline for this asset first.';
+    case 'INSUFFICIENT_BALANCE':
+      return 'Your balance does not cover this, including the network reserve and fee.';
+    case 'REQUESTS_MISMATCH':
+    case 'AUTH_UNEXPECTED':
+      return 'The built transaction did not match what you reviewed, so Nest stopped it.';
     default:
-      return `Nest stopped this swap (${plan.errorCode}).`;
+      return `Nest stopped this (${plan.errorCode}).`;
   }
 }
 

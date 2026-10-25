@@ -135,4 +135,19 @@ The exact requested URLs and HTTP observations are stored in `provenance`. Worki
 - [DefiLlama Pro API documentation](https://api-docs.defillama.com/llms-pro.txt)
 - [DefiLlama yield server](https://github.com/DefiLlama/yield-server)
 
+## Protocol detail projections
+
+`python3 research/data/build-protocol-yields.py` builds the preview's
+`protocol-yields.js` and matching JSON from the existing DeFiLlama capture.
+Only pools matching both the protocol slug and Stellar appear on its detail page.
+
+`python3 research/data/collect-raven-scout.py` refreshes project context from
+Scout's public API, a Raven source family. It does not call authenticated Raven
+MCP or Lumenloop. Identity matching requires a DeFiLlama slug or a reviewed
+project identity; semantic search matches alone are excluded. Source dates,
+project-family scope and unknown values remain explicit. The resulting
+`ui/spec/protocol-context.json` and `ui/protocol-context.js` contain public data;
+raw response caches stay under ignored `.nest/`. A failed or partial refresh
+preserves the prior usable capture. `--cache PATH` re-projects saved responses.
+
 Source URLs and capture times identify the underlying observations. Display summaries and excerpts may be condensed; monetary figures, asset identities and provider definitions retain their source semantics.

@@ -31,8 +31,7 @@
     const renderActivity = key => {
       root.querySelector('[data-position-state-label]').hidden = key !== 'positions';
       activity.innerHTML = key === 'positions' ? render(root.querySelector('[data-position-state]').value)
-        : key === 'history' ? '<div class="table-wrap"><table class="mkt-small-table"><thead><tr><th>Illustrative action</th><th>Amount</th><th>State</th><th>Evidence</th></tr></thead><tbody><tr><td>XLM → USDC</td><td class="mono">500.00 XLM</td><td>Confirmed fixture</td><td>No real receipt</td></tr></tbody></table></div>'
-        : '<div class="empty-state"><strong>No pending fixture workflows.</strong><p class="muted">Submitted, reconciling, partial and confirmed states remain distinct.</p></div>';
+        : '<div class="table-wrap"><table class="mkt-small-table"><thead><tr><th>Illustrative action</th><th>Amount</th><th>State</th><th>Evidence</th></tr></thead><tbody><tr><td>XLM → USDC</td><td class="mono">500.00 XLM</td><td>Confirmed fixture</td><td>No real receipt</td></tr></tbody></table></div>';
       window.NestUI.hydrateLogos?.(activity);
     };
     root.querySelectorAll('[data-activity]').forEach(button => button.addEventListener('click', () => {

@@ -21,3 +21,14 @@
 
 .d-chat-welcome:has(.d-allocation-form){margin:8px auto 0}.d-chat-start-heading{display:flex;align-items:center;justify-content:center;gap:12px;margin-bottom:8px}.d-chat-start-heading>img{width:40px;flex:none}.d-chat-start-heading h2{font:600 30px/1.2 var(--serif);margin:0}.d-chat-welcome:has(.d-allocation-form)>p{font-size:13px;line-height:1.6;margin:0}.d-chat-welcome:has(.d-allocation-form) .d-prompt-grid{margin:12px 0 14px}.d-chat-welcome:has(.d-allocation-form) .d-prompt-grid button{min-height:56px;padding:14px}.d-allocation-form{padding:14px;margin-bottom:0}.d-allocation-form>p:first-child{margin-bottom:10px}
 @container workspace (max-width:500px){.d-chat-start-heading{gap:10px}.d-chat-start-heading h2{font-size:26px;text-align:left}.d-chat-start-heading>img{width:32px}.d-chat-welcome:has(.d-allocation-form) .d-prompt-grid{margin-block:16px}.d-allocation-form{padding:14px}}
+/* Conversation rail expands on hover or keyboard focus; touch uses the header toggle. */
+.d-chat-workspace{grid-template-columns:240px minmax(0,1fr);transition:grid-template-columns 180ms ease}
+.d-chat-workspace.d-sidebar-collapsed{grid-template-columns:64px minmax(0,1fr)}
+.d-chat-sidebar{min-width:0;overflow:hidden}
+.d-chat-sidebar>.c-inline{min-height:44px}
+.d-chat-history{min-height:44px}
+.d-chat-history>span,.d-chat-sidebar-links .btn>span{white-space:nowrap}
+.d-sidebar-collapsed .d-chat-sidebar>.c-inline{justify-content:center}
+.d-sidebar-collapsed .d-chat-history,.d-sidebar-collapsed .d-chat-sidebar-links .btn{min-width:44px}
+@container workspace (max-width:760px){.d-chat-workspace,.d-chat-workspace.d-sidebar-collapsed{grid-template-columns:minmax(0,1fr)}.d-chat-workspace{transition:none}.d-chat-sidebar{overflow:visible}}
+@media(prefers-reduced-motion:reduce){.d-chat-workspace{transition:none}}

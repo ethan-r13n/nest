@@ -1,0 +1,12 @@
+#screen[data-route=portfolio] .portfolio-content{display:grid;grid-template-columns:minmax(0,1fr)}
+#screen[data-route=portfolio] .portfolio-content .data-table{width:100%}
+#screen[data-route=portfolio] .portfolio-content th:last-child{width:115px}
+#screen[data-route=portfolio] .portfolio-content td:last-child .btn{min-width:86px;min-height:44px}
+[data-position-management]{scroll-margin-top:125px}
+[data-position-management]:focus:not(:focus-visible){outline:none}
+#screen[data-route=portfolio] .portfolio-content>.panel,#screen[data-route=portfolio] .portfolio-content .panel-body{min-width:0}
+#screen[data-route=portfolio] .portfolio-content .table-wrap{position:relative;max-width:100%;overflow-x:auto}
+#screen[data-route=portfolio] .portfolio-composition-heading{display:block;min-width:0}
+#screen[data-route=portfolio] .portfolio-composition-heading .portfolio-balance{font-size:38px;line-height:1.2;margin:8px 0 4px}
+#screen[data-route=portfolio] .portfolio-composition-heading .data-note{font-size:10px;margin:0}
+@media(max-width:767px){#screen[data-route=portfolio] .portfolio-composition-heading .portfolio-balance{font-size:32px}}

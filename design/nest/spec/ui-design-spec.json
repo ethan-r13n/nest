@@ -17,7 +17,7 @@
     "component_styles": "../components.css",
     "visual_guide": "../index.html",
     "product_plan": "https://chatgpt.com/space/page_01bffc9d67848191b2ef9c6400ffc767",
-    "style": "Raven-derived forest surfaces, cream text, orange actions, IBM Plex Serif titles, Sans controls and Mono financial data.",
+    "style": "Raven-derived forest surfaces, cream text, orange actions; IBM Plex Serif 700 page titles and 600 section/card headings, Sans body and descriptive subtitles, Mono controls and financial data.",
     "layout": "Workspace-first. Brand cover is collateral rather than a large in-app hero."
   },
   "reference_handling": {
@@ -494,7 +494,7 @@
         ],
         "header": "Network-scoped heading and source/as-of badge",
         "metrics": "Eight provider network metric cells in a four-column/two-row grid",
-        "composition_and_league": "Two balanced panels: current distributed asset-class composition and the league table. Stack below 1100px.",
+        "composition_and_league": "Two compact panels of equal 440px height. Internal, keyboard-focusable scroll regions contain composition/history and every captured league row. Sticky league headers; panels stack below 1100px.",
         "composition_controls": [
           "Composition/History presentation control",
           "Include stablecoins visibility control"
@@ -506,8 +506,8 @@
         "assets": "Full-width search/filter/sort toolbar with 10-row asset table pages and CSV"
       },
       "metric_definitions": [
-        "Distributed Asset Value",
-        "Represented Asset Value",
+        "Transferable RWAs",
+        "Restricted RWAs",
         "RWA Holders",
         "RWA 30D Transfer Volume",
         "RWA Count",
@@ -663,7 +663,11 @@
         "Each of 109 rows retains its exact original source URL",
         "Row clicks and asset anchors navigate in the same tab",
         "Access indicators remain independent and unknowns are explicit",
-        "Badge screen-reader text is contained inside each chip to preserve mobile scroll containment"
+        "Badge screen-reader text is contained inside each chip to preserve mobile scroll containment",
+        "Transferable and Restricted RWAs retain the original source values and 30-day changes",
+        "Both metric definitions are available by hover, keyboard focus and mobile tap, and dismiss with Escape",
+        "Composition and league panels have equal compact heights and bounded internal scrolling",
+        "All captured league rows remain available; no first-seven truncation"
       ],
       "access_indicators": {
         "classification": "Three independent dimensions, never mutually exclusive. Distributed/Represented is not access metadata.",
@@ -685,6 +689,23 @@
           "rwa-access-observations.json",
           "rwa-dex-observations.json"
         ]
+      },
+      "metric_card_aliases": {
+        "source": "https://app.rwa.xyz/blog/a-new-framework-for-tokenized-assets-distributed-and-represented",
+        "mappings": {
+          "distributedAssetValue": {
+            "provider_label": "Distributed Asset Value",
+            "ui_label": "Transferable RWAs",
+            "tooltip": "Value of tokenized real-world assets that can move to external wallets and between eligible wallets. KYC or allowlist requirements may still apply."
+          },
+          "representedAssetValue": {
+            "provider_label": "Represented Asset Value",
+            "ui_label": "Restricted RWAs",
+            "tooltip": "Value of tokenized real-world assets confined to the issuer’s platform. These tokens cannot move to external wallets or transfer between wallets."
+          }
+        },
+        "invariant": "Presentation aliases only. Source keys, all dollar values and 30-day changes are unchanged.",
+        "info_control": "Labeled 44px button with aria-describedby, aria-controls and expanded state. Opens on hover/focus; tap or Enter pins/toggles; Escape, blur or outside click dismisses."
       }
     },
     {
@@ -770,7 +791,9 @@
         "The preview's amount presets, route selection and refresh are local fixture interactions only.",
         "Candle interval changes displayed OHLC; zoom/pan/Fit and ArrowLeft/ArrowRight inspect the chart independently from quotes.",
         "Close uses the full available quantity, obtains a fresh exact-input quote in production, then opens the shared review. No holding or P&L changes until the confirmed receipt.",
-        "Preview selector demonstrates sample position, missing cost basis and disconnected wallet."
+        "Preview selector demonstrates sample position, missing cost basis and disconnected wallet.",
+        "Pay and Receive asset buttons and the pair heading open the same searchable eight-asset selector.",
+        "Asset selection or reversal clears the previous quote and its review bounds. Unavailable pairs never retain XLM prices, routes or candles."
       ],
       "states": {
         "loading": "Skeleton reference metrics and route progress; disable financial review until the quote set is valid.",
@@ -851,18 +874,73 @@
         "720 OHLC fixture candles satisfy high/low/time invariants across six intervals",
         "Spot accounting uses scaled integers; known gain/loss and missing basis are tested",
         "Full close preserves 2500.0000000 XLM and fixture minimum 432.87475 USDC",
-        "Chart observer is disposed before route/state replacement"
-      ]
+        "Chart observer is disposed before route/state replacement",
+        "All eight catalog symbols have real local icons",
+        "Search, selection on both sides, pair reversal, same-asset prevention and Escape focus restoration work",
+        "Unknown pairs are visible in discovery and remain non-executable without current routing data"
+      ],
+      "asset_selection": {
+        "version": "0.7.0",
+        "network": "Stellar Mainnet",
+        "assets": [
+          {
+            "id": "XLM",
+            "label": "XLM",
+            "name": "Stellar Lumens"
+          },
+          {
+            "id": "USDC",
+            "label": "USDC",
+            "name": "USD Coin"
+          },
+          {
+            "id": "AQUA",
+            "label": "AQUA",
+            "name": "Aquarius"
+          },
+          {
+            "id": "EURC",
+            "label": "EURC",
+            "name": "Circle Euro"
+          },
+          {
+            "id": "USDT0",
+            "label": "USDT0",
+            "name": "USDT0"
+          },
+          {
+            "id": "PYUSD",
+            "label": "PYUSD",
+            "name": "PayPal USD"
+          },
+          {
+            "id": "SOLVBTC",
+            "label": "SolvBTC",
+            "name": "Solv Protocol Bitcoin"
+          },
+          {
+            "id": "EUTBL",
+            "label": "EUTBL",
+            "name": "Spiko EU T-Bills"
+          }
+        ],
+        "icons": "Real, locally bundled brand images; AQUA alias resolves Aquarius, SolvBTC image acquired through Chrome. Source URLs and hashes in logo-provenance.json.",
+        "vaults": "USDC and XLM retained; six requested assets added. Checkbox + icon + symbol in a compact two-column grid. Filters combine and reset; no matching fixture produces an empty state, not a fabricated vault.",
+        "trade": "Searchable native modal for Pay and Receive, also opened from the pair heading. Selecting the other side swaps both assets to prevent an identical pair. Escape/Close restores focus.",
+        "quotes": "Every asset or direction change clears amounts, minimum received and review metadata. Only the original XLM/USDC fixture supports a sample quote. Other pairs show unavailable prices/history/routes and disable review until market data is integrated.",
+        "chart_lifecycle": "Chart interval listeners and resize observer are disposed before a new pair mounts. Restoring the original pair restores its OHLC fixture without duplicate handlers.",
+        "production": "Catalog entries must bind canonical network/issuer/SAC/contract and decimals; source availability, wallet eligibility and amount-specific routing are checked independently before review."
+      }
     },
     {
       "id": "vaults",
       "title": "Earn opportunity navigation",
       "route": "/earn",
       "preview_route": "#vaults",
-      "purpose": "Filter and compare direct lending, curated vaults and campaigns before selecting a product-specific action page.",
+      "purpose": "Compare direct supply, vaults, campaigns and the top 15 Aquarius liquidity pools in one Earn list.",
       "layout": {
         "desktop": "Category row above a 248px left filter rail and horizontally arranged opportunity rows. Sort bar spans the results column.",
-        "row": "Identity and curator; net yield/methodology; Stellar TVL/source; withdrawal condition; separate detail action.",
+        "row": "Shared identity/provider, source-reported APR or APY and breakdown, reported TVL/source, withdrawal condition and Inspect link.",
         "medium": "Exit context can wrap under the identity rather than forcing small type. Filters become a sheet below 1024px.",
         "mobile": "Stack row facts into two labeled columns; keep product identity first and the detail action full width."
       },
@@ -871,34 +949,32 @@
         "OpportunityFilterRail",
         "AssetFilter",
         "ExitConditionFilter",
-        "RiskProfileFilter",
         "OpportunitySort",
         "OpportunityRow",
         "SourceStamp",
         "FreshnessBadge"
       ],
       "filters": [
-        "Search product/curator",
-        "Canonical asset",
-        "Direct supply / vault / campaign",
-        "Risk profile: All / Lower / Moderate / Higher / Unrated",
+        "Search product, provider or pool identity",
+        "Underlying asset",
+        "All opportunities / Direct supply / Vaults / Campaigns / Liquidity",
+        "Protocol",
+        "Pool type and fee tier for Liquidity",
         "Withdrawal condition"
       ],
       "content_rules": [
-        "Net yield is accompanied by methodology; base yield and incentives remain separate on detail.",
-        "Do not copy reference leveraged-stock, option or derivatives product categories into P0.",
-        "Use approved markets/products across Blend, Templar, XOXNO, DeFindex, Upshift/Gami and Sentora.",
-        "Provider, curator and underlying protocol are separate identities.",
-        "An unavailable yield is labeled unavailable rather than zero or an invented APY.",
-        "Campaign rewards are not annualized without an actual supported methodology."
+        "All opportunities includes liquidity; no separate Supply & vaults navigation.",
+        "Only the top 15 eligible Aquarius pools by reported TVL are included; rank before user filters.",
+        "Retain upstream APR/APY definitions, separate fees and incentives, and exclude account-specific boosts.",
+        "Display source retrieval time separately from the unavailable Aquarius observation time and rate window.",
+        "Omit unknown rates, TVL, fees, contracts and unsupported risk ratings.",
+        "No fabricated charts, fees, position balances, or campaign annualization."
       ],
       "interactions": [
-        "Search, category, asset, risk profile and exit filters combine",
-        "Sort by supported metric with unavailable values last",
-        "Reset clears all filters",
-        "Detail links preserve exact product identity",
-        "Unsupported/paused product remains inspectable with execution disabled and a reason",
-        "Production search/filter/sort/pagination is controlled and server-backed"
+        "Search, category, asset, protocol, exit, pool type and fee filters combine and reset.",
+        "Sort unavailable metrics last; paginate while preserving filters.",
+        "Inspect links preserve exact product or pool identity.",
+        "Paused or unverified pools remain inspectable with financial execution disabled."
       ],
       "states": {
         "loading": "Skeleton rows and result count",
@@ -911,8 +987,8 @@
       "backend_bindings": [
         {
           "contract": "GET /api/markets",
-          "status": "specified; pending implementation",
-          "purpose": "Approved product registry, capabilities, asset identities, market state and exit facts"
+          "status": "Aquarius read implemented; other product execution registry pending",
+          "purpose": "GET /api/markets?kind=liquidity_pool&venue=aquarius; network-bound, validated, bounded and cached reads."
         },
         {
           "contract": "Research/provider projection",
@@ -934,22 +1010,26 @@
         "Filter sheet restores focus"
       ],
       "acceptance": [
-        "All filters combine and reset",
-        "Sort/pagination preserve filter state",
-        "No principal-protection guarantee; fixture risk labels are explicitly illustrative until a reviewed methodology exists",
-        "Exit conditions appear before an action",
-        "Provider, curator and underlying exposure are not conflated",
-        "No permissionless deployment is enabled merely by protocol name"
+        "One list and shared rows for all yield sources",
+        "At most 15 eligible LPs ranked by TVL before filtering",
+        "Missing facts omitted",
+        "APR/APY source semantics retained",
+        "Identity preserved on every Inspect link",
+        "No writes enabled by discovery"
       ],
-      "risk_profile": {
-        "placement": "Above Exit availability",
-        "prototype": "Explicit illustrative profiles for visual filtering; not validated product ratings. Unavailable product is Unrated.",
-        "production": "Return versioned product-risk methodology, evidence, observation time and an unclassified state. Never infer safety from yield or exit timing.",
-        "removed_sidebar_sections": [
-          "Yield composition",
-          "Before you deposit"
+      "asset_filters": {
+        "assets": [
+          "XLM",
+          "USDC",
+          "AQUA",
+          "EURC",
+          "USDT0",
+          "PYUSD",
+          "SolvBTC",
+          "EUTBL"
         ],
-        "preserved": "Underlying yield breakdown and pre-action withdrawal terms on product detail/review."
+        "presentation": "Two columns of labeled checkboxes with real asset icons",
+        "behavior": "OR within assets; AND with category, search, protocol and exit filters. Unknown asset contracts remain research identities until verified."
       }
     },
     {
@@ -957,46 +1037,35 @@
       "title": "Per-vault / per-product detail",
       "route": "/earn/:opportunityId",
       "preview_route": "#vault-detail",
-      "purpose": "Combine user reference images 3–5 into one page that explains the product, its position and the full supported entry/exit lifecycle.",
+      "purpose": "Short sourced strategy description and only supported facts, risks, contracts, counterparties and fees. LP pages use the same layout.",
       "layout": {
         "desktop": "Main content with a 340px right action ticket; long-page sections retain one product context. Ticket sticks while reviewing on desktop.",
         "ordered_sections": [
-          "Back link and product identity",
-          "Description and metrics",
-          "Yield/product-model/withdrawal tags",
-          "Performance or position history",
-          "Overview / exposure / position facts",
-          "Expandable contract and asset identities",
-          "Counterparties / fee structure / FAQ",
-          "Numbered product process",
-          "Market, protocol and execution risks"
+          "Back link and identity",
+          "Concise strategy description and known source metrics",
+          "Overview facts",
+          "Relevant risk bullets",
+          "Published contract addresses",
+          "Source links and checked/retrieved time",
+          "Management draft, withdrawal timing, counterparties and known fees"
         ],
         "mobile": "Ticket moves below product context rather than squeezing beside it. Context panels and process/risk groups stack. Keep withdrawal disclosure visible before the review action."
       },
       "components": [
         "ProductHeader",
-        "YieldBreakdown",
-        "ProductModelMetrics",
-        "StickyActionTicket",
-        "WithdrawalTimingDisclosure",
-        "ShareHistory or PositionHistory",
-        "PositionOverview",
-        "ExposureBreakdown",
+        "SourcedStrategyDescription",
+        "ReportedMetrics",
+        "OverviewFacts",
+        "RiskGroups",
         "ContractIdentityDisclosure",
         "CounterpartyList",
         "FeeSchedule",
-        "FAQ",
-        "ProductProcess",
-        "RiskGroups",
-        "RedemptionStatus",
-        "CampaignLotTable",
-        "ActionReviewSheet"
+        "DisabledManagementDraft"
       ],
       "product_models": {
         "direct_supply": {
           "providers": [
             "Blend",
-            "Templar",
             "XOXNO"
           ],
           "accounting": "Venue-native balances and collateral/debt effects; no universal vault-share or health-factor assumptions",
@@ -1011,7 +1080,8 @@
           "providers": [
             "DeFindex",
             "Upshift/Gami",
-            "Sentora evergreen USDC via Upshift"
+            "Sentora evergreen USDC via Upshift",
+            "Templar curated vaults"
           ],
           "accounting": "Verified share decimals/conversion and net asset value; receipt and backing are not double-counted",
           "actions": [
@@ -1032,6 +1102,17 @@
             "Reward claim when supported"
           ],
           "exit": "Selected-lot timing and exact rewards forfeited; no assumed shares or instant redemption"
+        },
+        "liquidity": {
+          "providers": [
+            "Aquarius"
+          ],
+          "accounting": "Two-token pool; separate pool hash, contract and LP share identities. Read-only unverified candidates.",
+          "actions": [
+            "Inspect",
+            "Draft add/remove amounts; review disabled"
+          ],
+          "exit": "Unverified until fresh pool, token and account checks."
         }
       },
       "withdrawal_disclosure": {
@@ -1049,14 +1130,11 @@
         "behavior": "Refresh on product, amount and preview changes. Unknown and variable timing remain prominent. Material changes require a new review."
       },
       "interaction": [
-        "Product identity is selected from the exact opportunity row; direct navigation resolves the canonical opportunity ID.",
-        "Deposit/Withdraw/Claim controls appear only for adapter-supported capabilities and the current product state.",
-        "Switching action updates required amount units, disclosures, fee components and position effects.",
-        "Changing amount invalidates prepared data and requires new checks/simulation.",
-        "Delayed redemption exposes request amount, pending state, actual earliest availability and separately available settlement/claim action.",
-        "Campaign withdrawal selects lots and shows accrued versus claimable versus forfeited rewards.",
-        "FAQ and contract details are expandable; essential exit facts remain visible.",
-        "The preview product selector is a design-review convenience, not a proposed production control."
+        "Exact product or pool identity resolves the detail; invalid IDs show unavailable.",
+        "Sourced descriptions remain concise; omit unavailable sections.",
+        "Add/remove drafts switch with labeled token or share units; review stays disabled.",
+        "No generic FAQ, numbered process, fictional leverage/health factor, or synthetic history.",
+        "Product-specific withdrawal terms remain visible beside the draft."
       ],
       "states": {
         "loading": "Product facts/ticket skeleton; no stale action",
@@ -1109,14 +1187,11 @@
         "44px mobile targets and reduced motion"
       ],
       "acceptance": [
-        "All three reference-detail images are represented on one page",
-        "Every supported deposit shows withdrawal timing before approval",
-        "No universal leverage/health/share-price fields are copied across unlike products",
-        "Claim only appears where supported",
-        "Campaign accrued/claimable/forfeited rewards remain distinct",
-        "A queued request stays visible through reload/reconciliation",
-        "Receipt shares/backing are not double-counted",
-        "Actual product scope and contract identities are verified before execution"
+        "Same layout and section treatment for vault and LP details",
+        "Every visible factual statement has a recorded source",
+        "Unsupported facts and sections omitted",
+        "Financial execution disabled until adapter lifecycle verified",
+        "No invented account metrics or history"
       ]
     },
     {
@@ -1793,7 +1868,12 @@
       "Credit preserves /credit; preview keys borrow/positions are design navigation",
       "Existing Research automation links can redirect to the Lab Automations view"
     ],
-    "decision": "Latest requested design introduces Lab and exactly two top-level Research tabs; older six-tab Research baseline is superseded for this design. Final URL aliases must be agreed with the application router."
+    "decision": "Latest requested design introduces Lab and exactly two top-level Research tabs; older six-tab Research baseline is superseded for this design. Final URL aliases must be agreed with the application router.",
+    "research": [
+      "DeFi",
+      "RWAs",
+      "MCP Contents"
+    ]
   },
   "backend_implementation_status": {
     "source": "../../../README.md and ../../../docs/technical-spec.md",
@@ -1831,7 +1911,20 @@
     "expanded_routes": [
       "portfolio"
     ],
-    "backend_scope": "design specimens; backend implementation pending"
+    "backend_scope": "design specimens; backend implementation pending",
+    "supply_layout": {
+      "file": "ui/spec/supply-layout.json",
+      "max_width_px": 1180,
+      "columns": "Single centered column with a 24px gap",
+      "primary_panel": "Supply intent spans the same full bounded width as Supply comparison, with 24px padding, a 28px serif heading and two-column form fields",
+      "comparison": "Directly beneath Supply intent at the same width and left/right edges; contained horizontal scrolling on small screens",
+      "removed_panels": [
+        "How comparison works",
+        "Your supplied positions"
+      ],
+      "narrow": "At workspace width <=800px, both panels remain stacked in a single column capped at 640px",
+      "behavior": "Existing inputs, calculation, exclusions, withdrawal disclosure and shared review remain unchanged"
+    }
   },
   "chat_discovery": {
     "file": "../ui/spec/discovery.json",
@@ -1893,9 +1986,383 @@
     }
   },
   "market_feedback": {
-    "version": "0.6.0",
+    "version": "0.8.2",
     "spec": "ui/spec/market-feedback.json",
     "human_spec": "ui/spec/market-feedback.html",
     "verification": "ui/spec/verification-market-feedback.json"
+  },
+  "asset_selection": {
+    "version": "0.7.0",
+    "network": "Stellar Mainnet",
+    "assets": [
+      {
+        "id": "XLM",
+        "label": "XLM",
+        "name": "Stellar Lumens"
+      },
+      {
+        "id": "USDC",
+        "label": "USDC",
+        "name": "USD Coin"
+      },
+      {
+        "id": "AQUA",
+        "label": "AQUA",
+        "name": "Aquarius"
+      },
+      {
+        "id": "EURC",
+        "label": "EURC",
+        "name": "Circle Euro"
+      },
+      {
+        "id": "USDT0",
+        "label": "USDT0",
+        "name": "USDT0"
+      },
+      {
+        "id": "PYUSD",
+        "label": "PYUSD",
+        "name": "PayPal USD"
+      },
+      {
+        "id": "SOLVBTC",
+        "label": "SolvBTC",
+        "name": "Solv Protocol Bitcoin"
+      },
+      {
+        "id": "EUTBL",
+        "label": "EUTBL",
+        "name": "Spiko EU T-Bills"
+      }
+    ],
+    "icons": "Real, locally bundled brand images; AQUA alias resolves Aquarius, SolvBTC image acquired through Chrome. Source URLs and hashes in logo-provenance.json.",
+    "vaults": "USDC and XLM retained; six requested assets added. Checkbox + icon + symbol in a compact two-column grid. Filters combine and reset; no matching fixture produces an empty state, not a fabricated vault.",
+    "trade": "Searchable native modal for Pay and Receive, also opened from the pair heading. Selecting the other side swaps both assets to prevent an identical pair. Escape/Close restores focus.",
+    "quotes": "Every asset or direction change clears amounts, minimum received and review metadata. Only the original XLM/USDC fixture supports a sample quote. Other pairs show unavailable prices/history/routes and disable review until market data is integrated.",
+    "chart_lifecycle": "Chart interval listeners and resize observer are disposed before a new pair mounts. Restoring the original pair restores its OHLC fixture without duplicate handlers.",
+    "production": "Catalog entries must bind canonical network/issuer/SAC/contract and decimals; source availability, wallet eligibility and amount-specific routing are checked independently before review."
+  },
+  "research_hierarchy": {
+    "version": "0.7.1",
+    "date": "2026-10-25",
+    "request": "UI 3 — Research hierarchy, pagination and consolidation",
+    "status": "Implemented in the local design runtime",
+    "navigation": [
+      "DeFi",
+      "RWAs",
+      "MCP Contents"
+    ],
+    "canonical_routes": {
+      "research-defi": "Network metrics and protocol directory",
+      "research-rwa": "RWA metrics, composition and asset directory",
+      "research-mcp": "Venue map followed by published MCP contents",
+      "protocol-detail?slug=:slug": "Protocol facts, source-matched yield pools, applicable market capabilities and Raven research"
+    },
+    "aliases": {
+      "research-markets": "research-mcp",
+      "research-map": "research-mcp",
+      "venue-detail?id=:id": "protocol-detail?slug=<explicit venue identity>",
+      "market-detail?id=:id": "protocol-detail?slug=<explicit market identity>"
+    },
+    "audit_and_changes": [
+      {
+        "finding": "Parallel venue / market detail journeys repeat protocol information.",
+        "change": "Remove the venue markets table and separate detail screens; consolidate assets, roles, reads, actions, authority, identity and withdrawal terms under DeFi protocol detail."
+      },
+      {
+        "finding": "Tall overview rail and repeated table toolbars delay access to the directory.",
+        "change": "Use a horizontal network metric strip, a compact orange history chart, and one filter / density / columns toolbar."
+      },
+      {
+        "finding": "Uniform research-only labels and paired name/detail buttons repeat every row.",
+        "change": "Use the protocol identity as the single detail action and remove the repeated availability column."
+      },
+      {
+        "finding": "Separate map and catalog tabs split source discovery.",
+        "change": "MCP Contents starts with the map; source-family filters and a compact disclosure list follow it."
+      },
+      {
+        "finding": "Only eight integration targets appear in the old map.",
+        "change": "Include 26 unique projects from the captured Scout records, group protocol versions by exact project identity, and distinguish eight integration targets from research coverage."
+      },
+      {
+        "finding": "Pagination differs by view and provides weak location context.",
+        "change": "Share numbered pagination with range, total and current page, 10/25/50 page sizes, disabled boundary actions, filter reset to page one, accessible status and list-context restoration."
+      },
+      {
+        "finding": "Single-chain protocol pages duplicate the same TVL in adjacent cards.",
+        "change": "Use captured Stellar pool coverage in place of duplicate protocol-wide TVL when only one chain is reported."
+      }
+    ],
+    "mcp_map": {
+      "projects": 26,
+      "integration_targets": 8,
+      "source": "spec/protocol-context.json",
+      "groups": [
+        "Spot",
+        "Lending",
+        "Vaults & yield",
+        "Infrastructure"
+      ],
+      "filters": [
+        "search",
+        "all projects / integration targets / research only"
+      ],
+      "details": [
+        "source-reported project status",
+        "first source summary sentence",
+        "audit / repository / contract reference counts",
+        "readable groups",
+        "SCF funding and source date",
+        "related protocol versions",
+        "protocol research link"
+      ],
+      "progressive_disclosure": "Four projects per group initially; expand each group. Search exposes all matching projects. Long source content opens on protocol detail."
+    },
+    "catalog": {
+      "operations": 60,
+      "skills": 20,
+      "section_identifiers": 202,
+      "source": "spec/raven-catalog.json",
+      "search": "IDs, summaries, source family, parameters and section identifiers",
+      "filters": [
+        "source family toggle",
+        "entry type"
+      ],
+      "details": "Parameters, source capture time, section identifiers, upstream source and availability boundary"
+    },
+    "source_boundaries": [
+      "Dated snapshots remain attributed; no new provider collection was performed.",
+      "Scout public-source evidence does not imply an authenticated Raven MCP session.",
+      "Research coverage does not imply a working native adapter or financial execution capability.",
+      "Project-family context does not attach lending capabilities or yield pools to a Blend backstop."
+    ],
+    "verification": {
+      "model_script": "scripts/verify-research-hierarchy.js",
+      "existing_regression": "scripts/verify-protocol-details.js",
+      "browser_evidence": "spec/verification-research-hierarchy.json"
+    }
+  },
+  "lab_trigger_feedback": {
+    "section": "Lab",
+    "version": "0.8.1",
+    "status": "Functional buildless UI preview; market services unconnected",
+    "reference": "lab-chat.html",
+    "views": [
+      {
+        "route": "lab-backtests",
+        "label": "Backtest",
+        "layout": "Strategy conversation, editable trigger presets, and conditional inline review",
+        "requires": [
+          "thesis",
+          "both venue and pool identities",
+          "same quoted pair",
+          "divergence threshold",
+          "fixed amount or capacity sizing",
+          "maximum impact per leg",
+          "historical period",
+          "round-trip fee assumption"
+        ],
+        "confirm": "Save a backtest request to unified History",
+        "saved_status": "Awaiting historical data"
+      },
+      {
+        "route": "lab-automation",
+        "label": "Set automation",
+        "layout": "Strategy conversation, editable trigger presets, and conditional inline review",
+        "requires": [
+          "thesis",
+          "both venue and pool identities",
+          "same quoted pair",
+          "divergence threshold",
+          "fixed amount or capacity sizing",
+          "maximum impact per leg",
+          "polling cadence",
+          "duration or until paused"
+        ],
+        "confirm": "Save a monitor setup to unified History",
+        "saved_status": "Not scheduled"
+      },
+      {
+        "route": "lab-history",
+        "label": "History",
+        "layout": "Saved setup cards with filters, original conversation, exact condition/source and configuration; no illustrative chart",
+        "persistence": "localStorage on this device in the preview",
+        "actions": [
+          "Inspect",
+          "Reuse as a new strategy",
+          "Remove with Undo"
+        ]
+      }
+    ],
+    "strategy_canvas": {
+      "removed": true,
+      "replacement": "Conversation only. An inline setup review appears after the required inputs are supplied."
+    },
+    "conversation": {
+      "preview": "Guided pool arbitrage and draft signal ideas for BTC EMA, volume breakouts and USDC yield gaps; signal rules and feeds require validation before a run.",
+      "production": "Restricted agent compiles a general thesis to an editable, typed strategy with validated sources",
+      "preserved_on_mode_switch": [
+        "Thesis",
+        "Shared source identities and parameters",
+        "Conversation"
+      ],
+      "required_followups_remain_explicit": true
+    },
+    "removed_from_lab": [
+      "Memory",
+      "Learning runs",
+      "Old synthetic allocation backtest",
+      "Old Source/Condition/Action rule builder",
+      "Separate run and evaluation screens",
+      "Connections UI",
+      "Generic assistant dock"
+    ],
+    "legacy_aliases": {
+      "lab-memory": "lab-backtests",
+      "learning-runs": "lab-backtests",
+      "backtest-run": "lab-history",
+      "automation-history": "lab-history"
+    },
+    "production_services_required": [
+      "Pool identity and common quote normalization",
+      "Historical prices, liquidity/depth, costs and replay jobs",
+      "Persistent polling lifecycle, source freshness, budgets and cadence",
+      "Alert crossing/rearm, deduplication and delivery evidence",
+      "Owner-scoped durable history"
+    ],
+    "boundaries": [
+      "Confirmation in this preview saves configuration locally only.",
+      "No historical result or profitability is invented.",
+      "No monitor is marked active or scheduled.",
+      "No transaction action is part of this Lab flow.",
+      "Signal drafts preserve the user condition and source but do not claim executable or validated rules.",
+      "A purchase condition creates only a reviewed proposal specification, never a trade."
+    ],
+    "files": [
+      "lab-model.js",
+      "screens/lab.js",
+      "lab.css",
+      "scripts/verify-lab-model.js"
+    ],
+    "verification": "verification-lab-trigger-feedback.json",
+    "trigger_presets": [
+      {
+        "id": "divergence",
+        "title": "Watch a pool divergence",
+        "rule": "Compare XLM/USDC on Soroswap and Aquarius; evaluate an upward crossing of a 1% price gap with size and impact constraints."
+      },
+      {
+        "id": "btc-ema",
+        "title": "Follow BTC momentum",
+        "rule": "BTC/USD daily close crosses from below to above its 20-day EMA; propose an XLM buy for user review once on the crossing."
+      },
+      {
+        "id": "volume-breakout",
+        "title": "Catch a volume breakout",
+        "rule": "XLM/USD daily close exceeds its previous 30-day high with daily volume above twice its previous 20-day average; alert once on a new breakout."
+      },
+      {
+        "id": "yield-gap",
+        "title": "Watch a better supply rate",
+        "rule": "Eligible USDC supply rate exceeds the current venue by 2 percentage points for 24 hours after fees, with enough exit and entry liquidity; alert only."
+      }
+    ],
+    "preset_behavior": "Fill the composer for editing; never auto-send, activate monitoring or trade.",
+    "strategy_requirements": {
+      "arbitrage": "Exact venues and pool identities, common quoted pair, threshold, sizing, maximum impact and mode-specific time inputs.",
+      "signal": "Original condition, named data source, alert versus reviewed proposal, fixed USDC amount for a purchase proposal, and mode-specific time inputs; rule validation remains pending."
+    }
+  },
+  "map_logo_coverage": {
+    "projects": 26,
+    "real_local_assets": 26,
+    "identity_aliases": 7,
+    "verification": "ui/spec/verification-lab-trigger-feedback.json"
+  },
+  "portfolio_feedback": {
+    "version": "portfolio1",
+    "date": "2026-10-25",
+    "status": "Implemented in the local design runtime",
+    "removed": [
+      "Wallet/spendable, direct-supply, vault-receipt and pending-exit summary cards",
+      "Gross-assets/debt summary block",
+      "Summary coverage timestamp and badges",
+      "Needs attention and Underlying exposure sidebar cards",
+      "Receive, Send and Redemptions tabs and their standalone screens"
+    ],
+    "retained": [
+      "Net portfolio value",
+      "Value breakdown",
+      "Positions & exits",
+      "Activity"
+    ],
+    "portfolio_tabs": [
+      "Overview",
+      "Activity"
+    ],
+    "position_action": {
+      "visible_label": "Manage",
+      "column_title": "No visible title; screen-reader label retained",
+      "destinations": {
+        "wallet": "Trade with the selected asset",
+        "supply": "Credit My positions with the exact supply position selected",
+        "borrow": "Credit My positions with the exact loan selected",
+        "vault": "Specific vault product management panel",
+        "lp": "Specific pool add/remove-liquidity panel"
+      },
+      "behavior": "Scroll and focus native management controls. No custom information page or financial review opens from the Portfolio row.",
+      "identity": "Unknown credit positions and vault products show unavailable states; they never select a different position."
+    },
+    "removed_routes": [
+      "fund",
+      "transfer",
+      "vault-management"
+    ],
+    "legacy_aliases": {
+      "fund": "portfolio",
+      "transfer": "portfolio",
+      "vault-management": "vault-detail?product=gami&view=manage"
+    },
+    "validation": [
+      "scripts/verify-portfolio-navigation.js",
+      "scripts/verify-credit-positions.js"
+    ],
+    "browser_evidence": "verification-portfolio-feedback.json",
+    "composition_header": {
+      "heading": "Portfolio composition",
+      "headline": "$24,760.00",
+      "placement": "Directly below the heading inside the composition panel",
+      "scope": "Net portfolio value · fixture",
+      "standalone_value_card": false
+    }
+  },
+  "ux_feedback": {
+    "spec": "../ui/spec/ux-feedback.json",
+    "verification": "../ui/spec/ux-audit-verification.json",
+    "coverage": "All 26 registered pages and shared dialogs",
+    "behavior": "Contextual help, associated inline errors, actionable retry and transient input recovery. Native financial validation remains authoritative."
+  },
+  "typography_feedback": {
+    "spec": "../ui/spec/typography.json",
+    "verification": "../ui/spec/typography-verification.json",
+    "capitalization": "Title Case for headings and navigation/table/card titles. Descriptive subtitle paragraphs remain sentence case. Acronyms and asset symbols retain their identity."
+  },
+  "trade_chart": {
+    "quote_currency": "USDC",
+    "base_markets": 7,
+    "implementation": "TradingView Lightweight Charts 5.2.1",
+    "contract": "ui/spec/trade-chart-integration.md",
+    "verification": "ui/spec/verification-trade-candles.json",
+    "live_adapter": "ui/scripts/market_data.py",
+    "data": "All seven assets render candlesticks. Aquarius trade OHLCV, sampled-price OHLC from underlying reference observations, and single-observation daily NAV candles for EUTBL. No invented observations, volume, empty-period or future candles."
+  },
+  "earn_integration": {
+    "documentation": "docs/aquarius-earn.md",
+    "verification": "ui/spec/verification-earn-liquidity.json",
+    "strategies": "research/data/vault-strategies.json",
+    "pool_capture": "research/data/aquarius-pools.json",
+    "capture_limit": 15
   }
 }

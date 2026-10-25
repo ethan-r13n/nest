@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-25",
+  "status": "passed",
+  "lab_model": "scripts/verify-lab-model.js",
+  "logos": "scripts/verify-map-logos.js",
+  "map_logos_verified": 26,
+  "real_asset_hashes_match_source_provenance": true,
+  "browser_interactions": [
+    "Preset fills the composer without sending",
+    "BTC EMA draft asks for source, not arbitrage pools",
+    "Source, reviewed USDC size and cadence produce a compact review",
+    "Confirmation saves an unscheduled local setup",
+    "History inspection and removal work",
+    "All 26 expanded map nodes have logo images; no failed images"
+  ],
+  "layouts": [
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "presets": 4,
+      "width": 375
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-automation",
+      "presets": 4,
+      "width": 375
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 375
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "presets": 4,
+      "width": 1024
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-automation",
+      "presets": 4,
+      "width": 1024
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 1024
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "presets": 4,
+      "width": 1440
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-automation",
+      "presets": 4,
+      "width": 1440
+    },
+    {
+      "canvas": false,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 1440
+    }
+  ]
+}

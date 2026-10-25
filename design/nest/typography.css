@@ -1,0 +1,18 @@
+/* Raven's Plex trio: expressive serif titles, quiet prose, precise controls. */
+:root{--nest-font-display:'IBM Plex Serif',Georgia,'Times New Roman',serif;--nest-font-sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;--nest-font-mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;--nest-weight-display:700;--nest-weight-heading:600;--nest-weight-body:400;--nest-weight-control:500}
+body{font-family:var(--nest-font-sans);font-weight:var(--nest-weight-body);line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,h5,h6,[role=heading],#screen :is(h1,h2,h3,h4,h5,h6){font-family:var(--nest-font-display);font-style:normal;text-transform:none;font-synthesis:none;letter-spacing:-.025em;overflow-wrap:break-word;text-wrap:pretty}
+h1,#screen h1{font-weight:var(--nest-weight-display);line-height:1.12}
+h2,h3,h4,h5,h6,#screen :is(h2,h3,h4,h5,h6){font-weight:var(--nest-weight-heading);line-height:1.25}
+#screen .page-head h1,#screen .r-title-row h1,#screen .lab-page-head h1{font-size:clamp(30px,2.8vw,42px)}
+#screen .d-chat-title h1{font-size:30px}
+#screen h2{letter-spacing:-.02em}
+#screen h3{font-size:19px;letter-spacing:-.015em}
+button,.btn,.button,.tab,.primary-nav a,.mobile-nav a{font-family:var(--nest-font-mono);font-weight:var(--nest-weight-control);letter-spacing:0;line-height:1.4}
+input,select,textarea{font-family:var(--nest-font-sans);font-weight:400;letter-spacing:normal}
+input[inputmode=decimal],input[type=number],.mono,code,pre,.metric-value{font-family:var(--nest-font-mono);font-variant-numeric:tabular-nums}
+#screen .data-note,#screen .credit-explainer,#screen .mkt-op-list-note,#screen .vd-status,#screen .cp-table-note,#screen .r-data-note{font-family:var(--nest-font-sans);font-size:12px;font-weight:400;line-height:1.65;letter-spacing:normal}
+.ux-tooltip,.ux-field-error{font-family:var(--nest-font-sans)}
+#screen .page-head p,#screen .r-title-row p,#screen .lab-page-head p{font-family:var(--nest-font-sans);font-weight:400;line-height:1.65;letter-spacing:normal;text-transform:none}
+.eyebrow,.field-label,.metric-label{font-family:var(--nest-font-mono);font-weight:500}
+@media(max-width:767px){#screen .page-head h1,#screen .r-title-row h1,#screen .lab-page-head h1{font-size:30px}#screen .d-chat-title h1{font-size:27px}#screen h3{font-size:18px}.primary-nav a,.mobile-nav a{letter-spacing:-.02em}}

@@ -8,15 +8,15 @@ boundaries are defined in [docs/technical-spec.md](docs/technical-spec.md); read
 | Path                                               | What                                                                                       | Runtime            |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------ | ------------------ |
 | `apps/web`                                         | Vite + React workspace (TanStack Router/Query, shadcn/ui on `packages/ui`)                 | Browser            |
-| `apps/worker`                                      | Application Worker: `/api/*` (Hono), D1 schema and migrations, later SSE and `scheduled()` | Cloudflare Workers |
+| `apps/worker`                                      | Application Worker: `/api/*` (Hono), D1 schema and migrations, SSE and scheduled work | Cloudflare Workers |
 | `packages/domain`                                  | Networks, asset identity, decimal amounts, public error codes                              | Anywhere           |
 | `packages/policy`                                  | Pure, ordered, fail-closed rule engine and the Guardrails schema                           | Anywhere           |
 | `packages/jobs`                                    | D1 job claims: leases fenced on the attempt, guarded outbox writes                         | Workers            |
-| `packages/adapters`                                | Stellar network constants (venue adapters land here)                                       | Workers            |
+| `packages/adapters`                                | Stellar network constants and venue adapters                                       | Workers            |
 | `packages/data`                                    | Validated loaders for research data, with provenance                                       | Anywhere           |
-| `packages/agent-runtime`                           | Pi compatibility tests; the agent runtime lands here once hosting is decided               | Workers            |
+| `packages/agent-runtime`                           | Bounded Pi model and tool runtime with Worker compatibility tests               | Workers            |
 | `packages/ui`                                      | shadcn/ui components themed with the Nest tokens in `design/nest`                          | Browser            |
-| `design/nest`, `research/data`, `infra/cloudflare` | Design handoff, research snapshots, provisioned resources                                  | —                  |
+| `design/nest`, `research/data`, `infra/cloudflare` | Design handoff, research snapshots, resource configuration                                  | —                  |
 
 `execution`, `automations`, `memory` and `evaluation` packages are added when their build stage starts.
 

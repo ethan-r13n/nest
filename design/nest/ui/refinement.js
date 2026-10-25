@@ -22,7 +22,11 @@
     const tools = document.createElement('div');
     tools.className = 'n-table-tools';
     tools.innerHTML = `<span class="n-table-hint">${U.icon('info')} Scroll to inspect every column</span><div class="n-table-options"><label>Density <select class="input" aria-label="Table density"><option value="compact">Compact</option><option value="comfortable">Comfortable</option></select></label><details class="n-column-menu"><summary>Columns <span aria-hidden="true">⌄</span></summary><div class="n-column-options">${labels.map((label, i) => `<label class="check"><input type="checkbox" aria-label="${U.escape(label)}${i === identity ? ' (required)' : ''}" data-column="${i}" ${state.hidden.has(i) ? '' : 'checked'} ${i === identity ? 'disabled' : ''}> ${U.escape(label)}${i === identity ? ' · required' : ''}</label>`).join('')}</div></details></div>`;
-    wrap.before(tools);
+    let toolbar = wrap.previousElementSibling;
+    while (toolbar && !toolbar.classList.contains('r-toolbar') && !toolbar.classList.contains('r-heading')) toolbar = toolbar.previousElementSibling;
+    if (route.startsWith('research-') && toolbar?.classList.contains('r-toolbar')) {
+      tools.classList.add('research-table-tools'); toolbar.append(tools);
+    } else wrap.before(tools);
     tools.querySelector('select').value = state.density;
     function apply() {
       table.dataset.density = state.density;
@@ -49,6 +53,9 @@
     observer.observe(table.tBodies[0], { childList: true });
     rootCleanups.push(() => observer.disconnect());
     apply();
+    const updateHint = () => { tools.querySelector('.n-table-hint').hidden = wrap.scrollWidth <= wrap.clientWidth + 1; };
+    const resize = new ResizeObserver(updateHint); resize.observe(wrap);
+    rootCleanups.push(() => resize.disconnect()); updateHint();
   }
 
   let rootCleanups = [];

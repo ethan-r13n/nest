@@ -1,0 +1,3187 @@
+{
+  "date": "2026-10-25",
+  "routes": [
+    {
+      "hash": "#chat",
+      "heading": "Ask Nest",
+      "help": 2,
+      "overflow": false,
+      "title": "Nest — Chat",
+      "unlabelled": []
+    },
+    {
+      "hash": "#research-mcp",
+      "heading": "MCP Contents",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Research / MCP Contents",
+      "unlabelled": []
+    },
+    {
+      "hash": "#protocol-detail",
+      "heading": " Blend Pools V2",
+      "help": 2,
+      "overflow": false,
+      "title": "Nest — Research / Protocol detail",
+      "unlabelled": []
+    },
+    {
+      "hash": "#asset-detail",
+      "heading": " BENJI",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Research / Asset detail",
+      "unlabelled": []
+    },
+    {
+      "hash": "#saved",
+      "heading": "Saved research",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Research / Saved",
+      "unlabelled": []
+    },
+    {
+      "hash": "#supply",
+      "heading": "Put liquidity to work",
+      "help": 2,
+      "overflow": false,
+      "title": "Nest — Credit / Supply",
+      "unlabelled": []
+    },
+    {
+      "hash": "#activity",
+      "heading": "Action history",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Portfolio / Activity",
+      "unlabelled": []
+    },
+    {
+      "hash": "#plan",
+      "heading": "Follow every step",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Execution / Plan status",
+      "unlabelled": []
+    },
+    {
+      "hash": "#connections",
+      "heading": "Connections",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Workspace / Connections",
+      "unlabelled": []
+    },
+    {
+      "hash": "#alerts",
+      "heading": "Alerts",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Alerts",
+      "unlabelled": []
+    },
+    {
+      "hash": "#conversations",
+      "heading": "Ask Nest",
+      "help": 2,
+      "overflow": false,
+      "title": "Nest — Chat / Conversations",
+      "unlabelled": []
+    },
+    {
+      "hash": "#policy-states",
+      "heading": "Your execution preferences",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Guardrails / State review",
+      "unlabelled": []
+    },
+    {
+      "hash": "#wallet-access",
+      "heading": "Choose your access",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Wallet / Access",
+      "unlabelled": []
+    },
+    {
+      "hash": "#research-defi",
+      "heading": "Stellar DeFi",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Research / DeFi",
+      "unlabelled": []
+    },
+    {
+      "hash": "#research-rwa",
+      "heading": "Stellar real-world assets",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Research / RWAs",
+      "unlabelled": []
+    },
+    {
+      "hash": "#vaults",
+      "heading": "Put your capital in context.",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Earn",
+      "unlabelled": []
+    },
+    {
+      "hash": "#liquidity",
+      "heading": "Put your capital in context.",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Earn / Liquidity",
+      "unlabelled": []
+    },
+    {
+      "hash": "#liquidity-detail",
+      "heading": "Pool unavailable",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Earn / Liquidity pool",
+      "unlabelled": []
+    },
+    {
+      "hash": "#vault-detail",
+      "heading": "Gami USDC vault",
+      "help": 2,
+      "overflow": false,
+      "title": "Nest — Vault / USDC",
+      "unlabelled": []
+    },
+    {
+      "hash": "#trade",
+      "heading": "XLM / USDC",
+      "help": 7,
+      "overflow": false,
+      "title": "Nest — Trade",
+      "unlabelled": []
+    },
+    {
+      "hash": "#borrow",
+      "heading": "Borrow on your terms.",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Credit / Borrow",
+      "unlabelled": []
+    },
+    {
+      "hash": "#positions",
+      "heading": "Keep the position in view.",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Credit / Positions",
+      "unlabelled": []
+    },
+    {
+      "hash": "#lab-backtests",
+      "heading": "From thesis to strategy.",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Lab / Backtest",
+      "unlabelled": []
+    },
+    {
+      "hash": "#lab-automation",
+      "heading": "From thesis to strategy.",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Lab / Set automation",
+      "unlabelled": []
+    },
+    {
+      "hash": "#lab-history",
+      "heading": "From thesis to strategy.",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Lab / History",
+      "unlabelled": []
+    },
+    {
+      "hash": "#portfolio",
+      "heading": "Your portfolio",
+      "help": 1,
+      "overflow": false,
+      "title": "Nest — Portfolio",
+      "unlabelled": []
+    }
+  ],
+  "layouts": [
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 4,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 4,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 8,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "unlabelled": 0,
+      "width": 375
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 4,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 4,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 8,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "unlabelled": 0,
+      "width": 1024
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 4,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 4,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 2,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 8,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 3,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "unlabelled": 0,
+      "width": 1440
+    },
+    {
+      "heading": true,
+      "help": 1,
+      "invalidHelpNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "unlabelled": 0,
+      "width": 1440
+    }
+  ],
+  "states": [
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#chat",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Chat",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#chat",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Ask Nest",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#chat",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Ask Nest",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#chat",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Chat",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#chat",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#research-mcp",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Research / MCP Contents",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-mcp",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "MCP Contents",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#research-mcp",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "MCP Contents",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-mcp",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Research / MCP Contents",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-mcp",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#protocol-detail",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Research / Protocol detail",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#protocol-detail",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": " Blend Pools V2",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#protocol-detail",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": " Blend Pools V2",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#protocol-detail",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Research / Protocol detail",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#protocol-detail",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#asset-detail",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Research / Asset detail",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#asset-detail",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": " BENJI",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#asset-detail",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": " BENJI",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#asset-detail",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Research / Asset detail",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#asset-detail",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#saved",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Research / Saved",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#saved",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Saved research",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#saved",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Saved research",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#saved",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Research / Saved",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#saved",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#supply",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Credit / Supply",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#supply",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Put liquidity to work",
+      "recovery": false,
+      "reviewEnabled": true,
+      "route": "#supply",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Put liquidity to work",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#supply",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Credit / Supply",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#supply",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#activity",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Portfolio / Activity",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#activity",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Action history",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#activity",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Action history",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#activity",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Portfolio / Activity",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#activity",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#plan",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Execution / Plan status",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#plan",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Follow every step",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#plan",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Follow every step",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#plan",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Execution / Plan status",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#plan",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#connections",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Workspace / Connections",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#connections",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Connections",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#connections",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Connections",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#connections",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Workspace / Connections",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#connections",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#alerts",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Alerts",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#alerts",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Alerts",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#alerts",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Alerts",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#alerts",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Alerts",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#alerts",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#conversations",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Chat / Conversations",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#conversations",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Ask Nest",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#conversations",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Ask Nest",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#conversations",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Chat / Conversations",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#conversations",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#policy-states",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Guardrails / State review",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#policy-states",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Your execution preferences",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#policy-states",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Your execution preferences",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#policy-states",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Guardrails / State review",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#policy-states",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#wallet-access",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Wallet / Access",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#wallet-access",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Choose your access",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#wallet-access",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Choose your access",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#wallet-access",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Wallet / Access",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#wallet-access",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#research-defi",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Research / DeFi",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-defi",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Stellar DeFi",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#research-defi",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Stellar DeFi",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-defi",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Research / DeFi",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-defi",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#research-rwa",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Research / RWAs",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-rwa",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Stellar real-world assets",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#research-rwa",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Stellar real-world assets",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-rwa",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Research / RWAs",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#research-rwa",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#vaults",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Earn",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#vaults",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Put your capital in context.",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#vaults",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Put your capital in context.",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#vaults",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Earn",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#vaults",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#liquidity",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Earn / Liquidity",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#liquidity",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Put your capital in context.",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#liquidity",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Put your capital in context.",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#liquidity",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Earn / Liquidity",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#liquidity",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#liquidity-detail",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Earn / Liquidity pool",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#liquidity-detail",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Earn / Liquidity pool",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#liquidity-detail",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#vault-detail",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Vault / USDC",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#vault-detail",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Gami USDC vault",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#vault-detail",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Gami USDC vault",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#vault-detail",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Vault / USDC",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#vault-detail",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#trade",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Trade",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#trade",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "XLM / USDC",
+      "recovery": false,
+      "reviewEnabled": true,
+      "route": "#trade",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "XLM / USDC",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#trade",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Trade",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#trade",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#borrow",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Credit / Borrow",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#borrow",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Borrow on your terms.",
+      "recovery": false,
+      "reviewEnabled": true,
+      "route": "#borrow",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Borrow on your terms.",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#borrow",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Credit / Borrow",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#borrow",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#positions",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Credit / Positions",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#positions",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Keep the position in view.",
+      "recovery": false,
+      "reviewEnabled": true,
+      "route": "#positions",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Keep the position in view.",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#positions",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Credit / Positions",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#positions",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#lab-backtests",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Lab / Backtest",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-backtests",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "From thesis to strategy.",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#lab-backtests",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "From thesis to strategy.",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-backtests",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Lab / Backtest",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-backtests",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#lab-automation",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Lab / Set automation",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-automation",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "From thesis to strategy.",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#lab-automation",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "From thesis to strategy.",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-automation",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Lab / Set automation",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-automation",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#lab-history",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Lab / History",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-history",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "From thesis to strategy.",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#lab-history",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "From thesis to strategy.",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-history",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Lab / History",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#lab-history",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Loading workspace",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#portfolio",
+      "state": "loading",
+      "status": true
+    },
+    {
+      "heading": "Portfolio",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#portfolio",
+      "state": "empty",
+      "status": true
+    },
+    {
+      "heading": "Your portfolio",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#portfolio",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Your portfolio",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#portfolio",
+      "state": "stale",
+      "status": true
+    },
+    {
+      "heading": "Portfolio",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#portfolio",
+      "state": "error",
+      "status": true
+    },
+    {
+      "heading": "Pool unavailable",
+      "recovery": false,
+      "reviewEnabled": false,
+      "route": "#liquidity-detail",
+      "state": "partial",
+      "status": true
+    },
+    {
+      "heading": "Pool unavailable",
+      "recovery": true,
+      "reviewEnabled": false,
+      "route": "#liquidity-detail",
+      "state": "stale",
+      "status": true
+    }
+  ],
+  "help": [
+    {
+      "contained": true,
+      "described": true,
+      "route": "#chat",
+      "text": 143,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#research-mcp",
+      "text": 107,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#protocol-detail",
+      "text": 136,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#asset-detail",
+      "text": 111,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#saved",
+      "text": 106,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#supply",
+      "text": 139,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#activity",
+      "text": 146,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#plan",
+      "text": 137,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#connections",
+      "text": 139,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#alerts",
+      "text": 134,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#conversations",
+      "text": 129,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#policy-states",
+      "text": 128,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#wallet-access",
+      "text": 124,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#research-defi",
+      "text": 167,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#research-rwa",
+      "text": 161,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#vaults",
+      "text": 123,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#liquidity",
+      "text": 138,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#liquidity-detail",
+      "text": 142,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#vault-detail",
+      "text": 128,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#trade",
+      "text": 174,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#borrow",
+      "text": 140,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#positions",
+      "text": 144,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#lab-backtests",
+      "text": 164,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#lab-automation",
+      "text": 154,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#lab-history",
+      "text": 147,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#portfolio",
+      "text": 151,
+      "visible": true,
+      "width": 375,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#chat",
+      "text": 143,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#research-mcp",
+      "text": 107,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#protocol-detail",
+      "text": 136,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#asset-detail",
+      "text": 111,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#saved",
+      "text": 106,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#supply",
+      "text": 139,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#activity",
+      "text": 146,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#plan",
+      "text": 137,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#connections",
+      "text": 139,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#alerts",
+      "text": 134,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#conversations",
+      "text": 129,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#policy-states",
+      "text": 128,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#wallet-access",
+      "text": 124,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#research-defi",
+      "text": 167,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#research-rwa",
+      "text": 161,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#vaults",
+      "text": 123,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#liquidity",
+      "text": 138,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#liquidity-detail",
+      "text": 142,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#vault-detail",
+      "text": 128,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#trade",
+      "text": 174,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#borrow",
+      "text": 140,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#positions",
+      "text": 144,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#lab-backtests",
+      "text": 164,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#lab-automation",
+      "text": 154,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#lab-history",
+      "text": 147,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    },
+    {
+      "contained": true,
+      "described": true,
+      "route": "#portfolio",
+      "text": 151,
+      "visible": true,
+      "width": 1440,
+      "escapeDismissed": true
+    }
+  ],
+  "opportunityTabs": [
+    {
+      "help": 3,
+      "route": "#vaults",
+      "rows": "327",
+      "tab": "All opportunities"
+    },
+    {
+      "help": 3,
+      "route": "#vaults",
+      "rows": "2",
+      "tab": "Direct supply"
+    },
+    {
+      "help": 3,
+      "route": "#vaults",
+      "rows": "4",
+      "tab": "Vaults"
+    },
+    {
+      "help": 3,
+      "route": "#vaults",
+      "rows": "1",
+      "tab": "Campaigns"
+    },
+    {
+      "help": 3,
+      "route": "#vaults",
+      "rows": "320",
+      "tab": "Liquidity"
+    }
+  ],
+  "interactionChecks": [
+    "Trade negative amount rejected; review disabled",
+    "Trade retry retains 2000, clears quote and refresh returns 348.04",
+    "Supply retry retains 2000, clears comparison and compare returns 26.73",
+    "Supply horizon below minimum rejected",
+    "Public account format rejected inline",
+    "Whitespace-only chat blocked",
+    "LP contribution/share errors retain disabled review",
+    "Guardrails invalid percentage rejected; correction accepted",
+    "Workspace search has no-match recovery",
+    "Unknown hash shows Page not found",
+    "Async liquidity retains partial/stale banner"
+  ],
+  "limitations": [
+    "No live source failure was induced; global error specimen and source catch path reviewed",
+    "Hover entry/leave behavior source-reviewed; focus, click and Escape tested in browser"
+  ],
+  "currentBranchPackageLayouts": [
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 375
+    },
+    {
+      "heading": "MCP Contents",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 375
+    },
+    {
+      "heading": " Blend Pools V2",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "width": 375
+    },
+    {
+      "heading": " BENJI",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "width": 375
+    },
+    {
+      "heading": "Saved Research",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "width": 375
+    },
+    {
+      "heading": "Put Liquidity To Work",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "width": 375
+    },
+    {
+      "heading": "Action History",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "width": 375
+    },
+    {
+      "heading": "Follow Every Step",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "width": 375
+    },
+    {
+      "heading": "Connections",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "width": 375
+    },
+    {
+      "heading": "Alerts",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "width": 375
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 375
+    },
+    {
+      "heading": "Your Execution Preferences",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "width": 375
+    },
+    {
+      "heading": "Choose Your Access",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "width": 375
+    },
+    {
+      "heading": "Stellar DeFi",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 375
+    },
+    {
+      "heading": "Stellar Real-World Assets",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 375
+    },
+    {
+      "heading": "Put Your Capital In Context.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "width": 375
+    },
+    {
+      "heading": "Put Liquidity To Work.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "width": 375
+    },
+    {
+      "heading": "Pool Unavailable",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 375
+    },
+    {
+      "heading": "Gami USDC Vault",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 375
+    },
+    {
+      "heading": "XLM / USDC",
+      "headingsUsePlex": true,
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 375
+    },
+    {
+      "heading": "Borrow On Your Terms.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "width": 375
+    },
+    {
+      "heading": "Keep The Position In View.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "width": 375
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "width": 375
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "width": 375
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 375
+    },
+    {
+      "heading": "Your Portfolio",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "width": 375
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 1024
+    },
+    {
+      "heading": "MCP Contents",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 1024
+    },
+    {
+      "heading": " Blend Pools V2",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "width": 1024
+    },
+    {
+      "heading": " BENJI",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "width": 1024
+    },
+    {
+      "heading": "Saved Research",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "width": 1024
+    },
+    {
+      "heading": "Put Liquidity To Work",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "width": 1024
+    },
+    {
+      "heading": "Action History",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "width": 1024
+    },
+    {
+      "heading": "Follow Every Step",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "width": 1024
+    },
+    {
+      "heading": "Connections",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "width": 1024
+    },
+    {
+      "heading": "Alerts",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "width": 1024
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 1024
+    },
+    {
+      "heading": "Your Execution Preferences",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "width": 1024
+    },
+    {
+      "heading": "Choose Your Access",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "width": 1024
+    },
+    {
+      "heading": "Stellar DeFi",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 1024
+    },
+    {
+      "heading": "Stellar Real-World Assets",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 1024
+    },
+    {
+      "heading": "Put Your Capital In Context.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "width": 1024
+    },
+    {
+      "heading": "Put Liquidity To Work.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "width": 1024
+    },
+    {
+      "heading": "Pool Unavailable",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 1024
+    },
+    {
+      "heading": "Gami USDC Vault",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 1024
+    },
+    {
+      "heading": "XLM / USDC",
+      "headingsUsePlex": true,
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 1024
+    },
+    {
+      "heading": "Borrow On Your Terms.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "width": 1024
+    },
+    {
+      "heading": "Keep The Position In View.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "width": 1024
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "width": 1024
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "width": 1024
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 1024
+    },
+    {
+      "heading": "Your Portfolio",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "width": 1024
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#chat",
+      "width": 1440
+    },
+    {
+      "heading": "MCP Contents",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-mcp",
+      "width": 1440
+    },
+    {
+      "heading": " Blend Pools V2",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#protocol-detail",
+      "width": 1440
+    },
+    {
+      "heading": " BENJI",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#asset-detail",
+      "width": 1440
+    },
+    {
+      "heading": "Saved Research",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#saved",
+      "width": 1440
+    },
+    {
+      "heading": "Put Liquidity To Work",
+      "headingsUsePlex": true,
+      "help": 4,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#supply",
+      "width": 1440
+    },
+    {
+      "heading": "Action History",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#activity",
+      "width": 1440
+    },
+    {
+      "heading": "Follow Every Step",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#plan",
+      "width": 1440
+    },
+    {
+      "heading": "Connections",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#connections",
+      "width": 1440
+    },
+    {
+      "heading": "Alerts",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#alerts",
+      "width": 1440
+    },
+    {
+      "heading": "Ask Nest",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#conversations",
+      "width": 1440
+    },
+    {
+      "heading": "Your Execution Preferences",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#policy-states",
+      "width": 1440
+    },
+    {
+      "heading": "Choose Your Access",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#wallet-access",
+      "width": 1440
+    },
+    {
+      "heading": "Stellar DeFi",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-defi",
+      "width": 1440
+    },
+    {
+      "heading": "Stellar Real-World Assets",
+      "headingsUsePlex": true,
+      "help": 2,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#research-rwa",
+      "width": 1440
+    },
+    {
+      "heading": "Put Your Capital In Context.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vaults",
+      "width": 1440
+    },
+    {
+      "heading": "Put Liquidity To Work.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity",
+      "width": 1440
+    },
+    {
+      "heading": "Pool Unavailable",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#liquidity-detail",
+      "width": 1440
+    },
+    {
+      "heading": "Gami USDC Vault",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#vault-detail",
+      "width": 1440
+    },
+    {
+      "heading": "XLM / USDC",
+      "headingsUsePlex": true,
+      "help": 8,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#trade",
+      "width": 1440
+    },
+    {
+      "heading": "Borrow On Your Terms.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#borrow",
+      "width": 1440
+    },
+    {
+      "heading": "Keep The Position In View.",
+      "headingsUsePlex": true,
+      "help": 3,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#positions",
+      "width": 1440
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-backtests",
+      "width": 1440
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-automation",
+      "width": 1440
+    },
+    {
+      "heading": "From Thesis To Strategy.",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#lab-history",
+      "width": 1440
+    },
+    {
+      "heading": "Your Portfolio",
+      "headingsUsePlex": true,
+      "help": 1,
+      "invalidNesting": 0,
+      "overflow": false,
+      "route": "#portfolio",
+      "width": 1440
+    }
+  ],
+  "currentBranchPackageInteractions": [
+    "Supply amount 0 produces inline error",
+    "Supply retry retains 2000 and requires fresh comparison",
+    "Trade retry retains 2000 and leaves review disabled"
+  ]
+}

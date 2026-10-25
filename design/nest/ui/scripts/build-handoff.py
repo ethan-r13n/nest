@@ -27,10 +27,16 @@ for name,raw in files.items():
   rel=urllib.parse.unquote(value.split('#')[0].split('?')[0]);target=posixpath.normpath(posixpath.join(posixpath.dirname(name),rel))
   if not rel:continue
   if target not in files and target+'/index.html' not in files:missing.append({'file':name,'link':value})
-manifest={'title':'Nest UI Design Handoff','version':'0.6.0','created':'2026-10-25','total_distinct_views':32,'total_hash_routes_including_alias':33,'additional_routes':4,'expanded_routes':['chat','research-defi','research-rwa','plan'],'identity':'Original woven Nest with solid circular egg','entry_points':{'design_index':'ui/designs.html','interactive':'ui/index.html','specification':'ui/spec/index.html','missing_screen_audit':'ui/spec/completion.html','chat_discovery':'ui/spec/discovery.html','raven_catalog':'ui/spec/raven-catalog.json','logos':'ui/spec/logos.html','machine_spec':'spec/ui-design-spec.json'},'verification':'ui/spec/verification-market-feedback.json','logo_assets':179,'dedicated_rwa_marks_unavailable':16,'archive_html_links_missing':missing,'files':[{'path':n,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()} for n,raw in sorted(files.items())]}
+app_source=(ui/'app.js').read_text()
+route_ids=set(re.findall(r"'([^']+)':\{name:",app_source))
+distinct_count=len(route_ids)-int('conversations' in route_ids)
+hash_route_count=len(route_ids)+7+(4 if 'const labAliases=' in app_source else 0)
+manifest={'title':'Nest UI Design Handoff','version':'0.9.0','created':'2026-10-25','total_distinct_views':distinct_count,'total_hash_routes_including_alias':hash_route_count,'additional_routes':4,'expanded_routes':['chat','research-defi','research-rwa','research-mcp','protocol-detail','plan','lab-backtests','lab-automation','lab-history'],'identity':'Original woven Nest with solid circular egg','entry_points':{'design_index':'ui/designs.html','interactive':'ui/index.html','specification':'ui/spec/index.html','missing_screen_audit':'ui/spec/completion.html','chat_discovery':'ui/spec/discovery.html','raven_catalog':'ui/spec/raven-catalog.json','research_hierarchy':'ui/spec/research-hierarchy.json','logos':'ui/spec/logos.html','machine_spec':'spec/ui-design-spec.json','contextual_help':'ui/spec/ux-feedback.json','typography':'ui/spec/typography.json'},'verification':'ui/spec/verification-portfolio-feedback.json','additional_verification':['ui/spec/ux-audit-verification.json','ui/spec/typography-verification.json','ui/spec/verification-research-hierarchy.json','ui/spec/verification-assets.json','ui/spec/verification-protocol-feedback.json'],'logo_assets':180,'dedicated_rwa_marks_unavailable':16,'archive_html_links_missing':missing,'files':[{'path':n,'bytes':len(raw),'sha256':hashlib.sha256(raw).hexdigest()} for n,raw in sorted(files.items())]}
 (ui/'handoff-manifest.json').write_text(json.dumps(manifest,indent=2));files['ui/handoff-manifest.json']=(ui/'handoff-manifest.json').read_bytes()
 archive=ui/'nest-ui-handoff.zip'
 with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED) as z:
  for name,raw in sorted(files.items()):z.writestr('nest-ui-handoff/'+name,raw)
 with zipfile.ZipFile(archive) as z:bad=z.testzip()
 print(json.dumps({'files':len(files),'bytes':archive.stat().st_size,'archive_test':bad,'missing_html_links':missing},indent=2))
+
+

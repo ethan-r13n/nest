@@ -5,7 +5,9 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    "./research": "./src/research.ts"
+    "./research": "./src/research.ts",
+    "./aquarius": "./src/aquarius.ts",
+    "./vault-strategies": "./src/vault-strategies.ts"
   },
   "scripts": {
     "typecheck": "tsc",

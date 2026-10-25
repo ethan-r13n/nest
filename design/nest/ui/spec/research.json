@@ -1,6 +1,6 @@
 {
   "section": "Research",
-  "version": "0.6.0",
+  "version": "0.7.1",
   "status": "Local design prototype; no live backend or wallet connection",
   "reference_evidence": [
     {
@@ -53,9 +53,9 @@
   ],
   "decisions": [
     {
-      "decision": "Research has four top-level tabs: DeFi, RWAs, Markets, and Venue map.",
-      "source": "Latest explicit user request",
-      "supersedes": "Earlier two-tab design; Saved remains a utility and Automations remains in Lab"
+      "decision": "Research has three tabs: DeFi, RWAs and MCP Contents. The venue map is first in MCP Contents; venue and market facts live on applicable DeFi protocol detail pages.",
+      "source": "UI 3 explicit user request",
+      "supersedes": "The four-tab Research design and separate venue/market detail journeys"
     },
     {
       "decision": "DeFi and RWA source totals remain separate and attributed.",
@@ -116,19 +116,16 @@
         "top_navigation": [
           "DeFi",
           "RWAs",
-          "Markets",
-          "Venue map"
+          "MCP Contents"
         ],
-        "header": "Research / Stellar network eyebrow, 36px Serif page title, one-sentence description, dated source badge",
-        "overview": "280px chain summary rail and remaining-width chart; 20–24px gap",
+        "header": "Compact 32px serif title, one-sentence description and dated source badge",
+        "overview": "Horizontal network metric strip above a compact, full-width history chart",
         "chain_summary": [
-          "Network identity and watchlist control",
-          "Provider chain DeFi TVL",
-          "Stablecoin value across USD-converted peg categories",
+          "Network identity and watchlist",
+          "Stellar chain DeFi TVL",
+          "Stablecoin value across all pegs",
           "24h DEX volume",
-          "Tracked 24h fees",
-          "Captured yield-pool and stablecoin counts",
-          "Source capture and source-time coverage"
+          "Tracked 24h fees"
         ],
         "history": "Dominant panel: metric title, latest recorded point, 1M/3M/1Y/All controls, TVL/DEX volume/Stablecoins, USD daily series, keyboard-accessible point inspection, visible source and caveat",
         "ranking": "Immediately below the overview: full-width search/category/columns toolbar, dense protocol table, pagination and export"
@@ -136,18 +133,16 @@
       "table": {
         "columns": [
           "Rank",
-          "Protocol and token/chain metadata",
+          "Protocol identity and token/chain metadata; single detail action",
           "Category",
           "Stellar TVL USD",
-          "1d change with scope note",
-          "7d change with scope note",
-          "Optional protocol-wide TVL",
-          "Research-only availability",
-          "Details"
+          "1d protocol-wide change",
+          "7d protocol-wide change",
+          "Optional protocol-wide TVL"
         ],
         "default_sort": "Stellar TVL descending",
         "default_filter": "CEX excluded; retain all eligible DeFi categories",
-        "pagination": "10 rows per page in preview; production uses server pagination",
+        "pagination": "Shared numbered 10/25/50 paging, source row range and page count; resets on filter/sort changes",
         "identity": "Protocol slug and source ID, not display name alone",
         "scope": "The supplied percentage changes are protocol-wide across all chains. Do not relabel them Stellar-only.",
         "aggregation": "Never sum overlapping parent/child, vault or access-route rows into chain TVL.",
@@ -156,15 +151,11 @@
       "interactions": [
         {
           "control": "Research tabs",
-          "result": "Switch between DeFi, RWAs, Markets and Venue map, preserving relevant local filters"
+          "result": "Switch among DeFi, RWAs and MCP Contents while retaining local list context"
         },
         {
           "control": "Metric and period",
           "result": "Re-render actual collected historical series. Preserve date/units. Do not normalize to XLM without a verified matching historical price series."
-        },
-        {
-          "control": "Point inspection slider",
-          "result": "Keyboard/touch/pointer choice shows the exact date and USD value and moves a visible point marker"
         },
         {
           "control": "Protocol search/category/sort",
@@ -176,7 +167,7 @@
         },
         {
           "control": "Details",
-          "result": "Open read-only protocol panel with exact values, scope, source and verified outbound reference; financial action needs a supported registered market"
+          "result": "Open the canonical protocol page with facts, scoped yield pools, applicable markets and Raven project evidence"
         },
         {
           "control": "Export",
@@ -198,15 +189,15 @@
         "wallet_disconnected": "Research and transient assistant remain available; persistent saves explain verification requirement"
       },
       "responsive": {
-        "desktop": "280px overview rail, wide chart, full table",
-        "tablet": "240px overview rail when space permits; stack below 800px",
-        "mobile": "Single column, chart redraws to actual width with fixed readable labels, ranking scrolls horizontally inside its container"
+        "desktop": "Horizontal metrics and compact chart; single toolbar above protocol table",
+        "tablet": "Network identity above four metrics; compact chart",
+        "mobile": "Two-column metrics; bounded table scrolling; pagination wraps without page overflow"
       },
       "accessibility": [
         "Semantic table headers and numeric alignment",
         "Explicit control labels and source units",
         "Native inputs/selects/buttons",
-        "Keyboard-operable date-point slider",
+        "Latest recorded chart point includes its date and USD value",
         "Dialog names, Escape and focus restoration",
         "Signs and words accompany financial colors",
         "No motion required to read data"
@@ -262,7 +253,8 @@
         "Actual historical points drive the chart",
         "No discovery data becomes an executable quote",
         "Works at 375/1024/1440px without page overflow"
-      ]
+      ],
+      "pagination_contract": "research-hierarchy.json"
     },
     {
       "id": "research-rwa",
@@ -274,12 +266,11 @@
         "top_navigation": [
           "DeFi",
           "RWAs",
-          "Markets",
-          "Venue map"
+          "MCP Contents"
         ],
         "header": "Network-scoped heading and source/as-of badge",
         "metrics": "Eight provider network metric cells in a four-column/two-row grid",
-        "composition_and_league": "Two balanced panels: current distributed asset-class composition and the league table. Stack below 1100px.",
+        "composition_and_league": "Two compact panels of equal 440px height. Internal, keyboard-focusable scroll regions contain composition/history and every captured league row. Sticky league headers; panels stack below 1100px.",
         "composition_controls": [
           "Composition/History presentation control",
           "Include stablecoins visibility control"
@@ -291,8 +282,8 @@
         "assets": "Full-width search/filter/sort toolbar with 10-row asset table pages and CSV"
       },
       "metric_definitions": [
-        "Distributed Asset Value",
-        "Represented Asset Value",
+        "Transferable RWAs",
+        "Restricted RWAs",
         "RWA Holders",
         "RWA 30D Transfer Volume",
         "RWA Count",
@@ -448,7 +439,11 @@
         "Each of 109 rows retains its exact original source URL",
         "Row clicks and asset anchors navigate in the same tab",
         "Access indicators remain independent and unknowns are explicit",
-        "Badge screen-reader text is contained inside each chip to preserve mobile scroll containment"
+        "Badge screen-reader text is contained inside each chip to preserve mobile scroll containment",
+        "Transferable and Restricted RWAs retain the original source values and 30-day changes",
+        "Both metric definitions are available by hover, keyboard focus and mobile tap, and dismiss with Escape",
+        "Composition and league panels have equal compact heights and bounded internal scrolling",
+        "All captured league rows remain available; no first-seven truncation"
       ],
       "access_indicators": {
         "classification": "Three independent dimensions, never mutually exclusive. Distributed/Represented is not access metadata.",
@@ -470,13 +465,30 @@
           "rwa-access-observations.json",
           "rwa-dex-observations.json"
         ]
+      },
+      "pagination_contract": "research-hierarchy.json",
+      "metric_card_aliases": {
+        "source": "https://app.rwa.xyz/blog/a-new-framework-for-tokenized-assets-distributed-and-represented",
+        "mappings": {
+          "distributedAssetValue": {
+            "provider_label": "Distributed Asset Value",
+            "ui_label": "Transferable RWAs",
+            "tooltip": "Value of tokenized real-world assets that can move to external wallets and between eligible wallets. KYC or allowlist requirements may still apply."
+          },
+          "representedAssetValue": {
+            "provider_label": "Represented Asset Value",
+            "ui_label": "Restricted RWAs",
+            "tooltip": "Value of tokenized real-world assets confined to the issuer’s platform. These tokens cannot move to external wallets or transfer between wallets."
+          }
+        },
+        "invariant": "Presentation aliases only. Source keys, all dollar values and 30-day changes are unchanged.",
+        "info_control": "Labeled 44px button with aria-describedby, aria-controls and expanded state. Opens on hover/focus; tap or Enter pins/toggles; Escape, blur or outside click dismisses."
       }
     }
   ],
   "shared_components": [
     "ResearchSectionTabs",
     "SourceSnapshotBadge",
-    "CapitalContextBar",
     "MetricDefinitionTile",
     "HistoricalSeriesPanel",
     "HistoricalPointInspector",
@@ -486,12 +498,16 @@
     "RWALeagueTable",
     "AssetIdentityTable",
     "SnapshotCSVExport",
-    "SourceCoverageDisclosure"
+    "SourceCoverageDisclosure",
+    "ResearchNumberedPagination",
+    "MCPContents",
+    "VenueCoverageMap"
   ],
   "implementation_notes": [
     "Design preview uses embedded dated observations for deterministic local review; production should use typed same-origin services and query state.",
     "No live provider fetch or financial submission occurs in these preview files.",
     "Production sorting/filtering/pagination must use the actual backend contract, not client recomputation of execution terms.",
     "The root application must retain the original solid-egg Nest logo, global Guardrails, and the shared ActionReviewSheet for any supported action."
-  ]
+  ],
+  "ui3": "research-hierarchy.json"
 }

@@ -1,0 +1,49 @@
+{
+  "date": "2026-10-25",
+  "status": "passed",
+  "layouts": [
+    {
+      "overflow": false,
+      "route": "portfolio",
+      "width": 375
+    },
+    {
+      "overflow": false,
+      "route": "activity",
+      "width": 375
+    },
+    {
+      "overflow": false,
+      "route": "portfolio",
+      "width": 1024
+    },
+    {
+      "overflow": false,
+      "route": "activity",
+      "width": 1024
+    },
+    {
+      "overflow": false,
+      "route": "portfolio",
+      "width": 1440
+    },
+    {
+      "overflow": false,
+      "route": "activity",
+      "width": 1440
+    }
+  ],
+  "interactions": [
+    "Supply Manage selects blend-supply and focuses Add/Withdraw controls",
+    "Debt Manage selects blend-loan and focuses loan management actions",
+    "Vault Manage selects Gami USDC and focuses the vault ticket",
+    "USDC Manage selects USDC / XLM in Trade without opening a review",
+    "LP deep link focuses the pool ticket; Remove changes to share redemption input",
+    "Removed Send route redirects to Portfolio with no transfer form"
+  ],
+  "modelChecks": [
+    "scripts/verify-portfolio-navigation.js",
+    "scripts/verify-credit-positions.js"
+  ],
+  "screenshot": "previews/portfolio-cleanup.jpg"
+}

@@ -1,0 +1,61 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "state": "default",
+      "expanded": "false",
+      "labelVisible": false,
+      "overflow": false,
+      "width": 64
+    },
+    {
+      "state": "hover",
+      "expanded": "true",
+      "labelVisible": true,
+      "width": 240
+    },
+    {
+      "state": "pointer-left",
+      "expanded": "false",
+      "width": 64
+    },
+    {
+      "state": "keyboard-focus",
+      "expanded": "true",
+      "focus": "Current conversation",
+      "width": 240
+    },
+    {
+      "state": "keyboard-left",
+      "expanded": "false"
+    },
+    {
+      "state": "mobile-default",
+      "overflow": false,
+      "sidebarVisible": false
+    },
+    {
+      "state": "mobile-open",
+      "expanded": "true",
+      "labelVisible": true,
+      "overflow": false,
+      "sidebarVisible": true
+    },
+    {
+      "state": "mobile-close",
+      "expanded": "false"
+    },
+    {
+      "state": "desktop-pinned",
+      "expanded": "true"
+    },
+    {
+      "state": "desktop-unpinned",
+      "expanded": "false"
+    }
+  ],
+  "previews": [
+    "previews/chat-rail-collapsed.jpg",
+    "previews/chat-rail-expanded.jpg"
+  ]
+}

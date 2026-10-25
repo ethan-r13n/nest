@@ -1,0 +1,146 @@
+{
+  "status": "passed",
+  "checks": [
+    {
+      "case": "XLM default",
+      "asset": "XLM",
+      "bars": 183,
+      "canvas": 7,
+      "kind": "line",
+      "overflow": false,
+      "points": 180,
+      "title": "XLM / USDC"
+    },
+    {
+      "case": "zoom in",
+      "bars": 137
+    },
+    {
+      "case": "zoom out",
+      "bars": 183
+    },
+    {
+      "case": "picker",
+      "assets": [
+        "XLM",
+        "AQUA",
+        "EURC",
+        "USDT0",
+        "PYUSD",
+        "SOLVBTC",
+        "EUTBL"
+      ]
+    },
+    {
+      "case": "AQUA",
+      "canvas": 7,
+      "kind": "candles",
+      "points": 77,
+      "source": "Aquarius swap records",
+      "title": "AQUA / USDC"
+    },
+    {
+      "case": "EURC",
+      "interval": "1H Reference",
+      "kind": "line",
+      "overflow": false,
+      "points": 180,
+      "source": "DefiLlama price oracle",
+      "title": "EURC / USDC"
+    },
+    {
+      "case": "USDT0",
+      "interval": "1H Reference",
+      "kind": "line",
+      "overflow": false,
+      "points": 180,
+      "source": "DefiLlama price oracle",
+      "title": "USDT0 / USDC"
+    },
+    {
+      "case": "PYUSD",
+      "interval": "1H Reference",
+      "kind": "line",
+      "overflow": false,
+      "points": 180,
+      "source": "DefiLlama price oracle",
+      "title": "PYUSD / USDC"
+    },
+    {
+      "case": "SOLVBTC",
+      "interval": "1H Reference",
+      "kind": "line",
+      "overflow": false,
+      "points": 180,
+      "source": "DefiLlama price oracle",
+      "title": "SolvBTC / USDC"
+    },
+    {
+      "case": "EUTBL",
+      "interval": "1D Reference",
+      "kind": "line",
+      "overflow": false,
+      "points": 71,
+      "source": "Spiko NAV · ECB EUR/USD",
+      "title": "EUTBL / USDC"
+    },
+    {
+      "case": "reverse keeps USDC chart and zoom",
+      "bars": "56",
+      "pay": "USDC",
+      "receive": "EUTBL⌄",
+      "title": "EUTBL / USDC",
+      "before": "56"
+    },
+    {
+      "case": "1m interval",
+      "points": "12",
+      "interval": "1m Reference"
+    },
+    {
+      "case": "4H interval",
+      "points": "180",
+      "interval": "4H Reference"
+    },
+    {
+      "case": "mouse wheel zoom",
+      "before": 183,
+      "after": 166
+    },
+    {
+      "case": "log scale",
+      "pressed": "true"
+    },
+    {
+      "case": "mobile",
+      "overflow": false,
+      "points": 180,
+      "stage": 302,
+      "width": 360
+    }
+  ],
+  "previews": [
+    "previews/trade-live-chart.jpg",
+    "previews/trade-live-mobile.jpg"
+  ],
+  "data": "All seven default markets contain timestamped provider observations; chart fixture generation removed.",
+  "adapter_tests": {
+    "passed": 5,
+    "covered": [
+      "USDC normalization without dollar-peg assumption",
+      "swap direction, exact token identities, deduplication and missing intervals",
+      "Soroswap-to-Aquarius fallback",
+      "eight-decimal Aquarius price normalization and metadata mismatch",
+      "daily NAV and invalid request rejection"
+    ]
+  },
+  "live_extra_intervals": {
+    "5m": 60,
+    "15m": 180,
+    "1D": 180
+  },
+  "http_validation": {
+    "USDC_as_base": 400,
+    "foreign_origin": 403
+  }
+}

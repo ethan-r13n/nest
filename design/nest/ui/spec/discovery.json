@@ -1,5 +1,5 @@
 {
-  "version": "0.5.1",
+  "version": "0.7.1",
   "date": "2026-10-25",
   "status": "Local design prototype; backend pending",
   "navigation": {
@@ -15,13 +15,16 @@
     "research": [
       "DeFi",
       "RWAs",
-      "Markets",
-      "Venue map"
+      "MCP Contents"
     ],
     "aliases": {
-      "conversations": "chat"
+      "conversations": "chat",
+      "research-markets": "research-mcp",
+      "research-map": "research-mcp",
+      "venue-detail?id=:id": "protocol-detail?slug=<explicit venue identity>",
+      "market-detail?id=:id": "protocol-detail?slug=<explicit market identity>"
     },
-    "distinct_screens": 32
+    "distinct_screens": 29
   },
   "routes": [
     {
@@ -81,78 +84,19 @@
       }
     },
     {
-      "id": "research-markets",
-      "route": "/research?tab=markets",
-      "title": "Markets & MCP read catalog",
-      "before": "New Research tab.",
-      "layout": "Four source-family cards, catalog counts, venue market table and searchable/paginated MCP operation/skill cards.",
+      "id": "research-mcp",
+      "route": "/research?tab=mcp",
+      "title": "MCP Contents",
+      "layout": "Venue coverage map with source inspector, then source-family filters, searchable disclosure list and shared numbered pagination.",
       "behavior": [
-        "Four Research tabs: DeFi, RWAs, Markets, Venue map. Saved remains a utility route.",
-        "Venue markets separate aggregator, lending protocol, vault platform, curator and product roles.",
-        "MCP read catalog lists all 60 operations and 20 skills from the pinned public manifest, with 202 section identifiers available in its data.",
-        "Search, family/type filters, pagination and JSON export operate over the actual collected catalog.",
-        "Snapshot time, source-fetched time, retrieval time and runtime verification remain separate.",
-        "A catalog entry does not establish a working endpoint, live market data, liquidity or execution permission."
+        "MCP Contents starts with the map; source-family filters and a compact disclosure list follow it.",
+        "Include 26 unique projects from the captured Scout records, group protocol versions by exact project identity, and distinguish eight integration targets from research coverage.",
+        "Share numbered pagination with range, total and current page, 10/25/50 page sizes, disabled boundary actions, filter reset to page one, accessible status and list-context restoration."
       ],
       "bindings": [
-        "GET /api/markets for registered native state/capabilities",
-        "Server-side bounded Raven catalog projection through the existing two-wrapper adapter",
-        "Guest fallback: pinned public manifest, labeled as snapshot; no OAuth token in browser"
-      ]
-    },
-    {
-      "id": "research-map",
-      "route": "/research?tab=map",
-      "title": "Venue map",
-      "before": "New Research tab.",
-      "layout": "Grouped network or grid for Spot/Lending/Vaults, eight venue identity cards, source-family trunk, contextual inspector.",
-      "behavior": [
-        "Search venue names/read coverage and filter by category; selection opens read/action/exit summaries.",
-        "All eight integration design records have a detail page; availability remains pending deployment verification.",
-        "Raven is a research source. Native adapters provide amount-specific state, simulation and confirmed outcomes.",
-        "Curators and platform routes can share one canonical vault; they are not additive TVL or separate user positions."
-      ],
-      "bindings": [
-        "GET /api/markets capability projection",
-        "Canonical venue/product registry; network-scoped deployments",
-        "Raven catalog metadata for research-source coverage only"
-      ]
-    },
-    {
-      "id": "venue-detail",
-      "route": "/research/venues/:id",
-      "title": "Venue detail",
-      "before": "New dynamic venue route, reachable for every integration target.",
-      "layout": "Identity, network availability, read groups, supported design actions, exit disclosure, source boundaries and references.",
-      "behavior": [
-        "Parameter selects Soroswap, Blend, Templar, XOXNO, DeFindex, Upshift, Gami Labs or Sentora.",
-        "Separate published research, adapter reads and transaction preparation authority.",
-        "Offer the relevant manual form or chat context without including private amounts in share URLs.",
-        "Product/deployment verification gates live actions."
-      ],
-      "bindings": [
-        "Network-scoped canonical venue/capability registry",
-        "GET /api/markets; approved venue documentation references"
-      ]
-    },
-    {
-      "id": "market-detail",
-      "route": "/research/markets/:id",
-      "title": "Market detail & read inspector",
-      "before": "New dynamic market route.",
-      "layout": "Market header, policy context, amount presets, comparable route bars or lending/vault terms, underlying composition, assets/identity and read inspector.",
-      "behavior": [
-        "Spot offers 100/1,000/10,000 XLM fixture comparisons; route output changes with the selected amount.",
-        "Review in chat carries the exact requested amount via in-memory draft, never a URL amount parameter.",
-        "Lending/vault variants preserve native risk, capacity, fees, settlement and missing data.",
-        "Read inspector distinguishes requested/succeeded/empty/partial/stale/error with provenance in production; preview shows Not requested.",
-        "No synthetic orderbook, fake ledger ID, fabricated receipt link or unconditional live-status badge."
-      ],
-      "bindings": [
-        "GET /api/markets",
-        "POST /api/intents/:id/compare",
-        "Native protocol/API/RPC read results and per-read provenance",
-        "Shared action review and application plan lifecycle"
+        "Bounded dated Raven catalog projection",
+        "Scout public-source project records",
+        "Explicit protocol identity routes"
       ]
     }
   ],
@@ -206,8 +150,8 @@
     "375/1024/1440 CSS pixel checks",
     "Chat transcript scrolls in its own row; composer remains visible without overlaying the transcript.",
     "No redundant assistant launcher on full Chat; contextual drawer remains on other routes.",
-    "Venue graph collapses into grouped cards on narrow layouts.",
-    "Catalog tables scroll within their container; source cards stack and maintain text labels."
+    "Map groups use compact project cards; inspector stacks below on small workspaces.",
+    "MCP catalog disclosures and numbered pagination fit a 375px viewport."
   ],
   "integration_fields": [
     "network",
@@ -222,12 +166,15 @@
     "plan ID/revision/digest and policy revision"
   ],
   "acceptance": [
-    "All four Research tabs are reachable from both existing research screens.",
-    "Every venue row/graph selection leads to the corresponding venue or market detail.",
     "The catalog exposes 60 operations, 20 skills and all 202 section identifiers without implying runtime verification.",
     "Chat exact amounts reach the shared review and remain strings at the boundary.",
     "Preparation and stale/mismatch/blocked cards cannot sign or submit.",
     "Manual forms remain available if AI fails.",
-    "No secrets, signed payloads, private context or wallet amounts are placed in URLs."
-  ]
+    "No secrets, signed payloads, private context or wallet amounts are placed in URLs.",
+    "Exactly three Research tabs: DeFi, RWAs and MCP Contents.",
+    "Every map node opens the corresponding DeFi protocol research; legacy links migrate to canonical routes.",
+    "Applicable market capabilities and exit conditions appear in protocol detail.",
+    "Pagination exposes row range and page position and preserves filters on return."
+  ],
+  "ui3": "research-hierarchy.json"
 }

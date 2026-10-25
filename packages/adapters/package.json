@@ -11,7 +11,13 @@
     "./stellar/inspect": "./src/stellar/inspect.ts",
     "./stellar/networks": "./src/stellar/networks.ts",
     "./stellar/sdex": "./src/stellar/sdex.ts",
-    "./venue": "./src/venue.ts"
+    "./venue": "./src/venue.ts",
+    "./aquarius/client": "./src/aquarius/client.ts",
+    "./blend/markets": "./src/blend/markets.ts",
+    "./blend/reader": "./src/blend/reader.ts",
+    "./blend/submit": "./src/blend/submit.ts",
+    "./stellar/accounts": "./src/stellar/accounts.ts",
+    "./stellar/trustline": "./src/stellar/trustline.ts"
   },
   "scripts": {
     "typecheck": "tsc && tsc -p tsconfig.node.json",
@@ -20,7 +26,9 @@
   "dependencies": {
     "@nest/domain": "workspace:*",
     "@stellar/stellar-sdk": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@nest/data": "workspace:*",
+    "@blend-capital/blend-sdk": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "catalog:",

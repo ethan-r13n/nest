@@ -7,17 +7,17 @@ import {
   ExecutionRequestError,
   execution,
   type Intent,
+  isPending,
   type Plan,
   planProblem,
   type Quote,
+  signAndSubmit,
   venueName,
 } from '../lib/execution.ts';
 import { shortAddress, useWallet } from '../lib/wallet.tsx';
+import { TrustlineStep } from './trustline-step.tsx';
 
 type Phase = 'quoting' | 'quoted' | 'preparing' | 'review' | 'signing' | 'confirming' | 'done' | 'stopped';
-
-const POLL_MS = 2_000;
-const POLL_LIMIT_MS = 90_000;
 
 /**
  * A swap proposal from chat. Everything shown comes from Nest's own records: the live quote, then
@@ -47,18 +47,22 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
     );
   }, []);
 
-  const requote = useCallback(async () => {
+  /** Quotes again and returns the new quote's ID, or null. */
+  const requote = useCallback(async (): Promise<string | null> => {
     setPhase('quoting');
     setError(null);
     setPlan(null);
     try {
       // The request itself always shows, even when no live quote can be had.
       setIntent(await execution.intent(intentId));
-      setQuote((await execution.quote(intentId)) ?? null);
+      const fresh = (await execution.quote(intentId)) ?? null;
+      setQuote(fresh);
       setPhase('quoted');
+      return fresh?.id ?? null;
     } catch (caught) {
       fail(caught);
       setPhase('stopped');
+      return null;
     }
   }, [intentId, fail]);
 
@@ -66,12 +70,12 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
     void requote();
   }, [requote]);
 
-  async function review() {
-    if (!quote || !wallet.address) return;
+  async function review(quoteId = quote?.id) {
+    if (!quoteId || !wallet.address) return;
     setError(null);
     setPhase('preparing');
     try {
-      const created = await execution.plan({ intentId, quoteId: quote.id, accountId: wallet.address });
+      const created = await execution.plan({ intentId, quoteId, accountId: wallet.address });
       const prepared = await execution.prepare(created.id);
       setPlan(prepared);
       setPhase(prepared.status === 'awaiting_review' ? 'review' : 'stopped');
@@ -81,38 +85,24 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
     }
   }
 
+  async function continueAfterTrustline() {
+    const quoteId = await requote();
+    if (quoteId) await review(quoteId);
+  }
+
   async function sign() {
     if (!plan?.prepared) return;
     setError(null);
     setPhase('signing');
     try {
-      const approved = await execution.approve(plan);
-      if (approved.status !== 'awaiting_signature') {
-        setPlan(approved);
-        setPhase('stopped');
-        return;
-      }
-      const signedXdr = await wallet.sign(plan.prepared.xdr, plan.prepared.networkPassphrase);
-      setPhase('confirming');
-      let current = await execution.submit(plan.id, signedXdr);
-      const started = Date.now();
-      while (
-        (current.status === 'submitted' || current.status === 'confirming') &&
-        Date.now() - started < POLL_LIMIT_MS &&
-        mounted.current
-      ) {
-        setPlan(current);
-        await new Promise((resolve) => setTimeout(resolve, POLL_MS));
-        current = await execution.read(plan.id);
-      }
-      setPlan(current);
-      setPhase(
-        current.status === 'confirmed'
-          ? 'done'
-          : current.status === 'submitted' || current.status === 'confirming'
-            ? 'confirming'
-            : 'stopped',
-      );
+      const settled = await signAndSubmit(plan, {
+        sign: wallet.sign,
+        onSigned: () => setPhase('confirming'),
+        onUpdate: setPlan,
+        stillWatching: () => mounted.current,
+      });
+      setPlan(settled);
+      setPhase(settled.status === 'confirmed' ? 'done' : isPending(settled) ? 'confirming' : 'stopped');
     } catch (caught) {
       fail(caught);
       // The plan is still waiting for a signature unless the submit itself reported otherwise.
@@ -206,6 +196,9 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
       {plan && phase === 'stopped' ? (
         <p className="text-destructive">{planProblem(plan) ?? 'This swap stopped.'}</p>
       ) : null}
+      {plan && phase === 'stopped' && plan.errorCode === 'TRUSTLINE_MISSING' ? (
+        <TrustlineStep use="swap" onAdded={continueAfterTrustline} />
+      ) : null}
       {error ? <p className="text-destructive">{error}</p> : null}
       {plan?.explorerUrl ? (
         <a
@@ -223,12 +216,12 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
           <span className="text-xs text-subtle">Valid for {secondsLeft}s</span>
         ) : null}
         {(phase === 'quoted' || phase === 'review') && expired ? (
-          <Button variant="outline" size="sm" onClick={requote}>
+          <Button variant="outline" size="sm" onClick={() => requote()}>
             <RefreshCw /> New quote
           </Button>
         ) : null}
         {phase === 'stopped' && !error ? (
-          <Button variant="outline" size="sm" onClick={requote}>
+          <Button variant="outline" size="sm" onClick={() => requote()}>
             <RefreshCw /> Try again
           </Button>
         ) : null}
@@ -238,7 +231,7 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
           </Button>
         ) : null}
         {phase === 'quoted' && !expired && wallet.address ? (
-          <Button size="sm" onClick={review}>
+          <Button size="sm" onClick={() => review()}>
             Review swap
           </Button>
         ) : null}
@@ -263,7 +256,7 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
   );
 }
 
-function Fact({ label, value }: { label: string; value: string }) {
+export function Fact({ label, value }: { label: string; value: string }) {
   return (
     <>
       <dt className="text-muted-foreground">{label}</dt>
@@ -272,7 +265,7 @@ function Fact({ label, value }: { label: string; value: string }) {
   );
 }
 
-function useCountdown(until: string | null | undefined): number | null {
+export function useCountdown(until: string | null | undefined): number | null {
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     if (!until) return;

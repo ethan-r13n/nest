@@ -1,0 +1,61 @@
+{
+  "version": "1.0",
+  "date": "2026-10-25",
+  "scope": "All 26 registered app pages, contextual management controls and shared dialogs",
+  "implementation": [
+    "ux.js",
+    "ux.css",
+    "app.js",
+    "screens/liquidity.js"
+  ],
+  "help": {
+    "patterns": [
+      "Per-page guidance",
+      "Financial term info buttons",
+      "Focus, hover and tap; Escape and outside dismissal",
+      "Viewport-bounded tooltip; delayed hover dismissal allows pointer entry",
+      "Existing RWA definition controls preserved"
+    ],
+    "semantics": [
+      "Accessible name on info buttons",
+      "aria-expanded and aria-describedby",
+      "No nested buttons or buttons inside navigation links",
+      "Existing form labels retained"
+    ]
+  },
+  "validation": {
+    "shared": [
+      "Required fields and whitespace-only messages",
+      "Positive decimal amounts for Trade, Supply, Vault and LP controls",
+      "Native min/max, pattern and number constraints",
+      "Optional Guardrails percentages and quote age",
+      "Public Stellar account shape; checksum/ledger verification remains unavailable"
+    ],
+    "native": [
+      "Borrow term validation",
+      "Credit position limits and projections",
+      "Allocation decimal/comma parsing",
+      "Lab thesis and setup validation"
+    ],
+    "feedback": [
+      "Inline associated error text",
+      "aria-invalid",
+      "Corrected values clear shared errors",
+      "Errors do not enable unavailable financial review"
+    ]
+  },
+  "recovery": {
+    "states": [
+      "Loading",
+      "Empty with return action",
+      "Partial with source warning",
+      "Stale with refresh action and blocked review",
+      "Error with retry",
+      "Unknown address with navigation recovery"
+    ],
+    "drafts": "Editable values stay in memory, scoped to the full route/context. Password, file, hidden, readonly and disabled controls are excluded. Retry restores inputs and invalidates old comparisons/quotes; no plan, signature or receipt is recreated.",
+    "sourceFailure": "Liquidity source failure has retry and opportunity navigation; asynchronous render retains preview warnings.",
+    "boundary": "Synchronous renderer/binder failures show recovery rather than a blank workspace. Real request IDs and source errors must come from the backend; none are invented."
+  },
+  "verification": "ux-audit-verification.json"
+}

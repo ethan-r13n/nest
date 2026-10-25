@@ -1,0 +1,151 @@
+{
+  "version": "0.7.0",
+  "date": "2026-10-25",
+  "interactions": [
+    {
+      "check": "Trade picker lists all eight assets with local icons",
+      "pass": true
+    },
+    {
+      "check": "Asset search filters by symbol/name",
+      "pass": true
+    },
+    {
+      "check": "SolvBTC selection clears quote, hides unrelated routes and candles",
+      "pass": true
+    },
+    {
+      "check": "AQUA selectable as pay asset",
+      "pass": true
+    },
+    {
+      "check": "EURC selectable as pay asset",
+      "pass": true
+    },
+    {
+      "check": "USDT0 selectable as pay asset",
+      "pass": true
+    },
+    {
+      "check": "PYUSD selectable as pay asset",
+      "pass": true
+    },
+    {
+      "check": "EUTBL selectable as pay asset",
+      "pass": true
+    },
+    {
+      "check": "Receive-side selector updates the pair",
+      "pass": true
+    },
+    {
+      "check": "Reverse swaps both selected assets",
+      "pass": true
+    },
+    {
+      "check": "Selecting the other side swaps assets instead of creating an identical pair",
+      "pass": true
+    },
+    {
+      "check": "Returning to XLM/USDC restores candles and requires a quote refresh",
+      "pass": true
+    },
+    {
+      "check": "Existing fixture quote still refreshes correctly",
+      "pass": true
+    },
+    {
+      "check": "Candlestick controls work after repeated asset changes",
+      "pass": true
+    },
+    {
+      "check": "Vault filter lists all eight assets and real local icons",
+      "pass": true
+    },
+    {
+      "check": "New asset filter shows an honest empty state when no fixture vault matches",
+      "pass": true
+    },
+    {
+      "check": "Vault reset restores all seven fixture opportunities",
+      "pass": true
+    },
+    {
+      "check": "Escape closes asset selector and restores trigger focus",
+      "pass": true
+    }
+  ],
+  "responsive": [
+    {
+      "icons": 8,
+      "pass": true,
+      "route": "vaults",
+      "scroll": 360,
+      "width": 360
+    },
+    {
+      "pass": true,
+      "route": "trade-picker",
+      "scroll": 360,
+      "width": 360
+    },
+    {
+      "pair": "SolvBTC / USDT0",
+      "pass": true,
+      "route": "trade-long-pair",
+      "scroll": 360,
+      "width": 360
+    },
+    {
+      "icons": 8,
+      "pass": true,
+      "route": "vaults",
+      "scroll": 1009,
+      "width": 1009
+    },
+    {
+      "pass": true,
+      "route": "trade-picker",
+      "scroll": 1009,
+      "width": 1009
+    },
+    {
+      "pair": "SolvBTC / USDT0",
+      "pass": true,
+      "route": "trade-long-pair",
+      "scroll": 1009,
+      "width": 1009
+    },
+    {
+      "icons": 8,
+      "pass": true,
+      "route": "vaults",
+      "scroll": 1425,
+      "width": 1425
+    },
+    {
+      "pass": true,
+      "route": "trade-picker",
+      "scroll": 1425,
+      "width": 1425
+    },
+    {
+      "pair": "SolvBTC / USDT0",
+      "pass": true,
+      "route": "trade-long-pair",
+      "scroll": 1425,
+      "width": 1425
+    }
+  ],
+  "consoleErrors": [],
+  "scope": "Asset catalog, real icons, selection, quote invalidation and existing fixture recovery. No live financial capability added.",
+  "unrelated_local_errors": [
+    {
+      "level": "error",
+      "message": "TypeError: Cannot read properties of undefined (reading 'validDraft')\n    at http://127.0.0.1:8765/ui/screens/lab.js:10:17\n    at http://127.0.0.1:8765/ui/screens/lab.js:172:3",
+      "timestamp": "2026-10-25T19:26:36.280Z",
+      "url": "http://127.0.0.1:8765/ui/screens/lab.js",
+      "note": "Concurrent local Lab edits; this file is outside the asset-selector change and is not included in its commit."
+    }
+  ]
+}

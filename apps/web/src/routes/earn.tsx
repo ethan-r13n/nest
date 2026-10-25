@@ -5,7 +5,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nest
 import { Checkbox } from '@nest/ui/components/checkbox';
 import { Input } from '@nest/ui/components/input';
 import { Label } from '@nest/ui/components/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeft, ArrowRight, ExternalLink, Search, SlidersHorizontal } from 'lucide-react';
@@ -18,15 +17,18 @@ import {
   UnavailableFacts,
   WithdrawalTiming,
 } from '../components/financial-draft.tsx';
-import { DraftNotice, EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
+import { strategyFor, VaultStrategyAside, VaultStrategyMain } from '../components/vault-strategy.tsx';
+import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { formatUsd, formatUtc } from '../lib/format.ts';
+import { useLiquidityPools } from '../lib/liquidity.ts';
 
 const research = parseResearchSnapshot(snapshotJson);
-const CATEGORIES = ['All opportunities', 'Direct supply', 'Vaults', 'Campaigns'];
+const CATEGORIES = ['All opportunities', 'Direct supply', 'Vaults', 'Campaigns', 'Liquidity'];
 const PROJECT_NAMES: Record<string, string> = {
   'blend-pools-v2': 'Blend',
   'xoxno-lending': 'XOXNO',
   'gami-labs': 'Gami Labs',
+  aquarius: 'Aquarius',
   'ondo-yield-assets': 'Ondo',
 };
 const PROVIDER_REFERENCES = [
@@ -39,32 +41,104 @@ const PROVIDER_REFERENCES = [
   },
 ];
 
-export function EarnPage() {
-  const [category, setCategory] = useState('All opportunities');
+type EarnOpportunity = {
+  id: string;
+  kind: 'yield' | 'liquidity';
+  symbol: string;
+  project: string;
+  category: string;
+  meta: string | null;
+  rateKind: 'APY' | 'APR';
+  totalRatePct: number | null;
+  baseRatePct: number | null;
+  rewardRatePct: number | null;
+  tvlUsd: number | null;
+  searchText: string;
+  poolType: string | null;
+  feeBps: number | null;
+};
+
+export function EarnPage({ initialCategory = 'All opportunities' }: { initialCategory?: string }) {
+  const liquidity = useLiquidityPools();
+  const [category, setCategory] = useState(initialCategory);
   const [query, setQuery] = useState('');
   const [assetQuery, setAssetQuery] = useState('');
   const [project, setProject] = useState('all');
   const [sort, setSort] = useState('tvl');
   const [withoutRewards, setWithoutRewards] = useState(false);
-  const projects = [...new Set(research.yieldPools.map((pool) => pool.project))].sort();
-  const rows = research.yieldPools.filter(matchesFilters).sort(compareRows);
-
-  function matchesFilters(pool: YieldPoolRow) {
-    return (
-      (category === 'All opportunities' || poolCategory(pool) === category) &&
-      (project === 'all' || pool.project === project) &&
-      `${pool.symbol} ${pool.meta ?? ''} ${projectName(pool.project)}`.toLowerCase().includes(query.toLowerCase()) &&
-      pool.symbol.toLowerCase().includes(assetQuery.toLowerCase()) &&
-      (!withoutRewards || pool.rewardApyPct === 0)
+  const [poolType, setPoolType] = useState('all');
+  const [fee, setFee] = useState('all');
+  const [page, setPage] = useState(0);
+  const opportunities: EarnOpportunity[] = [
+    ...research.yieldPools.map(
+      (pool): EarnOpportunity => ({
+        id: pool.id,
+        kind: 'yield',
+        symbol: pool.symbol,
+        project: pool.project,
+        category: poolCategory(pool),
+        meta: pool.meta,
+        rateKind: 'APY',
+        totalRatePct: pool.totalApyPct,
+        baseRatePct: pool.baseApyPct,
+        rewardRatePct: pool.rewardApyPct,
+        tvlUsd: pool.tvlUsd,
+        searchText: `${pool.symbol} ${pool.meta ?? ''} ${projectName(pool.project)}`,
+        poolType: null,
+        feeBps: null,
+      }),
+    ),
+    ...(liquidity.data?.pools ?? []).map(
+      (pool): EarnOpportunity => ({
+        id: pool.id,
+        kind: 'liquidity',
+        symbol: pool.tokens.map((token) => token.symbol).join(' / '),
+        project: 'aquarius',
+        category: 'Liquidity',
+        meta: `${pool.type === 'stable' ? 'Stable' : 'Volatile'} · ${pool.feeBps / 100}% swap fee`,
+        rateKind: 'APR',
+        totalRatePct: pool.totalAprPct,
+        baseRatePct: pool.feeAprPct,
+        rewardRatePct:
+          pool.aquaAprPct === null || pool.incentiveAprPct === null ? null : pool.aquaAprPct + pool.incentiveAprPct,
+        tvlUsd: pool.tvlUsd,
+        searchText: `${pool.tokens.map((token) => `${token.symbol} ${token.identity} ${token.contractId}`).join(' ')} Aquarius`,
+        poolType: pool.type,
+        feeBps: pool.feeBps,
+      }),
+    ),
+  ];
+  const projects = [...new Set(opportunities.map((row) => row.project))].sort();
+  const fees = [...new Set(opportunities.flatMap((row) => (row.feeBps === null ? [] : [row.feeBps])))].sort(
+    (a, b) => a - b,
+  );
+  const rows = opportunities
+    .filter(
+      (row) =>
+        (category === 'All opportunities' || row.category === category) &&
+        (project === 'all' || row.project === project) &&
+        row.searchText.toLowerCase().includes(query.toLowerCase()) &&
+        row.searchText.toLowerCase().includes(assetQuery.toLowerCase()) &&
+        (!withoutRewards || row.rewardRatePct === 0) &&
+        (poolType === 'all' || row.poolType === poolType) &&
+        (fee === 'all' || row.feeBps === Number(fee)),
+    )
+    .sort((a, b) =>
+      sort === 'name'
+        ? a.symbol.localeCompare(b.symbol)
+        : sort === 'apy'
+          ? (b.totalRatePct ?? -1) - (a.totalRatePct ?? -1)
+          : (b.tvlUsd ?? -1) - (a.tvlUsd ?? -1),
     );
-  }
+  const currentPage = Math.min(page, Math.max(0, Math.ceil(rows.length / 25) - 1));
+  const visibleRows = rows.slice(currentPage * 25, currentPage * 25 + 25);
 
-  function compareRows(left: YieldPoolRow, right: YieldPoolRow) {
-    if (sort === 'name') return left.symbol.localeCompare(right.symbol);
-    if (sort === 'apy') return (right.totalApyPct ?? -1) - (left.totalApyPct ?? -1);
-    return (right.tvlUsd ?? -1) - (left.tvlUsd ?? -1);
+  function chooseCategory(value: string) {
+    setCategory(value);
+    setPage(0);
+    setPoolType('all');
+    setFee('all');
   }
-
   function resetFilters() {
     setCategory('All opportunities');
     setQuery('');
@@ -72,29 +146,29 @@ export function EarnPage() {
     setProject('all');
     setSort('tvl');
     setWithoutRewards(false);
+    setPoolType('all');
+    setFee('all');
+    setPage(0);
   }
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
         title="A home for idle capital."
-        kicker="Vaults & yield"
-        description="Explore supply and vault observations, then inspect fees, incentives and withdrawal conditions before choosing a product."
+        kicker="Earn"
+        description="Compare lending, vaults, campaigns and liquidity on Stellar."
       />
-      <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
-        <Badge variant="outline">Mainnet snapshot · dated, not live</Badge>
-        <a
-          href={research.sources.defillama.url}
-          target="_blank"
-          rel="noreferrer"
-          className="hover:text-foreground hover:underline"
-        >
-          DefiLlama · captured {formatUtc(research.sources.defillama.capturedAt)}
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
+        <Badge variant="outline">Research · transactions unavailable</Badge>
+        <a href={research.sources.defillama.url} target="_blank" rel="noreferrer" className="hover:underline">
+          DefiLlama · {formatUtc(research.sources.defillama.capturedAt)}
         </a>
+        {liquidity.data && (
+          <a href={liquidity.data.sourceUrl} target="_blank" rel="noreferrer" className="hover:underline">
+            Aquarius top 15 · {liquidity.data.network} · retrieved {formatUtc(liquidity.data.retrievedAt)}
+          </a>
+        )}
       </div>
-      <p className="text-xs text-muted-foreground">
-        These are Mainnet observations. The connected network does not change their scope or make them Testnet data.
-      </p>
       <fieldset className="flex flex-wrap gap-1 border-b pb-3">
         <legend className="sr-only">Opportunity category</legend>
         {CATEGORIES.map((item) => (
@@ -103,13 +177,12 @@ export function EarnPage() {
             variant={category === item ? 'secondary' : 'ghost'}
             className="min-h-11"
             aria-pressed={category === item}
-            onClick={() => setCategory(item)}
+            onClick={() => chooseCategory(item)}
           >
             {item}
           </Button>
         ))}
       </fieldset>
-
       <div className="grid min-w-0 gap-6 lg:grid-cols-[15rem_minmax(0,1fr)]">
         <Card className="min-w-0 self-start">
           <CardHeader className="flex-row items-center justify-between">
@@ -123,74 +196,108 @@ export function EarnPage() {
           </CardHeader>
           <CardContent className="space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="vault-asset-filter">Asset</Label>
+              <Label htmlFor="earn-asset-filter">Asset</Label>
               <Input
-                id="vault-asset-filter"
+                id="earn-asset-filter"
                 className="min-h-11"
                 value={assetQuery}
-                onChange={(event) => setAssetQuery(event.currentTarget.value)}
-                placeholder="Filter by symbol"
+                onChange={(event) => {
+                  setAssetQuery(event.currentTarget.value);
+                  setPage(0);
+                }}
+                placeholder="Symbol, issuer or contract"
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="vault-project-filter">Project</Label>
-              <Select value={project} onValueChange={(next) => next !== null && setProject(next)}>
-                <SelectTrigger id="vault-project-filter" className="min-h-11 w-full">
-                  <SelectValue>{project === 'all' ? 'All projects' : projectName(project)}</SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem className="min-h-11" value="all">
-                    All projects
-                  </SelectItem>
-                  {projects.map((item) => (
-                    <SelectItem className="min-h-11" key={item} value={item}>
-                      {projectName(item)}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
+            <label className="flex flex-col gap-2 text-sm">
+              Project
+              <select
+                className="min-h-11 rounded-lg border bg-background px-3"
+                value={project}
+                onChange={(event) => {
+                  setProject(event.currentTarget.value);
+                  setPage(0);
+                }}
+              >
+                <option value="all">All projects</option>
+                {projects.map((item) => (
+                  <option key={item} value={item}>
+                    {projectName(item)}
+                  </option>
+                ))}
+              </select>
+            </label>
             <div className="flex items-start gap-3">
-              <Checkbox id="vault-no-rewards" checked={withoutRewards} onCheckedChange={setWithoutRewards} />
-              <Label htmlFor="vault-no-rewards" className="min-h-11 leading-relaxed">
-                Only observations reporting zero reward APY
+              <Checkbox
+                id="earn-no-rewards"
+                checked={withoutRewards}
+                onCheckedChange={(checked) => {
+                  setWithoutRewards(checked);
+                  setPage(0);
+                }}
+              />
+              <Label htmlFor="earn-no-rewards" className="min-h-11 leading-relaxed">
+                Only observations reporting zero incentives
               </Label>
             </div>
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Exit terms and eligibility are unverified in this snapshot. A research row is not an available deposit
-              route.
-            </p>
+            {category === 'Liquidity' && (
+              <>
+                <label className="flex flex-col gap-2 text-sm">
+                  Pool type
+                  <select
+                    className="min-h-11 rounded-lg border bg-background px-3"
+                    value={poolType}
+                    onChange={(event) => {
+                      setPoolType(event.currentTarget.value);
+                      setPage(0);
+                    }}
+                  >
+                    <option value="all">All types</option>
+                    <option value="stable">Stable</option>
+                    <option value="volatile">Volatile</option>
+                  </select>
+                </label>
+                <label className="flex flex-col gap-2 text-sm">
+                  Fee tier
+                  <select
+                    className="min-h-11 rounded-lg border bg-background px-3"
+                    value={fee}
+                    onChange={(event) => {
+                      setFee(event.currentTarget.value);
+                      setPage(0);
+                    }}
+                  >
+                    <option value="all">All fees</option>
+                    {fees.map((value) => (
+                      <option key={value} value={String(value)}>
+                        {value / 100}%
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </>
+            )}
           </CardContent>
         </Card>
-
         <div className="min-w-0 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground" aria-live="polite">
-              {rows.length} of {research.yieldPools.length} dated observations
+              {rows.length} opportunities
             </p>
-            <div className="flex items-center gap-2">
-              <Label htmlFor="vault-sort" className="text-xs">
-                Sort
-              </Label>
-              <Select value={sort} onValueChange={(next) => next !== null && setSort(next)}>
-                <SelectTrigger id="vault-sort" className="min-h-11 w-44">
-                  <SelectValue>
-                    {sort === 'tvl' ? 'Reported TVL' : sort === 'apy' ? 'Reported APY' : 'Asset name'}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem className="min-h-11" value="tvl">
-                    Reported TVL
-                  </SelectItem>
-                  <SelectItem className="min-h-11" value="apy">
-                    Reported APY
-                  </SelectItem>
-                  <SelectItem className="min-h-11" value="name">
-                    Asset name
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+            <label className="flex items-center gap-2 text-xs">
+              Sort
+              <select
+                className="min-h-11 rounded-lg border bg-background px-3 text-sm"
+                value={sort}
+                onChange={(event) => {
+                  setSort(event.currentTarget.value);
+                  setPage(0);
+                }}
+              >
+                <option value="tvl">Reported TVL</option>
+                <option value="apy">Reported annualized rate</option>
+                <option value="name">Asset name</option>
+              </select>
+            </label>
           </div>
           <div className="relative">
             <Search
@@ -199,23 +306,40 @@ export function EarnPage() {
             />
             <Input
               value={query}
-              onChange={(event) => setQuery(event.currentTarget.value)}
+              onChange={(event) => {
+                setQuery(event.currentTarget.value);
+                setPage(0);
+              }}
               placeholder="Search assets or projects"
-              aria-label="Search yield observations"
+              aria-label="Search opportunities"
               className="min-h-11 pl-10"
             />
           </div>
-          {rows.length ? (
-            rows.map((pool) => <OpportunityRow key={pool.id} pool={pool} />)
-          ) : (
+          {liquidity.isPending && (
+            <p role="status" className="text-xs text-muted-foreground">
+              Loading Aquarius liquidity opportunities…
+            </p>
+          )}
+          {liquidity.isError && (
+            <div role="status" className="flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
+              Aquarius refresh unavailable. Showing the captured data when available.
+              <Button variant="outline" className="min-h-11" onClick={() => void liquidity.refetch()}>
+                Retry
+              </Button>
+            </div>
+          )}
+          {visibleRows.map((row) => (
+            <OpportunityRow key={`${row.kind}-${row.id}`} row={row} />
+          ))}
+          {!rows.length && !liquidity.isPending && (
             <Card>
               <CardContent>
                 <EmptyState
                   title="No observations match"
                   description={
                     category === 'Campaigns'
-                      ? 'Campaign lots and reward terms are not represented in this source snapshot. No current campaign availability is implied.'
-                      : 'Try another asset, project or incentive filter. Missing data does not mean a venue has no liquidity.'
+                      ? 'No campaign observations are included in this source coverage.'
+                      : 'Try another asset, project or incentive filter.'
                   }
                 >
                   <Button variant="outline" className="min-h-11" onClick={resetFilters}>
@@ -225,44 +349,55 @@ export function EarnPage() {
               </CardContent>
             </Card>
           )}
+          {rows.length > 25 && (
+            <div className="flex items-center justify-end gap-4 text-sm">
+              <Button
+                variant="outline"
+                className="min-h-11"
+                disabled={currentPage === 0}
+                onClick={() => setPage(currentPage - 1)}
+              >
+                Previous
+              </Button>
+              <span>
+                {currentPage * 25 + 1}–{Math.min(rows.length, currentPage * 25 + 25)} of {rows.length}
+              </span>
+              <Button
+                variant="outline"
+                className="min-h-11"
+                disabled={(currentPage + 1) * 25 >= rows.length}
+                onClick={() => setPage(currentPage + 1)}
+              >
+                Next
+              </Button>
+            </div>
+          )}
           <p className="text-xs leading-relaxed text-muted-foreground">
-            Reported APY is not a promised or necessarily net return. Base and reward components stay separate;
-            overlapping protocol and vault TVL must not be added into a new total.
+            APY and APR retain their source definitions. Aquarius APR excludes account-specific boosts; its measurement
+            window is not supplied. Indexed data does not verify an executable pool or current exit availability.
           </p>
         </div>
       </div>
-
-      <section className="space-y-4" aria-labelledby="vault-provider-references">
-        <div>
-          <h2 id="vault-provider-references" className="text-2xl font-semibold">
-            More vault providers
-          </h2>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Reference links for products outside this dated pool coverage. Current terms and executable access are not
-            connected.
-          </p>
-        </div>
-        <div className="grid gap-4 md:grid-cols-3">
-          {PROVIDER_REFERENCES.map((provider) => (
-            <Card key={provider.name} size="sm">
-              <CardHeader>
-                <CardTitle className="text-lg">{provider.name}</CardTitle>
-                <CardDescription>{provider.description}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <a
-                  href={provider.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
-                >
-                  Provider site
-                  <ExternalLink className="size-3" />
-                </a>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+      <section className="grid gap-4 md:grid-cols-3" aria-label="More provider references">
+        {PROVIDER_REFERENCES.map((provider) => (
+          <Card key={provider.name} size="sm">
+            <CardHeader>
+              <CardTitle className="text-lg">{provider.name}</CardTitle>
+              <CardDescription>{provider.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <a
+                href={provider.url}
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
+              >
+                Provider site
+                <ExternalLink className="size-3" />
+              </a>
+            </CardContent>
+          </Card>
+        ))}
       </section>
     </div>
   );
@@ -272,145 +407,83 @@ export function VaultDetailPage({ vaultId }: { vaultId: string }) {
   const [amount, setAmount] = useState('');
   const pool = research.yieldPools.find((item) => item.id === vaultId);
   if (!pool) return <MissingOpportunity />;
+  const strategy = strategyFor(pool.project, pool.symbol);
+  const depositAsset = strategy?.facts.find((fact) => fact.label === 'Deposit asset')?.value ?? pool.symbol;
+  const metrics = [
+    { label: 'Reported TVL', value: pool.tvlUsd, display: formatUsd(pool.tvlUsd) },
+    { label: 'Base APY', value: pool.baseApyPct, display: formatApy(pool.baseApyPct) },
+    { label: 'Reward APY', value: pool.rewardApyPct, display: formatApy(pool.rewardApyPct) },
+  ].filter((metric) => metric.value !== null);
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <Link
-        to="/vaults"
+        to="/earn"
         className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
       >
         <ArrowLeft className="size-4" />
-        All yield opportunities
+        Earn
       </Link>
-      <PageHeader
-        title={pool.symbol}
-        kicker={projectName(pool.project)}
-        description="An observed yield opportunity. Current product identity, eligibility and execution terms still require verification."
-        actions={<Badge variant="outline">Mainnet snapshot · research only</Badge>}
-      />
-      <p className="text-xs text-muted-foreground">
-        Mainnet observation · {formatUtc(pool.observedAt)}. This dated record is independent of the connected network.
-      </p>
+      <PageHeader title={pool.symbol} kicker={projectName(pool.project)} description={strategy?.description ?? ''} />
+      <p className="text-xs text-muted-foreground">Mainnet observation · {formatUtc(pool.observedAt)}</p>
       <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0 space-y-5">
-          <div className="grid gap-4 sm:grid-cols-3">
-            <StatCard label="Reported TVL" value={formatUsd(pool.tvlUsd)} />
-            <StatCard label="Base APY" value={formatApy(pool.baseApyPct)} />
-            <StatCard label="Reward APY" value={formatApy(pool.rewardApyPct)} />
-          </div>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">Product overview</CardTitle>
-              <CardDescription>
-                {pool.meta ?? 'Additional product methodology is not included in this observation.'}
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <dl className="grid gap-4 text-sm sm:grid-cols-2">
-                <div>
-                  <dt className="text-muted-foreground">Project</dt>
-                  <dd className="mt-1">{projectName(pool.project)}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Observation type</dt>
-                  <dd className="mt-1">{poolCategory(pool)}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Reported total APY</dt>
-                  <dd className="mt-1 font-mono">{formatApy(pool.totalApyPct)}</dd>
-                </div>
-                <div>
-                  <dt className="text-muted-foreground">Observed</dt>
-                  <dd className="mt-1 text-xs">{formatUtc(pool.observedAt)}</dd>
-                </div>
-              </dl>
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Total APY is the provider's reported percentage, not a guaranteed net return. Exact fees, receipt/share
-                mechanics, underlying allocations and capacity are unavailable here.
-              </p>
-              <details className="rounded-lg border p-3 text-xs">
-                <summary className="min-h-6 cursor-pointer text-muted-foreground">Source identifier</summary>
-                <p className="mt-2 break-all font-mono text-subtle">{pool.id}</p>
-                <p className="mt-2 text-muted-foreground">
-                  This source identifier is not a verified contract or asset address.
-                </p>
-              </details>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">Performance history</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <EmptyState
-                title="No product history in this snapshot"
-                description="One APY observation cannot establish historical returns or share-price performance. No synthetic curve is substituted."
-              />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">Understand the product</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <UnavailableFacts
-                labels={[
-                  'Curator and underlying exposure',
-                  'Entry and ongoing fees',
-                  'Verified contract version',
-                  'Share or campaign-lot model',
-                  'Current deposit capacity',
-                ]}
-              />
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Share vaults and campaign deposits have different accounting. Do not infer receipt shares, reward
-                entitlement or redemption steps from the asset symbol.
-              </p>
-            </CardContent>
-          </Card>
+          {metrics.length > 0 && (
+            <div className="grid gap-4 sm:grid-cols-3">
+              {metrics.map((metric) => (
+                <StatCard key={metric.label} label={metric.label} value={metric.display} />
+              ))}
+            </div>
+          )}
+          <VaultStrategyMain strategy={strategy} />
         </div>
-        <Card className="min-w-0 self-start lg:sticky lg:top-24">
-          <CardHeader>
-            <CardTitle className="text-2xl">Your next action</CardTitle>
-            <CardDescription>Prepare a draft, then verify current terms.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <Tabs defaultValue="deposit">
-              <TabsList className="h-auto flex-wrap">
-                <TabsTrigger className="min-h-11" value="deposit">
-                  Deposit
-                </TabsTrigger>
-                <TabsTrigger className="min-h-11" value="withdraw">
-                  Withdraw
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="deposit" className="space-y-4">
-                <DecimalField unit={pool.symbol} label="Amount" value={amount} onChange={setAmount} />
-                <WithdrawalTiming />
-                <Button disabled className="min-h-11 w-full" aria-describedby="vault-deposit-unavailable">
-                  Review deposit
-                </Button>
-                <p id="vault-deposit-unavailable" className="text-xs leading-relaxed text-muted-foreground">
-                  Verified product details, live deposit preview and wallet approval are not available in this build.
-                </p>
-              </TabsContent>
-              <TabsContent value="withdraw" className="space-y-4">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Owned positions and current withdrawal capacity must be loaded before redemption can be prepared.
-                </p>
-                <Link
-                  to="/vaults/$vaultId/manage"
-                  params={{ vaultId: pool.id }}
-                  className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
-                >
-                  Position management
-                  <ArrowRight className="size-4" />
-                </Link>
-              </TabsContent>
-            </Tabs>
-            <DraftNotice />
-            <ReviewRequirements />
-          </CardContent>
-        </Card>
+        <aside className="min-w-0 space-y-5">
+          <Card>
+            <CardHeader>
+              <CardTitle>Manage position</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <Tabs defaultValue="deposit">
+                <TabsList className="h-auto">
+                  <TabsTrigger className="min-h-11" value="deposit">
+                    Deposit
+                  </TabsTrigger>
+                  <TabsTrigger className="min-h-11" value="withdraw">
+                    Withdraw
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="deposit" className="space-y-4">
+                  <DecimalField unit={depositAsset} label="Amount" value={amount} onChange={setAmount} />
+                  {strategy?.withdrawal ? (
+                    <div className="rounded-lg border border-warning/40 bg-warning/5 p-4 text-xs leading-relaxed">
+                      <p className="mb-2 font-medium">Withdrawal timing</p>
+                      <p className="text-muted-foreground">{strategy.withdrawal}</p>
+                    </div>
+                  ) : (
+                    <WithdrawalTiming />
+                  )}
+                  <Button disabled className="min-h-11 w-full">
+                    Review deposit
+                  </Button>
+                </TabsContent>
+                <TabsContent value="withdraw" className="space-y-4">
+                  {strategy?.withdrawal && (
+                    <p className="text-sm leading-relaxed text-muted-foreground">{strategy.withdrawal}</p>
+                  )}
+                  <Link
+                    to="/vaults/$vaultId/manage"
+                    params={{ vaultId: pool.id }}
+                    className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
+                  >
+                    Position management
+                    <ArrowRight className="size-4" />
+                  </Link>
+                </TabsContent>
+              </Tabs>
+              <p className="text-xs text-muted-foreground">Transactions are not connected in this preview.</p>
+            </CardContent>
+          </Card>
+          <VaultStrategyAside strategy={strategy} />
+        </aside>
       </div>
     </div>
   );
@@ -502,39 +575,69 @@ export function VaultManagePage({ vaultId }: { vaultId: string }) {
   );
 }
 
-function OpportunityRow({ pool }: { pool: YieldPoolRow }) {
+function OpportunityRow({ row }: { row: EarnOpportunity }) {
+  const linkClass = 'inline-flex min-h-11 items-center font-medium hover:text-primary';
+  const label = <>{row.symbol}</>;
+  const inspect = (
+    <>
+      Inspect
+      <ArrowRight className="size-4" />
+    </>
+  );
   return (
     <Card className="py-0">
       <CardContent className="grid gap-5 py-5 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_auto]">
         <div className="min-w-0 space-y-1">
-          <Link
-            to="/vaults/$vaultId"
-            params={{ vaultId: pool.id }}
-            className="inline-flex min-h-11 items-center font-medium hover:text-primary"
-          >
-            {pool.symbol}
-          </Link>
+          {row.kind === 'liquidity' ? (
+            <Link to="/earn/liquidity/$poolId" params={{ poolId: row.id }} className={linkClass}>
+              {label}
+            </Link>
+          ) : (
+            <Link to="/earn/$vaultId" params={{ vaultId: row.id }} className={linkClass}>
+              {label}
+            </Link>
+          )}
           <p className="text-xs text-muted-foreground">
-            {projectName(pool.project)} · {poolCategory(pool)}
+            {projectName(row.project)} · {row.category}
           </p>
-          {pool.meta ? <p className="text-xs text-subtle">{pool.meta}</p> : null}
+          {row.meta && <p className="text-xs text-subtle">{row.meta}</p>}
         </div>
         <OpportunityMetric
-          label="Reported APY"
-          value={formatApy(pool.totalApyPct)}
-          detail={`Base ${formatApy(pool.baseApyPct)} · rewards ${formatApy(pool.rewardApyPct)}`}
+          label={`Reported ${row.rateKind}`}
+          value={row.totalRatePct === null ? '' : formatApy(row.totalRatePct)}
+          detail={[
+            row.baseRatePct === null
+              ? ''
+              : `${row.kind === 'liquidity' ? 'Fees' : 'Base'} ${formatApy(row.baseRatePct)}`,
+            row.rewardRatePct === null ? '' : `Rewards ${formatApy(row.rewardRatePct)}`,
+          ]
+            .filter(Boolean)
+            .join(' · ')}
         />
-        <OpportunityMetric label="Reported TVL" value={formatUsd(pool.tvlUsd)} detail="Mainnet observation" />
-        <OpportunityMetric label="Withdrawal" value="Unverified" detail="Current terms unavailable" />
+        <OpportunityMetric
+          label="Reported TVL"
+          value={row.tvlUsd === null ? '' : formatUsd(row.tvlUsd)}
+          detail={row.kind === 'liquidity' ? 'Aquarius indexed observation' : 'Mainnet observation'}
+        />
+        <OpportunityMetric label="Withdrawal" value="Unverified" detail="Refresh current pool or product state" />
         <div className="flex items-center">
-          <Link
-            to="/vaults/$vaultId"
-            params={{ vaultId: pool.id }}
-            className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
-          >
-            Inspect
-            <ArrowRight className="size-4" />
-          </Link>
+          {row.kind === 'liquidity' ? (
+            <Link
+              to="/earn/liquidity/$poolId"
+              params={{ poolId: row.id }}
+              className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
+            >
+              {inspect}
+            </Link>
+          ) : (
+            <Link
+              to="/earn/$vaultId"
+              params={{ vaultId: row.id }}
+              className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
+            >
+              {inspect}
+            </Link>
+          )}
         </div>
       </CardContent>
     </Card>
@@ -542,6 +645,7 @@ function OpportunityRow({ pool }: { pool: YieldPoolRow }) {
 }
 
 function OpportunityMetric({ label, value, detail }: { label: string; value: string; detail: string }) {
+  if (!value) return <div aria-hidden="true" />;
   return (
     <div className="flex flex-col justify-center gap-1">
       <span className="text-xs text-muted-foreground">{label}</span>
@@ -585,5 +689,5 @@ function projectName(project: string) {
 }
 
 function formatApy(value: number | null) {
-  return value === null ? 'Unavailable' : `${value.toFixed(2)}%`;
+  return value === null ? 'Unavailable' : value > 0 && value < 0.01 ? '<0.01%' : `${value.toFixed(2)}%`;
 }

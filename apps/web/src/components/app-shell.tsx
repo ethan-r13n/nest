@@ -10,7 +10,7 @@ import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger 
 import { Skeleton } from '@nest/ui/components/skeleton';
 import { Link, Outlet, useLocation } from '@tanstack/react-router';
 import { Bell, Menu, Wallet } from 'lucide-react';
-import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { type ReactNode, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
 import { useHealth } from '../lib/health.ts';
@@ -22,24 +22,25 @@ import { useWorkspaceSession, WorkspaceSessionProvider } from './workspace-sessi
 const ROUTES = [
   { to: '/chat', label: 'Chat' },
   { to: '/research', label: 'Research' },
-  { to: '/vaults', label: 'Vaults' },
+  { to: '/earn', label: 'Earn' },
   { to: '/credit', label: 'Credit' },
   { to: '/trade', label: 'Trade' },
   { to: '/lab/memory', label: 'Lab' },
   { to: '/portfolio', label: 'Portfolio' },
 ] as const;
 
-export function AppShell() {
+/** The workspace frame. Route pages render in its outlet; error and not-found pages pass `children`. */
+export function AppShell({ children }: { children?: ReactNode }) {
   return (
     <WalletProvider>
       <WorkspaceSessionProvider>
-        <WorkspaceShell />
+        <WorkspaceShell>{children}</WorkspaceShell>
       </WorkspaceSessionProvider>
     </WalletProvider>
   );
 }
 
-function WorkspaceShell() {
+function WorkspaceShell({ children }: { children: ReactNode }) {
   const { assistantOpen } = useWorkspaceSession();
   const [desktop, setDesktop] = useState(() => window.matchMedia('(min-width: 1200px)').matches);
   const [assistantWidth, setAssistantWidth] = useState(380);
@@ -142,7 +143,7 @@ function WorkspaceShell() {
       >
         <ResizablePanel id="workspace-panel" minSize={desktop && assistantOpen ? 600 : 0}>
           <div id="workspace-scroll" ref={workspaceScrollRef} className="relative h-full overflow-y-auto">
-            <WorkspaceContent />
+            <WorkspaceContent>{children}</WorkspaceContent>
           </div>
         </ResizablePanel>
         {desktop && assistantOpen ? (
@@ -186,7 +187,7 @@ function WorkspaceShell() {
   );
 }
 
-function WorkspaceContent() {
+function WorkspaceContent({ children }: { children: ReactNode }) {
   const chatPage = useLocation({ select: (location) => location.pathname === '/chat' });
   return (
     <main
@@ -200,7 +201,7 @@ function WorkspaceContent() {
           </div>
         }
       >
-        <Outlet />
+        {children ?? <Outlet />}
       </Suspense>
     </main>
   );
@@ -221,6 +222,7 @@ function NetworkStatus() {
 function isActiveGroup(pathname: string, route: string) {
   if (route === '/research')
     return ['/research', '/protocols', '/assets', '/venues', '/markets'].some((prefix) => pathname.startsWith(prefix));
+  if (route === '/earn') return pathname.startsWith('/earn') || pathname.startsWith('/vaults');
   if (route === '/lab/memory') return pathname.startsWith('/lab');
   if (route === '/portfolio') return pathname.startsWith('/portfolio') || pathname.startsWith('/plans');
   return pathname.startsWith(route);

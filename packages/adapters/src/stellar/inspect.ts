@@ -143,7 +143,7 @@ export function verifySignedTransaction(
   return tx;
 }
 
-function parseTransaction(xdrText: string, network: StellarNetwork): Transaction {
+export function parseTransaction(xdrText: string, network: StellarNetwork): Transaction {
   let parsed: Transaction | FeeBumpTransaction;
   try {
     parsed = TransactionBuilder.fromXDR(xdrText, NETWORK_PASSPHRASES[network]);
@@ -154,7 +154,7 @@ function parseTransaction(xdrText: string, network: StellarNetwork): Transaction
   return parsed;
 }
 
-function validUntil(tx: Transaction, nowSeconds: number): number {
+export function validUntil(tx: Transaction, nowSeconds: number): number {
   const maxTime = Number(tx.timeBounds?.maxTime ?? 0);
   if (!maxTime) fail('VALIDITY', 'The transaction has no expiry.');
   if (maxTime <= nowSeconds) fail('VALIDITY', 'The transaction has already expired.');
@@ -293,10 +293,10 @@ function authorizedTransfer(node: InvocationTree, expected: SwapExpectation): bi
   return amount;
 }
 
-function hex(bytes: Uint8Array): string {
+export function hex(bytes: Uint8Array): string {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
-function fail(code: string, message: string): never {
+export function fail(code: string, message: string): never {
   throw new InspectionError(code, message);
 }

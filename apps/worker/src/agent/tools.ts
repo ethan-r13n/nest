@@ -6,7 +6,13 @@ import { Type } from 'typebox';
 import snapshotJson from '../../../../research/data/stellar-research-ui.json' with { type: 'json' };
 import type { RavenCallResult, RavenToolName } from '../raven/connection.ts';
 
-export const APPROVED_TOOLS = ['list_markets', 'raven_search', 'raven_execute', 'propose_intent'] as const;
+export const APPROVED_TOOLS = [
+  'list_markets',
+  'raven_search',
+  'raven_execute',
+  'compare_opportunities',
+  'propose_intent',
+] as const;
 
 export interface RavenClient {
   callTool(name: RavenToolName, args: Record<string, unknown>): Promise<RavenCallResult>;
@@ -27,9 +33,48 @@ interface SwapProposal {
     | { unavailable: string };
 }
 
+export interface LendingOffer {
+  pool: string;
+  poolStatus: string;
+  supplyApyPct: number;
+  borrowApyPct: number;
+  utilizationPct: number;
+  collateral: { symbol: string; amount: string } | null;
+  estimatedHealth: number | null;
+  withdrawalTiming: string;
+}
+
+interface LendingProposal {
+  intentId: string;
+  kind: 'supply' | 'borrow';
+  asset: { symbol: string; amount: string };
+  offers: LendingOffer[];
+  excluded: { name: string; reason: string }[];
+  unavailable?: string;
+}
+
 /** Creates application records only; it can never approve, sign or submit. */
 export interface ProposalService {
   proposeSwap(input: { sell: 'USDC' | 'XLM'; buy: 'USDC' | 'XLM'; amount: string }): Promise<SwapProposal>;
+  proposeLending(input: {
+    kind: 'supply' | 'borrow';
+    asset: 'USDC' | 'XLM';
+    amount: string;
+    collateralAsset?: 'USDC' | 'XLM' | undefined;
+  }): Promise<LendingProposal>;
+  /** Live lending rates on this network, read-only. */
+  lendingRates(): Promise<LendingRates>;
+}
+
+interface LendingRates {
+  network: string;
+  pools: {
+    name: string;
+    status: string;
+    canSupply: boolean;
+    canBorrow: boolean;
+    reserves: { symbol: string; supplyApyPct: number; borrowApyPct: number; utilizationPct: number }[];
+  }[];
 }
 
 const DEFAULT_LIMIT = 10;
@@ -134,50 +179,118 @@ export function createTools(deps: { raven: RavenClient; proposals: ProposalServi
       run: async (args) => ravenOutput(await deps.raven.callTool('execute', args)),
     }),
     defineTool({
-      name: 'propose_intent',
-      label: 'Preparing a swap proposal',
+      name: 'compare_opportunities',
+      label: 'Reading live lending rates',
       description: [
-        'Propose a swap for the user to review when they ask to trade. Supported: selling USDC for XLM or XLM for',
-        'USDC. Nest gets a live quote (Soroswap on mainnet, Stellar’s DEX on testnet) and shows the user a proposal card; the user connects their wallet,',
-        'reviews the exact transaction and signs it there. You cannot approve, sign or submit. Explain the quote',
-        'from the tool result; do not compute amounts yourself.',
+        'Read live supply and borrow APYs, utilization and status for every Blend pool Nest supports on this network.',
+        'Use it to answer questions about current lending rates. It changes nothing. Pools that are on ice cannot',
+        'take new loans; frozen pools take no deposits.',
+      ].join(' '),
+      parameters: Type.Object({}),
+      replay: 'safe',
+      run: async () => {
+        try {
+          return { text: JSON.stringify(await deps.proposals.lendingRates()) };
+        } catch (error) {
+          return { text: error instanceof Error ? error.message : 'Rates are unavailable.', isError: true };
+        }
+      },
+    }),
+    defineTool({
+      name: 'propose_intent',
+      label: 'Preparing a proposal',
+      description: [
+        'Propose an action for the user to review. kind "swap": sell USDC for XLM or XLM for USDC (sell, buy,',
+        'amount); Nest gets a live quote (Soroswap on mainnet, Stellar’s DEX on testnet). kind "supply": lend',
+        'asset to earn interest (asset, amount). kind "borrow": borrow asset against collateral (asset, amount,',
+        'optional collateral; defaults to the other asset). For supply and borrow, Nest compares every Blend pool',
+        'and picks the best rate, sizing borrow collateral for a safe health factor. The user sees a proposal card,',
+        'connects their wallet, reviews the exact transaction and signs it there. You cannot approve, sign or submit.',
+        'Explain the result from the tool output; do not compute amounts or rates yourself.',
       ].join(' '),
       parameters: Type.Object({
-        kind: Type.Literal('swap'),
-        sell: Type.Union([Type.Literal('USDC'), Type.Literal('XLM')]),
-        buy: Type.Union([Type.Literal('USDC'), Type.Literal('XLM')]),
+        kind: Type.Union([Type.Literal('swap'), Type.Literal('supply'), Type.Literal('borrow')]),
         amount: Type.String({
           pattern: '^(0|[1-9][0-9]*)([.][0-9]{1,7})?$',
           maxLength: 30,
-          description: 'Amount of the asset being sold, as a plain decimal such as "100".',
+          description: 'Plain decimal such as "100": the amount sold, supplied or borrowed.',
         }),
+        sell: Type.Optional(Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Swap only.' })),
+        buy: Type.Optional(Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Swap only.' })),
+        asset: Type.Optional(
+          Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Supply or borrow: the asset.' }),
+        ),
+        collateral: Type.Optional(
+          Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Borrow only: the collateral.' }),
+        ),
       }),
       // It creates a record, so a crash never repeats it.
       replay: 'never',
       sequential: true,
-      run: async ({ sell, buy, amount }) => {
-        let proposal: SwapProposal;
+      run: async (args) => {
         try {
-          proposal = await deps.proposals.proposeSwap({ sell, buy, amount });
+          if (args.kind === 'swap') {
+            if (!args.sell || !args.buy) return { text: 'A swap needs sell and buy.', isError: true };
+            return swapOutput(
+              await deps.proposals.proposeSwap({ sell: args.sell, buy: args.buy, amount: args.amount }),
+            );
+          }
+          if (!args.asset) return { text: `A ${args.kind} needs asset.`, isError: true };
+          return lendingOutput(
+            await deps.proposals.proposeLending({
+              kind: args.kind,
+              asset: args.asset,
+              amount: args.amount,
+              collateralAsset: args.collateral,
+            }),
+          );
         } catch (error) {
-          return { text: error instanceof Error ? error.message : 'The swap could not be proposed.', isError: true };
+          return { text: error instanceof Error ? error.message : 'The action could not be proposed.', isError: true };
         }
-        const quote = proposal.quote;
-        const summary =
-          'unavailable' in quote
-            ? `The live quote is unavailable right now (${quote.unavailable}); the proposal card will retry.`
-            : [
-                `Expected about ${quote.expectedOut} ${proposal.buy.symbol}, at least ${quote.minimumOut} after`,
-                `${quote.slippageBps / 100}% slippage. Price impact: ${quote.priceImpactBps === null ? 'not reported' : `${quote.priceImpactBps / 100}%`}.`,
-                `Routes: ${quote.protocols.join(', ') || 'Soroswap'}. Nest fee: 0. The quote is valid for about 30 seconds and the card refreshes it.`,
-              ].join(' ');
-        return {
-          text: `Swap proposal ready: sell ${proposal.sell.amount} ${proposal.sell.symbol} for ${proposal.buy.symbol}. ${summary} The user reviews and signs in their wallet; nothing executes until they do.`,
-          details: { intentId: proposal.intentId, kind: 'swap' },
-        };
       },
     }),
   ];
+}
+
+function swapOutput(proposal: SwapProposal): ToolOutput {
+  const quote = proposal.quote;
+  const summary =
+    'unavailable' in quote
+      ? `The live quote is unavailable right now (${quote.unavailable}); the proposal card will retry.`
+      : [
+          `Expected about ${quote.expectedOut} ${proposal.buy.symbol}, at least ${quote.minimumOut} after`,
+          `${quote.slippageBps / 100}% slippage. Price impact: ${quote.priceImpactBps === null ? 'not reported' : `${quote.priceImpactBps / 100}%`}.`,
+          `Routes: ${quote.protocols.join(', ') || 'Soroswap'}. Nest fee: 0. The quote is valid for about 30 seconds and the card refreshes it.`,
+        ].join(' ');
+  return {
+    text: `Swap proposal ready: sell ${proposal.sell.amount} ${proposal.sell.symbol} for ${proposal.buy.symbol}. ${summary} The user reviews and signs in their wallet; nothing executes until they do.`,
+    details: { intentId: proposal.intentId, kind: 'swap' },
+  };
+}
+
+function lendingOutput(proposal: LendingProposal): ToolOutput {
+  const verb = proposal.kind === 'supply' ? 'Supply' : 'Borrow';
+  const [best] = proposal.offers;
+  const excluded = proposal.excluded.map((entry) => `${entry.name}: ${entry.reason}`).join(' ');
+  const lines = [`${verb} proposal for ${proposal.asset.amount} ${proposal.asset.symbol} on Blend.`];
+  if (proposal.unavailable)
+    lines.push(`Live rates are unavailable right now (${proposal.unavailable}); the card will retry.`);
+  else if (!best) lines.push('No Blend pool can take this right now.');
+  else if (proposal.kind === 'supply') {
+    lines.push(
+      `Best rate: ${best.pool}, ${best.supplyApyPct.toFixed(2)}% supply APY (variable), utilization ${best.utilizationPct.toFixed(1)}%.`,
+      `Withdrawal timing: ${best.withdrawalTiming}`,
+    );
+  } else {
+    lines.push(
+      `Best rate: ${best.pool}, ${best.borrowApyPct.toFixed(2)}% borrow APY (variable).`,
+      `Collateral: ${best.collateral?.amount} ${best.collateral?.symbol}, for an estimated health factor of ${best.estimatedHealth?.toFixed(2)} (Blend liquidates below 1).`,
+      `Collateral withdrawal: ${best.withdrawalTiming}`,
+    );
+  }
+  if (excluded) lines.push(`Excluded: ${excluded}`);
+  lines.push('Nest fee: 0. The user reviews and signs in their wallet; nothing executes until they do.');
+  return { text: lines.join(' '), details: { intentId: proposal.intentId, kind: proposal.kind } };
 }
 
 function ravenOutput(result: RavenCallResult): ToolOutput {

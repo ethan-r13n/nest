@@ -1,0 +1,377 @@
+{
+  "date": "2026-10-25",
+  "version": "0.7.0",
+  "modelTests": {
+    "result": "passed",
+    "file": "scripts/verify-lab-model.js",
+    "coverage": [
+      "natural-language extraction",
+      "incremental pool identities",
+      "targeted follow-ups",
+      "fixed and capacity sizing",
+      "mode-specific period/cadence",
+      "invalid input gating",
+      "revision fingerprint",
+      "persisted data escaping"
+    ]
+  },
+  "browserLayouts": [
+    {
+      "requestedWidth": 375,
+      "actualWidth": 360,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 360,
+      "route": "lab-backtests",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 375,
+      "actualWidth": 360,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 360,
+      "route": "lab-automation",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 375,
+      "actualWidth": 360,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 360,
+      "route": "lab-history",
+      "settingsOpen": null,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 768,
+      "actualWidth": 753,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 753,
+      "route": "lab-backtests",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 768,
+      "actualWidth": 753,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 753,
+      "route": "lab-automation",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 768,
+      "actualWidth": 753,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 753,
+      "route": "lab-history",
+      "settingsOpen": null,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 1024,
+      "actualWidth": 1009,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 1009,
+      "route": "lab-backtests",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 1024,
+      "actualWidth": 1009,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 1009,
+      "route": "lab-automation",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 1024,
+      "actualWidth": 1009,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 1009,
+      "route": "lab-history",
+      "settingsOpen": null,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 1440,
+      "actualWidth": 1425,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 1425,
+      "route": "lab-backtests",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 1440,
+      "actualWidth": 1425,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 1425,
+      "route": "lab-automation",
+      "settingsOpen": true,
+      "tabCount": 3
+    },
+    {
+      "requestedWidth": 1440,
+      "actualWidth": 1425,
+      "assistantHidden": true,
+      "chartWithinPage": true,
+      "oldLabVisible": false,
+      "pageWidth": 1425,
+      "route": "lab-history",
+      "settingsOpen": null,
+      "tabCount": 3
+    }
+  ],
+  "legacyAliases": [
+    {
+      "legacyRoute": "lab-memory",
+      "heading": "From thesis to strategy.",
+      "route": "lab-backtests",
+      "tabCount": 3
+    },
+    {
+      "legacyRoute": "learning-runs",
+      "heading": "From thesis to strategy.",
+      "route": "lab-backtests",
+      "tabCount": 3
+    },
+    {
+      "legacyRoute": "backtest-run",
+      "heading": "From thesis to strategy.",
+      "route": "lab-history",
+      "tabCount": 3
+    },
+    {
+      "legacyRoute": "automation-history",
+      "heading": "From thesis to strategy.",
+      "route": "lab-history",
+      "tabCount": 3
+    }
+  ],
+  "smokeChecks": [
+    {
+      "hasWorkspace": true,
+      "heading": "Blend Pools V2",
+      "route": "protocol-detail"
+    },
+    {
+      "hasWorkspace": true,
+      "heading": "XLM / USDC",
+      "route": "trade"
+    },
+    {
+      "hasWorkspace": true,
+      "heading": "Put your capital in context.",
+      "route": "vaults"
+    }
+  ],
+  "interactions": {
+    "backtestConfirmationSaved": true,
+    "automationConfirmationSaved": true,
+    "historySurvivesReload": true,
+    "originalPoolInputsRetained": true,
+    "historyModeFilters": true,
+    "historySearch": true,
+    "historyReuse": true,
+    "removeAndUndo": true,
+    "invalidThresholdBlocksConfirmation": true,
+    "validThresholdUpdatesPreview": true,
+    "visualizationChoices": [
+      "spread",
+      "prices",
+      "capacity"
+    ],
+    "newChatNoDuplicateListeners": true,
+    "qaHistoryEntriesRemoved": true
+  },
+  "previewBoundary": {
+    "historicalReplayConnected": false,
+    "monitorSchedulerConnected": false,
+    "llmConnected": false,
+    "storage": "local to this device",
+    "chart": "illustrative only"
+  },
+  "previews": [
+    "previews/lab-start.png",
+    "previews/lab-backtests.png",
+    "previews/lab-automation.png",
+    "previews/lab-history.png",
+    "previews/lab-mobile.png"
+  ],
+  "prBaseline": {
+    "head": "69a35300277a9cc87c68bab44cb42ba08ba23160",
+    "browserChecks": [
+      {
+        "requestedWidth": 375,
+        "labTabs": 3,
+        "pageWidth": 360,
+        "route": "lab-backtests",
+        "width": 360,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 375,
+        "labTabs": 3,
+        "pageWidth": 360,
+        "route": "lab-automation",
+        "width": 360,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 375,
+        "labTabs": 3,
+        "pageWidth": 360,
+        "route": "lab-history",
+        "width": 360,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 375,
+        "labTabs": null,
+        "pageWidth": 360,
+        "route": "protocol-detail",
+        "width": 360,
+        "yieldRows": 5
+      },
+      {
+        "requestedWidth": 768,
+        "labTabs": 3,
+        "pageWidth": 753,
+        "route": "lab-backtests",
+        "width": 753,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 768,
+        "labTabs": 3,
+        "pageWidth": 753,
+        "route": "lab-automation",
+        "width": 753,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 768,
+        "labTabs": 3,
+        "pageWidth": 753,
+        "route": "lab-history",
+        "width": 753,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 768,
+        "labTabs": null,
+        "pageWidth": 753,
+        "route": "protocol-detail",
+        "width": 753,
+        "yieldRows": 5
+      },
+      {
+        "requestedWidth": 1024,
+        "labTabs": 3,
+        "pageWidth": 1009,
+        "route": "lab-backtests",
+        "width": 1009,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 1024,
+        "labTabs": 3,
+        "pageWidth": 1009,
+        "route": "lab-automation",
+        "width": 1009,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 1024,
+        "labTabs": 3,
+        "pageWidth": 1009,
+        "route": "lab-history",
+        "width": 1009,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 1024,
+        "labTabs": null,
+        "pageWidth": 1009,
+        "route": "protocol-detail",
+        "width": 1009,
+        "yieldRows": 5
+      },
+      {
+        "requestedWidth": 1440,
+        "labTabs": 3,
+        "pageWidth": 1425,
+        "route": "lab-backtests",
+        "width": 1425,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 1440,
+        "labTabs": 3,
+        "pageWidth": 1425,
+        "route": "lab-automation",
+        "width": 1425,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 1440,
+        "labTabs": 3,
+        "pageWidth": 1425,
+        "route": "lab-history",
+        "width": 1425,
+        "yieldRows": 0
+      },
+      {
+        "requestedWidth": 1440,
+        "labTabs": null,
+        "pageWidth": 1425,
+        "route": "protocol-detail",
+        "width": 1425,
+        "yieldRows": 5
+      }
+    ],
+    "invalidThresholdBlocked": true,
+    "historyPersistence": {
+      "saved": 2,
+      "statuses": [
+        "Not scheduled",
+        "Awaiting historical data"
+      ]
+    },
+    "mcpPreserved": {
+      "heading": "MCP Contents",
+      "researchTabs": [
+        "DeFi",
+        "RWAs",
+        "MCP Contents"
+      ]
+    }
+  }
+}

@@ -1,30 +1,55 @@
 const $=id=>document.getElementById(id), UI=window.NestUI;
+const labAliases={'lab-memory':'lab-backtests','learning-runs':'lab-backtests','backtest-run':'lab-history','automation-history':'lab-history'};
 const routes={
- 'chat':{name:'Chat',group:'chat'},'research-markets':{name:'Research / Markets',group:'research'},'research-map':{name:'Research / Venue map',group:'research'},'venue-detail':{name:'Research / Venue detail',group:'research'},'market-detail':{name:'Research / Market detail',group:'research'},
- 'protocol-detail':{name:'Research / Protocol detail',group:'research'},'asset-detail':{name:'Research / Asset detail',group:'research'},'saved':{name:'Research / Saved',group:'research'},
- 'supply':{name:'Credit / Supply',group:'credit'},'fund':{name:'Portfolio / Receive',group:'portfolio'},'transfer':{name:'Portfolio / Send',group:'portfolio'},'activity':{name:'Portfolio / Activity',group:'portfolio'},'plan':{name:'Execution / Plan status',group:'portfolio'},'vault-management':{name:'Vault / Redemptions & rewards',group:'vaults'},
- 'automation-history':{name:'Lab / Automation history',group:'lab'},'connections':{name:'Connections',group:'lab'},'alerts':{name:'Alerts',group:'portfolio'},'conversations':{name:'Chat / Conversations',group:'chat'},'policy-states':{name:'Guardrails / State review',group:'portfolio'},'wallet-access':{name:'Wallet / Access',group:'portfolio'},'backtest-run':{name:'Lab / Backtest run',group:'lab'},'learning-runs':{name:'Lab / Learning runs · P1',group:'lab'},
+ 'chat':{name:'Chat',group:'chat'},'research-mcp':{name:'Research / MCP Contents',group:'research'},
+ 'protocol-detail':{name:'Research / Protocol detail',group:'research'},'asset-detail':{name:'Research / Asset detail',group:'research'},'saved':{name:'Research / Bookmarks',group:'research'},
+ 'supply':{name:'Credit / Supply',group:'credit'},'activity':{name:'Portfolio / Activity',group:'portfolio'},'plan':{name:'Execution / Plan status',group:'portfolio'},
+ 'connections':{name:'Workspace / Connections',group:'portfolio'},'alerts':{name:'Alerts',group:'portfolio'},'conversations':{name:'Chat / Conversations',group:'chat'},'policy-states':{name:'Guardrails / State review',group:'portfolio'},'wallet-access':{name:'Wallet / Access',group:'portfolio'},
  'research-defi':{name:'Research / DeFi',group:'research'},'research-rwa':{name:'Research / RWAs',group:'research'},
- 'vaults':{name:'Vaults',group:'vaults'},'vault-detail':{name:'Vault / USDC',group:'vaults'},'trade':{name:'Trade',group:'trade'},
+ 'vaults':{name:'Earn',group:'vaults'},'liquidity':{name:'Earn / Liquidity',group:'vaults'},'liquidity-detail':{name:'Earn / Liquidity pool',group:'vaults'},'vault-detail':{name:'Vault / USDC',group:'vaults'},'trade':{name:'Trade',group:'trade'},
  'borrow':{name:'Credit / Borrow',group:'credit'},'positions':{name:'Credit / Positions',group:'credit'},
- 'lab-memory':{name:'Lab / Memory',group:'lab'},'lab-backtests':{name:'Lab / Backtests',group:'lab'},'lab-automation':{name:'Lab / Automations',group:'lab'},'portfolio':{name:'Portfolio',group:'portfolio'}
+ 'lab-backtests':{name:'Lab / Backtest',group:'lab'},'lab-automation':{name:'Lab / Set automation',group:'lab'},'lab-history':{name:'Lab / History',group:'lab'},'portfolio':{name:'Portfolio',group:'portfolio'}
 };
 let activeRoute='research-defi',previewState='default',toastTimer;
+const researchScroll = new Map();let lastRenderedRoute=null;
 const dialogTriggers=new WeakMap();let screenObserver,guardrailsDirty=false;
 window.showToast=message=>{const el=$('toast');el.textContent=message;el.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.hidden=true,3500);};
 function setActiveNav(){document.querySelectorAll('[data-group]').forEach(a=>{const on=a.dataset.group===routes[activeRoute]?.group;a.classList.toggle('active',on);if(on)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});}
+function recoveryHTML(name,kind='error'){
+ const empty=kind==='empty';
+ return `<div class="page-head"><h1>${UI.escape(name)}</h1></div><section class="panel empty-state ux-recovery" ${empty?'role="status"':'role="alert"'}><h2>${empty?'No results to show':'This view couldn’t be loaded'}</h2><p>${empty?'No results are available for this preview. Return to the current view to adjust its inputs or filters.':'Try loading this view again. Your entered values stay in this session; quotes and action reviews must be refreshed.'}</p><div class="ux-recovery-actions"><button class="btn btn-primary" data-reset-state>${empty?'Return to view':'Try again'}</button><a class="btn" href="#research-defi">Open Research</a></div></section>`;
+}
 function renderScreen(scroll=false){
- const route=location.hash.slice(1).split('?')[0]||'research-defi';activeRoute=routes[route]?route:'research-defi';document.title=`Nest — ${routes[activeRoute].name}`;setActiveNav();
- const render=window.NestScreens[activeRoute];let html=render?render():`<div class="empty-state"><h1>${UI.escape(routes[activeRoute].name)}</h1><p>This screen is being assembled.</p></div>`;
- const stateCopy={partial:'Partial coverage · successful results remain visible; missing sources have explicit reasons.',stale:'Stale / expired preview · prepare a fresh revision before review or signing.'};
- if(previewState==='loading')html=`<div class="page-head"><div><span class="eyebrow">${routes[activeRoute].name}</span><h1>Loading workspace</h1><p>Waiting for validated data and source observation times.</p></div></div><div class="panel panel-body" aria-busy="true"><div class="skeleton" style="width:40%"></div><div class="skeleton" style="width:65%"></div>${'<div class="skeleton-row"></div>'.repeat(6)}</div>`;
- if(previewState==='empty')html=`<div class="page-head"><h1>${routes[activeRoute].name}</h1></div><div class="panel empty-state"><h3>No results yet</h3><p>No eligible results match these inputs. Explain the limiting filters, source coverage or missing capability.</p><button class="btn" data-reset-state>Reset preview</button></div>`;
- if(previewState==='error')html=`<div class="page-head"><h1>${routes[activeRoute].name}</h1></div><div class="panel empty-state"><h3>We couldn’t load this view.</h3><p>Keep the user’s draft, expose the failed source and request ID, and offer a retry.</p><button class="btn btn-primary" data-reset-state>Retry preview</button></div>`;
- if(stateCopy[previewState])html=`<div class="alert state-banner">△ ${stateCopy[previewState]}</div>`+html;
- screenObserver?.disconnect();window.NestRefine?.dispose();window.NestTradeChart?.dispose();window.NestChatResizeCleanup?.();UI.disposeCharts?.($('screen'));const fresh=$('screen').cloneNode(false);$('screen').replaceWith(fresh);fresh.innerHTML=html;if(!['loading','empty','error'].includes(previewState))window.NestBinders[activeRoute]?.(fresh);UI.initCharts?.(fresh);UI.hydrateLogos?.(fresh);window.NestRefine?.init(fresh,activeRoute);screenObserver=new MutationObserver(()=>{UI.initCharts?.(fresh);UI.hydrateLogos?.(fresh);});screenObserver.observe(fresh,{childList:true,subtree:true});
- if(previewState==='stale')$('screen').querySelectorAll('[data-review]').forEach(b=>{b.disabled=true;b.setAttribute('title','Stale review: fresh preparation required');});
- if(['chat','conversations'].includes(activeRoute)){$('agent-dock').hidden=true;$('agent-resizer').hidden=true;$('workspace-layout').classList.remove('agent-open');$('agent-launcher').hidden=true;}else if($('agent-dock').hidden)$('agent-launcher').hidden=false;
- if(scroll)window.scrollTo({top:0,behavior:'instant'});
+ const old=$('screen');window.NestUX?.capture(old);
+ const canonical=window.NestPortfolioNavigation?.legacy(location.hash)||window.NestResearchRoute?.(location.hash);
+ if(canonical){history.replaceState(null,'',canonical);}
+ if(scroll&&lastRenderedRoute?.startsWith('research-'))researchScroll.set(lastRenderedRoute,window.scrollY);
+ const requestedRoute=location.hash.slice(1).split('?')[0]||'research-defi',route=labAliases[requestedRoute]||requestedRoute,known=Boolean(routes[route]);
+ activeRoute=known?route:'research-defi';const name=known?routes[activeRoute].name:'Page unavailable';document.title=`Nest — ${name}`;setActiveNav();
+ let html,failed=false;
+ try {html=known?window.NestScreens[activeRoute]?.():`<section class="panel empty-state ux-recovery" role="alert"><h1>Page not found</h1><p>This address does not match a Nest page. Choose a page from the navigation or return to Research.</p><a class="btn btn-primary" href="#research-defi">Open Research</a></section>`;if(!html)throw Error('Missing screen');}
+ catch {html=recoveryHTML(name);failed=true;}
+ const stateCopy={partial:'Some sources are unavailable. Available results remain visible; check source coverage before comparing.',stale:'This preview is out of date. Refresh the view before reviewing an action.'};
+ if(previewState==='loading')html=`<div class="page-head"><div><span class="eyebrow">${UI.escape(name)}</span><h1>Loading workspace</h1><p role="status">Waiting for source data…</p></div></div><div class="panel panel-body" aria-busy="true"><div class="skeleton" style="width:40%"></div><div class="skeleton" style="width:65%"></div>${'<div class="skeleton-row"></div>'.repeat(6)}</div>`;
+ if(['empty','error'].includes(previewState))html=recoveryHTML(name,previewState);
+ const notice=stateCopy[previewState]?`<div class="alert state-banner" data-preview-notice role="status">△ ${stateCopy[previewState]} ${previewState==='stale'?'<button class="btn" data-reset-state>Refresh view</button>':''}</div>`:'';
+ if(notice)html=notice+html;
+ screenObserver?.disconnect();window.NestUX?.dispose();window.NestRefine?.dispose();window.NestTradeChart?.dispose();window.NestChatResizeCleanup?.();UI.disposeCharts?.(old);
+ const fresh=old.cloneNode(false);old.replaceWith(fresh);fresh.innerHTML=html;window.NestTypography?.apply(fresh);
+ const normal=known&&!failed&&!['loading','empty','error'].includes(previewState);
+ const changed=window.NestUX?.prepare(fresh,activeRoute,normal&&previewState==='default'?'default':previewState==='default'?'error':previewState)||[];
+ try {
+  if(normal)window.NestBinders[activeRoute]?.(fresh);
+  UI.initCharts?.(fresh);UI.hydrateLogos?.(fresh);window.NestRefine?.init(fresh,activeRoute);
+  window.NestUX?.mount(fresh,activeRoute,changed);
+ } catch {
+  window.NestUX?.dispose();window.NestRefine?.dispose();window.NestTradeChart?.dispose();UI.disposeCharts?.(fresh);fresh.innerHTML=recoveryHTML(name);fresh.dataset.uxState='error';window.NestUX?.mount(fresh,activeRoute);
+ }
+ const keepPreviewState=()=>{if(notice&&!fresh.querySelector('[data-preview-notice]'))fresh.insertAdjacentHTML('afterbegin',notice);if(previewState==='stale')fresh.querySelectorAll('[data-review]').forEach(b=>{b.disabled=true;b.setAttribute('title','Refresh this view before reviewing an action.');});};
+ keepPreviewState();screenObserver=new MutationObserver(()=>{UI.initCharts?.(fresh);UI.hydrateLogos?.(fresh);keepPreviewState();});screenObserver.observe(fresh,{childList:true,subtree:true});
+ if(['chat','conversations','lab-backtests','lab-automation','lab-history'].includes(activeRoute)){$('agent-dock').hidden=true;$('agent-resizer').hidden=true;$('workspace-layout').classList.remove('agent-open');$('agent-launcher').hidden=true;}else if($('agent-dock').hidden)$('agent-launcher').hidden=false;
+ if(scroll)window.scrollTo({top:activeRoute.startsWith('research-')?(researchScroll.get(activeRoute)||0):0,behavior:'instant'});
+ window.NestPortfolioNavigation?.focus(fresh);lastRenderedRoute=activeRoute;
  if(!$('agent-dock').hidden)$('agent-dock').innerHTML=agentHTML();
 }
 window.addEventListener('hashchange',()=>{previewState='default';$('state-select').value='default';renderScreen(true);});
@@ -53,7 +78,7 @@ function utility(kind,trigger){let title='',html='';
  if(kind==='network'){title='Network';html='<p class="muted">Mainnet is the primary product network. The isolated Testnet profile uses separate registries, liquidity and signing scope.</p><div class="grid-2"><button class="btn" data-network="Mainnet">◉ Mainnet</button><button class="btn" data-network="Testnet">◉ Testnet</button></div><p class="data-note">Network changes invalidate production prepared plans; the design preview has no executable plans.</p>';}
  if(kind==='routes'){title='Nest workspace';html='<div class="route-grid">'+Object.entries(routes).map(([k,v])=>`<a class="btn" data-route-link href="#${k}">${v.name}</a>`).join('')+'</div>';}
  if(kind==='search'){title='Search workspace';html='<label class="field"><span class="field-label">Screen, position or asset</span><input id="global-search" class="input" placeholder="Search screens…" autofocus></label><div class="route-grid mt-24" id="search-results">'+Object.entries(routes).map(([k,v])=>`<a class="btn" data-route-link href="#${k}">${v.name}</a>`).join('')+'</div>';}
- $('utility-dialog').innerHTML=`<div class="dialog-head"><h2 id="utility-title">${title}</h2>${closeButton('utility-dialog')}</div>${html}`;showDialog('utility-dialog',trigger);if(kind==='search')$('global-search').addEventListener('input',e=>{$('search-results').querySelectorAll('a').forEach(a=>a.hidden=!a.textContent.toLowerCase().includes(e.target.value.toLowerCase()));});
+ $('utility-dialog').innerHTML=`<div class="dialog-head"><h2 id="utility-title">${title}</h2>${closeButton('utility-dialog')}</div>${html}`;showDialog('utility-dialog',trigger);if(kind==='search')$('global-search').addEventListener('input',e=>{const results=$('search-results');results.querySelectorAll('a').forEach(a=>a.hidden=!a.textContent.toLowerCase().includes(e.target.value.toLowerCase()));let empty=results.querySelector('[data-search-empty]');if(!empty){empty=document.createElement('p');empty.dataset.searchEmpty='true';empty.className='muted';empty.setAttribute('role','status');empty.textContent='No pages match. Try a shorter name, such as Trade or Credit.';results.append(empty);}empty.hidden=[...results.querySelectorAll('a')].some(a=>!a.hidden);});
 }
 document.addEventListener('click',e=>{if(e.target.closest('.skip')){e.preventDefault();$('screen').focus();return;}const review=e.target.closest('[data-review]');if(review&&!review.disabled){openReview(review.dataset.review,review);return;}if(e.target.closest('[data-discard-guardrails]')){guardrailsDirty=false;$('utility-dialog').close();$('guardrails-dialog').close();return;}const close=e.target.closest('[data-close]');if(close){requestClose(close.dataset.close);return;}const open=e.target.closest('[data-open]');if(open){open.dataset.open==='guardrails'?openGuardrails(open):utility(open.dataset.open,open);return;}const ag=e.target.closest('[data-agent]');if(ag||e.target.closest('#agent-launcher')){openAgent(ag||e.target.closest('#agent-launcher'));return;}if(e.target.closest('[data-agent-close]')){closeAgent();return;}if(e.target.closest('[data-chat-send]')){const surface=e.target.closest('.agent-content');window.NestChatDraft=surface?.querySelector('textarea')?.value.trim()||'Help me understand '+routes[activeRoute].name.toLowerCase();closeAgent();location.hash='chat';return;}if(e.target.closest('[data-reset-state]')){previewState='default';$('state-select').value='default';renderScreen();return;}if(e.target.closest('[data-route-link]'))$('utility-dialog').close();const network=e.target.closest('[data-network]');if(network){document.querySelector('.network span').textContent=network.dataset.network;$('utility-dialog').close();showToast('Network display changed in preview; fixtures retain their labeled source scope.');}if(e.target.closest('[data-demo-wallet]')){document.querySelector('.wallet-button').textContent='G…DEMO';$('utility-dialog').close();showToast('Illustrative connected state · no wallet or account accessed.');}});
 document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='k'){e.preventDefault();utility('search',document.activeElement);}});

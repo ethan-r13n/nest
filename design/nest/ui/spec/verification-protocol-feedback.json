@@ -1,0 +1,193 @@
+{
+  "date": "2026-10-25",
+  "modelChecks": {
+    "result": "passed",
+    "protocols": 44,
+    "protocolsWithCapturedStellarYields": 3,
+    "matchedScoutProtocols": 32,
+    "nullZeroTinyApy": true,
+    "exactProtocolAndChainMatch": true,
+    "safeLinks": true,
+    "snapshotParity": true
+  },
+  "browserChecks": [
+    {
+      "requestedWidth": 375,
+      "actualWidth": 360,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 360,
+      "route": "#protocol-detail?slug=blend-pools-v2",
+      "sidebarCardWidths": [
+        328,
+        328,
+        328
+      ],
+      "yieldRows": 5
+    },
+    {
+      "requestedWidth": 375,
+      "actualWidth": 360,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 360,
+      "route": "#protocol-detail?slug=gami-labs",
+      "sidebarCardWidths": [
+        328,
+        328,
+        328
+      ],
+      "yieldRows": 2
+    },
+    {
+      "requestedWidth": 375,
+      "actualWidth": 360,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 360,
+      "route": "#protocol-detail?slug=defindex",
+      "sidebarCardWidths": [
+        328,
+        328,
+        328
+      ],
+      "yieldRows": 0
+    },
+    {
+      "requestedWidth": 768,
+      "actualWidth": 753,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 753,
+      "route": "#protocol-detail?slug=blend-pools-v2",
+      "sidebarCardWidths": [
+        345,
+        345,
+        345
+      ],
+      "yieldRows": 5
+    },
+    {
+      "requestedWidth": 768,
+      "actualWidth": 753,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 753,
+      "route": "#protocol-detail?slug=gami-labs",
+      "sidebarCardWidths": [
+        345,
+        345,
+        345
+      ],
+      "yieldRows": 2
+    },
+    {
+      "requestedWidth": 768,
+      "actualWidth": 753,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 753,
+      "route": "#protocol-detail?slug=defindex",
+      "sidebarCardWidths": [
+        345,
+        345,
+        345
+      ],
+      "yieldRows": 0
+    },
+    {
+      "requestedWidth": 1024,
+      "actualWidth": 1009,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 1009,
+      "route": "#protocol-detail?slug=blend-pools-v2",
+      "sidebarCardWidths": [
+        471,
+        471,
+        471
+      ],
+      "yieldRows": 5
+    },
+    {
+      "requestedWidth": 1024,
+      "actualWidth": 1009,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 1009,
+      "route": "#protocol-detail?slug=gami-labs",
+      "sidebarCardWidths": [
+        471,
+        471,
+        471
+      ],
+      "yieldRows": 2
+    },
+    {
+      "requestedWidth": 1024,
+      "actualWidth": 1009,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 1009,
+      "route": "#protocol-detail?slug=defindex",
+      "sidebarCardWidths": [
+        471,
+        471,
+        471
+      ],
+      "yieldRows": 0
+    },
+    {
+      "requestedWidth": 1440,
+      "actualWidth": 1425,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 1425,
+      "route": "#protocol-detail?slug=blend-pools-v2",
+      "sidebarCardWidths": [
+        360,
+        360,
+        360
+      ],
+      "yieldRows": 5
+    },
+    {
+      "requestedWidth": 1440,
+      "actualWidth": 1425,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 1425,
+      "route": "#protocol-detail?slug=gami-labs",
+      "sidebarCardWidths": [
+        360,
+        360,
+        360
+      ],
+      "yieldRows": 2
+    },
+    {
+      "requestedWidth": 1440,
+      "actualWidth": 1425,
+      "buttonsSideBySide": true,
+      "controlsHeight": 253,
+      "pageWidth": 1425,
+      "route": "#protocol-detail?slug=defindex",
+      "sidebarCardWidths": [
+        360,
+        360,
+        360
+      ],
+      "yieldRows": 0
+    }
+  ],
+  "interactions": {
+    "viewOpportunitiesPreservesRoute": true,
+    "viewOpportunitiesScrollsToPoolTable": true,
+    "publishedAuditReferencesExpand": true,
+    "unmatchedScoutFallbackVisible": true
+  },
+  "previews": [
+    "previews/protocol-detail.png",
+    "previews/protocol-detail-mobile.png"
+  ]
+}

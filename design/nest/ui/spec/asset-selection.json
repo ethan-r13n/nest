@@ -1,0 +1,52 @@
+{
+  "version": "0.7.0",
+  "network": "Stellar Mainnet",
+  "assets": [
+    {
+      "id": "XLM",
+      "label": "XLM",
+      "name": "Stellar Lumens"
+    },
+    {
+      "id": "USDC",
+      "label": "USDC",
+      "name": "USD Coin"
+    },
+    {
+      "id": "AQUA",
+      "label": "AQUA",
+      "name": "Aquarius"
+    },
+    {
+      "id": "EURC",
+      "label": "EURC",
+      "name": "Circle Euro"
+    },
+    {
+      "id": "USDT0",
+      "label": "USDT0",
+      "name": "USDT0"
+    },
+    {
+      "id": "PYUSD",
+      "label": "PYUSD",
+      "name": "PayPal USD"
+    },
+    {
+      "id": "SOLVBTC",
+      "label": "SolvBTC",
+      "name": "Solv Protocol Bitcoin"
+    },
+    {
+      "id": "EUTBL",
+      "label": "EUTBL",
+      "name": "Spiko EU T-Bills"
+    }
+  ],
+  "icons": "Real, locally bundled brand images; AQUA alias resolves Aquarius, SolvBTC image acquired through Chrome. Source URLs and hashes in logo-provenance.json.",
+  "vaults": "USDC and XLM retained; six requested assets added. Checkbox + icon + symbol in a compact two-column grid. Filters combine and reset; no matching fixture produces an empty state, not a fabricated vault.",
+  "trade": "Searchable native modal for Pay and Receive, also opened from the pair heading. Selecting the other side swaps both assets to prevent an identical pair. Escape/Close restores focus.",
+  "quotes": "Every asset or direction change clears amounts, minimum received and review metadata. Only the original XLM/USDC fixture supports a sample quote. Other pairs show unavailable prices/history/routes and disable review until market data is integrated.",
+  "chart_lifecycle": "Chart interval listeners and resize observer are disposed before a new pair mounts. Restoring the original pair restores its OHLC fixture without duplicate handlers.",
+  "production": "Catalog entries must bind canonical network/issuer/SAC/contract and decimals; source availability, wallet eligibility and amount-specific routing are checked independently before review."
+}

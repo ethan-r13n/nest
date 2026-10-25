@@ -17,6 +17,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowDownUp, ArrowRight, Bookmark, Building2, Download, ExternalLink, Search } from 'lucide-react';
 import { type ReactNode, useId, useState } from 'react';
 
+import { LiveLendingRates } from '../components/live-lending.tsx';
 import { ResearchDataTable } from '../components/research-data-table.tsx';
 import { ResearchHistoryChart } from '../components/research-history.tsx';
 import { DraftNotice, EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
@@ -106,6 +107,7 @@ export function ResearchPage() {
       />
       <ResearchTabs />
       <ResearchIntent />
+      <LiveLendingRates />
       <section className="grid min-w-0 gap-5 xl:grid-cols-[260px_minmax(0,1fr)]" aria-label="Stellar overview">
         <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
           <StatCard

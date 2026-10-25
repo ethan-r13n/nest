@@ -1,0 +1,101 @@
+{
+  "version": "0.7.1",
+  "date": "2026-10-25",
+  "request": "UI 3 — Research hierarchy, pagination and consolidation",
+  "status": "Implemented in the local design runtime",
+  "navigation": [
+    "DeFi",
+    "RWAs",
+    "MCP Contents"
+  ],
+  "canonical_routes": {
+    "research-defi": "Network metrics and protocol directory",
+    "research-rwa": "RWA metrics, composition and asset directory",
+    "research-mcp": "Venue map followed by published MCP contents",
+    "protocol-detail?slug=:slug": "Protocol facts, source-matched yield pools, applicable market capabilities and Raven research"
+  },
+  "aliases": {
+    "research-markets": "research-mcp",
+    "research-map": "research-mcp",
+    "venue-detail?id=:id": "protocol-detail?slug=<explicit venue identity>",
+    "market-detail?id=:id": "protocol-detail?slug=<explicit market identity>"
+  },
+  "audit_and_changes": [
+    {
+      "finding": "Parallel venue / market detail journeys repeat protocol information.",
+      "change": "Remove the venue markets table and separate detail screens; consolidate assets, roles, reads, actions, authority, identity and withdrawal terms under DeFi protocol detail."
+    },
+    {
+      "finding": "Tall overview rail and repeated table toolbars delay access to the directory.",
+      "change": "Use a horizontal network metric strip, a compact orange history chart, and one filter / density / columns toolbar."
+    },
+    {
+      "finding": "Uniform research-only labels and paired name/detail buttons repeat every row.",
+      "change": "Use the protocol identity as the single detail action and remove the repeated availability column."
+    },
+    {
+      "finding": "Separate map and catalog tabs split source discovery.",
+      "change": "MCP Contents starts with the map; source-family filters and a compact disclosure list follow it."
+    },
+    {
+      "finding": "Only eight integration targets appear in the old map.",
+      "change": "Include 26 unique projects from the captured Scout records, group protocol versions by exact project identity, and distinguish eight integration targets from research coverage."
+    },
+    {
+      "finding": "Pagination differs by view and provides weak location context.",
+      "change": "Share numbered pagination with range, total and current page, 10/25/50 page sizes, disabled boundary actions, filter reset to page one, accessible status and list-context restoration."
+    },
+    {
+      "finding": "Single-chain protocol pages duplicate the same TVL in adjacent cards.",
+      "change": "Use captured Stellar pool coverage in place of duplicate protocol-wide TVL when only one chain is reported."
+    }
+  ],
+  "mcp_map": {
+    "projects": 26,
+    "integration_targets": 8,
+    "source": "spec/protocol-context.json",
+    "groups": [
+      "Spot",
+      "Lending",
+      "Vaults & yield",
+      "Infrastructure"
+    ],
+    "filters": [
+      "search",
+      "all projects / integration targets / research only"
+    ],
+    "details": [
+      "source-reported project status",
+      "first source summary sentence",
+      "audit / repository / contract reference counts",
+      "readable groups",
+      "SCF funding and source date",
+      "related protocol versions",
+      "protocol research link"
+    ],
+    "progressive_disclosure": "Four projects per group initially; expand each group. Search exposes all matching projects. Long source content opens on protocol detail."
+  },
+  "catalog": {
+    "operations": 60,
+    "skills": 20,
+    "section_identifiers": 202,
+    "source": "spec/raven-catalog.json",
+    "search": "IDs, summaries, source family, parameters and section identifiers",
+    "filters": [
+      "source family toggle",
+      "entry type"
+    ],
+    "details": "Parameters, source capture time, section identifiers, upstream source and availability boundary"
+  },
+  "source_boundaries": [
+    "Dated snapshots remain attributed; no new provider collection was performed.",
+    "Scout public-source evidence does not imply an authenticated Raven MCP session.",
+    "Research coverage does not imply a working native adapter or financial execution capability.",
+    "Project-family context does not attach lending capabilities or yield pools to a Blend backstop."
+  ],
+  "verification": {
+    "model_script": "scripts/verify-research-hierarchy.js",
+    "existing_regression": "scripts/verify-protocol-details.js",
+    "browser_evidence": "spec/verification-research-hierarchy.json"
+  }
+}

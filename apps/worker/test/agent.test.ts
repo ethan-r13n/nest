@@ -10,11 +10,10 @@ import { createApp } from '../src/app.ts';
 
 const ORIGIN = 'https://nest.test';
 const offlineRaven: RavenClient = { callTool: async () => ({ status: 'not_connected' }) };
-const noProposals: ProposalService = {
-  proposeSwap: async () => {
-    throw new Error('not used');
-  },
+const notUsed = async (): Promise<never> => {
+  throw new Error('not used');
 };
+const noProposals: ProposalService = { proposeSwap: notUsed, proposeLending: notUsed, lendingRates: notUsed };
 
 async function createConversation(): Promise<string> {
   const response = await exports.default.fetch(`${ORIGIN}/api/agent/conversations`, { method: 'POST' });
@@ -310,6 +309,7 @@ describe('propose_intent', () => {
   it('creates a proposal and explains the application quote, not its own numbers', async () => {
     const calls: unknown[] = [];
     const tool = proposeTool({
+      ...noProposals,
       proposeSwap: async (input) => {
         calls.push(input);
         return {
@@ -338,12 +338,50 @@ describe('propose_intent', () => {
 
   it('reports a refused proposal as a tool error', async () => {
     const tool = proposeTool({
+      ...noProposals,
       proposeSwap: async () => {
         throw new Error('Choose two different assets to swap.');
       },
     });
     const result = await tool?.execute('call-2', { kind: 'swap', sell: 'XLM', buy: 'XLM', amount: '1' }, undefined);
     expect(result?.isError).toBe(true);
+  });
+
+  it('proposes a borrow from the best pool and repeats health, timing and exclusions', async () => {
+    const calls: unknown[] = [];
+    const tool = proposeTool({
+      ...noProposals,
+      proposeLending: async (input) => {
+        calls.push(input);
+        return {
+          intentId: 'intent-2',
+          kind: 'borrow',
+          asset: { symbol: 'USDC', amount: '1000' },
+          offers: [
+            {
+              pool: 'Blend Testnet V2',
+              poolStatus: 'Admin active',
+              supplyApyPct: 7.4,
+              borrowApyPct: 9.29,
+              utilizationPct: 70,
+              collateral: { symbol: 'XLM', amount: '7485.38' },
+              estimatedHealth: 1.6,
+              withdrawalTiming: 'No lockup.',
+            },
+          ],
+          excluded: [{ name: 'Blend Fixed', reason: 'The pool is on ice, so borrowing is disabled.' }],
+        };
+      },
+    });
+    const result = await tool?.execute('call-3', { kind: 'borrow', asset: 'USDC', amount: '1000' }, undefined);
+    const text = result?.content[0]?.type === 'text' ? result.content[0].text : '';
+
+    expect(calls).toEqual([{ kind: 'borrow', asset: 'USDC', amount: '1000', collateralAsset: undefined }]);
+    expect(text).toContain('9.29% borrow APY');
+    expect(text).toContain('7485.38 XLM');
+    expect(text).toContain('health factor of 1.60');
+    expect(text).toContain('Blend Fixed: The pool is on ice');
+    expect(result?.details).toEqual({ intentId: 'intent-2', kind: 'borrow' });
   });
 
   it('turns only a successful propose_intent result into a proposal event', () => {
@@ -357,5 +395,9 @@ describe('propose_intent', () => {
     expect(proposalOf(end('propose_intent', true, { intentId: 'intent-1' }))).toBeNull();
     expect(proposalOf(end('raven_search', false, { intentId: 'intent-1' }))).toBeNull();
     expect(proposalOf(end('propose_intent', false, {}))).toBeNull();
+    expect(proposalOf(end('propose_intent', false, { intentId: 'intent-2', kind: 'supply' }))).toMatchObject({
+      kind: 'supply',
+    });
+    expect(proposalOf(end('propose_intent', false, { intentId: 'intent-2', kind: 'withdraw' }))).toBeNull();
   });
 });

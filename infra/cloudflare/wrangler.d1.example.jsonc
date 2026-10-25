@@ -11,7 +11,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "nest-runtime-mainnet",
+      "database_name": "nest-mainnet",
       "database_id": "00000000-0000-0000-0000-000000000001",
       "preview_database_id": "00000000-0000-0000-0000-000000000002",
       "migrations_dir": "migrations",
@@ -27,7 +27,7 @@
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "nest-runtime-testnet",
+          "database_name": "nest-testnet",
           "database_id": "00000000-0000-0000-0000-000000000002",
           "preview_database_id": "00000000-0000-0000-0000-000000000002",
           "migrations_dir": "migrations",

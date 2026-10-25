@@ -1,0 +1,86 @@
+{
+  "version": "0.7.1",
+  "date": "2026-10-25",
+  "interactions": [
+    {
+      "check": "Keyboard focus opens the transferable definition",
+      "pass": true
+    },
+    {
+      "check": "Escape dismisses the tooltip while preserving focus",
+      "pass": true
+    },
+    {
+      "check": "Tap/click opens and pins the definition",
+      "pass": true
+    },
+    {
+      "check": "Second tap/click closes the definition",
+      "pass": true
+    },
+    {
+      "check": "Keyboard scroll reaches later captured league rows",
+      "pass": true
+    },
+    {
+      "check": "Restricted definition opens and fits at 375px",
+      "pass": true
+    },
+    {
+      "check": "Restricted definition opens and fits at 1024px",
+      "pass": true
+    },
+    {
+      "check": "Restricted definition opens and fits at 1440px",
+      "pass": true
+    },
+    {
+      "check": "Empty source view preserves compact equal panels and explicit unavailable data",
+      "pass": true
+    }
+  ],
+  "responsive": [
+    {
+      "heights": [
+        440,
+        440
+      ],
+      "pass": true,
+      "scrollWidth": 360,
+      "width": 360
+    },
+    {
+      "heights": [
+        440,
+        440
+      ],
+      "pass": true,
+      "scrollWidth": 1009,
+      "width": 1009
+    },
+    {
+      "heights": [
+        440,
+        440
+      ],
+      "pass": true,
+      "scrollWidth": 1425,
+      "width": 1425
+    }
+  ],
+  "snapshotUnchanged": true,
+  "metricValues": [
+    {
+      "label": "Transferable RWAs",
+      "display": "$3.75B",
+      "change30dPercent": 10.85
+    },
+    {
+      "label": "Restricted RWAs",
+      "display": "$78.22M",
+      "change30dPercent": 0.32
+    }
+  ],
+  "hoverImplementation": "Native mouseenter/mouseleave shows and dismisses while allowing hover over the tooltip; focus and click cover keyboard and touch. Non-drag hover was reviewed in source; the browser automation surface only exposes pointer dragging.",
+  "consoleErrors": []
+}

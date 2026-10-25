@@ -1,0 +1,27 @@
+{
+  "version": "0.7.1",
+  "date": "2026-10-25",
+  "source": "https://app.rwa.xyz/blog/a-new-framework-for-tokenized-assets-distributed-and-represented",
+  "metric_aliases": {
+    "distributedAssetValue": {
+      "provider_label": "Distributed Asset Value",
+      "ui_label": "Transferable RWAs",
+      "tooltip": "Value of tokenized real-world assets that can move to external wallets and between eligible wallets. KYC or allowlist requirements may still apply."
+    },
+    "representedAssetValue": {
+      "provider_label": "Represented Asset Value",
+      "ui_label": "Restricted RWAs",
+      "tooltip": "Value of tokenized real-world assets confined to the issuer’s platform. These tokens cannot move to external wallets or transfer between wallets."
+    }
+  },
+  "value_invariant": "All source snapshot values and 30-day changes remain unchanged.",
+  "panels": {
+    "height_px": 440,
+    "layout": "Equal heights; bounded scroll regions, sticky table headers, all captured rows; stack on narrow screens",
+    "scroll_regions": [
+      "r-rwa-chart",
+      "r-league"
+    ]
+  },
+  "verification": "verification-rwa-cards.json"
+}

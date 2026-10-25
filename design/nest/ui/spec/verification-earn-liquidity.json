@@ -1,0 +1,156 @@
+{
+  "date": "2026-10-25",
+  "unified": {
+    "assets": [
+      {
+        "label": "USDC",
+        "value": "USDC"
+      },
+      {
+        "label": "AQUA",
+        "value": "AQUA"
+      },
+      {
+        "label": "XLM",
+        "value": "XLM"
+      },
+      {
+        "label": "EURC",
+        "value": "EURC"
+      },
+      {
+        "label": "USDT0",
+        "value": "USDT0"
+      },
+      {
+        "label": "PYUSD",
+        "value": "PYUSD"
+      },
+      {
+        "label": "SolvBTC",
+        "value": "SOLVBTC"
+      },
+      {
+        "label": "EUTBL",
+        "value": "EUTBL"
+      }
+    ],
+    "categories": [
+      "All Opportunities",
+      "Direct Supply",
+      "Vaults",
+      "Campaigns",
+      "Liquidity"
+    ],
+    "overflow": false,
+    "pairs": [
+      "xSolvBTC / Solv BTC",
+      "PYUSD / USDC",
+      "XLM / Solv BTC",
+      "XLM / USDC",
+      "CETES / USDC",
+      "USTRY / USDC",
+      "USDY / USDC",
+      "USDM1 / USDC",
+      "STBL_USST - USST Token / USDC",
+      "XLM / AQUA",
+      "XLM / yXLM",
+      "USDC / yUSDC",
+      "BTC / ETH",
+      "BTC / yBTC",
+      "AQUA / USDC"
+    ],
+    "total": "22"
+  },
+  "liquidityCount": 15,
+  "lpDetail": {
+    "description": "Provide XLM and USDC to an Aquarius constant-product pool. Trading fees accrue in pool value; AQUA and other incentives are separate.",
+    "heading": "XLM / USDC",
+    "managementTarget": true,
+    "overflow": false,
+    "reviewDisabled": true,
+    "sameVaultLayout": true
+  },
+  "layouts": [
+    {
+      "view": "375 #vaults",
+      "width": 360,
+      "scrollWidth": 360,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": null
+    },
+    {
+      "view": "375 #vault-detail",
+      "width": 360,
+      "scrollWidth": 360,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": false
+    },
+    {
+      "view": "375 #liquidity-detail?pool=aquarius-ca6pujlbykzkueklzjmkbzlekp2othandeowsff44ftsylkqpiiccjbe",
+      "width": 360,
+      "scrollWidth": 360,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": false
+    },
+    {
+      "view": "1024 #vaults",
+      "width": 1009,
+      "scrollWidth": 1009,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": null
+    },
+    {
+      "view": "1024 #vault-detail",
+      "width": 1009,
+      "scrollWidth": 1009,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": true
+    },
+    {
+      "view": "1024 #liquidity-detail?pool=aquarius-ca6pujlbykzkueklzjmkbzlekp2othandeowsff44ftsylkqpiiccjbe",
+      "width": 1009,
+      "scrollWidth": 1009,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": true
+    },
+    {
+      "view": "1440 #vaults",
+      "width": 1425,
+      "scrollWidth": 1425,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": null
+    },
+    {
+      "view": "1440 #vault-detail",
+      "width": 1425,
+      "scrollWidth": 1425,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": true
+    },
+    {
+      "view": "1440 #liquidity-detail?pool=aquarius-ca6pujlbykzkueklzjmkbzlekp2othandeowsff44ftsylkqpiiccjbe",
+      "width": 1425,
+      "scrollWidth": 1425,
+      "hasContent": true,
+      "overflow": false,
+      "sideBySide": true
+    }
+  ],
+  "checks": [
+    "Shared opportunity rows and category navigation",
+    "Top 15 selected before filters",
+    "USDC filter present",
+    "Exact source token symbols preserved",
+    "Add and remove drafts switch without enabling transactions",
+    "Vault and LP share overview, risks, contracts, counterparties and fee layout"
+  ]
+}

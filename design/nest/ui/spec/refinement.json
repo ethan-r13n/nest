@@ -123,9 +123,10 @@
         "https://ui.shadcn.com/blocks#sidebar-07"
       ],
       "implemented": [
-        "Desktop rail collapses to labeled icon actions and retains access to new conversation, memory, activity and coverage.",
-        "Narrow layouts reveal conversation history inline from an explicit toggle.",
-        "Global top navigation and Guardrails beside Wallet remain."
+        "Desktop opens as a 64px icon rail with accessible action names; expands to 240px on pointer hover or keyboard focus.",
+        "Pointer exit or focus leaving the rail collapses it, unless the user pins it with the header toggle.",
+        "Narrow layouts reveal the full labeled conversation history inline from an explicit touch-friendly toggle.",
+        "Reduced motion disables the width transition. Global top navigation and Guardrails beside Wallet remain."
       ],
       "react_components": [
         "Sidebar",
@@ -209,5 +210,9 @@
       "Private amounts remain out of URLs. Production binds the comparison context to canonical network/asset identity and current source observations."
     ],
     "production": "Keep comparison intent separate from financial preparation; connect Chat to validated application comparison results."
+  },
+  "portfolio_feedback": {
+    "supersedes": "Earlier summary cards, sidebar and Receive/Send/Redemptions screens",
+    "contract": "portfolio-feedback.json"
   }
 }

@@ -6,7 +6,7 @@
 // PI_MODEL_ID must be a free OpenRouter model; src/agent/models.ts refuses anything else.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "nest-runtime",
+  "name": "nest",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-15",
   // pi-mcp's OAuth flow (PKCE, state) uses Node's Buffer; nothing else needs Node APIs.
@@ -50,7 +50,7 @@
   "d1_databases": [
     {
       "binding": "DB",
-      "database_name": "nest-runtime-mainnet",
+      "database_name": "nest-mainnet",
       "database_id": "00000000-0000-0000-0000-000000000001",
       "migrations_dir": "migrations",
       "remote": false
@@ -82,7 +82,7 @@
       "d1_databases": [
         {
           "binding": "DB",
-          "database_name": "nest-runtime-testnet",
+          "database_name": "nest-testnet",
           "database_id": "00000000-0000-0000-0000-000000000002",
           "migrations_dir": "migrations",
           "remote": false

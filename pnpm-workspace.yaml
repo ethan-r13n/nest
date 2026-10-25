@@ -5,6 +5,7 @@ packages:
 # One exact version per dependency for the whole workspace. Renovate proposes upgrades;
 # Pi stays on the version the spec pins until a compatibility test passes on the next one.
 catalog:
+  "@blend-capital/blend-sdk": 3.3.1
   "@creit.tech/stellar-wallets-kit": 2.7.1
   "@base-ui/react": 1.9.0
   "@biomejs/biome": 2.6.3
