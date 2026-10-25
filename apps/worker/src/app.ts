@@ -6,7 +6,9 @@ import { requestId } from 'hono/request-id';
 import { secureHeaders } from 'hono/secure-headers';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
+import { createAgentRoutes } from './agent/routes.ts';
 import { ConfigError, decodeConfig } from './config.ts';
+import { createRavenRoutes } from './raven/routes.ts';
 
 const MAX_BODY_BYTES = 64 * 1024;
 const STATUS_BY_CODE: Record<ErrorCode, ContentfulStatusCode> = {
@@ -14,6 +16,7 @@ const STATUS_BY_CODE: Record<ErrorCode, ContentfulStatusCode> = {
   UNAUTHORIZED: 401,
   FORBIDDEN: 403,
   NOT_FOUND: 404,
+  CONFLICT: 409,
   PAYLOAD_TOO_LARGE: 413,
   RATE_LIMITED: 429,
   EXECUTION_DISABLED: 409,
@@ -57,6 +60,9 @@ export function createApp() {
     );
   });
 
+  app.route('/agent', createAgentRoutes());
+  app.route('/raven', createRavenRoutes());
+
   app.notFound((c) => errorResponse(c, new AppError('NOT_FOUND', 'No such endpoint.')));
   app.onError((error, c) => errorResponse(c, error));
   return app;
@@ -96,8 +102,18 @@ function errorResponse(c: AppContext, error: unknown) {
       }),
     );
   }
+  const retryAfterSeconds = error instanceof AppError ? error.retryAfterSeconds : undefined;
+  if (retryAfterSeconds !== undefined) c.header('retry-after', String(retryAfterSeconds));
   return c.json(
-    { ok: false, error: { code: publicError.code, message: publicError.message, requestId: c.get('requestId') } },
+    {
+      ok: false,
+      error: {
+        code: publicError.code,
+        message: publicError.message,
+        requestId: c.get('requestId'),
+        ...(retryAfterSeconds !== undefined ? { retryAfterSeconds } : {}),
+      },
+    },
     STATUS_BY_CODE[publicError.code],
   );
 }
