@@ -126,27 +126,6 @@
       "url": "https://docs.iris.credit/home/user-guide/maturity-and-overdue",
       "inspected": "2026-10-25",
       "observed": "IRIS documents Active, Grace period and Liquidatable phases; quote-bound overdue rates/grace periods and fixed-term early-close interest. These inform a conditional term-loan panel, not generic assumptions about Nest venues."
-    },
-    {
-      "id": "pilot-memory",
-      "url": "https://pilot-two-delta.vercel.app/memory",
-      "inspection": "Browser inspected",
-      "observed": "Knowledge graph beside a note reader; searchable Markdown-note list; linked notes and context summary; separate execution-policy editor lower on the page.",
-      "adapt": "Nest keeps the graph, reader, note search and linked navigation. Accepted preferences and proposals remain distinct; policy editing moves to the existing Guardrails authority. Do not inherit Pilot's automatic-execution or mandatory caps."
-    },
-    {
-      "id": "pilot-backtests",
-      "url": "https://pilot-two-delta.vercel.app/research/backtests",
-      "inspection": "Resolved through the live Backtests navigation because the supplied backtest URL duplicated Memory and included a trailing comma.",
-      "observed": "Bounded configuration, sample/historical modes, post-cost equity and benchmark, drawdown/cost/fill metrics, event audit, saved-run comparison and frozen reproducibility evidence.",
-      "adapt": "Nest uses a compact configuration rail and dominant evidence/results area. Preview calculations use explicitly synthetic XLM/USDC observations. Real historical replay remains a separately implemented service."
-    },
-    {
-      "id": "pilot-strategy",
-      "url": "https://pilot-two-delta.vercel.app/strategy",
-      "inspection": "Browser inspected after asynchronous content loaded",
-      "observed": "Strategy presets, editable bounds, review-first simulated lifecycle, per-event checks, portfolio effect and event timeline.",
-      "adapt": "Nest's P0 builder starts from arbitrary supported conditions, not a fixed strategy menu. Use Source→Condition→Action, one test, explicit revision review and activation. P0 actions notify or propose an action; no unattended signing."
     }
   ],
   "screens": [
@@ -1830,7 +1809,7 @@
     {
       "date": "2026-10-25",
       "id": "reference-ui-v02",
-      "decision": "Ingest eight supplied UI images and live references into ten Nest-styled screen views. Vault images3–5 form one detail page. Use original solid-egg logo; Research top tabs DeFi/RWAs; Lab combines Memory/Backtests/Automations. Backtests route resolved via Pilot navigation. P0 economic capabilities continue to follow the technical specification.",
+      "decision": "Ingest eight supplied UI images and live references into ten Nest-styled screen views. Vault images3–5 form one detail page. Use original solid-egg logo; Research top tabs DeFi/RWAs; Lab combines Memory/Backtests/Automations. Backtests use the Lab navigation. P0 economic capabilities continue to follow the technical specification.",
       "source": "User UI-reference instruction and browser inspection"
     }
   ],

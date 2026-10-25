@@ -102,22 +102,6 @@
   ],
   "sources": [
     {
-      "url": "https://pilot-two-delta.vercel.app/chat",
-      "observed": "Prompt fill, safe recorded approval replay, preparing/awaiting-approval card and separate Review & sign control."
-    },
-    {
-      "url": "https://pilot-two-delta.vercel.app/map",
-      "observed": "23-row demo venue catalog, category/layer/network filters, published read/build counts and venue detail dialog."
-    },
-    {
-      "url": "https://pilot-two-delta.vercel.app/markets",
-      "observed": "Search/filter market table with price/cost/liquidity/status and pair drill-down."
-    },
-    {
-      "url": "https://pilot-two-delta.vercel.app/markets/xrp-rlusd?network=mainnet",
-      "observed": "Size-aware best execution, pool/book comparison, asset/issuer facts and request inspector. XRPL-specific elements are adapted to Stellar."
-    },
-    {
       "url": "https://raven.stellar.org/docs",
       "observed": "Two tools, four source families, structured success/error envelopes, source/as-of caveats. Authenticated runtime access not invoked."
     }

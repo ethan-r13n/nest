@@ -40,40 +40,7 @@
   ],
   "logo_assets": 180,
   "dedicated_rwa_marks_unavailable": 16,
-  "archive_html_links_missing": [
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/vault-list.png"
-    },
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/vault-detail-top.png"
-    },
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/vault-detail-overview.png"
-    },
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/vault-detail-process.png"
-    },
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/borrow-debt.png"
-    },
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/borrow-rate.png"
-    },
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/borrow-rate-duplicate.png"
-    },
-    {
-      "file": "ui/spec/index.html",
-      "link": "../references/manifest.json"
-    }
-  ],
+  "archive_html_links_missing": [],
   "files": [
     {
       "path": "README.md",
@@ -242,8 +209,8 @@
     },
     {
       "path": "spec/ui-design-spec.json",
-      "bytes": 113519,
-      "sha256": "a434736916b18bb0ab2d941f696449e394493db113786ceecd166cdc067983eb"
+      "bytes": 111666,
+      "sha256": "b34ab4c0059de9cc1caf6362d8e767fab089b990bb9a85fda66faaffdfebe4e5"
     },
     {
       "path": "tokens.css",
@@ -267,8 +234,8 @@
     },
     {
       "path": "ui/README.txt",
-      "bytes": 9077,
-      "sha256": "453adfd0b612fe84a91443cebb20a5f3cf6ac2cb3011a7642558ede9f71d9db8"
+      "bytes": 1832,
+      "sha256": "20c30a398f6f4ff09370a0b4567dbdc681b84fa9a9efc00c68eacb370823ce47"
     },
     {
       "path": "ui/app.js",
@@ -1797,18 +1764,18 @@
     },
     {
       "path": "ui/spec/discovery.html",
-      "bytes": 9807,
-      "sha256": "3190f12e0b8f5467f9b430df26d8462fca6e7dbef905b054b04a7b26d4d06156"
+      "bytes": 8773,
+      "sha256": "224eda028edfd4dde7092bec52bac4f8e3d000b34d2ab4107a68301adc8836df"
     },
     {
       "path": "ui/spec/discovery.json",
-      "bytes": 8296,
-      "sha256": "4549ea4fa5568e28883a37cad25862688f880227f612eea17f84ef1659f984db"
+      "bytes": 7465,
+      "sha256": "382ff324ece2fbc6596109a806943cbcf1dcf260113c30f24f5fb62d0f5eb8c9"
     },
     {
       "path": "ui/spec/index.html",
-      "bytes": 111261,
-      "sha256": "b26c6c7f2b074f75e408bd115f1ab9c905d9adf23732e6de19f4bd323f295215"
+      "bytes": 109295,
+      "sha256": "47c1374c6823440ba5d1183c50139ff4af7d69c7bbcdc35b9aac378009f1f1d9"
     },
     {
       "path": "ui/spec/lab-chat.html",
