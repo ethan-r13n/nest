@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:recommended"],
+  "rangeStrategy": "pin",
+  "packageRules": [
+    {
+      "description": "Pi moves fast; upgrade its packages together and only after the Workers compatibility tests pass.",
+      "matchPackageNames": ["@earendil-works/**", "typebox"],
+      "groupName": "pi",
+      "automerge": false
+    },
+    {
+      "matchPackageNames": ["wrangler", "@cloudflare/**"],
+      "groupName": "cloudflare"
+    }
+  ]
+}

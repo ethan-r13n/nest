@@ -1,0 +1,12 @@
+{
+  "binding": "DB",
+  "local_placeholders": true,
+  "mainnet": {
+    "database_name": "nest-mainnet",
+    "database_id": "00000000-0000-0000-0000-000000000001"
+  },
+  "testnet": {
+    "database_name": "nest-testnet",
+    "database_id": "00000000-0000-0000-0000-000000000002"
+  }
+}

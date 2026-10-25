@@ -1,0 +1,36 @@
+/* Import assets/fonts/fonts.css and tokens.css before this file. */
+.nest { font-family:var(--nest-font-sans); color:var(--nest-text); background:var(--nest-background); font-size:16px; line-height:1.5; }
+.nest * { box-sizing:border-box; }
+.nest :where(button,input,select) { font:inherit; }
+.nest button,.nest a,.nest input,.nest select { -webkit-tap-highlight-color:transparent; }
+.nest :is(button,a,input,select,textarea):focus-visible { outline:2px solid var(--nest-accent); outline-offset:3px; }
+.nest .nest-button-primary:focus-visible { outline-color:var(--nest-text); }
+.nest-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:44px; padding:10px 18px; border:1px solid var(--nest-border-strong); border-radius:var(--nest-radius-control); background:transparent; color:var(--nest-text); font-family:var(--nest-font-sans); font-weight:600; line-height:1.2; text-decoration:none; cursor:pointer; transition:background var(--nest-duration-fast),border-color var(--nest-duration-fast); }
+.nest-button:hover { border-color:var(--nest-accent); background:var(--nest-accent-tint); }
+.nest-button-primary { color:var(--nest-background); background:var(--nest-accent); border-color:var(--nest-accent); }
+.nest-button-primary:hover { color:var(--nest-background); background:var(--nest-accent-hover); border-color:var(--nest-accent-hover); }
+.nest-button:disabled { cursor:not-allowed; background:var(--nest-surface-raised); border-color:var(--nest-border); color:var(--nest-text-muted); }
+.nest-button-ghost { border-color:transparent; color:var(--nest-text-secondary); }
+.nest-button-danger { color:var(--nest-error); }
+.nest-field { display:flex; flex-direction:column; gap:8px; min-width:0; }
+.nest-label { font:500 12px/1.5 var(--nest-font-mono); color:var(--nest-text-secondary); }
+.nest-input { width:100%; min-height:44px; padding:11px 14px; border:1px solid var(--nest-input-border); border-radius:var(--nest-radius-control); color:var(--nest-text); background:var(--nest-background); font:400 16px/1.4 var(--nest-font-sans); }
+.nest-input[aria-invalid=true] { border-color:var(--nest-error); }
+.nest-panel { border:1px solid var(--nest-border); border-radius:var(--nest-radius-card); background:var(--nest-surface); }
+.nest-number { font-family:var(--nest-font-mono); font-variant-numeric:tabular-nums; }
+.nest-eyebrow { font:500 12px/1.5 var(--nest-font-mono); text-transform:uppercase; letter-spacing:.18em; color:var(--nest-text-secondary); }
+.nest-title { font:600 36px/1.1 var(--nest-font-display); letter-spacing:-.025em; }
+.nest-badge { display:inline-flex; align-items:center; gap:6px; padding:4px 9px; border-radius:999px; color:var(--nest-text-secondary); background:var(--nest-surface-raised); font:400 12px/1.5 var(--nest-font-mono); white-space:nowrap; }
+.nest-badge-success { color:var(--nest-success); background:color-mix(in srgb,var(--nest-success) 9%,var(--nest-surface)); }
+.nest-badge-warning { color:var(--nest-warning); background:color-mix(in srgb,var(--nest-warning) 9%,var(--nest-surface)); }
+.nest-badge-error { color:var(--nest-error); background:color-mix(in srgb,var(--nest-error) 9%,var(--nest-surface)); }
+.nest-badge-info { color:var(--nest-info); background:color-mix(in srgb,var(--nest-info) 9%,var(--nest-surface)); }
+.nest-table { width:100%; border-collapse:collapse; font-size:14px; }
+.nest-table th { padding:12px 16px; text-align:left; font:400 12px/1.5 var(--nest-font-mono); color:var(--nest-text-secondary); background:var(--nest-surface); border-bottom:1px solid var(--nest-border-strong); }
+.nest-table td { height:var(--nest-row-height); padding:10px 16px; border-bottom:1px solid var(--nest-border); }
+.nest-table tr:last-child td { border-bottom:0; }
+.nest-table tbody tr:hover { background:var(--nest-surface-raised); }
+.nest-table .nest-numeric { text-align:right; font-family:var(--nest-font-mono); font-variant-numeric:tabular-nums; }
+.nest-source { color:var(--nest-text-subtle); font:400 11px/1.6 var(--nest-font-mono); }
+.nest-alert { display:flex; gap:10px; align-items:baseline; border-left:2px solid var(--nest-warning); padding:12px 16px; color:var(--nest-warning); background:color-mix(in srgb,var(--nest-warning) 5%,var(--nest-surface)); font-size:13px; }
+@media (prefers-reduced-motion:reduce) { .nest *, .nest *::before, .nest *::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }

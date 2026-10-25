@@ -1,0 +1,11 @@
+# Server-only local settings. Copy to apps/worker/.dev.vars or .dev.vars.testnet.
+# Generate 32 random bytes with: openssl rand -base64 32
+APP_ENCRYPTION_KEY=
+OPENROUTER_API_KEY=
+SOROSWAP_API_KEY=
+STELLAR_MAINNET_RPC_URL=
+# The public Testnet RPC is already configured; override only when needed.
+STELLAR_TESTNET_RPC_URL=
+# Execution remains off unless explicitly enabled in this ignored local file.
+EXECUTION_ENABLED=false
+ENABLED_WRITE_ADAPTERS=

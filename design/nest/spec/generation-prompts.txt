@@ -1,0 +1,59 @@
+Nest artwork prompt record
+
+Created 2026-10-25 using the built-in image generation tool.
+
+Final logo SVGs are a clean geometric reconstruction of the generated concept; nest-logo.png is exported from that vector master.
+
+Source design reference: https://raven.stellar.org/
+
+
+
+LOGO CONCEPT
+
+Use case: logo-brand
+Asset type: primary symbol for Nest, an agentic workspace for Stellar DeFi research, comparison, and user-reviewed execution.
+Primary request: Create one exceptionally simple, distinctive, flat geometric nest emblem. Three thick orange interwoven open elliptical U-shaped ribbons cradle one small round orange seed in the center; the result feels like a protective, ordered home for signals and capital. Nest bowl silhouette, balanced, compact, horizontally oval, few broad curves. Elegant precision, not an illustration of twigs. The outer two bands have gently staggered upward ends and an unmistakable open top. The seed is fully separated by generous negative space.
+Style: clean vector-like solid one-color logo, crisp exact edges, no texture. Design reads clearly as a nest at small size, no Wi-Fi arcs. Built to later become extruded ribbons in a 3D scene.
+Color: only vivid vermilion orange #ff5500 for the mark.
+Composition: one large centered emblem, square canvas, generous transparent margins. Transparent background, no background shapes.
+Text: none.
+Avoid: birds, wings, feathers, houses, shields, stars, letters, gradients, shadows, glow, perspective, 3D, mockups, multiple variants, captions, watermarks.
+
+
+
+LOGO REFINEMENT
+
+Use case: logo-brand
+Asset type: a clean final primary logo symbol for Nest.
+Input image: previous generated Nest logo is the edit target. Preserve the overall interwoven bowl/cradle silhouette and centered circular seed.
+Primary request: Refine this into a perfectly crisp professional flat vector-style symbol. One uniform solid orange #ff5500. Exactly three broad smooth woven ribbons form a low open-top nest with balanced staggered ends; seed sits inside it. Make the logo less wide, a compact roughly 1.45:1 bowl. Remove every stray pixel, scratch, dot, texture and ragged edge. Exquisite clean curves and intentional negative gaps. The seed should be a little smaller and float inside the cradle.
+Composition: center the clean mark with at least 18% transparent margin on each side. The icon must be flat, perfectly uniform orange, no gradient or shading.
+Text: none.
+Constraints: genuine transparent background. No added objects, no words, no star, no bird, no shadow.
+
+
+
+TEXT-FREE COVER
+
+Use case: stylized-concept
+Asset type: high-end wide cover-banner artwork for Nest, later to be recreated as an animated 3D render.
+Input image: latest orange Nest logo is a design reference, not an object to paste. Translate its woven nest bowl and central seed into a physical sculpture.
+Primary request: An elegant, sculptural nest formed by exactly three broad vermilion-orange continuous elliptical ribbons crossing and interleaving as a compact open bowl, cradling a single small warm ivory sphere. Calm computational organic design, precise wide smooth bands, a recognizable nest silhouette, airy open core and generous negative space. Sculpture occupies the RIGHT 55 percent of the wide composition and floats just above a dark green plane. Camera in shallow elevated three-quarter view, slightly looking down into nest; sculpture fully visible.
+Backdrop: seamless almost-black forest green #0e150d / #151f14 studio, quiet subtle moss haze, lower grounding shadow, very sparse fine orange stipple at the sculpture edge suggesting Raven's dithered visual language. The LEFT 40 percent is a clean, dark, nearly uniform EMPTY field reserved for later typography.
+Materials: satin ceramic orange with restrained warm metallic edge reflections, ivory matte seed sphere. Broad clean surfaces, no twigs or fibers, no black metal.
+Lighting: soft warm key from upper left, narrow orange rim, subtle indirect green bounce, exquisite controlled highlights, cinematic ambient occlusion without harsh glow.
+Composition: panoramic landscape 3:1 aspect ratio, suitable for a 2400 by 800 cover. Strong sculptural depth with a legible simple silhouette and substantial margins above and below. Keep the nest centered vertically on right.
+Text: no text, no logos, no lettering, no UI, no watermark.
+Avoid: birds, feathers, plants, literal eggs, baskets, satellites, planets, orbiting rings, extra spheres, gold coins, crypto icons, neon, violet or blue, busy backgrounds. This is a woven cradle, not a planet with orbital rings.
+
+
+
+FINAL COVER
+
+Use case: compositing
+Asset type: final wide Nest brand cover banner, keeping the existing 3:1 composition.
+Input image: latest wide 3D orange Nest sculpture cover is the edit target.
+Primary request: Add elegant editorial typography in the empty LEFT field ONLY. Preserve the sculpture, seed sphere, backdrop, lighting, framing, geometry and all visual details exactly. Do not alter the right half.
+Text (verbatim): "Nest" and "STELLAR DEFI WORKSPACE"
+Typography: "Nest" in very large warm-cream #eef0e2 IBM Plex Serif style, robust elegant serif, semibold, normal title case, tight tracking. Position horizontally at about 9% from left and vertically around 41% from top, using roughly 27% of the image width. Place "STELLAR DEFI WORKSPACE" below it, in small muted sage #9aa890 IBM Plex Mono style uppercase with generous tracking, left aligned with Nest, about 24px at full output. Keep ample negative space above/below typography. No additional text.
+Constraints: text sharp, perfectly spelled, no distortions, no glow, no decorative lines, no additional logos or symbols. Keep original panoramic ratio.

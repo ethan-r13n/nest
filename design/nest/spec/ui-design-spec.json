@@ -1,0 +1,270 @@
+{
+  "schema_version": 1,
+  "title": "Nest UI Design Spec",
+  "updated": "2026-10-25",
+  "status": "Awaiting user-provided UI references",
+  "purpose": "Adapt supplied UI references into Nest-styled screen designs and consolidate implementation requirements for the real backend.",
+  "identity": {
+    "selected": "Original woven Nest with a solid circular egg",
+    "symbol": "../assets/nest-symbol.svg",
+    "lockup": "../assets/nest-lockup.svg",
+    "cover": "../assets/nest-cover.png",
+    "selection_note": "The initial identity is selected. Circular Stellar-inspired variations remain exploratory."
+  },
+  "foundations": {
+    "tokens": "../tokens.json",
+    "css_tokens": "../tokens.css",
+    "component_styles": "../components.css",
+    "visual_guide": "../index.html",
+    "product_plan": "https://chatgpt.com/space/page_01bffc9d67848191b2ef9c6400ffc767",
+    "style": "Raven-derived forest surfaces, cream text, orange actions, IBM Plex Serif titles, Sans controls and Mono financial data.",
+    "layout": "Workspace-first. Brand cover is collateral rather than a large in-app hero."
+  },
+  "reference_handling": {
+    "source": "UI samples supplied by the user",
+    "interpretation": "Capture layout and interaction intent, then adapt to Nest's visual system and authoritative product behavior.",
+    "deliverables_per_screen": [
+      "Nest-styled visual design",
+      "Layout and responsive behavior",
+      "Component inventory and reuse",
+      "Interaction and navigation behavior",
+      "Loading, empty, partial, stale, validation, error and confirmed states as applicable",
+      "Accessibility and keyboard behavior",
+      "Data fields, units, freshness and real backend bindings",
+      "Acceptance criteria, decisions and unresolved questions"
+    ],
+    "backend_rule": "Resolve bindings from the actual backend contract. Mark unknown fields or capabilities explicitly; do not invent endpoints or imply unsupported execution.",
+    "mock_data_rule": "Keep illustrative values labeled and separate from verified live data.",
+    "aggregation": "Maintain one consolidated screen specification and a shared component catalogue as references arrive."
+  },
+  "references": [],
+  "screens": [
+    {
+      "id": "global-guardrails",
+      "title": "Guardrails settings drawer",
+      "status": "Target interface contract; see the application README for implemented capabilities.",
+      "entry": {
+        "label": "Guardrails",
+        "location": "Top right of the global header, immediately beside Connect Wallet or the connected WalletMenu",
+        "availability": "Available across every workspace route, including before wallet connection",
+        "mobile": "Keep a compact labeled Guardrails control beside the wallet control in the header; open the same settings as a full-width mobile drawer."
+      },
+      "layout": {
+        "surface": "Right-side settings drawer using the existing Nest tokens, with a full-height sheet on narrow screens",
+        "sections": [
+          "Execution preferences",
+          "Lending health",
+          "Data freshness",
+          "Optional caps"
+        ],
+        "actions": [
+          "Save preferences",
+          "Cancel"
+        ],
+        "footer": "Persistent Save and Cancel controls, changed-settings summary, and saved policy revision",
+        "proposal_notice": "Numerical defaults are proposals to confirm. Display proposed values explicitly; never silently treat a suggestion as a saved preference."
+      },
+      "scope": {
+        "saved": "Authenticated, ownership-verified wallet plus network",
+        "guest": "May inspect settings and edit a transient draft; persistent Save requires wallet connection and ownership verification",
+        "wallet_or_network_change": "Load the new scope explicitly; never copy an unsaved draft or saved policy to another scope without user action"
+      },
+      "controls": [
+        {
+          "id": "slippage",
+          "label": "Maximum slippage",
+          "input": "Percentage decimal string",
+          "proposed_default": {
+            "display": "0.5%",
+            "basis_points": 50,
+            "confirmed": false
+          },
+          "behavior": "An explicitly accepted value is an execution bound, enforced by the application and the supported transaction path"
+        },
+        {
+          "id": "price-impact",
+          "label": "Price impact warning",
+          "input": "Percentage decimal string",
+          "proposed_default": {
+            "display": "Above 1%",
+            "basis_points": 100,
+            "comparison": "greater_than",
+            "confirmed": false
+          },
+          "behavior": "Warn above the accepted threshold; a warning alone does not block or exclude a route",
+          "optional_hard_limit": "A separate hard price-impact ceiling may be explicitly enabled by the user; it is disabled by default"
+        },
+        {
+          "id": "quote-expiry",
+          "label": "Maximum quote age",
+          "input": "Seconds",
+          "proposed_default": {
+            "seconds": 30,
+            "confirmed": false
+          },
+          "behavior": "Effective expiry is the earliest accepted maximum age, provider expiry, transaction validity, or tighter applicable chain/venue validity bound; show the actual countdown"
+        },
+        {
+          "id": "fees",
+          "label": "Fees",
+          "input": "Optional custom ceiling in explicit fee asset and units",
+          "custom_ceiling_default": null,
+          "behavior": "Always show and obtain approval for the prepared action's maximum venue, aggregator and network fees. An optional custom ceiling can impose a stricter bound. A material fee-maximum change requires renewed review."
+        },
+        {
+          "id": "lending-health",
+          "label": "Lending health",
+          "input": "Separate configurable minimum and warning threshold in the venue's native risk metric",
+          "proposed_warning": {
+            "metric": "Health factor, only where supported and semantically applicable",
+            "below": "1.5",
+            "confirmed": false
+          },
+          "behavior": "Do not apply 1.5 across incompatible venue metrics. Show warnings separately from a user-configured blocking minimum. Chain/venue collateral and liquidation validity requirements always apply."
+        },
+        {
+          "id": "data-freshness",
+          "label": "Data freshness",
+          "input": "Per-source maximum age/tolerance with units and source identity",
+          "proposed_default": null,
+          "behavior": "Enforce accepted source tolerances during quote and preview generation, using observation/provider as-of time rather than retrieval time alone. Stricter chain, oracle or venue validity cannot be relaxed by this setting."
+        }
+      ],
+      "optional_caps": {
+        "default": "Disabled and unset",
+        "categories": [
+          "Funding",
+          "Spending",
+          "Daily turnover",
+          "Borrowing"
+        ],
+        "behavior": "No mandatory global caps. The approved intent defines the action amount. Apply additional caps only after the user explicitly enables and saves them.",
+        "retained_checks": "Account balances, chain reserves, market liquidity/capacity, contract validity, approved payload bounds and venue rules remain mandatory"
+      },
+      "interaction": {
+        "open": "Fetch the active saved revision and initialize a separate editable draft; clearly identify any unconfirmed suggestions",
+        "edit": "Changes remain local to the drawer draft until Save; no autosave or agent write path",
+        "save": "Validate on the server under authenticated wallet/network ownership and an expected revision; explicit Save creates a new auditable policy revision",
+        "conflict": "Preserve the draft, display the newer saved revision and require explicit review/reapplication; never silently overwrite either revision",
+        "success": "Display the saved revision and confirmation, invalidate affected prepared plans and refresh their review state",
+        "cancel": "Discard the draft and leave the active saved policy unchanged",
+        "unsaved_close": "Require an explicit discard decision before losing edits",
+        "agent_boundary": "The agent may explain or propose changes but cannot save, accept or silently modify guardrails",
+        "validity_boundary": "User preferences cannot override chain or venue validity requirements"
+      },
+      "states": [
+        "Loading",
+        "Saved",
+        "Unsaved changes",
+        "Validation error",
+        "Saving",
+        "Save failed",
+        "Revision conflict",
+        "Wallet verification required",
+        "Unsupported venue risk metric"
+      ],
+      "accessibility": [
+        "Named dialog with Guardrails heading and accessible control labels, units and explanatory text",
+        "Move focus into the drawer, keep keyboard focus within the modal surface and restore focus to the Guardrails button on close",
+        "Support Escape with unsaved-edit handling, visible focus, screen-reader validation/status announcements and 44px touch targets",
+        "Warnings include text/icons and do not rely on color"
+      ],
+      "data_bindings": "Target interface contract; see the application README for implemented capabilities.",
+      "acceptance": [
+        "Guardrails is beside Connect Wallet/WalletMenu on desktop and remains discoverable on mobile",
+        "Save, Cancel, validation failure and revision-conflict behavior preserve the documented draft/saved separation",
+        "Numerical suggestions remain marked unconfirmed until explicit acceptance; no defaults or optional caps are silently activated",
+        "Price-impact and lending warnings remain distinct from blocking limits",
+        "User settings cannot extend provider expiry or relax chain/venue requirements",
+        "Fee maxima and source freshness are enforced during preparation/review",
+        "The agent cannot mutate guardrails and saving an affected revision invalidates existing prepared reviews"
+      ]
+    },
+    {
+      "id": "portfolio-spend-preview",
+      "title": "Portfolio Spend preview",
+      "status": "UI-only concept; no Rain integration",
+      "route": "/portfolio?view=spend",
+      "mockup": "../mockups/rain-card.html",
+      "screenshot": "../mockups/rain-card-preview.jpg",
+      "layout": "Masked Nest card and wallet-USDC context on the left; heading, four-step onboarding concept and Preview card setup action on the right. Stack below 620px.",
+      "theme": "Use existing Nest forest/cream/orange palette and typography; persistent UI PREVIEW and Not issued labels.",
+      "funds": "Wallet USDC is separate from unavailable card balance and DeFi positions; illustrative values are labeled. No automatic vault withdrawal, collateral release or asset sale.",
+      "flow": [
+        "Connect wallet",
+        "Check eligibility and verify identity",
+        "Create and fund card",
+        "Spend"
+      ],
+      "interaction": "Preview card setup toggles local explanation only; proposed steps are not completed provider states.",
+      "boundaries": [
+        "No Rain API, credentials, KYC collection, card issuance or terms acceptance",
+        "No financial intent, signature, submission, payment or ledger mutation",
+        "No claim of direct arbitrary Freighter-wallet spending",
+        "Future live program needs verified Stellar USDC asset/issuer, funding model, partner access and reconciliation"
+      ],
+      "acceptance": [
+        "Preview labels remain visible and card is never marked active",
+        "Wallet and card balances are not conflated",
+        "CTA affects local presentation only",
+        "Desktop and mobile layout plus keyboard interaction remain usable"
+      ]
+    }
+  ],
+  "shared_components": [
+    {
+      "id": "GuardrailsButton",
+      "purpose": "Labeled global header action beside Connect Wallet/WalletMenu that opens GuardrailsDrawer"
+    },
+    {
+      "id": "GuardrailsDrawer",
+      "purpose": "Wallet/network-scoped explicit-save settings editor defined by global-guardrails"
+    },
+    {
+      "id": "WithdrawalTimingDisclosure",
+      "purpose": "Prominent pre-deposit explanation of when and how the user can withdraw or release the deposited assets",
+      "placement": "Visible before the deposit submission/signing action in the action ticket and shared ActionReviewSheet; never only behind a tooltip or collapsed technical section",
+      "applies_to": [
+        "Direct lending supply",
+        "Collateral deposits/additions",
+        "Vault deposits",
+        "Campaign deposits",
+        "Every deposit leg of a composed plan"
+      ],
+      "fields": [
+        "Timing status: immediate, scheduled, variable, or unknown; estimates remain explicitly labeled",
+        "Lockup duration and release conditions",
+        "Cooldown duration and when it starts",
+        "Withdrawal queue, request/claim steps and settlement conditions",
+        "Earliest availability or range when supported by the source",
+        "Conditions affecting collateral release, including outstanding debt where applicable",
+        "Source, observation time and a clear reason when duration is variable or unknown"
+      ],
+      "behavior": "State unknown or variable timing prominently rather than inventing an instant exit. Refresh when the selected product or deposit preview changes; material disclosure changes require the updated review.",
+      "binding": "Adapter-supplied exit-condition facts associated with the prepared plan, not agent-generated estimates",
+      "acceptance": "Every supported deposit type shows withdrawal timing before approval, including lockup, cooldown, queue, variable and unknown cases"
+    },
+    {
+      "id": "SpendCardPreview",
+      "purpose": "Portfolio-only Rain card concept with explicit preview and unavailable card-balance states",
+      "mockup": "../mockups/rain-card.html"
+    }
+  ],
+  "decisions": [
+    {
+      "date": "2026-10-25",
+      "decision": "Use the first original Nest logo with the plain circular egg.",
+      "source": "User selection"
+    },
+    {
+      "date": "2026-10-25",
+      "decision": "Add explicit-save Guardrails beside Connect Wallet, make global funding/spending/daily-turnover/borrowing caps optional, and prominently disclose withdrawal timing before every deposit. Numerical defaults remain unconfirmed proposals.",
+      "source": "User instruction"
+    },
+    {
+      "date": "2026-10-25",
+      "decision": "Add a UI-only Rain spending concept for Stellar USDC under Portfolio; live issuance and payment integration is outside P0.",
+      "source": "User instruction and supplied layout reference"
+    }
+  ]
+}

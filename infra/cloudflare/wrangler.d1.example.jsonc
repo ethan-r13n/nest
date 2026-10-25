@@ -1,0 +1,39 @@
+// Merge this fragment into the application's Wrangler configuration.
+// Add the actual Worker name, entrypoint and compatibility configuration there.
+// Align migrations_dir with the real SQL directory, relative to the final Wrangler file.
+// Keep automatic Worker Previews disabled until preview bindings are configured.
+{
+  "account_id": "YOUR_CLOUDFLARE_ACCOUNT_ID",
+  "vars": {
+    "STELLAR_NETWORK": "mainnet",
+    "EXECUTION_ENABLED": "false"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nest-runtime-mainnet",
+      "database_id": "00000000-0000-0000-0000-000000000001",
+      "preview_database_id": "00000000-0000-0000-0000-000000000002",
+      "migrations_dir": "migrations",
+      "remote": false
+    }
+  ],
+  "env": {
+    "testnet": {
+      "vars": {
+        "STELLAR_NETWORK": "testnet",
+        "EXECUTION_ENABLED": "false"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "nest-runtime-testnet",
+          "database_id": "00000000-0000-0000-0000-000000000002",
+          "preview_database_id": "00000000-0000-0000-0000-000000000002",
+          "migrations_dir": "migrations",
+          "remote": false
+        }
+      ]
+    }
+  }
+}

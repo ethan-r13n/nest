@@ -1,0 +1,21 @@
+packages:
+  - apps/*
+  - packages/*
+
+# One exact version per dependency for the whole workspace. Renovate proposes upgrades;
+# Pi stays on the version the spec pins until a compatibility test passes on the next one.
+catalog:
+  "@biomejs/biome": 2.6.3
+  knip: 6.43.0
+  lefthook: 2.2.2
+  turbo: 2.11.10
+  typescript: 7.0.2
+
+# pnpm runs no dependency install scripts unless they are listed here.
+allowBuilds:
+  esbuild: true
+  lefthook: true
+  workerd: true
+  # Pulled in by Pi's provider SDKs; their install scripts are not needed at runtime.
+  "@google/genai": false
+  protobufjs: false

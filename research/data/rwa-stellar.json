@@ -1,0 +1,5558 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "RWA.xyz",
+    "url": "https://app.rwa.xyz/networks/stellar",
+    "network": "stellar",
+    "method": "Rendered DOM of user-accessible free-account page; ordinary table pagination",
+    "capturedAt": "2026-10-25T14:40:20.074Z",
+    "asOfDisplay": "10/25/2026",
+    "live": false
+  },
+  "coverage": {
+    "reportedAssetRows": 109,
+    "capturedAssetRows": 109,
+    "uniqueAssetIdentities": 109,
+    "assetPages": [
+      {
+        "display": "Showing 1 to 25 of 109 results",
+        "rowCount": 25
+      },
+      {
+        "display": "Showing 25 to 50 of 109 results",
+        "rowCount": 25
+      },
+      {
+        "display": "Showing 50 to 75 of 109 results",
+        "rowCount": 25
+      },
+      {
+        "display": "Showing 75 to 100 of 109 results",
+        "rowCount": 25
+      },
+      {
+        "display": "Showing 100 to 109 of 109 results",
+        "rowCount": 9
+      }
+    ],
+    "leagueTables": "Nine filter views collected; eight contain data and represented managers displays no rows.",
+    "historicalSeries": "Not collected; CSV export requires Pro",
+    "assetDetailPages": "Not collected",
+    "missingValues": "Null means absent or unavailable; never inferred as zero",
+    "collectedLeagueRows": 62
+  },
+  "networkMetrics": [
+    {
+      "key": "distributedAssetValue",
+      "label": "Distributed Asset Value",
+      "display": "$3.75B",
+      "change30dPercent": 10.85,
+      "unit": "USD",
+      "rounded": true
+    },
+    {
+      "key": "representedAssetValue",
+      "label": "Represented Asset Value",
+      "display": "$78.22M",
+      "change30dPercent": 0.32,
+      "unit": "USD",
+      "rounded": true
+    },
+    {
+      "key": "rwaHolders",
+      "label": "RWA Holders",
+      "display": "24,138",
+      "value": 24138,
+      "change30dPercent": 10.73,
+      "unit": "holders",
+      "rounded": false
+    },
+    {
+      "key": "rwaTransferVolume30d",
+      "label": "RWA 30D Transfer Volume",
+      "display": "$517.13M",
+      "change30dPercent": -4.18,
+      "unit": "USD",
+      "rounded": true
+    },
+    {
+      "key": "rwaCount",
+      "label": "RWA Count",
+      "display": "84",
+      "value": 84,
+      "unit": "assets",
+      "rounded": false
+    },
+    {
+      "key": "stablecoinMarketCap",
+      "label": "Stablecoin Market Cap",
+      "display": "$524.58M",
+      "change30dPercent": 20.19,
+      "unit": "USD",
+      "rounded": true
+    },
+    {
+      "key": "stablecoinHolders",
+      "label": "Stablecoin Holders",
+      "display": "742.57K",
+      "change30dPercent": 2.12,
+      "unit": "holders",
+      "rounded": true
+    },
+    {
+      "key": "stablecoinTransferVolume30d",
+      "label": "Stablecoin 30D Transfer Volume",
+      "display": "$15.04B",
+      "change30dPercent": 40.88,
+      "unit": "USD",
+      "rounded": true
+    }
+  ],
+  "assets": [
+    {
+      "assetClass": "Active Strategies",
+      "assetUrl": "https://app.rwa.xyz/assets/eurSAFO",
+      "cells": [
+        "Spiko Amundi Overnight Swap Fund (EUR)\neurSAFO",
+        "—",
+        "$\n1,464,692,684\n▲",
+        "10,892\n▲",
+        "Active Strategies",
+        "Distributed",
+        "Spiko",
+        "France",
+        "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+        "CBOOC...JX7FZP"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBOOCGZSVRSZFRE4U2NWR2B4RXYVJWRCBTGOUD2JPI2TDJPWMTJX7FZP",
+      "contractLabel": "CBOOC...JX7FZP",
+      "domicile": "France",
+      "holdersDisplay": "10,892\n▲",
+      "manager": null,
+      "name": "Spiko Amundi Overnight Swap Fund (EUR)",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+      "ticker": "eurSAFO",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,464,692,684\n▲",
+      "identity": "https://app.rwa.xyz/assets/eurSAFO|https://stellar.expert/explorer/public/asset/CBOOCGZSVRSZFRE4U2NWR2B4RXYVJWRCBTGOUD2JPI2TDJPWMTJX7FZP",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/USDY",
+      "cells": [
+        "Ondo U.S. Dollar Yield\nUSDY",
+        "—",
+        "$\n538,032,183\n▲",
+        "1,354\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Ondo",
+        "British Virgin Islands",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "USDY-...DAZ6-1"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/USDY-GAJMPX5NBOG6TQFPQGRABJEEB2YE7RFRLUKJDZAZGAD5GFX4J7TADAZ6-1",
+      "contractLabel": "USDY-...DAZ6-1",
+      "domicile": "British Virgin Islands",
+      "holdersDisplay": "1,354\n▲",
+      "manager": null,
+      "name": "Ondo U.S. Dollar Yield",
+      "platform": "Ondo",
+      "platformUrl": "https://app.rwa.xyz/platforms/ondo",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "USDY",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n538,032,183\n▲",
+      "identity": "https://app.rwa.xyz/assets/USDY|https://stellar.expert/explorer/public/asset/USDY-GAJMPX5NBOG6TQFPQGRABJEEB2YE7RFRLUKJDZAZGAD5GFX4J7TADAZ6-1",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Corporate Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/TPT30",
+      "cells": [
+        "VuMe Bond 2030\nTPT30",
+        "—",
+        "$\n500,000,000",
+        "1",
+        "Corporate Credit",
+        "Distributed",
+        "Realiz",
+        "Luxembourg",
+        "Luxembourg — Securitisation Law (22 Mar 2004, amended 8 Mar 2022)\n\nCSSF",
+        "CBUBV...KM2VJ4"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBUBVYRKTQLMDRUBPP6SH4GO33KZCEEYBIWB5AWNGKODP4A6KPKM2VJ4",
+      "contractLabel": "CBUBV...KM2VJ4",
+      "domicile": "Luxembourg",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "VuMe Bond 2030",
+      "platform": "Realiz",
+      "platformUrl": "https://app.rwa.xyz/platforms/realiz",
+      "regulatoryFramework": "Luxembourg — Securitisation Law (22 Mar 2004, amended 8 Mar 2022)\n\nCSSF",
+      "ticker": "TPT30",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n500,000,000",
+      "identity": "https://app.rwa.xyz/assets/TPT30|https://stellar.expert/explorer/public/asset/CBUBVYRKTQLMDRUBPP6SH4GO33KZCEEYBIWB5AWNGKODP4A6KPKM2VJ4",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/BENJI",
+      "cells": [
+        "BENJI\nBENJI",
+        "Franklin Templeton",
+        "$\n434,589,739\n▼",
+        "1,109\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Franklin Templeton Benji Investments",
+        "United States of America",
+        "Investment Company Act of 1940\n\nSEC - U.S. Securities and Exchange Commission",
+        "BENJI...7HZIW5"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/BENJI-GBHNGLLIE3KWGKCHIKMHJ5HVZHYIK7WTBE4QF5PLAKL4CJGSEU7HZIW5",
+      "contractLabel": "BENJI...7HZIW5",
+      "domicile": "United States of America",
+      "holdersDisplay": "1,109\n▲",
+      "manager": "Franklin Templeton",
+      "name": "BENJI",
+      "platform": "Franklin Templeton Benji Investments",
+      "platformUrl": "https://app.rwa.xyz/platforms/franklin-templeton-benji-investments",
+      "regulatoryFramework": "Investment Company Act of 1940\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "BENJI",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n434,589,739\n▼",
+      "identity": "https://app.rwa.xyz/assets/BENJI|https://stellar.expert/explorer/public/asset/BENJI-GBHNGLLIE3KWGKCHIKMHJ5HVZHYIK7WTBE4QF5PLAKL4CJGSEU7HZIW5",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/USDC",
+      "cells": [
+        "USDC\nUSDC",
+        "—",
+        "$\n386,788,356\n▼",
+        "718,477\n▲",
+        "Stablecoins",
+        "Distributed",
+        "Circle",
+        "Bermuda",
+        "Markets in Crypto-Assets Regulation (MiCA)\n\nEU (ESMA, EBA)",
+        "USDC-...K4KZVN"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/USDC-GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+      "contractLabel": "USDC-...K4KZVN",
+      "domicile": "Bermuda",
+      "holdersDisplay": "718,477\n▲",
+      "manager": null,
+      "name": "USDC",
+      "platform": "Circle",
+      "platformUrl": "https://app.rwa.xyz/platforms/circle",
+      "regulatoryFramework": "Markets in Crypto-Assets Regulation (MiCA)\n\nEU (ESMA, EBA)",
+      "ticker": "USDC",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n386,788,356\n▼",
+      "identity": "https://app.rwa.xyz/assets/USDC|https://stellar.expert/explorer/public/asset/USDC-GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Non-U.S. Government Debt",
+      "assetUrl": "https://app.rwa.xyz/assets/EUTBL",
+      "cells": [
+        "Spiko EU T-Bills Money Market Fund\nEUTBL",
+        "Twenty First Capital",
+        "$\n271,832,624\n▲",
+        "2,349\n▲",
+        "Non-U.S. Government Debt",
+        "Distributed",
+        "Spiko",
+        "France",
+        "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+        "CBGV2...MWDDOF"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBGV2QFQBBGEQRUKUMCPO3SZOHDDYO6SCP5CH6TW7EALKVHCXTMWDDOF",
+      "contractLabel": "CBGV2...MWDDOF",
+      "domicile": "France",
+      "holdersDisplay": "2,349\n▲",
+      "manager": "Twenty First Capital",
+      "name": "Spiko EU T-Bills Money Market Fund",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+      "ticker": "EUTBL",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n271,832,624\n▲",
+      "identity": "https://app.rwa.xyz/assets/EUTBL|https://stellar.expert/explorer/public/asset/CBGV2QFQBBGEQRUKUMCPO3SZOHDDYO6SCP5CH6TW7EALKVHCXTMWDDOF",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Active Strategies",
+      "assetUrl": "https://app.rwa.xyz/assets/SAFO",
+      "cells": [
+        "Spiko Amundi Overnight Swap Fund\nSAFO",
+        "Amundi",
+        "$\n117,655,077\n▼",
+        "850\n▲",
+        "Active Strategies",
+        "Distributed",
+        "Spiko",
+        "France",
+        "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+        "CDGSC...NVGQHX"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDGSC6BA4TCAOVSFQCUEHDMOIIHYYVNYBT6YEARS4MX3ITAHUINVGQHX",
+      "contractLabel": "CDGSC...NVGQHX",
+      "domicile": "France",
+      "holdersDisplay": "850\n▲",
+      "manager": "Amundi",
+      "name": "Spiko Amundi Overnight Swap Fund",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+      "ticker": "SAFO",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n117,655,077\n▼",
+      "identity": "https://app.rwa.xyz/assets/SAFO|https://stellar.expert/explorer/public/asset/CDGSC6BA4TCAOVSFQCUEHDMOIIHYYVNYBT6YEARS4MX3ITAHUINVGQHX",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/PYUSD",
+      "cells": [
+        "Paypal USD\nPYUSD",
+        "—",
+        "$\n86,953,715\n▲",
+        "5,081\n▲",
+        "Stablecoins",
+        "Distributed",
+        "Paxos",
+        "United States of America",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "PYUSD...ZTU2V5"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/PYUSD-GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5",
+      "contractLabel": "PYUSD...ZTU2V5",
+      "domicile": "United States of America",
+      "holdersDisplay": "5,081\n▲",
+      "manager": null,
+      "name": "Paypal USD",
+      "platform": "Paxos",
+      "platformUrl": "https://app.rwa.xyz/platforms/paxos",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "PYUSD",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n86,953,715\n▲",
+      "identity": "https://app.rwa.xyz/assets/PYUSD|https://stellar.expert/explorer/public/asset/PYUSD-GDQE7IXJ4HUHV6RQHIUPRJSEZE4DRS5WY577O2FY6YQ5LVWZ7JZTU2V5",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/SWEEP",
+      "cells": [
+        "State Street Galaxy OnChain Liquidity Sweep Fund\nSWEEP",
+        "State Street Investment Management",
+        "$\n74,973,313\n▲",
+        "3\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Galaxy Digital",
+        "United States of America",
+        "U.S. Securities Act Reg. D Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CB6PI...FZILW3"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CB6PIAMD6VPZEI7CMS4PMN6RL5LBTRNAO2ICB7SFXATKKIETOWFZILW3",
+      "contractLabel": "CB6PI...FZILW3",
+      "domicile": "United States of America",
+      "holdersDisplay": "3\n▲",
+      "manager": "State Street Investment Management",
+      "name": "State Street Galaxy OnChain Liquidity Sweep Fund",
+      "platform": "Galaxy Digital",
+      "platformUrl": "https://app.rwa.xyz/platforms/galaxy-digital",
+      "regulatoryFramework": "U.S. Securities Act Reg. D Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "SWEEP",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n74,973,313\n▲",
+      "identity": "https://app.rwa.xyz/assets/SWEEP|https://stellar.expert/explorer/public/asset/CB6PIAMD6VPZEI7CMS4PMN6RL5LBTRNAO2ICB7SFXATKKIETOWFZILW3",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/gBENJI",
+      "cells": [
+        "gBENJI\ngBENJI",
+        "Franklin Templeton",
+        "$\n51,618,278\n▲",
+        "9",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Franklin Templeton Benji Investments",
+        "Luxembourg",
+        "EU UCITS Directive",
+        "gBENJ...BXRP-2"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/gBENJI-GD5J73EKK5IYL5XS3FBTHHX7CZIYRP7QXDL57XFWGC2WVYWT326OBXRP-2",
+      "contractLabel": "gBENJ...BXRP-2",
+      "domicile": "Luxembourg",
+      "holdersDisplay": "9",
+      "manager": "Franklin Templeton",
+      "name": "gBENJI",
+      "platform": "Franklin Templeton Benji Investments",
+      "platformUrl": "https://app.rwa.xyz/platforms/franklin-templeton-benji-investments",
+      "regulatoryFramework": "EU UCITS Directive",
+      "ticker": "gBENJI",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n51,618,278\n▲",
+      "identity": "https://app.rwa.xyz/assets/gBENJI|https://stellar.expert/explorer/public/asset/gBENJI-GD5J73EKK5IYL5XS3FBTHHX7CZIYRP7QXDL57XFWGC2WVYWT326OBXRP-2",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Active Strategies",
+      "assetUrl": "https://app.rwa.xyz/assets/gbpSAFO",
+      "cells": [
+        "Spiko Amundi Overnight Swap Fund (GBP)\ngbpSAFO",
+        "—",
+        "$\n50,966,099\n▲",
+        "373\n▲",
+        "Active Strategies",
+        "Distributed",
+        "Spiko",
+        "France",
+        "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+        "CAGYR...KUNQKP"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CAGYRRKPFSWKM6SJOE4QAAVYMOSHMDS5WOQ4T5A2E6XNCU7LZZKUNQKP",
+      "contractLabel": "CAGYR...KUNQKP",
+      "domicile": "France",
+      "holdersDisplay": "373\n▲",
+      "manager": null,
+      "name": "Spiko Amundi Overnight Swap Fund (GBP)",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+      "ticker": "gbpSAFO",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n50,966,099\n▲",
+      "identity": "https://app.rwa.xyz/assets/gbpSAFO|https://stellar.expert/explorer/public/asset/CAGYRRKPFSWKM6SJOE4QAAVYMOSHMDS5WOQ4T5A2E6XNCU7LZZKUNQKP",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/sgBENJI",
+      "cells": [
+        "sgBENJI\nsgBENJI",
+        "Franklin Templeton",
+        "$\n38,490,045\n▲",
+        "11\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Franklin Templeton Benji Investments",
+        "Singapore",
+        "Singapore Securities and Futures Act 2001\n\nMonetary Authority of Singapore (MAS)",
+        "sgBEN...VZBM5C"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/sgBENJI-GAGICV3VBJSKKH5H5MQQIUTUP462YVHC23KUHZY6FJERRJFBDIVZBM5C",
+      "contractLabel": "sgBEN...VZBM5C",
+      "domicile": "Singapore",
+      "holdersDisplay": "11\n▲",
+      "manager": "Franklin Templeton",
+      "name": "sgBENJI",
+      "platform": "Franklin Templeton Benji Investments",
+      "platformUrl": "https://app.rwa.xyz/platforms/franklin-templeton-benji-investments",
+      "regulatoryFramework": "Singapore Securities and Futures Act 2001\n\nMonetary Authority of Singapore (MAS)",
+      "ticker": "sgBENJI",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n38,490,045\n▲",
+      "identity": "https://app.rwa.xyz/assets/sgBENJI|https://stellar.expert/explorer/public/asset/sgBENJI-GAGICV3VBJSKKH5H5MQQIUTUP462YVHC23KUHZY6FJERRJFBDIVZBM5C",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/USTBL",
+      "cells": [
+        "Spiko US T-Bills Money Market Fund\nUSTBL",
+        "Twenty First Capital",
+        "$\n36,036,407\n▲",
+        "447\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Spiko",
+        "France",
+        "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+        "CARUU...76F4TO"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CARUUX2FZNPH6DGJOEUFSIUQWYHNL5AVDV7PMVSHWL7OBYIBFC76F4TO",
+      "contractLabel": "CARUU...76F4TO",
+      "domicile": "France",
+      "holdersDisplay": "447\n▲",
+      "manager": "Twenty First Capital",
+      "name": "Spiko US T-Bills Money Market Fund",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+      "ticker": "USTBL",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n36,036,407\n▲",
+      "identity": "https://app.rwa.xyz/assets/USTBL|https://stellar.expert/explorer/public/asset/CARUUX2FZNPH6DGJOEUFSIUQWYHNL5AVDV7PMVSHWL7OBYIBFC76F4TO",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/SPX",
+      "cells": [
+        "SpaceX Bond (Cometum)\nSPX",
+        "—",
+        "$\n26,888,649",
+        "101",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "SPX-G...3465FL"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/SPX-GCYVGZHMNWII6F3JHBPERKFCRSPS7NOMKOCFXDP2QD62ZE3JKF3465FL",
+      "contractLabel": "SPX-G...3465FL",
+      "domicile": "Germany",
+      "holdersDisplay": "101",
+      "manager": null,
+      "name": "SpaceX Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "SPX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n26,888,649",
+      "identity": "https://app.rwa.xyz/assets/SPX|https://stellar.expert/explorer/public/asset/SPX-GCYVGZHMNWII6F3JHBPERKFCRSPS7NOMKOCFXDP2QD62ZE3JKF3465FL",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/YLDS",
+      "cells": [
+        "YLDS\nYLDS",
+        "Figure Investment Advisors",
+        "$\n25,244,840\n▲",
+        "9\n▲",
+        "Stablecoins",
+        "Distributed",
+        "Figure",
+        "United States of America",
+        "U.S. Securities Act of 1933 — SEC-Registered Security\n\nSEC - U.S. Securities and Exchange Commission",
+        "YLDS-...AVH3-1"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/YLDS-GAC7MOPTQLQUM3KC24AW4GHS3RLF72LPEZO54AH7EZ6TSMGRB5SOAVH3-1",
+      "contractLabel": "YLDS-...AVH3-1",
+      "domicile": "United States of America",
+      "holdersDisplay": "9\n▲",
+      "manager": "Figure Investment Advisors",
+      "name": "YLDS",
+      "platform": "Figure",
+      "platformUrl": "https://app.rwa.xyz/platforms/figure",
+      "regulatoryFramework": "U.S. Securities Act of 1933 — SEC-Registered Security\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "YLDS",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n25,244,840\n▲",
+      "identity": "https://app.rwa.xyz/assets/YLDS|https://stellar.expert/explorer/public/asset/YLDS-GAC7MOPTQLQUM3KC24AW4GHS3RLF72LPEZO54AH7EZ6TSMGRB5SOAVH3-1",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Stocks",
+      "assetUrl": "https://app.rwa.xyz/assets/SPXUX",
+      "cells": [
+        "WisdomTree 500 Digital Fund\nSPXUX",
+        "WisdomTree Digital Management",
+        "$\n18,726,709\n▼",
+        "190",
+        "Stocks",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "SEC-registered Security\n\nU.S. Securities and Exchange Commission (SEC)",
+        "SPXU-...4Z6COM"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/SPXU-GDJBVX3QA5HJPBSAU5VIX2W6MC37NU4UFXPKEGK42SJCYN6AEQ4Z6COM",
+      "contractLabel": "SPXU-...4Z6COM",
+      "domicile": "United States of America",
+      "holdersDisplay": "190",
+      "manager": "WisdomTree Digital Management",
+      "name": "WisdomTree 500 Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "SEC-registered Security\n\nU.S. Securities and Exchange Commission (SEC)",
+      "ticker": "SPXUX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n18,726,709\n▼",
+      "identity": "https://app.rwa.xyz/assets/SPXUX|https://stellar.expert/explorer/public/asset/SPXU-GDJBVX3QA5HJPBSAU5VIX2W6MC37NU4UFXPKEGK42SJCYN6AEQ4Z6COM",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/EURCV",
+      "cells": [
+        "EUR CoinVertible\nEURCV",
+        "Societe Generale - FORGE",
+        "$\n16,837,801\n▼",
+        "5",
+        "Stablecoins",
+        "Distributed",
+        "Societe Generale - FORGE",
+        "France",
+        "France Electronic Money Institution (EMI)\n\nAutorité de Contrôle Prudentiel et de Résolution (ACPR)",
+        "EURCV...5AXW3G"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/EURCV-GCEYGIVOLAVBF2TG2RUSGTUJCIN75KEX3NGLMY4VPL4GFE5L355AXW3G",
+      "contractLabel": "EURCV...5AXW3G",
+      "domicile": "France",
+      "holdersDisplay": "5",
+      "manager": "Societe Generale - FORGE",
+      "name": "EUR CoinVertible",
+      "platform": "Societe Generale - FORGE",
+      "platformUrl": "https://app.rwa.xyz/platforms/societe-generale-forge",
+      "regulatoryFramework": "France Electronic Money Institution (EMI)\n\nAutorité de Contrôle Prudentiel et de Résolution (ACPR)",
+      "ticker": "EURCV",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n16,837,801\n▼",
+      "identity": "https://app.rwa.xyz/assets/EURCV|https://stellar.expert/explorer/public/asset/EURCV-GCEYGIVOLAVBF2TG2RUSGTUJCIN75KEX3NGLMY4VPL4GFE5L355AXW3G",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/USTRY",
+      "cells": [
+        "Etherfuse USTRY\nUSTRY",
+        "—",
+        "$\n12,413,080\n▲",
+        "457\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Etherfuse",
+        "United States of America",
+        "Switzerland DLT Act",
+        "USTRY...ATMYWC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/USTRY-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "contractLabel": "USTRY...ATMYWC",
+      "domicile": "United States of America",
+      "holdersDisplay": "457\n▲",
+      "manager": null,
+      "name": "Etherfuse USTRY",
+      "platform": "Etherfuse",
+      "platformUrl": "https://app.rwa.xyz/platforms/etherfuse",
+      "regulatoryFramework": "Switzerland DLT Act",
+      "ticker": "USTRY",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n12,413,080\n▲",
+      "identity": "https://app.rwa.xyz/assets/USTRY|https://stellar.expert/explorer/public/asset/USTRY-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Non-U.S. Government Debt",
+      "assetUrl": "https://app.rwa.xyz/assets/UKTBL",
+      "cells": [
+        "Spiko UK T-Bills Money Market Fund\nUKTBL",
+        "Twenty First Capital",
+        "$\n9,925,498\n▼",
+        "346\n▼",
+        "Non-U.S. Government Debt",
+        "Distributed",
+        "Spiko",
+        "France",
+        "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+        "CDT3K...ABP4FR"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDT3KU6TQZNOHKNOHNAFFDQZDURVC3MSTL4ML7TUTZGNOPBZCLABP4FR",
+      "contractLabel": "CDT3K...ABP4FR",
+      "domicile": "France",
+      "holdersDisplay": "346\n▼",
+      "manager": "Twenty First Capital",
+      "name": "Spiko UK T-Bills Money Market Fund",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+      "ticker": "UKTBL",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n9,925,498\n▼",
+      "identity": "https://app.rwa.xyz/assets/UKTBL|https://stellar.expert/explorer/public/asset/CDT3KU6TQZNOHKNOHNAFFDQZDURVC3MSTL4ML7TUTZGNOPBZCLABP4FR",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/RVL5",
+      "cells": [
+        "Rivool Agriculture Notes High Grade - RVL5\nRVL5",
+        "—",
+        "$\n9,191,582",
+        "1",
+        "Asset-Backed Credit",
+        "Distributed",
+        "Rivool Finance",
+        "Brazil",
+        "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+        "RVL5-...HS3VMC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/RVL5-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "contractLabel": "RVL5-...HS3VMC",
+      "domicile": "Brazil",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Rivool Agriculture Notes High Grade - RVL5",
+      "platform": "Rivool Finance",
+      "platformUrl": "https://app.rwa.xyz/platforms/rivool-finance",
+      "regulatoryFramework": "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+      "ticker": "RVL5",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n9,191,582",
+      "identity": "https://app.rwa.xyz/assets/RVL5|https://stellar.expert/explorer/public/asset/RVL5-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/RVL4",
+      "cells": [
+        "Rivool Agriculture Notes High Yield - RVL4\nRVL4",
+        "Nagro",
+        "$\n9,191,582",
+        "1",
+        "Asset-Backed Credit",
+        "Distributed",
+        "Rivool Finance",
+        "Brazil",
+        "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+        "RVL4-...HS3VMC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/RVL4-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "contractLabel": "RVL4-...HS3VMC",
+      "domicile": "Brazil",
+      "holdersDisplay": "1",
+      "manager": "Nagro",
+      "name": "Rivool Agriculture Notes High Yield - RVL4",
+      "platform": "Rivool Finance",
+      "platformUrl": "https://app.rwa.xyz/platforms/rivool-finance",
+      "regulatoryFramework": "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+      "ticker": "RVL4",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n9,191,582",
+      "identity": "https://app.rwa.xyz/assets/RVL4|https://stellar.expert/explorer/public/asset/RVL4-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/RSRB",
+      "cells": [
+        "R&B Oak Park - Equity Tranche 1\nRSRB",
+        "—",
+        "$\n9,000,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CB7ID...5AI54W"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CB7ID5RFSHXTXNGBRJBK4S2WQBD2WJQSNGY5FX6EYI7PITXEED5AI54W",
+      "contractLabel": "CB7ID...5AI54W",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "R&B Oak Park - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "RSRB",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n9,000,000",
+      "identity": "https://app.rwa.xyz/assets/RSRB|https://stellar.expert/explorer/public/asset/CB7ID5RFSHXTXNGBRJBK4S2WQBD2WJQSNGY5FX6EYI7PITXEED5AI54W",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/RSRB",
+      "cells": [
+        "R&B Oak Park - Equity Tranche 1\nRSRB",
+        "—",
+        "$\n9,000,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CDTPL...L5223J"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDTPLH4K7DCVCVEE5HQXAE2PFSW23SPYBKPMITWF3BYW3T32JZL5223J",
+      "contractLabel": "CDTPL...L5223J",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "R&B Oak Park - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "RSRB",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n9,000,000",
+      "identity": "https://app.rwa.xyz/assets/RSRB|https://stellar.expert/explorer/public/asset/CDTPLH4K7DCVCVEE5HQXAE2PFSW23SPYBKPMITWF3BYW3T32JZL5223J",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Corporate Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/deJAAA",
+      "cells": [
+        "JAAA deRWA\ndeJAAA",
+        "Anemoy",
+        "$\n8,687,119\n▲",
+        "50\n▲",
+        "Corporate Credit",
+        "Distributed",
+        "Centrifuge",
+        "United States of America",
+        "Non-Regulated",
+        "CC64W...4QYGSL"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CC64WBDGS6QQP22QTTIACYIXT3WF7BBQEYOQPLTP7GTKYY7PZ74QYGSL",
+      "contractLabel": "CC64W...4QYGSL",
+      "domicile": "United States of America",
+      "holdersDisplay": "50\n▲",
+      "manager": "Anemoy",
+      "name": "JAAA deRWA",
+      "platform": "Centrifuge",
+      "platformUrl": "https://app.rwa.xyz/platforms/centrifuge",
+      "regulatoryFramework": "Non-Regulated",
+      "ticker": "deJAAA",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n8,687,119\n▲",
+      "identity": "https://app.rwa.xyz/assets/deJAAA|https://stellar.expert/explorer/public/asset/CC64WBDGS6QQP22QTTIACYIXT3WF7BBQEYOQPLTP7GTKYY7PZ74QYGSL",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/RSR",
+      "cells": [
+        "Sedona Ranch - Equity Tranche 1\nRSR",
+        "—",
+        "$\n8,202,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CDH2A...55BVFR"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDH2A7S4J6ECQDL4K4BB5JCBF37DYYYFNNKM2VIRZV3IVZ5VAT55BVFR",
+      "contractLabel": "CDH2A...55BVFR",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Sedona Ranch - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "RSR",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n8,202,000",
+      "identity": "https://app.rwa.xyz/assets/RSR|https://stellar.expert/explorer/public/asset/CDH2A7S4J6ECQDL4K4BB5JCBF37DYYYFNNKM2VIRZV3IVZ5VAT55BVFR",
+      "sourcePage": 1,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/RSR",
+      "cells": [
+        "Sedona Ranch - Equity Tranche 1\nRSR",
+        "—",
+        "$\n8,202,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CBJKR...DGDKLC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBJKR3NVPIL4REW75PG7M7ZJIJJ62U7I4K52Y634G7AX5C4L5ADGDKLC",
+      "contractLabel": "CBJKR...DGDKLC",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Sedona Ranch - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "RSR",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n8,202,000",
+      "identity": "https://app.rwa.xyz/assets/RSR|https://stellar.expert/explorer/public/asset/CBJKR3NVPIL4REW75PG7M7ZJIJJ62U7I4K52Y634G7AX5C4L5ADGDKLC",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/deJTRSY",
+      "cells": [
+        "JTRSY deRWA\ndeJTRSY",
+        "Anemoy",
+        "$\n8,022,539\n▼",
+        "285\n▼",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Centrifuge",
+        "United States of America",
+        "Non-Regulated",
+        "CBI7U...R6IHRV"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBI7UCH5KGSVQRO5H4SUCZUTZABCITZLRHQQZTWL2TK4RZ72TAR6IHRV",
+      "contractLabel": "CBI7U...R6IHRV",
+      "domicile": "United States of America",
+      "holdersDisplay": "285\n▼",
+      "manager": "Anemoy",
+      "name": "JTRSY deRWA",
+      "platform": "Centrifuge",
+      "platformUrl": "https://app.rwa.xyz/platforms/centrifuge",
+      "regulatoryFramework": "Non-Regulated",
+      "ticker": "deJTRSY",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n8,022,539\n▼",
+      "identity": "https://app.rwa.xyz/assets/deJTRSY|https://stellar.expert/explorer/public/asset/CBI7UCH5KGSVQRO5H4SUCZUTZABCITZLRHQQZTWL2TK4RZ72TAR6IHRV",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/LDVM",
+      "cells": [
+        "LDV at the Maidstone - Equity Tranche 1\nLDVM",
+        "—",
+        "$\n6,320,400",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CCWCN...IQSQJK"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CCWCNQ6PBZ6FQFOJPURTJCRL2IB7K5BFBT4AWDEQJLF7J6PRDBIQSQJK",
+      "contractLabel": "CCWCN...IQSQJK",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "LDV at the Maidstone - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "LDVM",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n6,320,400",
+      "identity": "https://app.rwa.xyz/assets/LDVM|https://stellar.expert/explorer/public/asset/CCWCNQ6PBZ6FQFOJPURTJCRL2IB7K5BFBT4AWDEQJLF7J6PRDBIQSQJK",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/LDVM",
+      "cells": [
+        "LDV at the Maidstone - Equity Tranche 1\nLDVM",
+        "—",
+        "$\n6,320,400",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CDA3T...YBNGND"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDA3TFZNNDE2FL7EXM5MA3USLN5KCQRD2R5T6KQDHWDVZR2HR5YBNGND",
+      "contractLabel": "CDA3T...YBNGND",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "LDV at the Maidstone - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "LDVM",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n6,320,400",
+      "identity": "https://app.rwa.xyz/assets/LDVM|https://stellar.expert/explorer/public/asset/CDA3TFZNNDE2FL7EXM5MA3USLN5KCQRD2R5T6KQDHWDVZR2HR5YBNGND",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Stocks",
+      "assetUrl": "https://app.rwa.xyz/assets/TECHX",
+      "cells": [
+        "WisdomTree Technology & Innovation 100 Digital Fund\nTECHX",
+        "—",
+        "$\n6,274,103\n▼",
+        "224\n▲",
+        "Stocks",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "TECH-...VOBF5R"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/TECH-GDSAW27GPR7EWKPTFDPGN2WWZYUHBFKVDBLOUUEKSNKHID4ZWUVOBF5R",
+      "contractLabel": "TECH-...VOBF5R",
+      "domicile": "United States of America",
+      "holdersDisplay": "224\n▲",
+      "manager": null,
+      "name": "WisdomTree Technology & Innovation 100 Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "TECHX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n6,274,103\n▼",
+      "identity": "https://app.rwa.xyz/assets/TECHX|https://stellar.expert/explorer/public/asset/TECH-GDSAW27GPR7EWKPTFDPGN2WWZYUHBFKVDBLOUUEKSNKHID4ZWUVOBF5R",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/LIQVID1037_S",
+      "cells": [
+        "TermMax Fixed Income LP Deal\nLIQVID1037_S",
+        "—",
+        "$\n5,844,796",
+        "15",
+        "Asset-Backed Credit",
+        "Distributed",
+        "Liqvid",
+        "United States of America",
+        "Hong Kong Ordinance Professional Investor Exemption\n\nHKMA - Hong Kong Monetary Authority",
+        "CAA4S...KBIP2K"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CAA4SZLVEY6FQTO7GA2AIWRPBKHS2F5VXIXWE3YIOIC6A6DI6PKBIP2K",
+      "contractLabel": "CAA4S...KBIP2K",
+      "domicile": "United States of America",
+      "holdersDisplay": "15",
+      "manager": null,
+      "name": "TermMax Fixed Income LP Deal",
+      "platform": "Liqvid",
+      "platformUrl": "https://app.rwa.xyz/platforms/liqvid",
+      "regulatoryFramework": "Hong Kong Ordinance Professional Investor Exemption\n\nHKMA - Hong Kong Monetary Authority",
+      "ticker": "LIQVID1037_S",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n5,844,796",
+      "identity": "https://app.rwa.xyz/assets/LIQVID1037_S|https://stellar.expert/explorer/public/asset/CAA4SZLVEY6FQTO7GA2AIWRPBKHS2F5VXIXWE3YIOIC6A6DI6PKBIP2K",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Active Strategies",
+      "assetUrl": "https://app.rwa.xyz/assets/chfSAFO",
+      "cells": [
+        "Spiko Amundi Overnight Swap Fund (CHF)\nchfSAFO",
+        "—",
+        "$\n5,210,880\n▲",
+        "5",
+        "Active Strategies",
+        "Distributed",
+        "Spiko",
+        "France",
+        "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+        "CAJD2...ENNMW4"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CAJD2IBSP7VO2VYJQUYJSOGPJINTUYV7MQITINXVPTIH3CCLCUENNMW4",
+      "contractLabel": "CAJD2...ENNMW4",
+      "domicile": "France",
+      "holdersDisplay": "5",
+      "manager": null,
+      "name": "Spiko Amundi Overnight Swap Fund (CHF)",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "UCITS Directive (2009/65/EC)\n\nNational Competent Authority (of the EU Member State of authorisation), with ESMA coordination",
+      "ticker": "chfSAFO",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n5,210,880\n▲",
+      "identity": "https://app.rwa.xyz/assets/chfSAFO|https://stellar.expert/explorer/public/asset/CAJD2IBSP7VO2VYJQUYJSOGPJINTUYV7MQITINXVPTIH3CCLCUENNMW4",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Corporate Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/JAAA",
+      "cells": [
+        "Janus Henderson AAA CLO Fund\nJAAA",
+        "Anemoy",
+        "$\n5,119,617\n▲",
+        "1",
+        "Corporate Credit",
+        "Distributed",
+        "Centrifuge",
+        "British Virgin Islands",
+        "British Virgin Islands Securities and Investment Business Act\n\nFSC - British Virgin Islands Financial Services Commission",
+        "CDV6U...XEZZSO"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDV6U7OEVY6KUEJ4WNS63AYB6RFU3BAE7AZJOQ7LPH447C6NWUXEZZSO",
+      "contractLabel": "CDV6U...XEZZSO",
+      "domicile": "British Virgin Islands",
+      "holdersDisplay": "1",
+      "manager": "Anemoy",
+      "name": "Janus Henderson AAA CLO Fund",
+      "platform": "Centrifuge",
+      "platformUrl": "https://app.rwa.xyz/platforms/centrifuge",
+      "regulatoryFramework": "British Virgin Islands Securities and Investment Business Act\n\nFSC - British Virgin Islands Financial Services Commission",
+      "ticker": "JAAA",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n5,119,617\n▲",
+      "identity": "https://app.rwa.xyz/assets/JAAA|https://stellar.expert/explorer/public/asset/CDV6U7OEVY6KUEJ4WNS63AYB6RFU3BAE7AZJOQ7LPH447C6NWUXEZZSO",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/JTRSY",
+      "cells": [
+        "Janus Henderson Treasury Fund\nJTRSY",
+        "Anemoy",
+        "$\n5,093,106\n▲",
+        "1",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Centrifuge",
+        "British Virgin Islands",
+        "British Virgin Islands Securities and Investment Business Act\n\nFSC - British Virgin Islands Financial Services Commission",
+        "CBHOE...4CYR2O"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBHOEKLWTB6HR2A3IXHIIMQG5FOXWXS6EG4Q5YJDRPMXPCX7M24CYR2O",
+      "contractLabel": "CBHOE...4CYR2O",
+      "domicile": "British Virgin Islands",
+      "holdersDisplay": "1",
+      "manager": "Anemoy",
+      "name": "Janus Henderson Treasury Fund",
+      "platform": "Centrifuge",
+      "platformUrl": "https://app.rwa.xyz/platforms/centrifuge",
+      "regulatoryFramework": "British Virgin Islands Securities and Investment Business Act\n\nFSC - British Virgin Islands Financial Services Commission",
+      "ticker": "JTRSY",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n5,093,106\n▲",
+      "identity": "https://app.rwa.xyz/assets/JTRSY|https://stellar.expert/explorer/public/asset/CBHOEKLWTB6HR2A3IXHIIMQG5FOXWXS6EG4Q5YJDRPMXPCX7M24CYR2O",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/EURC",
+      "cells": [
+        "EURC\nEURC",
+        "—",
+        "$\n4,787,141\n▼",
+        "6,989\n▲",
+        "Stablecoins",
+        "Distributed",
+        "Circle",
+        "United States of America",
+        "U.S. State Money Transmitter Licensing",
+        "EURC-...ITNPP2"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/EURC-GDHU6WRG4IEQXM5NZ4BMPKOXHW76MZM4Y2IEMFDVXBSDP6SJY4ITNPP2",
+      "contractLabel": "EURC-...ITNPP2",
+      "domicile": "United States of America",
+      "holdersDisplay": "6,989\n▲",
+      "manager": null,
+      "name": "EURC",
+      "platform": "Circle",
+      "platformUrl": "https://app.rwa.xyz/platforms/circle",
+      "regulatoryFramework": "U.S. State Money Transmitter Licensing",
+      "ticker": "EURC",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n4,787,141\n▼",
+      "identity": "https://app.rwa.xyz/assets/EURC|https://stellar.expert/explorer/public/asset/EURC-GDHU6WRG4IEQXM5NZ4BMPKOXHW76MZM4Y2IEMFDVXBSDP6SJY4ITNPP2",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/RVL2",
+      "cells": [
+        "Rivool Institucional Nagro Agro - RVL2\nRVL2",
+        "Nagro",
+        "$\n4,537,476",
+        "11",
+        "Asset-Backed Credit",
+        "Distributed",
+        "Rivool Finance",
+        "Brazil",
+        "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+        "RVL2-...HS3VMC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/RVL2-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "contractLabel": "RVL2-...HS3VMC",
+      "domicile": "Brazil",
+      "holdersDisplay": "11",
+      "manager": "Nagro",
+      "name": "Rivool Institucional Nagro Agro - RVL2",
+      "platform": "Rivool Finance",
+      "platformUrl": "https://app.rwa.xyz/platforms/rivool-finance",
+      "regulatoryFramework": "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+      "ticker": "RVL2",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n4,537,476",
+      "identity": "https://app.rwa.xyz/assets/RVL2|https://stellar.expert/explorer/public/asset/RVL2-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Specialty Finance",
+      "assetUrl": "https://app.rwa.xyz/assets/LIQVID1041_S",
+      "cells": [
+        "Zynk TVL Provision Deal\nLIQVID1041_S",
+        "—",
+        "$\n4,517,561\n▲",
+        "3",
+        "Specialty Finance",
+        "Distributed",
+        "Liqvid",
+        "Estonia",
+        "Non-Regulated",
+        "CBV4A...7DSMBX"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBV4ASJV2DQVTLRI3CKNT5TOQJBZDUAUDQCQWZ7LB6SIWYX7EW7DSMBX",
+      "contractLabel": "CBV4A...7DSMBX",
+      "domicile": "Estonia",
+      "holdersDisplay": "3",
+      "manager": null,
+      "name": "Zynk TVL Provision Deal",
+      "platform": "Liqvid",
+      "platformUrl": "https://app.rwa.xyz/platforms/liqvid",
+      "regulatoryFramework": "Non-Regulated",
+      "ticker": "LIQVID1041_S",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n4,517,561\n▲",
+      "identity": "https://app.rwa.xyz/assets/LIQVID1041_S|https://stellar.expert/explorer/public/asset/CBV4ASJV2DQVTLRI3CKNT5TOQJBZDUAUDQCQWZ7LB6SIWYX7EW7DSMBX",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Active Strategies",
+      "assetUrl": "https://app.rwa.xyz/assets/eurSPKCC",
+      "cells": [
+        "Spiko Cash & Carry Euro\neurSPKCC",
+        "Twenty First Capital",
+        "$\n4,289,049\n▲",
+        "24\n▲",
+        "Active Strategies",
+        "Distributed",
+        "Spiko",
+        "France",
+        "Fonds Professionnel Spécialisé (FPS) — Alternative Investment Fund (France)\n\nAutorité des marchés financiers (AMF)",
+        "CDWOB...BSXR6A"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDWOB6T7SVSMMQN5V3P2OPTBAXOP7DAZHGVW3PYTZIKHVFKN6TBSXR6A",
+      "contractLabel": "CDWOB...BSXR6A",
+      "domicile": "France",
+      "holdersDisplay": "24\n▲",
+      "manager": "Twenty First Capital",
+      "name": "Spiko Cash & Carry Euro",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "Fonds Professionnel Spécialisé (FPS) — Alternative Investment Fund (France)\n\nAutorité des marchés financiers (AMF)",
+      "ticker": "eurSPKCC",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n4,289,049\n▲",
+      "identity": "https://app.rwa.xyz/assets/eurSPKCC|https://stellar.expert/explorer/public/asset/CDWOB6T7SVSMMQN5V3P2OPTBAXOP7DAZHGVW3PYTZIKHVFKN6TBSXR6A",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Commodities",
+      "assetUrl": "https://app.rwa.xyz/assets/XAUm",
+      "cells": [
+        "Matrixdock Gold\nXAUm",
+        "—",
+        "$\n4,109,697\n▼",
+        "38\n▲",
+        "Commodities",
+        "Distributed",
+        "Matrixdock",
+        "British Virgin Islands",
+        "Non-Regulated",
+        "CC2RB...WPVAGO"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CC2RBGYNCFBCVENIDL5BFBWPH4OUZM2UA3OD2K2N54GLMWCC4KWPVAGO",
+      "contractLabel": "CC2RB...WPVAGO",
+      "domicile": "British Virgin Islands",
+      "holdersDisplay": "38\n▲",
+      "manager": null,
+      "name": "Matrixdock Gold",
+      "platform": "Matrixdock",
+      "platformUrl": "https://app.rwa.xyz/platforms/matrixdock",
+      "regulatoryFramework": "Non-Regulated",
+      "ticker": "XAUm",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n4,109,697\n▼",
+      "identity": "https://app.rwa.xyz/assets/XAUm|https://stellar.expert/explorer/public/asset/CC2RBGYNCFBCVENIDL5BFBWPH4OUZM2UA3OD2K2N54GLMWCC4KWPVAGO",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/SHR",
+      "cells": [
+        "Sea Horse Resort - Equity Tranche 1\nSHR",
+        "—",
+        "$\n4,029,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CBZNQ...5GPKOB"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBZNQF6LYJ3L6UNB4RSFAD2QVJVQYXN5CWU74T33UXCT7I52UD5GPKOB",
+      "contractLabel": "CBZNQ...5GPKOB",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Sea Horse Resort - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "SHR",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n4,029,000",
+      "identity": "https://app.rwa.xyz/assets/SHR|https://stellar.expert/explorer/public/asset/CBZNQF6LYJ3L6UNB4RSFAD2QVJVQYXN5CWU74T33UXCT7I52UD5GPKOB",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/SHR",
+      "cells": [
+        "Sea Horse Resort - Equity Tranche 1\nSHR",
+        "—",
+        "$\n4,029,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CARM2...D63JH7"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CARM2SLSX7N43DKAHOJXUKZOTL27PMRVOAVSIJABBPRWDNBEPYD63JH7",
+      "contractLabel": "CARM2...D63JH7",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Sea Horse Resort - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "SHR",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n4,029,000",
+      "identity": "https://app.rwa.xyz/assets/SHR|https://stellar.expert/explorer/public/asset/CARM2SLSX7N43DKAHOJXUKZOTL27PMRVOAVSIJABBPRWDNBEPYD63JH7",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/CHS",
+      "cells": [
+        "Capri Hotel Southampton - Equity Tranche 1\nCHS",
+        "—",
+        "$\n4,005,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CAXJP...PQBW2L"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CAXJP5XW37Q73N24YFVIHI475PJJC2TBJKJV3HPMITKANCJ77VPQBW2L",
+      "contractLabel": "CAXJP...PQBW2L",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Capri Hotel Southampton - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "CHS",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n4,005,000",
+      "identity": "https://app.rwa.xyz/assets/CHS|https://stellar.expert/explorer/public/asset/CAXJP5XW37Q73N24YFVIHI475PJJC2TBJKJV3HPMITKANCJ77VPQBW2L",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/CHS",
+      "cells": [
+        "Capri Hotel Southampton - Equity Tranche 1\nCHS",
+        "—",
+        "$\n4,005,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CALKA...J52SAM"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CALKAWFRZJIX4UFNPK2PEYUUWS2VOIAPS4PU7SSV7HK4PTFAQLJ52SAM",
+      "contractLabel": "CALKA...J52SAM",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Capri Hotel Southampton - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "CHS",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n4,005,000",
+      "identity": "https://app.rwa.xyz/assets/CHS|https://stellar.expert/explorer/public/asset/CALKAWFRZJIX4UFNPK2PEYUUWS2VOIAPS4PU7SSV7HK4PTFAQLJ52SAM",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Non-U.S. Government Debt",
+      "assetUrl": "https://app.rwa.xyz/assets/CETES",
+      "cells": [
+        "Etherfuse CETES\nCETES",
+        "—",
+        "$\n3,455,640\n▼",
+        "769\n▲",
+        "Non-U.S. Government Debt",
+        "Distributed",
+        "Etherfuse",
+        "United States of America",
+        "Switzerland DLT Act",
+        "CETES...ATMYWC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CETES-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "contractLabel": "CETES...ATMYWC",
+      "domicile": "United States of America",
+      "holdersDisplay": "769\n▲",
+      "manager": null,
+      "name": "Etherfuse CETES",
+      "platform": "Etherfuse",
+      "platformUrl": "https://app.rwa.xyz/platforms/etherfuse",
+      "regulatoryFramework": "Switzerland DLT Act",
+      "ticker": "CETES",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n3,455,640\n▼",
+      "identity": "https://app.rwa.xyz/assets/CETES|https://stellar.expert/explorer/public/asset/CETES-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/RSC",
+      "cells": [
+        "The Carmen Hotel - Equity Tranche 1\nRSC",
+        "—",
+        "$\n3,000,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CBVWK...6KJTOP"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBVWKNOEBQUDW4YAEFLKZUIUZXTEYLFQ2BB4VYPOHJ4JVXHJNB6KJTOP",
+      "contractLabel": "CBVWK...6KJTOP",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "The Carmen Hotel - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "RSC",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n3,000,000",
+      "identity": "https://app.rwa.xyz/assets/RSC|https://stellar.expert/explorer/public/asset/CBVWKNOEBQUDW4YAEFLKZUIUZXTEYLFQ2BB4VYPOHJ4JVXHJNB6KJTOP",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/RSC",
+      "cells": [
+        "The Carmen Hotel - Equity Tranche 1\nRSC",
+        "—",
+        "$\n3,000,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CBTYP...CPND3B"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBTYPYAI4W47NTHBM5N3TSMNF2VYF5MWLRTVN3LPKJIEOLMNBUCPND3B",
+      "contractLabel": "CBTYP...CPND3B",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "The Carmen Hotel - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "RSC",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n3,000,000",
+      "identity": "https://app.rwa.xyz/assets/RSC|https://stellar.expert/explorer/public/asset/CBTYPYAI4W47NTHBM5N3TSMNF2VYF5MWLRTVN3LPKJIEOLMNBUCPND3B",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Corporate Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/BB1",
+      "cells": [
+        "Bitbond BB1 tokenized bond\nBB1",
+        "—",
+        "$\n2,989,180\n▼",
+        "1,446",
+        "Corporate Credit",
+        "Distributed",
+        "Bitbond",
+        "Germany",
+        "MiFID II\n\nESMA — European Securities and Markets Authority",
+        "BB1-G...V6CWFN"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/BB1-GD5J6HLF5666X4AZLTFTXLY46J5SW7EXRKBLEYPJP33S33MXZGV6CWFN",
+      "contractLabel": "BB1-G...V6CWFN",
+      "domicile": "Germany",
+      "holdersDisplay": "1,446",
+      "manager": null,
+      "name": "Bitbond BB1 tokenized bond",
+      "platform": "Bitbond",
+      "platformUrl": "https://app.rwa.xyz/platforms/bitbond",
+      "regulatoryFramework": "MiFID II\n\nESMA — European Securities and Markets Authority",
+      "ticker": "BB1",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n2,989,180\n▼",
+      "identity": "https://app.rwa.xyz/assets/BB1|https://stellar.expert/explorer/public/asset/BB1-GD5J6HLF5666X4AZLTFTXLY46J5SW7EXRKBLEYPJP33S33MXZGV6CWFN",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/WTGXX",
+      "cells": [
+        "WisdomTree Treasury Money Market Digital Fund\nWTGXX",
+        "WisdomTree Digital Management",
+        "$\n2,338,661\n▲",
+        "806\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "WTGX-...UC3JG6"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/WTGX-GDMBNMFJ3TRFLASJ6UGETFME3PJPNKPU24C7KFDBEBPQFG2CI6UC3JG6",
+      "contractLabel": "WTGX-...UC3JG6",
+      "domicile": "United States of America",
+      "holdersDisplay": "806\n▲",
+      "manager": "WisdomTree Digital Management",
+      "name": "WisdomTree Treasury Money Market Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "WTGXX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n2,338,661\n▲",
+      "identity": "https://app.rwa.xyz/assets/WTGXX|https://stellar.expert/explorer/public/asset/WTGX-GDMBNMFJ3TRFLASJ6UGETFME3PJPNKPU24C7KFDBEBPQFG2CI6UC3JG6",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/BRPL01",
+      "cells": [
+        "BRPL01 - BP EDUCACAO E ENTRETENIMENTO S.A.\nBRPL01",
+        "—",
+        "$\n2,024,692\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "BRPL0...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/BRPL01-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "BRPL0...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "BRPL01 - BP EDUCACAO E ENTRETENIMENTO S.A.",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "BRPL01",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n2,024,692\n▲",
+      "identity": "https://app.rwa.xyz/assets/BRPL01|https://stellar.expert/explorer/public/asset/BRPL01-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Commodities",
+      "assetUrl": "https://app.rwa.xyz/assets/WTGOLD",
+      "cells": [
+        "WisdomTree Gold Token\nWTGOLD",
+        "WisdomTree Digital Management",
+        "$\n1,942,017\n▼",
+        "569\n▼",
+        "Commodities",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "New York State, U.S. Virtual Currency Business\n\nNYDFS - New York State Department of Financial Services",
+        "GOLD-...BE2MPJ"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/GOLD-GCK75CK3VX5L4ZLSD7HHNVA4L3LKGIAYWLCZO2IBNGOFTBV3HJBE2MPJ",
+      "contractLabel": "GOLD-...BE2MPJ",
+      "domicile": "United States of America",
+      "holdersDisplay": "569\n▼",
+      "manager": "WisdomTree Digital Management",
+      "name": "WisdomTree Gold Token",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "New York State, U.S. Virtual Currency Business\n\nNYDFS - New York State Department of Financial Services",
+      "ticker": "WTGOLD",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,942,017\n▼",
+      "identity": "https://app.rwa.xyz/assets/WTGOLD|https://stellar.expert/explorer/public/asset/GOLD-GCK75CK3VX5L4ZLSD7HHNVA4L3LKGIAYWLCZO2IBNGOFTBV3HJBE2MPJ",
+      "sourcePage": 2,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/AUDD",
+      "cells": [
+        "Australian Digital Dollar\nAUDD",
+        "—",
+        "$\n1,938,096\n▼",
+        "448\n▲",
+        "Stablecoins",
+        "Distributed",
+        "AUDC Pty Ltd",
+        "Australia",
+        "Australian Digital Currency Exchange\n\nAUSTRAC - Australian Transaction Reports and Analysis Centre",
+        "AUDD-...LB2EEU"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/AUDD-GDC7X2MXTYSAKUUGAIQ7J7RPEIM7GXSAIWFYWWH4GLNFECQVJJLB2EEU",
+      "contractLabel": "AUDD-...LB2EEU",
+      "domicile": "Australia",
+      "holdersDisplay": "448\n▲",
+      "manager": null,
+      "name": "Australian Digital Dollar",
+      "platform": "AUDC Pty Ltd",
+      "platformUrl": "https://app.rwa.xyz/platforms/audc-pty-ltd",
+      "regulatoryFramework": "Australian Digital Currency Exchange\n\nAUSTRAC - Australian Transaction Reports and Analysis Centre",
+      "ticker": "AUDD",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,938,096\n▼",
+      "identity": "https://app.rwa.xyz/assets/AUDD|https://stellar.expert/explorer/public/asset/AUDD-GDC7X2MXTYSAKUUGAIQ7J7RPEIM7GXSAIWFYWWH4GLNFECQVJJLB2EEU",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/FLTTX",
+      "cells": [
+        "WisdomTree Floating Rate Treasury Digital Fund\nFLTTX",
+        "—",
+        "$\n1,865,189\n▲",
+        "145",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "FLTT-...KR6QJ6"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/FLTT-GBTZKH3RNKW46XEZNCGZEBAGJISKDZKQXKSQ2N5G5SFX36TLWKKR6QJ6",
+      "contractLabel": "FLTT-...KR6QJ6",
+      "domicile": "United States of America",
+      "holdersDisplay": "145",
+      "manager": null,
+      "name": "WisdomTree Floating Rate Treasury Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "FLTTX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,865,189\n▲",
+      "identity": "https://app.rwa.xyz/assets/FLTTX|https://stellar.expert/explorer/public/asset/FLTT-GBTZKH3RNKW46XEZNCGZEBAGJISKDZKQXKSQ2N5G5SFX36TLWKKR6QJ6",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/RVL1",
+      "cells": [
+        "Rivool Institucional Nagro Agro - RVL1\nRVL1",
+        "Nagro",
+        "$\n1,803,480",
+        "3",
+        "Asset-Backed Credit",
+        "Distributed",
+        "Rivool Finance",
+        "Brazil",
+        "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+        "RVL1-...HS3VMC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/RVL1-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "contractLabel": "RVL1-...HS3VMC",
+      "domicile": "Brazil",
+      "holdersDisplay": "3",
+      "manager": "Nagro",
+      "name": "Rivool Institucional Nagro Agro - RVL1",
+      "platform": "Rivool Finance",
+      "platformUrl": "https://app.rwa.xyz/platforms/rivool-finance",
+      "regulatoryFramework": "Brazilian Virtual Assets Law\n\nBCB - Banco Central do Braasil",
+      "ticker": "RVL1",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,803,480",
+      "identity": "https://app.rwa.xyz/assets/RVL1|https://stellar.expert/explorer/public/asset/RVL1-GCHCHABG57ZC6RMWQK34Q7XPMXDHMTD6G22T5HDXOOIRGOBCAKHS3VMC",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/JEITTO36",
+      "cells": [
+        "JEITTO36 -\nJEITTO36",
+        "—",
+        "$\n1,623,500\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "JEITT...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/JEITTO36-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "JEITT...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "JEITTO36 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "JEITTO36",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n1,623,500\n▲",
+      "identity": "https://app.rwa.xyz/assets/JEITTO36|https://stellar.expert/explorer/public/asset/JEITTO36-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/MNO",
+      "cells": [
+        "Maidstone New Orleans - Equity Tranche 1\nMNO",
+        "—",
+        "$\n1,300,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CBMNF...3HGP33"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBMNFCZ6XFISCZ56NGO5FVBQBK2CRFPQZQLQCEIRV7VSVG4HGE3HGP33",
+      "contractLabel": "CBMNF...3HGP33",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Maidstone New Orleans - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "MNO",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n1,300,000",
+      "identity": "https://app.rwa.xyz/assets/MNO|https://stellar.expert/explorer/public/asset/CBMNFCZ6XFISCZ56NGO5FVBQBK2CRFPQZQLQCEIRV7VSVG4HGE3HGP33",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Real Estate",
+      "assetUrl": "https://app.rwa.xyz/assets/MNO",
+      "cells": [
+        "Maidstone New Orleans - Equity Tranche 1\nMNO",
+        "—",
+        "$\n1,300,000",
+        "1",
+        "Real Estate",
+        "Represented",
+        "RedSwan Digital Real Estate",
+        "United States of America",
+        "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+        "CBGNG...I5AAJM"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CBGNGQVUKWZ5WBH5B4DCIWPO6ZFLO7NM6BWB5M6WQPVLSXOBBUI5AAJM",
+      "contractLabel": "CBGNG...I5AAJM",
+      "domicile": "United States of America",
+      "holdersDisplay": "1",
+      "manager": null,
+      "name": "Maidstone New Orleans - Equity Tranche 1",
+      "platform": "RedSwan Digital Real Estate",
+      "platformUrl": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+      "regulatoryFramework": "U.S. Securities Act Reg. S Exemption\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "MNO",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n1,300,000",
+      "identity": "https://app.rwa.xyz/assets/MNO|https://stellar.expert/explorer/public/asset/CBGNGQVUKWZ5WBH5B4DCIWPO6ZFLO7NM6BWB5M6WQPVLSXOBBUI5AAJM",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Diversified Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/WTSIX",
+      "cells": [
+        "WisdomTree Short-Duration Income Digital Fund\nWTSIX",
+        "—",
+        "$\n1,275,371\n▲",
+        "60\n▲",
+        "Diversified Credit",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "WTSI-...N7HAFG"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/WTSI-GAD22PDBRFEMXAKPFDP4JGDFWKKD6VPXWUWEAXBS6ZYJYFFQDUN7HAFG",
+      "contractLabel": "WTSI-...N7HAFG",
+      "domicile": "United States of America",
+      "holdersDisplay": "60\n▲",
+      "manager": null,
+      "name": "WisdomTree Short-Duration Income Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "WTSIX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,275,371\n▲",
+      "identity": "https://app.rwa.xyz/assets/WTSIX|https://stellar.expert/explorer/public/asset/WTSI-GAD22PDBRFEMXAKPFDP4JGDFWKKD6VPXWUWEAXBS6ZYJYFFQDUN7HAFG",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Stocks",
+      "assetUrl": "https://app.rwa.xyz/assets/EQTYX",
+      "cells": [
+        "WisdomTree Siegel Global Equity Digital Fund\nEQTYX",
+        "—",
+        "$\n1,163,071\n▼",
+        "91\n▼",
+        "Stocks",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "EQTY-...TDH6D6"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/EQTY-GAKODZFS4MV36JGDTULJACWJKBJCO33CJTVTWSQFSUV7XLZJNXTDH6D6",
+      "contractLabel": "EQTY-...TDH6D6",
+      "domicile": "United States of America",
+      "holdersDisplay": "91\n▼",
+      "manager": null,
+      "name": "WisdomTree Siegel Global Equity Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "EQTYX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,163,071\n▼",
+      "identity": "https://app.rwa.xyz/assets/EQTYX|https://stellar.expert/explorer/public/asset/EQTY-GAKODZFS4MV36JGDTULJACWJKBJCO33CJTVTWSQFSUV7XLZJNXTDH6D6",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/USDM1",
+      "cells": [
+        "USDM1\nUSDM1",
+        "—",
+        "$\n1,135,768\n▲",
+        "577\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "M1X Global",
+        "Republic of the Marshall Islands",
+        "Republic of the Marshall Islands - Fiscal Debt and Responsibility Act 2020\n\nGovernment of the Republic of the Marshall Islands (Ministry of Finance)",
+        "USDM1...2ZWPKC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/USDM1-GDM5QWWXCMDTQMZAKMYTCI52LA7FWBHAZMU5NJLMIFHDJISJRP2ZWPKC",
+      "contractLabel": "USDM1...2ZWPKC",
+      "domicile": "Republic of the Marshall Islands",
+      "holdersDisplay": "577\n▲",
+      "manager": null,
+      "name": "USDM1",
+      "platform": "M1X Global",
+      "platformUrl": "https://app.rwa.xyz/platforms/m1x-global",
+      "regulatoryFramework": "Republic of the Marshall Islands - Fiscal Debt and Responsibility Act 2020\n\nGovernment of the Republic of the Marshall Islands (Ministry of Finance)",
+      "ticker": "USDM1",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,135,768\n▲",
+      "identity": "https://app.rwa.xyz/assets/USDM1|https://stellar.expert/explorer/public/asset/USDM1-GDM5QWWXCMDTQMZAKMYTCI52LA7FWBHAZMU5NJLMIFHDJISJRP2ZWPKC",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/EURS",
+      "cells": [
+        "Stasis Euro\nEURS",
+        "—",
+        "$\n1,098,167\n▼",
+        "33\n▼",
+        "Stablecoins",
+        "Distributed",
+        "Stasis",
+        "Malta",
+        "—",
+        "EURS-...Q2CUZJ"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/EURS-GC5FGCDEOGOGSNWCCNKS3OMEVDHTE3Q5A5FEQWQKV3AXA7N6KDQ2CUZJ",
+      "contractLabel": "EURS-...Q2CUZJ",
+      "domicile": "Malta",
+      "holdersDisplay": "33\n▼",
+      "manager": null,
+      "name": "Stasis Euro",
+      "platform": "Stasis",
+      "platformUrl": "https://app.rwa.xyz/platforms/stasis",
+      "regulatoryFramework": null,
+      "ticker": "EURS",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,098,167\n▼",
+      "identity": "https://app.rwa.xyz/assets/EURS|https://stellar.expert/explorer/public/asset/EURS-GC5FGCDEOGOGSNWCCNKS3OMEVDHTE3Q5A5FEQWQKV3AXA7N6KDQ2CUZJ",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/gBENJI",
+      "cells": [
+        "gBENJI\ngBENJI",
+        "Franklin Templeton",
+        "$\n1,055,572\n▼",
+        "9\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "Franklin Templeton Benji Investments",
+        "Luxembourg",
+        "EU UCITS Directive",
+        "grBEN...FGN2FQ"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/grBENJI-GA3ZBL3LBRKOF7CZ6MCA7JLPHWQCGYCCGKH4GVWNEDZOXW4IPXFGN2FQ",
+      "contractLabel": "grBEN...FGN2FQ",
+      "domicile": "Luxembourg",
+      "holdersDisplay": "9\n▲",
+      "manager": "Franklin Templeton",
+      "name": "gBENJI",
+      "platform": "Franklin Templeton Benji Investments",
+      "platformUrl": "https://app.rwa.xyz/platforms/franklin-templeton-benji-investments",
+      "regulatoryFramework": "EU UCITS Directive",
+      "ticker": "gBENJI",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,055,572\n▼",
+      "identity": "https://app.rwa.xyz/assets/gBENJI|https://stellar.expert/explorer/public/asset/grBENJI-GA3ZBL3LBRKOF7CZ6MCA7JLPHWQCGYCCGKH4GVWNEDZOXW4IPXFGN2FQ",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/WTSYX",
+      "cells": [
+        "WisdomTree Short-Term Treasury Digital Fund\nWTSYX",
+        "—",
+        "$\n1,009,745\n▲",
+        "77",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "WTSY-...RL36VF"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/WTSY-GB3ZUC7FGDEEBXY3BDEJWMPNGBFA66YRI4QQT6PBO3ZT6F33S7RL36VF",
+      "contractLabel": "WTSY-...RL36VF",
+      "domicile": "United States of America",
+      "holdersDisplay": "77",
+      "manager": null,
+      "name": "WisdomTree Short-Term Treasury Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "WTSYX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n1,009,745\n▲",
+      "identity": "https://app.rwa.xyz/assets/WTSYX|https://stellar.expert/explorer/public/asset/WTSY-GB3ZUC7FGDEEBXY3BDEJWMPNGBFA66YRI4QQT6PBO3ZT6F33S7RL36VF",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/WTTSX",
+      "cells": [
+        "WisdomTree 3-7 Year Treasury Digital Fund\nWTTSX",
+        "—",
+        "$\n961,296\n▲",
+        "36",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "WTTS-...HJR5VI"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/WTTS-GBBV5CF7UPA2PYRPA632URLB55BWML7X4H33ZRCDWMTULOXDGPHJR5VI",
+      "contractLabel": "WTTS-...HJR5VI",
+      "domicile": "United States of America",
+      "holdersDisplay": "36",
+      "manager": null,
+      "name": "WisdomTree 3-7 Year Treasury Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "WTTSX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n961,296\n▲",
+      "identity": "https://app.rwa.xyz/assets/WTTSX|https://stellar.expert/explorer/public/asset/WTTS-GBBV5CF7UPA2PYRPA632URLB55BWML7X4H33ZRCDWMTULOXDGPHJR5VI",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/TIPSX",
+      "cells": [
+        "WisdomTree TIPS Digital Fund\nTIPSX",
+        "—",
+        "$\n934,397\n▲",
+        "39\n▲",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "TIPS-...EUALVD"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/TIPS-GAJ4KSYLVBJKQ4UBPKJJXPYWVIRZWVTIYRMHBXTHGCDS4XJXXYEUALVD",
+      "contractLabel": "TIPS-...EUALVD",
+      "domicile": "United States of America",
+      "holdersDisplay": "39\n▲",
+      "manager": null,
+      "name": "WisdomTree TIPS Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "TIPSX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n934,397\n▲",
+      "identity": "https://app.rwa.xyz/assets/TIPSX|https://stellar.expert/explorer/public/asset/TIPS-GAJ4KSYLVBJKQ4UBPKJJXPYWVIRZWVTIYRMHBXTHGCDS4XJXXYEUALVD",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/WTSTX",
+      "cells": [
+        "WisdomTree 7-10 Year Treasury Digital Fund\nWTSTX",
+        "—",
+        "$\n917,690\n▲",
+        "24\n▼",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "WTST-...GDE77P"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/WTST-GDEBI5X7J4IDXCSVV3KPFZIHQRCBVF3DAZMS5H7KYOBK45T6XYGDE77P",
+      "contractLabel": "WTST-...GDE77P",
+      "domicile": "United States of America",
+      "holdersDisplay": "24\n▼",
+      "manager": null,
+      "name": "WisdomTree 7-10 Year Treasury Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "WTSTX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n917,690\n▲",
+      "identity": "https://app.rwa.xyz/assets/WTSTX|https://stellar.expert/explorer/public/asset/WTST-GDEBI5X7J4IDXCSVV3KPFZIHQRCBVF3DAZMS5H7KYOBK45T6XYGDE77P",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/CARTAO56",
+      "cells": [
+        "CARTAO56 -\nCARTAO56",
+        "—",
+        "$\n893,620\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "CARTA...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CARTAO56-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "CARTA...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "CARTAO56 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "CARTAO56",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n893,620\n▲",
+      "identity": "https://app.rwa.xyz/assets/CARTAO56|https://stellar.expert/explorer/public/asset/CARTAO56-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "U.S. Treasury Funds",
+      "assetUrl": "https://app.rwa.xyz/assets/WTLGX",
+      "cells": [
+        "WisdomTree Long Term Treasury Digital Fund\nWTLGX",
+        "—",
+        "$\n752,681\n▲",
+        "32\n▼",
+        "U.S. Treasury Funds",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "WTLG-...YK34XH"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/WTLG-GAK7PE7DD4ZRJQN3VBCQFBKFV53JGUM2SQATQAKLFK6MVONPGNYK34XH",
+      "contractLabel": "WTLG-...YK34XH",
+      "domicile": "United States of America",
+      "holdersDisplay": "32\n▼",
+      "manager": null,
+      "name": "WisdomTree Long Term Treasury Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "WTLGX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n752,681\n▲",
+      "identity": "https://app.rwa.xyz/assets/WTLGX|https://stellar.expert/explorer/public/asset/WTLG-GAK7PE7DD4ZRJQN3VBCQFBKFV53JGUM2SQATQAKLFK6MVONPGNYK34XH",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/ACREDIT05",
+      "cells": [
+        "ACREDIT05 -\nACREDIT05",
+        "—",
+        "$\n647,305\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "ACRED...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/ACREDIT05-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "ACRED...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "ACREDIT05 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "ACREDIT05",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n647,305\n▲",
+      "identity": "https://app.rwa.xyz/assets/ACREDIT05|https://stellar.expert/explorer/public/asset/ACREDIT05-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/ACREDIT04",
+      "cells": [
+        "ACREDIT04 -\nACREDIT04",
+        "—",
+        "$\n646,902\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "ACRED...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/ACREDIT04-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "ACRED...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "ACREDIT04 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "ACREDIT04",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n646,902\n▲",
+      "identity": "https://app.rwa.xyz/assets/ACREDIT04|https://stellar.expert/explorer/public/asset/ACREDIT04-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/ACREDIT06",
+      "cells": [
+        "ACREDIT06 - TRAVESSIA ASSESSORIA FINANCEIRA LTDA.\nACREDIT06",
+        "—",
+        "$\n636,228\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "ACRED...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/ACREDIT06-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "ACRED...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "ACREDIT06 - TRAVESSIA ASSESSORIA FINANCEIRA LTDA.",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "ACREDIT06",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n636,228\n▲",
+      "identity": "https://app.rwa.xyz/assets/ACREDIT06|https://stellar.expert/explorer/public/asset/ACREDIT06-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Stocks",
+      "assetUrl": "https://app.rwa.xyz/assets/LNGVX",
+      "cells": [
+        "WisdomTree Siegel Longevity Digital Fund\nLNGVX",
+        "—",
+        "$\n575,632\n▼",
+        "45",
+        "Stocks",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "LNGV-...DHLC6D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/LNGV-GAHOGWBAWNIKESGNNW7Y7JU5KL54HIEHJGY6Y5QLY6YR3J7WZIDHLC6D",
+      "contractLabel": "LNGV-...DHLC6D",
+      "domicile": "United States of America",
+      "holdersDisplay": "45",
+      "manager": null,
+      "name": "WisdomTree Siegel Longevity Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "LNGVX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n575,632\n▼",
+      "identity": "https://app.rwa.xyz/assets/LNGVX|https://stellar.expert/explorer/public/asset/LNGV-GAHOGWBAWNIKESGNNW7Y7JU5KL54HIEHJGY6Y5QLY6YR3J7WZIDHLC6D",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Active Strategies",
+      "assetUrl": "https://app.rwa.xyz/assets/SPKCC",
+      "cells": [
+        "Spiko Cash and Carry Dollar\nSPKCC",
+        "Twenty First Capital",
+        "$\n570,102\n▲",
+        "4\n▲",
+        "Active Strategies",
+        "Distributed",
+        "Spiko",
+        "France",
+        "Fonds Professionnel Spécialisé (FPS) — Alternative Investment Fund (France)\n\nAutorité des marchés financiers (AMF)",
+        "CDS2G...PMTCNT"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CDS2GCAQTNQINSCJUJIVBJXILKBWP5PU7LOBGHMP3X47QCQBFKPMTCNT",
+      "contractLabel": "CDS2G...PMTCNT",
+      "domicile": "France",
+      "holdersDisplay": "4\n▲",
+      "manager": "Twenty First Capital",
+      "name": "Spiko Cash and Carry Dollar",
+      "platform": "Spiko",
+      "platformUrl": "https://app.rwa.xyz/platforms/spiko",
+      "regulatoryFramework": "Fonds Professionnel Spécialisé (FPS) — Alternative Investment Fund (France)\n\nAutorité des marchés financiers (AMF)",
+      "ticker": "SPKCC",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n570,102\n▲",
+      "identity": "https://app.rwa.xyz/assets/SPKCC|https://stellar.expert/explorer/public/asset/CDS2GCAQTNQINSCJUJIVBJXILKBWP5PU7LOBGHMP3X47QCQBFKPMTCNT",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Stocks",
+      "assetUrl": "https://app.rwa.xyz/assets/MODRX",
+      "cells": [
+        "WisdomTree Siegel Moderate Digital Fund\nMODRX",
+        "—",
+        "$\n525,335\n▼",
+        "39",
+        "Stocks",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "MODR-...LVLOOJ"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/MODR-GANULT25TFO6V6BFWSEG4VSCR4QXBNHV5T344R2AFZEPE6B324LVLOOJ",
+      "contractLabel": "MODR-...LVLOOJ",
+      "domicile": "United States of America",
+      "holdersDisplay": "39",
+      "manager": null,
+      "name": "WisdomTree Siegel Moderate Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "MODRX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n525,335\n▼",
+      "identity": "https://app.rwa.xyz/assets/MODRX|https://stellar.expert/explorer/public/asset/MODR-GANULT25TFO6V6BFWSEG4VSCR4QXBNHV5T344R2AFZEPE6B324LVLOOJ",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Stocks",
+      "assetUrl": "https://app.rwa.xyz/assets/WTPIX",
+      "cells": [
+        "WisdomTree Equity Premium Income Digital Fund\nWTPIX",
+        "WisdomTree Digital Management",
+        "$\n327,709\n▼",
+        "27",
+        "Stocks",
+        "Distributed",
+        "WisdomTree",
+        "—",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "EPXC-...NST5GO"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/EPXC-GDEFMEVYR6OWK2ZA2CSNPX6R5UQ4I55Y3HNEWO7XASLB2LU6FDNST5GO",
+      "contractLabel": "EPXC-...NST5GO",
+      "domicile": null,
+      "holdersDisplay": "27",
+      "manager": "WisdomTree Digital Management",
+      "name": "WisdomTree Equity Premium Income Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "WTPIX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n327,709\n▼",
+      "identity": "https://app.rwa.xyz/assets/WTPIX|https://stellar.expert/explorer/public/asset/EPXC-GDEFMEVYR6OWK2ZA2CSNPX6R5UQ4I55Y3HNEWO7XASLB2LU6FDNST5GO",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Non-U.S. Government Debt",
+      "assetUrl": "https://app.rwa.xyz/assets/TESOURO",
+      "cells": [
+        "Etherfuse TESOURO\nTESOURO",
+        "—",
+        "$\n304,731\n▲",
+        "129\n▲",
+        "Non-U.S. Government Debt",
+        "Distributed",
+        "Etherfuse",
+        "United States of America",
+        "Switzerland DLT Act",
+        "TESOU...ATMYWC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/TESOURO-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "contractLabel": "TESOU...ATMYWC",
+      "domicile": "United States of America",
+      "holdersDisplay": "129\n▲",
+      "manager": null,
+      "name": "Etherfuse TESOURO",
+      "platform": "Etherfuse",
+      "platformUrl": "https://app.rwa.xyz/platforms/etherfuse",
+      "regulatoryFramework": "Switzerland DLT Act",
+      "ticker": "TESOURO",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n304,731\n▲",
+      "identity": "https://app.rwa.xyz/assets/TESOURO|https://stellar.expert/explorer/public/asset/TESOURO-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "sourcePage": 3,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/mZAR",
+      "cells": [
+        "mZAR\nmZAR",
+        "—",
+        "$\n286,234\n▼",
+        "2,115\n▲",
+        "Stablecoins",
+        "Distributed",
+        "Mesh",
+        "Netherlands",
+        "—",
+        "mZAR-...B7Q4BY"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/mZAR-GCBNWTCCMC32UHZ5OCC2PNMFDGXRVPA7MFFBFFTCVW77SX5PMRB7Q4BY",
+      "contractLabel": "mZAR-...B7Q4BY",
+      "domicile": "Netherlands",
+      "holdersDisplay": "2,115\n▲",
+      "manager": null,
+      "name": "mZAR",
+      "platform": "Mesh",
+      "platformUrl": "https://app.rwa.xyz/platforms/mesh",
+      "regulatoryFramework": null,
+      "ticker": "mZAR",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n286,234\n▼",
+      "identity": "https://app.rwa.xyz/assets/mZAR|https://stellar.expert/explorer/public/asset/mZAR-GCBNWTCCMC32UHZ5OCC2PNMFDGXRVPA7MFFBFFTCVW77SX5PMRB7Q4BY",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/USDGLO",
+      "cells": [
+        "Glo Dollar\nUSDGLO",
+        "—",
+        "$\n253,603",
+        "553\n▲",
+        "Stablecoins",
+        "Distributed",
+        "Brale",
+        "United States of America",
+        "U.S. State Money Transmitter Licensing",
+        "USDGL...HWS6XV"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/USDGLO-GBBS25EGYQPGEZCGCFBKG4OAGFXU6DSOQBGTHELLJT3HZXZJ34HWS6XV",
+      "contractLabel": "USDGL...HWS6XV",
+      "domicile": "United States of America",
+      "holdersDisplay": "553\n▲",
+      "manager": null,
+      "name": "Glo Dollar",
+      "platform": "Brale",
+      "platformUrl": "https://app.rwa.xyz/platforms/brale",
+      "regulatoryFramework": "U.S. State Money Transmitter Licensing",
+      "ticker": "USDGLO",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n253,603",
+      "identity": "https://app.rwa.xyz/assets/USDGLO|https://stellar.expert/explorer/public/asset/USDGLO-GBBS25EGYQPGEZCGCFBKG4OAGFXU6DSOQBGTHELLJT3HZXZJ34HWS6XV",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Diversified Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/CRDYX",
+      "cells": [
+        "WisdomTree Private Credit and Alternative Income Digital Fund\nCRDYX",
+        "WisdomTree Digital Management",
+        "$\n247,886\n▲",
+        "55\n▲",
+        "Diversified Credit",
+        "Distributed",
+        "WisdomTree",
+        "United States of America",
+        "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+        "CRDT-...6J2P45"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CRDT-GBWMQUGPPLSC62YPGD5CEHATOQRQMNLNAV2TMEXJ4ZYOTY4TJD6J2P45",
+      "contractLabel": "CRDT-...6J2P45",
+      "domicile": "United States of America",
+      "holdersDisplay": "55\n▲",
+      "manager": "WisdomTree Digital Management",
+      "name": "WisdomTree Private Credit and Alternative Income Digital Fund",
+      "platform": "WisdomTree",
+      "platformUrl": "https://app.rwa.xyz/platforms/wisdomtree",
+      "regulatoryFramework": "U.S. Securities Act Form N-1A for Mutual Funds\n\nSEC - U.S. Securities and Exchange Commission",
+      "ticker": "CRDYX",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n247,886\n▲",
+      "identity": "https://app.rwa.xyz/assets/CRDYX|https://stellar.expert/explorer/public/asset/CRDT-GBWMQUGPPLSC62YPGD5CEHATOQRQMNLNAV2TMEXJ4ZYOTY4TJD6J2P45",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/GYEN",
+      "cells": [
+        "GMO JPY\nGYEN",
+        "—",
+        "$\n213,740\n▲",
+        "2,867\n▲",
+        "Stablecoins",
+        "Distributed",
+        "GMO Trust",
+        "United States of America",
+        "New York State, U.S. Virtual Currency Business\n\nNYDFS - New York State Department of Financial Services",
+        "GYEN-...LC5TOB"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/GYEN-GDF6VOEGRWLOZ64PQQGKD2IYWA22RLT37GJKS2EJXZHT2VLAGWLC5TOB",
+      "contractLabel": "GYEN-...LC5TOB",
+      "domicile": "United States of America",
+      "holdersDisplay": "2,867\n▲",
+      "manager": null,
+      "name": "GMO JPY",
+      "platform": "GMO Trust",
+      "platformUrl": "https://app.rwa.xyz/platforms/gmo-trust",
+      "regulatoryFramework": "New York State, U.S. Virtual Currency Business\n\nNYDFS - New York State Department of Financial Services",
+      "ticker": "GYEN",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n213,740\n▲",
+      "identity": "https://app.rwa.xyz/assets/GYEN|https://stellar.expert/explorer/public/asset/GYEN-GDF6VOEGRWLOZ64PQQGKD2IYWA22RLT37GJKS2EJXZHT2VLAGWLC5TOB",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/ZUSD",
+      "cells": [
+        "Z.com USD\nZUSD",
+        "—",
+        "$\n110,178",
+        "5,869\n▼",
+        "Stablecoins",
+        "Distributed",
+        "GMO Trust",
+        "United States of America",
+        "New York State, U.S. Virtual Currency Business\n\nNYDFS - New York State Department of Financial Services",
+        "ZUSD-...LC5TOB"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/ZUSD-GDF6VOEGRWLOZ64PQQGKD2IYWA22RLT37GJKS2EJXZHT2VLAGWLC5TOB",
+      "contractLabel": "ZUSD-...LC5TOB",
+      "domicile": "United States of America",
+      "holdersDisplay": "5,869\n▼",
+      "manager": null,
+      "name": "Z.com USD",
+      "platform": "GMO Trust",
+      "platformUrl": "https://app.rwa.xyz/platforms/gmo-trust",
+      "regulatoryFramework": "New York State, U.S. Virtual Currency Business\n\nNYDFS - New York State Department of Financial Services",
+      "ticker": "ZUSD",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n110,178",
+      "identity": "https://app.rwa.xyz/assets/ZUSD|https://stellar.expert/explorer/public/asset/ZUSD-GDF6VOEGRWLOZ64PQQGKD2IYWA22RLT37GJKS2EJXZHT2VLAGWLC5TOB",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/SBC",
+      "cells": [
+        "Stable Coin\nSBC",
+        "—",
+        "$\n20,329",
+        "10\n▲",
+        "Stablecoins",
+        "Distributed",
+        "Brale",
+        "United States of America",
+        "U.S. State Money Transmitter Licensing",
+        "SBC-G...A7KHZR"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/SBC-GCQCNWT22JDLENQAVIE6DRJGHWAQ6EX2H5ABGPV55EJUPPZM5UA7KHZR",
+      "contractLabel": "SBC-G...A7KHZR",
+      "domicile": "United States of America",
+      "holdersDisplay": "10\n▲",
+      "manager": null,
+      "name": "Stable Coin",
+      "platform": "Brale",
+      "platformUrl": "https://app.rwa.xyz/platforms/brale",
+      "regulatoryFramework": "U.S. State Money Transmitter Licensing",
+      "ticker": "SBC",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n20,329",
+      "identity": "https://app.rwa.xyz/assets/SBC|https://stellar.expert/explorer/public/asset/SBC-GCQCNWT22JDLENQAVIE6DRJGHWAQ6EX2H5ABGPV55EJUPPZM5UA7KHZR",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/EURAU",
+      "cells": [
+        "AllUnity EUR\nEURAU",
+        "—",
+        "$\n19,268\n▼",
+        "69\n▲",
+        "Stablecoins",
+        "Distributed",
+        "AllUnity",
+        "Germany",
+        "Markets in Crypto-Assets Regulation (MiCA)\n\nEU (ESMA, EBA)",
+        "CB44W...4V3VRI"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CB44W727WSLHPXJ47A6DHF5D34RKWSOZAMEDXO3CF5TEEEQ2ZX4V3VRI",
+      "contractLabel": "CB44W...4V3VRI",
+      "domicile": "Germany",
+      "holdersDisplay": "69\n▲",
+      "manager": null,
+      "name": "AllUnity EUR",
+      "platform": "AllUnity",
+      "platformUrl": "https://app.rwa.xyz/platforms/allunity",
+      "regulatoryFramework": "Markets in Crypto-Assets Regulation (MiCA)\n\nEU (ESMA, EBA)",
+      "ticker": "EURAU",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n19,268\n▼",
+      "identity": "https://app.rwa.xyz/assets/EURAU|https://stellar.expert/explorer/public/asset/CB44W727WSLHPXJ47A6DHF5D34RKWSOZAMEDXO3CF5TEEEQ2ZX4V3VRI",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/MBCREDSB10",
+      "cells": [
+        "MBCREDSB10 -\nMBCREDSB10",
+        "—",
+        "$\n19,133\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "MBCRE...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/MBCREDSB10-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "MBCRE...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "MBCREDSB10 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "MBCREDSB10",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n19,133\n▲",
+      "identity": "https://app.rwa.xyz/assets/MBCREDSB10|https://stellar.expert/explorer/public/asset/MBCREDSB10-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/MBCREDIT10",
+      "cells": [
+        "MBCREDIT10 -\nMBCREDIT10",
+        "—",
+        "$\n17,119\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "MBCRE...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/MBCREDIT10-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "MBCRE...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "MBCREDIT10 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "MBCREDIT10",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n17,119\n▲",
+      "identity": "https://app.rwa.xyz/assets/MBCREDIT10|https://stellar.expert/explorer/public/asset/MBCREDIT10-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/VEUR",
+      "cells": [
+        "VNX Euro\nVEUR",
+        "—",
+        "$\n16,484\n▼",
+        "16",
+        "Stablecoins",
+        "Distributed",
+        "VNX",
+        "Liechtenstein",
+        "Liechtenstein Blockchain Act\n\nFMA - Liechtenstein Financial Market Authority",
+        "VEUR-...EWXIZN"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/VEUR-GDXLSLCOPPHTWOQXLLKSVN4VN3G67WD2ENU7UMVAROEYVJLSPSEWXIZN",
+      "contractLabel": "VEUR-...EWXIZN",
+      "domicile": "Liechtenstein",
+      "holdersDisplay": "16",
+      "manager": null,
+      "name": "VNX Euro",
+      "platform": "VNX",
+      "platformUrl": "https://app.rwa.xyz/platforms/vnx",
+      "regulatoryFramework": "Liechtenstein Blockchain Act\n\nFMA - Liechtenstein Financial Market Authority",
+      "ticker": "VEUR",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n16,484\n▼",
+      "identity": "https://app.rwa.xyz/assets/VEUR|https://stellar.expert/explorer/public/asset/VEUR-GDXLSLCOPPHTWOQXLLKSVN4VN3G67WD2ENU7UMVAROEYVJLSPSEWXIZN",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/VCHF",
+      "cells": [
+        "VNX Swiss Franc\nVCHF",
+        "—",
+        "$\n8,839\n▼",
+        "15",
+        "Stablecoins",
+        "Distributed",
+        "VNX",
+        "Liechtenstein",
+        "Liechtenstein Blockchain Act\n\nFMA - Liechtenstein Financial Market Authority",
+        "VCHF-...EWXIZN"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/VCHF-GDXLSLCOPPHTWOQXLLKSVN4VN3G67WD2ENU7UMVAROEYVJLSPSEWXIZN",
+      "contractLabel": "VCHF-...EWXIZN",
+      "domicile": "Liechtenstein",
+      "holdersDisplay": "15",
+      "manager": null,
+      "name": "VNX Swiss Franc",
+      "platform": "VNX",
+      "platformUrl": "https://app.rwa.xyz/platforms/vnx",
+      "regulatoryFramework": "Liechtenstein Blockchain Act\n\nFMA - Liechtenstein Financial Market Authority",
+      "ticker": "VCHF",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n8,839\n▼",
+      "identity": "https://app.rwa.xyz/assets/VCHF|https://stellar.expert/explorer/public/asset/VCHF-GDXLSLCOPPHTWOQXLLKSVN4VN3G67WD2ENU7UMVAROEYVJLSPSEWXIZN",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/QCAD",
+      "cells": [
+        "Canadian Dollar Digital Money\nQCAD",
+        "—",
+        "$\n2,501\n▲",
+        "12",
+        "Stablecoins",
+        "Distributed",
+        "Stablecorp Digital Currencies Inc.",
+        "Canada",
+        "—",
+        "QCAD-...SF5MKJ"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/QCAD-GBRSN6AURJN4R7RT5EDLO3SPFEZBS5FWE3W2R7RTMCYDIJH3ISSF5MKJ",
+      "contractLabel": "QCAD-...SF5MKJ",
+      "domicile": "Canada",
+      "holdersDisplay": "12",
+      "manager": null,
+      "name": "Canadian Dollar Digital Money",
+      "platform": "Stablecorp Digital Currencies Inc.",
+      "platformUrl": "https://app.rwa.xyz/platforms/stablecorp-digital-currencies-inc",
+      "regulatoryFramework": null,
+      "ticker": "QCAD",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n2,501\n▲",
+      "identity": "https://app.rwa.xyz/assets/QCAD|https://stellar.expert/explorer/public/asset/QCAD-GBRSN6AURJN4R7RT5EDLO3SPFEZBS5FWE3W2R7RTMCYDIJH3ISSF5MKJ",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/CARTAO57",
+      "cells": [
+        "CARTAO57 -\nCARTAO57",
+        "—",
+        "$\n806\n▲",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "CARTA...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CARTAO57-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "CARTA...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "CARTAO57 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "CARTAO57",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n806\n▲",
+      "identity": "https://app.rwa.xyz/assets/CARTAO57|https://stellar.expert/explorer/public/asset/CARTAO57-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Stablecoins",
+      "assetUrl": "https://app.rwa.xyz/assets/MXNe",
+      "cells": [
+        "Real MXN\nMXNe",
+        "—",
+        "$\n8\n▼",
+        "2",
+        "Stablecoins",
+        "Distributed",
+        "Brale",
+        "United States of America",
+        "U.S. State Money Transmitter Licensing",
+        "MXNe-...A7KHZR"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/MXNe-GCQCNWT22JDLENQAVIE6DRJGHWAQ6EX2H5ABGPV55EJUPPZM5UA7KHZR",
+      "contractLabel": "MXNe-...A7KHZR",
+      "domicile": "United States of America",
+      "holdersDisplay": "2",
+      "manager": null,
+      "name": "Real MXN",
+      "platform": "Brale",
+      "platformUrl": "https://app.rwa.xyz/platforms/brale",
+      "regulatoryFramework": "U.S. State Money Transmitter Licensing",
+      "ticker": "MXNe",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n8\n▼",
+      "identity": "https://app.rwa.xyz/assets/MXNe|https://stellar.expert/explorer/public/asset/MXNe-GCQCNWT22JDLENQAVIE6DRJGHWAQ6EX2H5ABGPV55EJUPPZM5UA7KHZR",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Non-U.S. Government Debt",
+      "assetUrl": "https://app.rwa.xyz/assets/EUROB",
+      "cells": [
+        "Etherfuse EUROB\nEUROB",
+        "—",
+        "$\n2\n▼",
+        "2",
+        "Non-U.S. Government Debt",
+        "Distributed",
+        "Etherfuse",
+        "United States of America",
+        "Switzerland DLT Act",
+        "EUROB...ATMYWC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/EUROB-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "contractLabel": "EUROB...ATMYWC",
+      "domicile": "United States of America",
+      "holdersDisplay": "2",
+      "manager": null,
+      "name": "Etherfuse EUROB",
+      "platform": "Etherfuse",
+      "platformUrl": "https://app.rwa.xyz/platforms/etherfuse",
+      "regulatoryFramework": "Switzerland DLT Act",
+      "ticker": "EUROB",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n2\n▼",
+      "identity": "https://app.rwa.xyz/assets/EUROB|https://stellar.expert/explorer/public/asset/EUROB-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Non-U.S. Government Debt",
+      "assetUrl": "https://app.rwa.xyz/assets/KTB",
+      "cells": [
+        "Etherfuse KTB\nKTB",
+        "—",
+        "$\n0\n▲",
+        "3",
+        "Non-U.S. Government Debt",
+        "Distributed",
+        "Etherfuse",
+        "United States of America",
+        "Switzerland DLT Act",
+        "KTB-G...ATMYWC"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/KTB-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "contractLabel": "KTB-G...ATMYWC",
+      "domicile": "United States of America",
+      "holdersDisplay": "3",
+      "manager": null,
+      "name": "Etherfuse KTB",
+      "platform": "Etherfuse",
+      "platformUrl": "https://app.rwa.xyz/platforms/etherfuse",
+      "regulatoryFramework": "Switzerland DLT Act",
+      "ticker": "KTB",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0\n▲",
+      "identity": "https://app.rwa.xyz/assets/KTB|https://stellar.expert/explorer/public/asset/KTB-GCRYUGD5NVARGXT56XEZI5CIFCQETYHAPQQTHO2O3IQZTHDH4LATMYWC",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/CHILLI10",
+      "cells": [
+        "CHILLI10 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.\nCHILLI10",
+        "—",
+        "$\n0",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "CHILL...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CHILLI10-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "CHILL...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "CHILLI10 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "CHILLI10",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/CHILLI10|https://stellar.expert/explorer/public/asset/CHILLI10-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/JEITTO37",
+      "cells": [
+        "JEITTO37 -\nJEITTO37",
+        "—",
+        "$\n0",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "JEITT...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/JEITTO37-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "JEITT...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "JEITTO37 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "JEITTO37",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/JEITTO37|https://stellar.expert/explorer/public/asset/JEITTO37-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/POOLCP02",
+      "cells": [
+        "POOLCP02 -\nPOOLCP02",
+        "—",
+        "$\n0",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "POOLC...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/POOLCP02-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "POOLC...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "POOLCP02 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "POOLCP02",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/POOLCP02|https://stellar.expert/explorer/public/asset/POOLCP02-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/MEDTKN04",
+      "cells": [
+        "MEDTKN04 -\nMEDTKN04",
+        "—",
+        "$\n0",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "MEDTK...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/MEDTKN04-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "MEDTK...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "MEDTKN04 -",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "MEDTKN04",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/MEDTKN04|https://stellar.expert/explorer/public/asset/MEDTKN04-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/CHILLI11",
+      "cells": [
+        "CHILLI11 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.\nCHILLI11",
+        "—",
+        "$\n0",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "CHILL...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CHILLI11-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "CHILL...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "CHILLI11 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "CHILLI11",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/CHILLI11|https://stellar.expert/explorer/public/asset/CHILLI11-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/DUX30",
+      "cells": [
+        "DUX30 - DUX COMPANY LTDA\nDUX30",
+        "—",
+        "$\n0",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "DUX30...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/DUX30-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "DUX30...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "DUX30 - DUX COMPANY LTDA",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "DUX30",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/DUX30|https://stellar.expert/explorer/public/asset/DUX30-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/PRXAI",
+      "cells": [
+        "PerplexityAI Bond (Cometum)\nPRXAI",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "PRXAI...4L5J36"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/PRXAI-GCLH2HUPI6MHV76LQJIP4QZ6I2WSJTOGI22RNP4SXVREQOY36B4L5J36",
+      "contractLabel": "PRXAI...4L5J36",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "PerplexityAI Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "PRXAI",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/PRXAI|https://stellar.expert/explorer/public/asset/PRXAI-GCLH2HUPI6MHV76LQJIP4QZ6I2WSJTOGI22RNP4SXVREQOY36B4L5J36",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/POLY",
+      "cells": [
+        "Polymarket Bond (Cometum)\nPOLY",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "POLY-...KE75TE"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/POLY-GB4ACTISKTJOUYYYSMGGW7PSB2P3H2O55U7QEHTXRFHFGNWG6JKE75TE",
+      "contractLabel": "POLY-...KE75TE",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Polymarket Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "POLY",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/POLY|https://stellar.expert/explorer/public/asset/POLY-GB4ACTISKTJOUYYYSMGGW7PSB2P3H2O55U7QEHTXRFHFGNWG6JKE75TE",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/ANDU",
+      "cells": [
+        "Anduril Bond (Cometum)\nANDU",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "ANDU-...7H6XBR"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/ANDU-GCNKPZ6ZIFDVBQFYBQ5OM2OZUM572TZDE6JXCWJIV4XLZEKBLG7H6XBR",
+      "contractLabel": "ANDU-...7H6XBR",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Anduril Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "ANDU",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/ANDU|https://stellar.expert/explorer/public/asset/ANDU-GCNKPZ6ZIFDVBQFYBQ5OM2OZUM572TZDE6JXCWJIV4XLZEKBLG7H6XBR",
+      "sourcePage": 4,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/KRKN",
+      "cells": [
+        "Kraken Bond (Cometum)\nKRKN",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "KRKN-...BT5TGO"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/KRKN-GDESQ5RTINLZ4PETDMWO6IASRVRW7CJHCEGHMOCMRNCRE25XJ2BT5TGO",
+      "contractLabel": "KRKN-...BT5TGO",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Kraken Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "KRKN",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/KRKN|https://stellar.expert/explorer/public/asset/KRKN-GDESQ5RTINLZ4PETDMWO6IASRVRW7CJHCEGHMOCMRNCRE25XJ2BT5TGO",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/MISTR",
+      "cells": [
+        "Mistral AI Bond (Cometum)\nMISTR",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "GD4FH...FH6REO"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/GD4FH2TO6CYAL2TCNGPHBOJL2X2RGYPQVHYLNDQKELEKTL3NEQFH6REO",
+      "contractLabel": "GD4FH...FH6REO",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Mistral AI Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "MISTR",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/MISTR|https://stellar.expert/explorer/public/asset/GD4FH2TO6CYAL2TCNGPHBOJL2X2RGYPQVHYLNDQKELEKTL3NEQFH6REO",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/NEUR",
+      "cells": [
+        "Neuralink Bond (Cometum)\nNEUR",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "NEUR-...LOMJTB"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/NEUR-GCUV5NIU6P4OZ5OSNJGF3KOTCAMLFGSS5G5MMZAIDUJDIQBE2YLOMJTB",
+      "contractLabel": "NEUR-...LOMJTB",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Neuralink Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "NEUR",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/NEUR|https://stellar.expert/explorer/public/asset/NEUR-GCUV5NIU6P4OZ5OSNJGF3KOTCAMLFGSS5G5MMZAIDUJDIQBE2YLOMJTB",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/STRIPE",
+      "cells": [
+        "Stripe Bond (Cometum)\nSTRIPE",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "STRIP...USGE7L"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/STRIPE-GAYA6FASDLEZXUY3EGQXAD3XTF6SWDR4AWUOSA4VYNYJWKS74ZUSGE7L",
+      "contractLabel": "STRIP...USGE7L",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Stripe Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "STRIPE",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/STRIPE|https://stellar.expert/explorer/public/asset/STRIPE-GAYA6FASDLEZXUY3EGQXAD3XTF6SWDR4AWUOSA4VYNYJWKS74ZUSGE7L",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/HIGAI",
+      "cells": [
+        "Higgsfield AI Bond (Cometum)\nHIGAI",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "HIGAI...T4ODPN"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/HIGAI-GAJEQR6WXLV6MYQ6LICZUUL2XGW37A6E4YJDBR6P7FAXWYLNEST4ODPN",
+      "contractLabel": "HIGAI...T4ODPN",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Higgsfield AI Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "HIGAI",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/HIGAI|https://stellar.expert/explorer/public/asset/HIGAI-GAJEQR6WXLV6MYQ6LICZUUL2XGW37A6E4YJDBR6P7FAXWYLNEST4ODPN",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/OAI",
+      "cells": [
+        "OpenAI Bond (Cometum)\nOAI",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "OAI-G...TDD4ZF"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/OAI-GAXB2KME3TT7OLN7DNXSUFV6YEFIBHVE3QHMQPSP26MNSXXJGKTDD4ZF",
+      "contractLabel": "OAI-G...TDD4ZF",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "OpenAI Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "OAI",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/OAI|https://stellar.expert/explorer/public/asset/OAI-GAXB2KME3TT7OLN7DNXSUFV6YEFIBHVE3QHMQPSP26MNSXXJGKTDD4ZF",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/SHIELD",
+      "cells": [
+        "ShieldAI Bond (Cometum)\nSHIELD",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "SHIEL...CJ7H4F"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/SHIELD-GC57UQLJXK4GFFCATRSKUMOMIFS56AJYXCPOJV3LR52AYEKSDICJ7H4F",
+      "contractLabel": "SHIEL...CJ7H4F",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "ShieldAI Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "SHIELD",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/SHIELD|https://stellar.expert/explorer/public/asset/SHIELD-GC57UQLJXK4GFFCATRSKUMOMIFS56AJYXCPOJV3LR52AYEKSDICJ7H4F",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Private Equity",
+      "assetUrl": "https://app.rwa.xyz/assets/ANTH",
+      "cells": [
+        "Anthropic Bond (Cometum)\nANTH",
+        "—",
+        "$\n0",
+        "0",
+        "Private Equity",
+        "Distributed",
+        "NYALA",
+        "Germany",
+        "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+        "ANTH-...ZK4UA3"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/ANTH-GCJ7VUWSC2BTOSNZIUUWNEYXQ35F2WOEM3Y4XAB6F7ZKQLOGOSZK4UA3",
+      "contractLabel": "ANTH-...ZK4UA3",
+      "domicile": "Germany",
+      "holdersDisplay": "0",
+      "manager": null,
+      "name": "Anthropic Bond (Cometum)",
+      "platform": "NYALA",
+      "platformUrl": "https://app.rwa.xyz/platforms/nyala",
+      "regulatoryFramework": "German Electronic Securities Act (eWpG)\n\nBMF - German Federal Ministry of Finance",
+      "ticker": "ANTH",
+      "tokenizationType": "Distributed",
+      "totalValueDisplay": "$\n0",
+      "identity": "https://app.rwa.xyz/assets/ANTH|https://stellar.expert/explorer/public/asset/ANTH-GCJ7VUWSC2BTOSNZIUUWNEYXQ35F2WOEM3Y4XAB6F7ZKQLOGOSZK4UA3",
+      "sourcePage": 5,
+      "executable": false
+    },
+    {
+      "assetClass": "Asset-Backed Credit",
+      "assetUrl": "https://app.rwa.xyz/assets/CHILLI09",
+      "cells": [
+        "CHILLI09 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.\nCHILLI09",
+        "—",
+        "—",
+        "—",
+        "Asset-Backed Credit",
+        "Represented",
+        "MB | Mercado Bitcoin",
+        "—",
+        "—",
+        "CHILL...CPWY4D"
+      ],
+      "contractExplorerUrl": "https://stellar.expert/explorer/public/asset/CHILLI09-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "contractLabel": "CHILL...CPWY4D",
+      "domicile": null,
+      "holdersDisplay": "—",
+      "manager": null,
+      "name": "CHILLI09 - CHILLI BEANS COMERCIO DE PRODUTOS LTDA.",
+      "platform": "MB | Mercado Bitcoin",
+      "platformUrl": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+      "regulatoryFramework": null,
+      "ticker": "CHILLI09",
+      "tokenizationType": "Represented",
+      "totalValueDisplay": "—",
+      "identity": "https://app.rwa.xyz/assets/CHILLI09|https://stellar.expert/explorer/public/asset/CHILLI09-GBVMRBARLKFMH56ROJEGGIB5KSTBC3DNP4ZYP4TZLKKFPCI75ECPWY4D",
+      "sourcePage": 5,
+      "executable": false
+    }
+  ],
+  "leagueTables": [
+    {
+      "assetType": "distributed",
+      "groupBy": "platform",
+      "headers": [
+        "#",
+        "Platform",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/spiko",
+                "text": "Spiko"
+              }
+            ],
+            "text": "Spiko"
+          },
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [],
+            "text": "$2.0B"
+          },
+          {
+            "links": [],
+            "text": "▲\n16.18%"
+          },
+          {
+            "links": [],
+            "text": "45.85\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/ondo",
+                "text": "Ondo"
+              }
+            ],
+            "text": "Ondo"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$538.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n0.29%"
+          },
+          {
+            "links": [],
+            "text": "12.58\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/franklin-templeton-benji-investments",
+                "text": "Franklin Templeton Benji Investments"
+              }
+            ],
+            "text": "Franklin Templeton Benji Investments"
+          },
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [],
+            "text": "$525.8M"
+          },
+          {
+            "links": [],
+            "text": "▲\n2.33%"
+          },
+          {
+            "links": [],
+            "text": "12.29\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/realiz",
+                "text": "Realiz"
+              }
+            ],
+            "text": "Realiz"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$500.0M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "11.69\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/circle",
+                "text": "Circle"
+              }
+            ],
+            "text": "Circle"
+          },
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [],
+            "text": "$391.6M"
+          },
+          {
+            "links": [],
+            "text": "▲\n3.50%"
+          },
+          {
+            "links": [],
+            "text": "9.15\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/paxos",
+                "text": "Paxos"
+              }
+            ],
+            "text": "Paxos"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$87.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n637.8%"
+          },
+          {
+            "links": [],
+            "text": "2.03\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/galaxy-digital",
+                "text": "Galaxy Digital"
+              }
+            ],
+            "text": "Galaxy Digital"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$75.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n124,767,783%"
+          },
+          {
+            "links": [],
+            "text": "1.75\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "8"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/wisdomtree",
+                "text": "WisdomTree"
+              }
+            ],
+            "text": "WisdomTree"
+          },
+          {
+            "links": [],
+            "text": "16"
+          },
+          {
+            "links": [],
+            "text": "$39.8M"
+          },
+          {
+            "links": [],
+            "text": "▼\n1.70%"
+          },
+          {
+            "links": [],
+            "text": "0.93\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/centrifuge",
+                "text": "Centrifuge"
+              }
+            ],
+            "text": "Centrifuge"
+          },
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [],
+            "text": "$26.9M"
+          },
+          {
+            "links": [],
+            "text": "▼\n8.58%"
+          },
+          {
+            "links": [],
+            "text": "0.63\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "10"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/nyala",
+                "text": "NYALA"
+              }
+            ],
+            "text": "NYALA"
+          },
+          {
+            "links": [],
+            "text": "12"
+          },
+          {
+            "links": [],
+            "text": "$26.9M"
+          },
+          {
+            "links": [],
+            "text": "▲\n57.05%"
+          },
+          {
+            "links": [],
+            "text": "0.63\n%\n▲"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    },
+    {
+      "assetType": "distributed",
+      "groupBy": "assetClass",
+      "headers": [
+        "#",
+        "Asset Class",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/active-strategies",
+                "text": "Active Strategies"
+              }
+            ],
+            "text": "Active Strategies"
+          },
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [],
+            "text": "$1.6B"
+          },
+          {
+            "links": [],
+            "text": "▲\n24.96%"
+          },
+          {
+            "links": [],
+            "text": "38.42\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/treasuries",
+                "text": "US Treasury Debt"
+              }
+            ],
+            "text": "US Treasury Debt"
+          },
+          {
+            "links": [],
+            "text": "17"
+          },
+          {
+            "links": [],
+            "text": "$1.2B"
+          },
+          {
+            "links": [],
+            "text": "▲\n7.85%"
+          },
+          {
+            "links": [],
+            "text": "28.29\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/stablecoins",
+                "text": "Stablecoins"
+              }
+            ],
+            "text": "Stablecoins"
+          },
+          {
+            "links": [],
+            "text": "17"
+          },
+          {
+            "links": [],
+            "text": "$524.6M"
+          },
+          {
+            "links": [],
+            "text": "▲\n20.19%"
+          },
+          {
+            "links": [],
+            "text": "12.26\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/credit",
+                "text": "Corporate Credit"
+              }
+            ],
+            "text": "Corporate Credit"
+          },
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [],
+            "text": "$516.8M"
+          },
+          {
+            "links": [],
+            "text": "▼\n0.00%"
+          },
+          {
+            "links": [],
+            "text": "12.08\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/government-bonds",
+                "text": "non-US Government Debt"
+              }
+            ],
+            "text": "non-US Government Debt"
+          },
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [],
+            "text": "$285.5M"
+          },
+          {
+            "links": [],
+            "text": "▼\n16.80%"
+          },
+          {
+            "links": [],
+            "text": "6.67\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/credit",
+                "text": "Asset-Backed Credit"
+              }
+            ],
+            "text": "Asset-Backed Credit"
+          },
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [],
+            "text": "$30.6M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "0.71\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/stocks",
+                "text": "Stocks"
+              }
+            ],
+            "text": "Stocks"
+          },
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [],
+            "text": "$27.6M"
+          },
+          {
+            "links": [],
+            "text": "▼\n2.60%"
+          },
+          {
+            "links": [],
+            "text": "0.65\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "8"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/private-equity-venture-capital",
+                "text": "Private Equity"
+              }
+            ],
+            "text": "Private Equity"
+          },
+          {
+            "links": [],
+            "text": "12"
+          },
+          {
+            "links": [],
+            "text": "$26.9M"
+          },
+          {
+            "links": [],
+            "text": "▲\n57.05%"
+          },
+          {
+            "links": [],
+            "text": "0.63\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/commodities",
+                "text": "Commodities"
+              }
+            ],
+            "text": "Commodities"
+          },
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [],
+            "text": "$6.1M"
+          },
+          {
+            "links": [],
+            "text": "▼\n6.65%"
+          },
+          {
+            "links": [],
+            "text": "0.14\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "10"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/credit",
+                "text": "Specialty Finance"
+              }
+            ],
+            "text": "Specialty Finance"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$4.5M"
+          },
+          {
+            "links": [],
+            "text": "▲\n1.00%"
+          },
+          {
+            "links": [],
+            "text": "0.11\n%\n▼"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    },
+    {
+      "assetType": "distributed",
+      "groupBy": "manager",
+      "headers": [
+        "#",
+        "Manager",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/franklin-templeton",
+                "text": "Franklin Templeton"
+              }
+            ],
+            "text": "Franklin Templeton"
+          },
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [],
+            "text": "$525.8M"
+          },
+          {
+            "links": [],
+            "text": "▲\n2.33%"
+          },
+          {
+            "links": [],
+            "text": "45.75\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/twenty-first-capital",
+                "text": "Twenty First Capital"
+              }
+            ],
+            "text": "Twenty First Capital"
+          },
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [],
+            "text": "$322.7M"
+          },
+          {
+            "links": [],
+            "text": "▼\n14.32%"
+          },
+          {
+            "links": [],
+            "text": "28.08\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/amundi",
+                "text": "Amundi"
+              }
+            ],
+            "text": "Amundi"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$117.7M"
+          },
+          {
+            "links": [],
+            "text": "▲\n21.13%"
+          },
+          {
+            "links": [],
+            "text": "10.24\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/state-street-investment-management",
+                "text": "State Street Investment Management"
+              }
+            ],
+            "text": "State Street Investment Management"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$75.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n124,767,783%"
+          },
+          {
+            "links": [],
+            "text": "6.52\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/anemoy",
+                "text": "Anemoy"
+              }
+            ],
+            "text": "Anemoy"
+          },
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [],
+            "text": "$26.9M"
+          },
+          {
+            "links": [],
+            "text": "▼\n8.58%"
+          },
+          {
+            "links": [],
+            "text": "2.34\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/figure-investment-advisors",
+                "text": "Figure Investment Advisors"
+              }
+            ],
+            "text": "Figure Investment Advisors"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$25.2M"
+          },
+          {
+            "links": [],
+            "text": "▲\n0.28%"
+          },
+          {
+            "links": [],
+            "text": "2.20\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/wisdomtree-digital-management",
+                "text": "WisdomTree Digital Management"
+              }
+            ],
+            "text": "WisdomTree Digital Management"
+          },
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [],
+            "text": "$23.6M"
+          },
+          {
+            "links": [],
+            "text": "▼\n0.83%"
+          },
+          {
+            "links": [],
+            "text": "2.05\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "8"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/societe-generale-forge",
+                "text": "Societe Generale - FORGE"
+              }
+            ],
+            "text": "Societe Generale - FORGE"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$16.8M"
+          },
+          {
+            "links": [],
+            "text": "▼\n1.65%"
+          },
+          {
+            "links": [],
+            "text": "1.47\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/nagro",
+                "text": "Nagro"
+              }
+            ],
+            "text": "Nagro"
+          },
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [],
+            "text": "$15.5M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "1.35\n%\n▼"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    },
+    {
+      "assetType": "represented",
+      "groupBy": "manager",
+      "headers": [
+        "#",
+        "Manager",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [],
+      "coverageNote": "No manager rows were displayed for this filter."
+    },
+    {
+      "assetType": "represented",
+      "groupBy": "assetClass",
+      "headers": [
+        "#",
+        "Asset Class",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/real-estate",
+                "text": "Real Estate"
+              }
+            ],
+            "text": "Real Estate"
+          },
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [],
+            "text": "$71.7M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "91.68\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/credit",
+                "text": "Asset-Backed Credit"
+              }
+            ],
+            "text": "Asset-Backed Credit"
+          },
+          {
+            "links": [],
+            "text": "16"
+          },
+          {
+            "links": [],
+            "text": "$6.5M"
+          },
+          {
+            "links": [],
+            "text": "▲\n4.04%"
+          },
+          {
+            "links": [],
+            "text": "8.32\n%\n▲"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    },
+    {
+      "assetType": "represented",
+      "groupBy": "platform",
+      "headers": [
+        "#",
+        "Platform",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+                "text": "RedSwan Digital Real Estate"
+              }
+            ],
+            "text": "RedSwan Digital Real Estate"
+          },
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [],
+            "text": "$71.7M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "91.68\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/mb-mercado-bitcoin",
+                "text": "MB | Mercado Bitcoin"
+              }
+            ],
+            "text": "MB | Mercado Bitcoin"
+          },
+          {
+            "links": [],
+            "text": "16"
+          },
+          {
+            "links": [],
+            "text": "$6.5M"
+          },
+          {
+            "links": [],
+            "text": "▲\n4.04%"
+          },
+          {
+            "links": [],
+            "text": "8.32\n%\n▲"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    },
+    {
+      "assetType": "all",
+      "groupBy": "platform",
+      "headers": [
+        "#",
+        "Platform",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/spiko",
+                "text": "Spiko"
+              }
+            ],
+            "text": "Spiko"
+          },
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [],
+            "text": "$2.0B"
+          },
+          {
+            "links": [],
+            "text": "▲\n16.18%"
+          },
+          {
+            "links": [],
+            "text": "45.02\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/ondo",
+                "text": "Ondo"
+              }
+            ],
+            "text": "Ondo"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$538.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n0.29%"
+          },
+          {
+            "links": [],
+            "text": "12.35\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/franklin-templeton-benji-investments",
+                "text": "Franklin Templeton Benji Investments"
+              }
+            ],
+            "text": "Franklin Templeton Benji Investments"
+          },
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [],
+            "text": "$525.8M"
+          },
+          {
+            "links": [],
+            "text": "▲\n2.33%"
+          },
+          {
+            "links": [],
+            "text": "12.07\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/realiz",
+                "text": "Realiz"
+              }
+            ],
+            "text": "Realiz"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$500.0M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "11.48\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/circle",
+                "text": "Circle"
+              }
+            ],
+            "text": "Circle"
+          },
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [],
+            "text": "$391.6M"
+          },
+          {
+            "links": [],
+            "text": "▲\n3.50%"
+          },
+          {
+            "links": [],
+            "text": "8.99\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/paxos",
+                "text": "Paxos"
+              }
+            ],
+            "text": "Paxos"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$87.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n637.8%"
+          },
+          {
+            "links": [],
+            "text": "2.00\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/galaxy-digital",
+                "text": "Galaxy Digital"
+              }
+            ],
+            "text": "Galaxy Digital"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$75.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n124,767,783%"
+          },
+          {
+            "links": [],
+            "text": "1.72\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "8"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/redswan-digital-real-estate",
+                "text": "RedSwan Digital Real Estate"
+              }
+            ],
+            "text": "RedSwan Digital Real Estate"
+          },
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [],
+            "text": "$71.7M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "1.65\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/wisdomtree",
+                "text": "WisdomTree"
+              }
+            ],
+            "text": "WisdomTree"
+          },
+          {
+            "links": [],
+            "text": "16"
+          },
+          {
+            "links": [],
+            "text": "$39.8M"
+          },
+          {
+            "links": [],
+            "text": "▼\n1.70%"
+          },
+          {
+            "links": [],
+            "text": "0.91\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "10"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/platforms/centrifuge",
+                "text": "Centrifuge"
+              }
+            ],
+            "text": "Centrifuge"
+          },
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [],
+            "text": "$26.9M"
+          },
+          {
+            "links": [],
+            "text": "▼\n8.58%"
+          },
+          {
+            "links": [],
+            "text": "0.62\n%\n▼"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    },
+    {
+      "assetType": "all",
+      "groupBy": "assetClass",
+      "headers": [
+        "#",
+        "Asset Class",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/active-strategies",
+                "text": "Active Strategies"
+              }
+            ],
+            "text": "Active Strategies"
+          },
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [],
+            "text": "$1.6B"
+          },
+          {
+            "links": [],
+            "text": "▲\n24.96%"
+          },
+          {
+            "links": [],
+            "text": "37.78\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/treasuries",
+                "text": "US Treasury Debt"
+              }
+            ],
+            "text": "US Treasury Debt"
+          },
+          {
+            "links": [],
+            "text": "17"
+          },
+          {
+            "links": [],
+            "text": "$1.2B"
+          },
+          {
+            "links": [],
+            "text": "▲\n7.85%"
+          },
+          {
+            "links": [],
+            "text": "27.83\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/stablecoins",
+                "text": "Stablecoins"
+              }
+            ],
+            "text": "Stablecoins"
+          },
+          {
+            "links": [],
+            "text": "17"
+          },
+          {
+            "links": [],
+            "text": "$524.6M"
+          },
+          {
+            "links": [],
+            "text": "▲\n20.19%"
+          },
+          {
+            "links": [],
+            "text": "12.06\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/credit",
+                "text": "Corporate Credit"
+              }
+            ],
+            "text": "Corporate Credit"
+          },
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [],
+            "text": "$516.8M"
+          },
+          {
+            "links": [],
+            "text": "▼\n0.00%"
+          },
+          {
+            "links": [],
+            "text": "11.88\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/government-bonds",
+                "text": "non-US Government Debt"
+              }
+            ],
+            "text": "non-US Government Debt"
+          },
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [],
+            "text": "$285.5M"
+          },
+          {
+            "links": [],
+            "text": "▼\n16.80%"
+          },
+          {
+            "links": [],
+            "text": "6.56\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/real-estate",
+                "text": "Real Estate"
+              }
+            ],
+            "text": "Real Estate"
+          },
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [],
+            "text": "$71.7M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "1.65\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/credit",
+                "text": "Asset-Backed Credit"
+              }
+            ],
+            "text": "Asset-Backed Credit"
+          },
+          {
+            "links": [],
+            "text": "21"
+          },
+          {
+            "links": [],
+            "text": "$30.6M"
+          },
+          {
+            "links": [],
+            "text": "▼\n16.99%"
+          },
+          {
+            "links": [],
+            "text": "0.70\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "8"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/stocks",
+                "text": "Stocks"
+              }
+            ],
+            "text": "Stocks"
+          },
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [],
+            "text": "$27.6M"
+          },
+          {
+            "links": [],
+            "text": "▼\n2.60%"
+          },
+          {
+            "links": [],
+            "text": "0.63\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/private-equity-venture-capital",
+                "text": "Private Equity"
+              }
+            ],
+            "text": "Private Equity"
+          },
+          {
+            "links": [],
+            "text": "12"
+          },
+          {
+            "links": [],
+            "text": "$26.9M"
+          },
+          {
+            "links": [],
+            "text": "▲\n57.05%"
+          },
+          {
+            "links": [],
+            "text": "0.62\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "10"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/commodities",
+                "text": "Commodities"
+              }
+            ],
+            "text": "Commodities"
+          },
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [],
+            "text": "$6.1M"
+          },
+          {
+            "links": [],
+            "text": "▼\n6.65%"
+          },
+          {
+            "links": [],
+            "text": "0.14\n%\n▼"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    },
+    {
+      "assetType": "all",
+      "groupBy": "manager",
+      "headers": [
+        "#",
+        "Manager",
+        "RWA Count",
+        "Total Value",
+        "30D%",
+        "Market Share"
+      ],
+      "rows": [
+        [
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/franklin-templeton",
+                "text": "Franklin Templeton"
+              }
+            ],
+            "text": "Franklin Templeton"
+          },
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [],
+            "text": "$525.8M"
+          },
+          {
+            "links": [],
+            "text": "▲\n2.33%"
+          },
+          {
+            "links": [],
+            "text": "45.75\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "2"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/twenty-first-capital",
+                "text": "Twenty First Capital"
+              }
+            ],
+            "text": "Twenty First Capital"
+          },
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [],
+            "text": "$322.7M"
+          },
+          {
+            "links": [],
+            "text": "▼\n14.32%"
+          },
+          {
+            "links": [],
+            "text": "28.08\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/amundi",
+                "text": "Amundi"
+              }
+            ],
+            "text": "Amundi"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$117.7M"
+          },
+          {
+            "links": [],
+            "text": "▲\n21.13%"
+          },
+          {
+            "links": [],
+            "text": "10.24\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/state-street-investment-management",
+                "text": "State Street Investment Management"
+              }
+            ],
+            "text": "State Street Investment Management"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$75.0M"
+          },
+          {
+            "links": [],
+            "text": "▲\n124,767,783%"
+          },
+          {
+            "links": [],
+            "text": "6.52\n%\n▲"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/anemoy",
+                "text": "Anemoy"
+              }
+            ],
+            "text": "Anemoy"
+          },
+          {
+            "links": [],
+            "text": "4"
+          },
+          {
+            "links": [],
+            "text": "$26.9M"
+          },
+          {
+            "links": [],
+            "text": "▼\n8.58%"
+          },
+          {
+            "links": [],
+            "text": "2.34\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "6"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/figure-investment-advisors",
+                "text": "Figure Investment Advisors"
+              }
+            ],
+            "text": "Figure Investment Advisors"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$25.2M"
+          },
+          {
+            "links": [],
+            "text": "▲\n0.28%"
+          },
+          {
+            "links": [],
+            "text": "2.20\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "7"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/wisdomtree-digital-management",
+                "text": "WisdomTree Digital Management"
+              }
+            ],
+            "text": "WisdomTree Digital Management"
+          },
+          {
+            "links": [],
+            "text": "5"
+          },
+          {
+            "links": [],
+            "text": "$23.6M"
+          },
+          {
+            "links": [],
+            "text": "▼\n0.83%"
+          },
+          {
+            "links": [],
+            "text": "2.05\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "8"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/societe-generale-forge",
+                "text": "Societe Generale - FORGE"
+              }
+            ],
+            "text": "Societe Generale - FORGE"
+          },
+          {
+            "links": [],
+            "text": "1"
+          },
+          {
+            "links": [],
+            "text": "$16.8M"
+          },
+          {
+            "links": [],
+            "text": "▼\n1.65%"
+          },
+          {
+            "links": [],
+            "text": "1.47\n%\n▼"
+          }
+        ],
+        [
+          {
+            "links": [],
+            "text": "9"
+          },
+          {
+            "links": [
+              {
+                "href": "https://app.rwa.xyz/asset-managers/nagro",
+                "text": "Nagro"
+              }
+            ],
+            "text": "Nagro"
+          },
+          {
+            "links": [],
+            "text": "3"
+          },
+          {
+            "links": [],
+            "text": "$15.5M"
+          },
+          {
+            "links": [],
+            "text": "0%"
+          },
+          {
+            "links": [],
+            "text": "1.35\n%\n▼"
+          }
+        ]
+      ],
+      "coverageNote": "Visible top rows only; rounded display values."
+    }
+  ],
+  "renderedNetworkText": "Distributed Asset Value\n\n$3.75B\n\n▲\n+10.85%\nfrom 30d ago\n\nRepresented Asset Value\n\n$78.22M\n\n▲\n+0.32%\nfrom 30d ago\n\nRWA Holders\n\n24,138\n\n▲\n+10.73%\nfrom 30d ago\n\nRWA 30D Transfer Volume\n\n$517.13M\n\n▼\n4.18%\nfrom 30d ago\n\nRWA Count\n\n84\n\nStablecoin Market Cap\n\n$524.58M\n\n▲\n+20.19%\nfrom 30d ago\n\nStablecoin Holders\n\n742.57K\n\n▲\n+2.12%\nfrom 30d ago\n\nStablecoin 30D Transfer Volume\n\n$15.04B\n\n▲\n+40.88%\nfrom 30d ago\n\nStellar Metrics\n\nCode Samples\nDownload CSV\nOpen options\nAsset Type\nDistributed\nRepresented\nAll\nMetric\nTotal Value\nAsset Holders\nActive Addresses\nTransfer Volume\nFund Flows\nInclude Stablecoins\n\nInclude stablecoins, cash and cash-equivalents\n\nGroup By\n\nAsset\n2022​2022\n2023​2023\n2024​2024\n2025​2025\n2026​2026\n1/4\n1/1/22\n7/1/22\n1/1/23\n7/1/23\n1/1/24\n7/1/24\n1/1/25\n7/1/25\n1/1/26\n7/1/26\n$0.00\n$1.0B\n$2.0B\n$3.0B\n$4.0B\nSpiko Amundi Overnight Swap Fund (EUR)\nOndo U.S. Dollar Yield\nVuMe Bond 2030\nBENJI\nSpiko EU T-Bills Money Market Fund\nSpiko Amundi Overnight Swap Fund\nState Street Galaxy OnChain Liquidity Sweep Fund\ngBENJI\nSpiko Amundi Overnight Swap Fund (GBP)\nsgBENJI\nSpiko US T-Bills Money Market Fund\nSpaceX Bond (Cometum)\nWisdomTree 500 Digital Fund\nEtherfuse USTRY\nSpiko UK T-Bills Money Market Fund\nRivool Agriculture Notes High Grade - RVL5\nRivool Agriculture Notes High Yield - RVL4\nJAAA deRWA\nJTRSY deRWA\nWisdomTree Technology & Innovation 100 Digital Fund\nTermMax Fixed Income LP Deal\nSpiko Amundi Overnight Swap Fund (CHF)\nJanus Henderson AAA CLO Fund\nJanus Henderson Treasury Fund\nRivool Institucional Nagro Agro - RVL2\nZynk TVL Provision Deal\nSpiko Cash & Carry Euro\nMatrixdock Gold\nEtherfuse CETES\nBitbond BB1 tokenized bond\nWisdomTree Treasury Money Market Digital Fund\nWisdomTree Gold Token\nWisdomTree Floating Rate Treasury Digital Fund\nRivool Institucional Nagro Agro - RVL1\nWisdomTree Short-Duration Income Digital Fund\nWisdomTree Siegel Global Equity Digital Fund\nUSDM1\nWisdomTree Short-Term Treasury Digital Fund\nWisdomTree 3-7 Year Treasury Digital Fund\nWisdomTree TIPS Digital Fund\nWisdomTree 7-10 Year Treasury Digital Fund\nWisdomTree Long Term Treasury Digital Fund\nWisdomTree Siegel Longevity Digital Fund\nSpiko Cash and Carry Dollar\nWisdomTree Siegel Moderate Digital Fund\nWisdomTree Equity Premium Income Digital Fund\nEtherfuse TESOURO\nWisdomTree Private Credit and Alternative Income Digital Fund\nEtherfuse EUROB\nEtherfuse KTB\nAll Others (11 Items)\n\nStellar RWA League Table\n\nDistributed\nRepresented\nAll\nPlatforms\nAsset Classes\nManagers\n#\nPlatform\nRWA Count\nTotal Value\n30D%\nMarket Share\n1\nSpiko\n9\n$2.0B\n▲\n16.18%\n45.85\n%\n▲\n2\nOndo\n1\n$538.0M\n▲\n0.29%\n12.58\n%\n▼\n3\nFranklin Templeton Benji Investments\n3\n$525.8M\n▲\n2.33%\n12.29\n%\n▼\n4\nRealiz\n1\n$500.0M\n0%\n11.69\n%\n▼\n5\nCircle\n2\n$391.6M\n▲\n3.50%\n9.15\n%\n▼\n6\nPaxos\n1\n$87.0M\n▲\n637.8%\n2.03\n%\n▲\n7\nGalaxy Digital\n1\n$75.0M\n▲\n124,767,783%\n1.75\n%\n▲\n8\nWisdomTree\n16\n$39.8M\n▼\n1.70%\n0.93\n%\n▼\n9\nCentrifuge\n4\n$26.9M\n▼\n8.58%\n0.63\n%\n▼\n10\nNYALA\n12\n$26.9M\n▲\n57.05%\n0.63\n%\n▲\n\nTotal RWA Value\n\nDistributed\nRepresented\nAll\n\nGroup By\n\nPlatform\nSpiko​$2.0B\nOndo​$538.0M\nFranklin Templeton Benji Investments​$525.8M\nRealiz ​$500.0M\nCircle​$391.6M\nPaxos​$87.0M\nGalaxy Digital​$75.0M\nas of 10/25/2026\n",
+  "caveats": [
+    "109 table rows include stablecoins and multiple token representations; not equivalent to the RWA Count of 84.",
+    "Do not add RWA values to DefiLlama TVL; definitions and overlap differ.",
+    "Manager league-table shares use the provider-selected universe; do not sum with platform shares.",
+    "Explorer URLs are source references, not verified execution asset identifiers.",
+    "Scraped research data never authorizes execution or establishes availability, user eligibility, redemption, APY or venue liquidity.",
+    "Data is a dated snapshot. No live refresh or historical series is implied."
+  ]
+}

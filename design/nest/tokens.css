@@ -1,0 +1,56 @@
+/* Nest v0.1 — Raven-derived foundations, app-specific semantic extensions. */
+:root {
+  color-scheme: dark;
+  --nest-background: #0e150d;
+  --nest-surface: #151f14;
+  --nest-surface-raised: #182617;
+  --nest-accent: #ff5500;
+  --nest-accent-hover: #ff7a33;
+  --nest-accent-tint: rgba(255,85,0,.13);
+  --nest-text: #eef0e2;
+  --nest-text-secondary: #9aa890;
+  --nest-text-muted: #71806a; /* decorative/disabled only */
+  --nest-text-subtle: #829179; /* accessible small text */
+  --nest-border: rgba(238,240,226,.12);
+  --nest-border-strong: rgba(238,240,226,.22);
+  --nest-input-border: rgba(238,240,226,.40);
+  --nest-success: #9acb88;
+  --nest-warning: #e7c66c;
+  --nest-error: #f18b82;
+  --nest-info: #94bce7;
+  --nest-series-1: #eef0e2;
+  --nest-series-2: #94bce7;
+  --nest-series-3: #e7c66c;
+  --nest-series-4: #b4a2cf;
+  --nest-font-display: 'IBM Plex Serif', Georgia, serif;
+  --nest-font-sans: 'IBM Plex Sans', system-ui, sans-serif;
+  --nest-font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --nest-size-display: clamp(48px, 7vw, 88px);
+  --nest-size-title: 36px;
+  --nest-size-section: 24px;
+  --nest-size-body: 16px;
+  --nest-size-control: 14px;
+  --nest-size-label: 12px;
+  --nest-space-1: 4px;
+  --nest-space-2: 8px;
+  --nest-space-3: 12px;
+  --nest-space-4: 16px;
+  --nest-space-6: 24px;
+  --nest-space-8: 32px;
+  --nest-space-12: 48px;
+  --nest-space-16: 64px;
+  --nest-radius-control: 12px;
+  --nest-radius-card: 16px;
+  --nest-radius-tag: 999px;
+  --nest-header-height: 64px;
+  --nest-row-height: 48px;
+  --nest-touch-target: 44px;
+  --nest-ticket-width: 340px;
+  --nest-agent-width: 380px;
+  --nest-duration-fast: 120ms;
+  --nest-duration-base: 180ms;
+  --nest-ease: cubic-bezier(.2,.7,.2,1);
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --nest-duration-fast: 0ms; --nest-duration-base: 0ms; }
+}

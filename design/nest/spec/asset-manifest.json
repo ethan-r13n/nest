@@ -1,0 +1,101 @@
+{
+  "brand": "Nest",
+  "version": "0.1",
+  "assets": [
+    {
+      "path": "assets/fonts/OFL.txt",
+      "bytes": 4456,
+      "sha256": "7e6b2818edbd8f6a01ae80641cc8f16a51080d08fb4e532be3a0b6f74adb07da"
+    },
+    {
+      "path": "assets/fonts/fonts.css",
+      "bytes": 873,
+      "sha256": "cf5d04e0eb3aebcb723c93bdeeb3c9be160a2209414be40d73cb1eefb40e5adc"
+    },
+    {
+      "path": "assets/fonts/ibm-plex-mono-400.woff2",
+      "bytes": 10052,
+      "sha256": "c36f509c0a8f9f85f29cb44bc8701d8a9e0b14c499e77a884f789ead7093a7ac"
+    },
+    {
+      "path": "assets/fonts/ibm-plex-mono-500.woff2",
+      "bytes": 10060,
+      "sha256": "a76f53ca6612e7b3828eec2311098675b7f9849ae4169a8bcef6302aec02a6c0"
+    },
+    {
+      "path": "assets/fonts/ibm-plex-sans-400.woff2",
+      "bytes": 17604,
+      "sha256": "aedeae141b19622c5599ec884f075b9b58ec3036d069a02350da34e31d56d24b"
+    },
+    {
+      "path": "assets/fonts/ibm-plex-sans-600.woff2",
+      "bytes": 19192,
+      "sha256": "2f66ab50ff7e70be314df64d8ec6511f04706438cb7a9d39ff945d1f74e19569"
+    },
+    {
+      "path": "assets/fonts/ibm-plex-serif-600.woff2",
+      "bytes": 15580,
+      "sha256": "d8bf89a58f34027c1ee0b24d4bd66f19a782887980e3ce149519c2c527cac3ce"
+    },
+    {
+      "path": "assets/fonts/ibm-plex-serif-700.woff2",
+      "bytes": 14936,
+      "sha256": "8d256fda8c12db0d7bbde004f3e844ba23cfaa3e764880b24056d6f0b79d70dd"
+    },
+    {
+      "path": "assets/nest-cover-clean.png",
+      "bytes": 1658970,
+      "sha256": "6628aeee3f1e21bd0af14aeae403e4abae078cc0b6b6f5be8e8dd9306426de98"
+    },
+    {
+      "path": "assets/nest-cover.png",
+      "bytes": 1641824,
+      "sha256": "6be9fc4b26a7322ef1aae9e52679a20a063f2d2ad2becf8d36b76ef60a067277"
+    },
+    {
+      "path": "assets/nest-lockup-editable.svg",
+      "bytes": 980,
+      "sha256": "b288aa7be50b35677700c40ed33d504c6c5408f8fc822eab7c75218ce6b15a0a"
+    },
+    {
+      "path": "assets/nest-lockup-on-light-editable.svg",
+      "bytes": 980,
+      "sha256": "19fdc5e7266dbe8f5a126f48df1d3dfc97f7be17da1d15df028831b0c36f2a23"
+    },
+    {
+      "path": "assets/nest-lockup-on-light.svg",
+      "bytes": 2337,
+      "sha256": "244b2e414b4b905b5f3e94d0fe209efb80ea6f7f76b2c523c356e07620614932"
+    },
+    {
+      "path": "assets/nest-lockup.png",
+      "bytes": 46296,
+      "sha256": "7b8059a7bd73f2a756de03cf775be9e0385733ef9c9a631392aebc570268bdda"
+    },
+    {
+      "path": "assets/nest-lockup.svg",
+      "bytes": 2337,
+      "sha256": "cf85b2ac4b31487e5ebd40fa3fee376224c1a6e5b0c6efd35cdc4037ae0a2de0"
+    },
+    {
+      "path": "assets/nest-logo-cream.png",
+      "bytes": 42651,
+      "sha256": "04e9065cc2897543a84045887d86e8f7f6115b2e5204210054eee3f0a30e4b1f"
+    },
+    {
+      "path": "assets/nest-logo.png",
+      "bytes": 39729,
+      "sha256": "2d614cb25e78b5dd19b1626e80b6fd945fc150325487e9bd58581f91a51f3e58"
+    },
+    {
+      "path": "assets/nest-symbol-cream.svg",
+      "bytes": 817,
+      "sha256": "83c4eca8b1b1d2fdc7d76bce88cf6366493e9beab1c5aabde7eab8bf2ae75975"
+    },
+    {
+      "path": "assets/nest-symbol.svg",
+      "bytes": 817,
+      "sha256": "9993f5b52e988b439bad6e73cc6851fb4af5a3dcd81c21b674050196a1e02cb7"
+    }
+  ]
+}

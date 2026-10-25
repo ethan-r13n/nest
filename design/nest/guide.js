@@ -1,0 +1,20 @@
+const byId = id => document.getElementById(id);
+let toastTimer;
+function toast(message) { const el=byId('toast'); el.textContent=message; el.hidden=false; clearTimeout(toastTimer); toastTimer=setTimeout(()=>el.hidden=true,2600); }
+document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(button.dataset.copy);toast(`Copied ${button.dataset.copy}`);}catch{toast(`Color: ${button.dataset.copy}`);}}));
+byId('surface-toggle').addEventListener('click',()=>{const on=byId('logo-stage').classList.toggle('light'); byId('surface-toggle').setAttribute('aria-pressed',String(on));byId('surface-toggle').textContent=on?'Forest surface':'Light surface';});
+byId('show-details').addEventListener('click',()=>{byId('button-details').textContent='Primary: orange + dark text. Secondary: cream + fine outline. Disabled: quiet surface + explicit reason. Keyboard focus uses a 2px ring with a 3px offset.';});
+let reviewTrigger;
+document.querySelectorAll('[data-open-review]').forEach(button=>button.addEventListener('click',()=>{reviewTrigger=button;byId('review-dialog').showModal();}));
+byId('review-close').addEventListener('click',()=>byId('review-dialog').close());
+byId('review-dialog').addEventListener('close',()=>reviewTrigger?.focus());
+const agent=byId('agent-panel');
+byId('agent-open').setAttribute('aria-controls','agent-panel');byId('agent-open').setAttribute('aria-expanded','false');
+byId('agent-open').addEventListener('click',()=>{agent.showModal();byId('agent-open').setAttribute('aria-expanded','true');byId('agent-close').focus();});
+byId('agent-close').addEventListener('click',()=>agent.close());
+agent.addEventListener('close',()=>{byId('agent-open').setAttribute('aria-expanded','false');byId('agent-open').focus();});
+byId('row-density').addEventListener('change',event=>byId('market-table').style.setProperty('--nest-demo-row',`${event.target.value}px`));
+let descending=true;
+byId('market-table').querySelectorAll('thead th')[1].setAttribute('aria-sort','descending');
+byId('sort-rate').addEventListener('click',()=>{descending=!descending;const tbody=byId('market-table').tBodies[0];[...tbody.rows].sort((a,b)=>{const av=Number(a.dataset.rate),bv=Number(b.dataset.rate);if(!av)return 1;if(!bv)return -1;return descending?bv-av:av-bv;}).forEach(row=>tbody.append(row));byId('sort-rate').querySelector('span').textContent=descending?'↓':'↑';byId('sort-rate').setAttribute('aria-label',`Sort fixture supply APR ${descending?'ascending':'descending'}`);byId('market-table').querySelectorAll('thead th')[1].setAttribute('aria-sort',descending?'descending':'ascending');});
+byId('compare-demo').addEventListener('click',()=>{byId('compare-status').textContent='Specimen only: a production comparison uses current, amount-aware quotes. Fixture values have not been recomputed.';toast('Fixture preview — no live comparison connected');});

@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 180" role="img" aria-labelledby="title"><title id="title">Nest</title><g transform="translate(10 16) scale(.88)" fill="#ff5500"><path d="M88 14C55 22 28 40 35 55C38 62 42 67 47 69C38 46 66 37 88 30Q91 29 91 25V18Q91 13 88 14Z"/>
+    <path d="M152 14C185 22 211 40 205 55C201 64 196 69 188 73C206 48 175 37 152 30Q149 29 149 25V18Q149 13 152 14Z"/>
+    <path d="M31 54C7 72 15 87 43 99C76 113 111 112 136 105C88 101 39 84 31 54Z"/>
+    <path d="M210 56C235 76 225 91 191 108C152 128 76 144 34 113C25 106 20 98 18 91C40 115 83 117 120 108C161 99 203 81 210 56Z"/>
+    <path d="M12 81C3 112 33 143 82 151C124 158 166 149 190 125C161 141 106 145 66 134C38 127 18 109 12 81ZM227 83C239 111 213 137 170 144C195 129 219 109 227 83Z"/>
+    <circle cx="120" cy="66" r="23"/></g><text x="250" y="130" fill="#eef0e2" font-family="IBM Plex Serif, Georgia, serif" font-weight="600" font-size="132" letter-spacing="-4">Nest</text></svg>
