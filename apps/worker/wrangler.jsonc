@@ -2,11 +2,15 @@
 // D1 resources come from infra/cloudflare/d1-resources.json. The default environment binds
 // mainnet; `--env testnet` binds the Testnet database. Financial writes stay disabled.
 // No cron trigger yet: it is added with the first real job dispatcher.
+// Each agent conversation is a SQLite-backed Durable Object (src/agent/conversation.ts).
+// PI_MODEL_ID must be a free OpenRouter model; src/agent/models.ts refuses anything else.
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nest-runtime",
   "main": "src/index.ts",
   "compatibility_date": "2026-10-15",
+  // pi-mcp's OAuth flow (PKCE, state) uses Node's Buffer; nothing else needs Node APIs.
+  "compatibility_flags": ["nodejs_compat"],
   "observability": {
     "enabled": true
   },
@@ -18,8 +22,27 @@
   },
   "vars": {
     "STELLAR_NETWORK": "mainnet",
-    "EXECUTION_ENABLED": "false"
+    "EXECUTION_ENABLED": "false",
+    "PI_PROVIDER": "openrouter",
+    "PI_MODEL_ID": "thinkingmachines/inkling:free",
+    "AGENT_GUEST_TURNS_PER_15_MIN": "5",
+    "AGENT_MAX_ACTIVE_RUNS": "4"
   },
+  "secrets": {
+    "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY"]
+  },
+  "durable_objects": {
+    "bindings": [
+      { "name": "CONVERSATIONS", "class_name": "ConversationAgent" },
+      { "name": "RAVEN", "class_name": "RavenConnection" },
+      { "name": "ADMISSION", "class_name": "AgentAdmission" }
+    ]
+  },
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["ConversationAgent"] },
+    { "tag": "v2", "new_sqlite_classes": ["RavenConnection"] },
+    { "tag": "v3", "new_sqlite_classes": ["AgentAdmission"] }
+  ],
   "d1_databases": [
     {
       "binding": "DB",
@@ -34,7 +57,21 @@
       "preview_urls": false,
       "vars": {
         "STELLAR_NETWORK": "testnet",
-        "EXECUTION_ENABLED": "false"
+        "EXECUTION_ENABLED": "false",
+        "PI_PROVIDER": "openrouter",
+        "PI_MODEL_ID": "thinkingmachines/inkling:free",
+        "AGENT_GUEST_TURNS_PER_15_MIN": "5",
+        "AGENT_MAX_ACTIVE_RUNS": "4"
+      },
+      "secrets": {
+        "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY"]
+      },
+      "durable_objects": {
+        "bindings": [
+          { "name": "CONVERSATIONS", "class_name": "ConversationAgent" },
+          { "name": "RAVEN", "class_name": "RavenConnection" },
+          { "name": "ADMISSION", "class_name": "AgentAdmission" }
+        ]
       },
       "d1_databases": [
         {

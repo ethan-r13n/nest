@@ -16,7 +16,7 @@ const HISTORY_LINKS = [
 ] as const;
 
 export function ChatPage() {
-  const { setDraft } = useWorkspaceSession();
+  const { setDraft, chat } = useWorkspaceSession();
   const [expanded, setExpanded] = useState(() => window.matchMedia('(min-width: 1024px)').matches);
   return (
     <div
@@ -39,9 +39,12 @@ export function ChatPage() {
             variant="ghost"
             className="min-h-11"
             size="icon"
-            aria-label="New draft"
-            title="New draft"
-            onClick={() => setDraft('')}
+            aria-label="New conversation"
+            title="New conversation"
+            onClick={() => {
+              setDraft('');
+              chat.reset();
+            }}
           >
             <Plus />
           </Button>
@@ -54,7 +57,7 @@ export function ChatPage() {
             <>
               <h2 className="font-sans text-xs font-medium uppercase tracking-wider text-subtle">Conversations</h2>
               <Card className="gap-1 p-3">
-                <p className="text-sm font-medium">Current draft</p>
+                <p className="text-sm font-medium">Current conversation</p>
                 <p className="text-xs text-subtle">Guest · not saved</p>
               </Card>
               <Separator />
@@ -74,7 +77,7 @@ export function ChatPage() {
           ))}
           {expanded ? (
             <p className="hidden text-xs leading-relaxed text-subtle lg:block">
-              Saved conversations require wallet sign-in. This draft only stays in the current session.
+              Saved conversations require wallet sign-in. This conversation only stays in the current session.
             </p>
           ) : null}
         </div>
