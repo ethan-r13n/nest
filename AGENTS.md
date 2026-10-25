@@ -47,8 +47,11 @@ Per package: `pnpm --filter @nest/worker test`, `pnpm --filter @nest/web build`,
 - The model proposes typed intents only. It never gets prepare, approve, sign or submit capabilities, policy or
   registry writes, arbitrary HTTP, or code execution. Financial state comes from application records, never from
   model output.
-- Mainnet and Testnet use separate D1 databases and registries. `EXECUTION_ENABLED` stays `false`, and each
-  adapter's write flag stays off until its full lifecycle is validated.
+- Mainnet and Testnet use separate D1 databases and registries. Submission needs both `EXECUTION_ENABLED=true`
+  and the adapter in `ENABLED_WRITE_ADAPTERS`; both stay off in committed config, and an adapter is enabled only
+  after its full lifecycle is validated on that network.
+- A built transaction reaches review only after `inspectSwapTransaction` (or the adapter's equivalent) decodes it
+  and matches every economic field to the plan; submit accepts only the exact prepared hash, signed by the account.
 - Don't deploy, apply remote migrations or touch the Cloudflare account unless asked.
 
 ## Code style (TypeScript)

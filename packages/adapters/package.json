@@ -5,19 +5,26 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
-    "./stellar/networks": "./src/stellar/networks.ts"
+    "./soroswap/client": "./src/soroswap/client.ts",
+    "./soroswap/contracts": "./src/soroswap/contracts.ts",
+    "./stellar/assets": "./src/stellar/assets.ts",
+    "./stellar/inspect": "./src/stellar/inspect.ts",
+    "./stellar/networks": "./src/stellar/networks.ts",
+    "./stellar/sdex": "./src/stellar/sdex.ts",
+    "./venue": "./src/venue.ts"
   },
   "scripts": {
     "typecheck": "tsc && tsc -p tsconfig.node.json",
     "test": "vitest run"
   },
   "dependencies": {
-    "@nest/domain": "workspace:*"
+    "@nest/domain": "workspace:*",
+    "@stellar/stellar-sdk": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@cloudflare/vitest-plugin": "catalog:",
     "@cloudflare/workers-types": "catalog:",
-    "@stellar/stellar-sdk": "catalog:",
     "@types/node": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

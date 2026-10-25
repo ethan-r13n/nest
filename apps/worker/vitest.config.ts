@@ -27,6 +27,9 @@ export default defineConfig({
           // Tests share one guest subject, so the per-guest window is opened wide; admission has its own tests.
           AGENT_GUEST_TURNS_PER_15_MIN: '10000',
           AGENT_MAX_ACTIVE_RUNS: '100',
+          // Tests never reach Soroswap or a mainnet RPC, whatever a developer's .dev.vars holds.
+          SOROSWAP_API_KEY: '',
+          STELLAR_MAINNET_RPC_URL: '',
         },
       },
     }),

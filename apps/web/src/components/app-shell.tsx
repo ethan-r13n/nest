@@ -14,6 +14,7 @@ import { Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
 import { useHealth } from '../lib/health.ts';
+import { shortAddress, useWallet, WalletProvider } from '../lib/wallet.tsx';
 import { AdjacentAssistant, AgentPanel } from './agent-panel.tsx';
 import { GuardrailsDrawer } from './guardrails-drawer.tsx';
 import { useWorkspaceSession, WorkspaceSessionProvider } from './workspace-session.tsx';
@@ -30,9 +31,11 @@ const ROUTES = [
 
 export function AppShell() {
   return (
-    <WorkspaceSessionProvider>
-      <WorkspaceShell />
-    </WorkspaceSessionProvider>
+    <WalletProvider>
+      <WorkspaceSessionProvider>
+        <WorkspaceShell />
+      </WorkspaceSessionProvider>
+    </WalletProvider>
   );
 }
 
@@ -90,10 +93,7 @@ function WorkspaceShell() {
             <Bell className="size-4" />
           </Link>
           <GuardrailsDrawer />
-          <Button nativeButton={false} render={<Link to="/wallet" />} aria-label="Connect wallet">
-            <Wallet />
-            <span className="hidden sm:inline">Connect wallet</span>
-          </Button>
+          <WalletButton />
           <AgentPanel desktop={desktop} />
           <Sheet>
             <SheetTrigger
@@ -187,8 +187,12 @@ function WorkspaceShell() {
 }
 
 function WorkspaceContent() {
+  const chatPage = useLocation({ select: (location) => location.pathname === '/chat' });
   return (
-    <main id="workspace" className="mx-auto w-full min-w-0 max-w-[1440px] flex-1 px-4 pt-6 pb-24 sm:px-6 xl:pb-8">
+    <main
+      id="workspace"
+      className={`mx-auto w-full min-w-0 max-w-[1440px] px-4 pt-5 sm:px-6 sm:pt-6 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 xl:pb-6' : 'flex-1 pb-24 xl:pb-8'}`}
+    >
       <Suspense
         fallback={
           <div role="status" className="flex min-h-48 items-center justify-center text-sm text-muted-foreground">
@@ -220,4 +224,19 @@ function isActiveGroup(pathname: string, route: string) {
   if (route === '/lab/memory') return pathname.startsWith('/lab');
   if (route === '/portfolio') return pathname.startsWith('/portfolio') || pathname.startsWith('/plans');
   return pathname.startsWith(route);
+}
+
+function WalletButton() {
+  const { address } = useWallet();
+  return (
+    <Button
+      nativeButton={false}
+      variant={address ? 'outline' : 'default'}
+      render={<Link to="/wallet" />}
+      aria-label={address ? `Wallet ${shortAddress(address)}` : 'Connect wallet'}
+    >
+      <Wallet />
+      <span className="hidden font-mono sm:inline">{address ? shortAddress(address) : 'Connect wallet'}</span>
+    </Button>
+  );
 }

@@ -6,10 +6,30 @@ import { Type } from 'typebox';
 import snapshotJson from '../../../../research/data/stellar-research-ui.json' with { type: 'json' };
 import type { RavenCallResult, RavenToolName } from '../raven/connection.ts';
 
-export const APPROVED_TOOLS = ['list_markets', 'raven_search', 'raven_execute'] as const;
+export const APPROVED_TOOLS = ['list_markets', 'raven_search', 'raven_execute', 'propose_intent'] as const;
 
 export interface RavenClient {
   callTool(name: RavenToolName, args: Record<string, unknown>): Promise<RavenCallResult>;
+}
+
+interface SwapProposal {
+  intentId: string;
+  sell: { symbol: string; amount: string };
+  buy: { symbol: string };
+  quote:
+    | {
+        expectedOut: string;
+        minimumOut: string;
+        slippageBps: number;
+        priceImpactBps: number | null;
+        protocols: string[];
+      }
+    | { unavailable: string };
+}
+
+/** Creates application records only; it can never approve, sign or submit. */
+export interface ProposalService {
+  proposeSwap(input: { sell: 'USDC' | 'XLM'; buy: 'USDC' | 'XLM'; amount: string }): Promise<SwapProposal>;
 }
 
 const DEFAULT_LIMIT = 10;
@@ -19,7 +39,7 @@ const MAX_RAVEN_CODE_CHARS = 8_000;
 const RAVEN_SERVICES = ['lumenloop', 'scout', 'stellarDocs'] as const;
 const research = parseResearchSnapshot(snapshotJson);
 
-export function createTools(deps: { raven: RavenClient }): AgentTool[] {
+export function createTools(deps: { raven: RavenClient; proposals: ProposalService }): AgentTool[] {
   return [
     defineTool({
       name: 'list_markets',
@@ -112,6 +132,50 @@ export function createTools(deps: { raven: RavenClient }): AgentTool[] {
       }),
       replay: 'safe',
       run: async (args) => ravenOutput(await deps.raven.callTool('execute', args)),
+    }),
+    defineTool({
+      name: 'propose_intent',
+      label: 'Preparing a swap proposal',
+      description: [
+        'Propose a swap for the user to review when they ask to trade. Supported: selling USDC for XLM or XLM for',
+        'USDC. Nest gets a live quote (Soroswap on mainnet, Stellar’s DEX on testnet) and shows the user a proposal card; the user connects their wallet,',
+        'reviews the exact transaction and signs it there. You cannot approve, sign or submit. Explain the quote',
+        'from the tool result; do not compute amounts yourself.',
+      ].join(' '),
+      parameters: Type.Object({
+        kind: Type.Literal('swap'),
+        sell: Type.Union([Type.Literal('USDC'), Type.Literal('XLM')]),
+        buy: Type.Union([Type.Literal('USDC'), Type.Literal('XLM')]),
+        amount: Type.String({
+          pattern: '^(0|[1-9][0-9]*)([.][0-9]{1,7})?$',
+          maxLength: 30,
+          description: 'Amount of the asset being sold, as a plain decimal such as "100".',
+        }),
+      }),
+      // It creates a record, so a crash never repeats it.
+      replay: 'never',
+      sequential: true,
+      run: async ({ sell, buy, amount }) => {
+        let proposal: SwapProposal;
+        try {
+          proposal = await deps.proposals.proposeSwap({ sell, buy, amount });
+        } catch (error) {
+          return { text: error instanceof Error ? error.message : 'The swap could not be proposed.', isError: true };
+        }
+        const quote = proposal.quote;
+        const summary =
+          'unavailable' in quote
+            ? `The live quote is unavailable right now (${quote.unavailable}); the proposal card will retry.`
+            : [
+                `Expected about ${quote.expectedOut} ${proposal.buy.symbol}, at least ${quote.minimumOut} after`,
+                `${quote.slippageBps / 100}% slippage. Price impact: ${quote.priceImpactBps === null ? 'not reported' : `${quote.priceImpactBps / 100}%`}.`,
+                `Routes: ${quote.protocols.join(', ') || 'Soroswap'}. Nest fee: 0. The quote is valid for about 30 seconds and the card refreshes it.`,
+              ].join(' ');
+        return {
+          text: `Swap proposal ready: sell ${proposal.sell.amount} ${proposal.sell.symbol} for ${proposal.buy.symbol}. ${summary} The user reviews and signs in their wallet; nothing executes until they do.`,
+          details: { intentId: proposal.intentId, kind: 'swap' },
+        };
+      },
     }),
   ];
 }

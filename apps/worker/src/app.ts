@@ -8,6 +8,7 @@ import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
 import { createAgentRoutes } from './agent/routes.ts';
 import { ConfigError, decodeConfig } from './config.ts';
+import { createExecutionRoutes } from './execution/routes.ts';
 import { createRavenRoutes } from './raven/routes.ts';
 
 const MAX_BODY_BYTES = 64 * 1024;
@@ -62,6 +63,7 @@ export function createApp() {
 
   app.route('/agent', createAgentRoutes());
   app.route('/raven', createRavenRoutes());
+  app.route('/', createExecutionRoutes());
 
   app.notFound((c) => errorResponse(c, new AppError('NOT_FOUND', 'No such endpoint.')));
   app.onError((error, c) => errorResponse(c, error));

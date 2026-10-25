@@ -109,3 +109,115 @@ export const assetRegistry = sqliteTable(
     check('asset_registry_decimals_ck', sql`${table.decimals} BETWEEN 0 AND 38`),
   ],
 );
+
+export const INTENT_KINDS = ['swap'] as const;
+export const INTENT_SOURCES = ['chat', 'form'] as const;
+export const PLAN_STATUSES = [
+  'policy_checked',
+  'blocked',
+  'awaiting_review',
+  'awaiting_signature',
+  'submitted',
+  'confirming',
+  'confirmed',
+  'failed',
+  'expired',
+] as const;
+const PLAN_STATUS_CHECK = sql.raw(`status IN (${PLAN_STATUSES.map((status) => `'${status}'`).join(', ')})`);
+
+/** A validated request before any quote. Amounts are raw integers as TEXT in the asset's decimals. */
+export const intents = sqliteTable(
+  'intents',
+  {
+    id: text('id').primaryKey(),
+    network: text('network', { enum: NETWORKS }).notNull(),
+    kind: text('kind', { enum: INTENT_KINDS }).notNull(),
+    sellAsset: text('sell_asset').notNull(),
+    buyAsset: text('buy_asset').notNull(),
+    sellAmountRaw: text('sell_amount_raw').notNull(),
+    source: text('source', { enum: INTENT_SOURCES }).notNull(),
+    createdAtMs: integer('created_at_ms').notNull(),
+  },
+  () => [check('intents_network_ck', NETWORK_CHECK)],
+);
+
+/** One provider answer for an intent. `providerQuote` is passed back unchanged to build the transaction. */
+export const quotes = sqliteTable(
+  'quotes',
+  {
+    id: text('id').primaryKey(),
+    intentId: text('intent_id')
+      .notNull()
+      .references(() => intents.id),
+    venue: text('venue').notNull(),
+    slippageBps: integer('slippage_bps').notNull(),
+    amountInRaw: text('amount_in_raw').notNull(),
+    amountOutRaw: text('amount_out_raw').notNull(),
+    minOutRaw: text('min_out_raw').notNull(),
+    priceImpactBps: integer('price_impact_bps'),
+    protocols: text('protocols').notNull(),
+    providerQuote: text('provider_quote').notNull(),
+    observedAtMs: integer('observed_at_ms').notNull(),
+    expiresAtMs: integer('expires_at_ms').notNull(),
+  },
+  (table) => [index('quotes_intent_idx').on(table.intentId)],
+);
+
+/**
+ * An immutable proposal for one account. Approval binds its digest and the prepared transaction
+ * hash; only a signature over exactly that transaction can submit it.
+ */
+export const plans = sqliteTable(
+  'plans',
+  {
+    id: text('id').primaryKey(),
+    intentId: text('intent_id')
+      .notNull()
+      .references(() => intents.id),
+    quoteId: text('quote_id')
+      .notNull()
+      .references(() => quotes.id),
+    network: text('network', { enum: NETWORKS }).notNull(),
+    accountId: text('account_id').notNull(),
+    idempotencyKey: text('idempotency_key').notNull(),
+    status: text('status', { enum: PLAN_STATUSES }).notNull(),
+    digest: text('digest').notNull(),
+    policy: text('policy').notNull(),
+    maxFeeStroops: text('max_fee_stroops').notNull(),
+    preparedXdr: text('prepared_xdr'),
+    preparedHash: text('prepared_hash'),
+    preparedFacts: text('prepared_facts'),
+    validUntilMs: integer('valid_until_ms'),
+    approvedAtMs: integer('approved_at_ms'),
+    signedXdr: text('signed_xdr'),
+    txHash: text('tx_hash'),
+    result: text('result'),
+    errorCode: text('error_code'),
+    createdAtMs: integer('created_at_ms').notNull(),
+    updatedAtMs: integer('updated_at_ms').notNull(),
+  },
+  (table) => [
+    uniqueIndex('plans_idempotency_uq').on(table.idempotencyKey),
+    uniqueIndex('plans_network_tx_hash_uq').on(table.network, table.txHash),
+    index('plans_account_idx').on(table.network, table.accountId),
+    check('plans_network_ck', NETWORK_CHECK),
+    check('plans_status_ck', PLAN_STATUS_CHECK),
+  ],
+);
+
+/** Every plan state change, with who caused it and why. */
+export const planEvents = sqliteTable(
+  'plan_events',
+  {
+    id: integer('id').primaryKey({ autoIncrement: true }),
+    planId: text('plan_id')
+      .notNull()
+      .references(() => plans.id),
+    fromStatus: text('from_status'),
+    toStatus: text('to_status').notNull(),
+    actor: text('actor', { enum: ['user', 'system'] }).notNull(),
+    reason: text('reason').notNull(),
+    createdAtMs: integer('created_at_ms').notNull(),
+  },
+  (table) => [index('plan_events_plan_idx').on(table.planId)],
+);

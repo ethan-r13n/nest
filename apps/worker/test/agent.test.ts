@@ -4,11 +4,17 @@ import type { PublicAgentEvent } from '@nest/agent-runtime/events';
 import { describe, expect, it } from 'vitest';
 
 import type { ConversationAgent } from '../src/agent/conversation.ts';
-import { createTools, type RavenClient } from '../src/agent/tools.ts';
+import { proposalOf } from '../src/agent/conversation.ts';
+import { createTools, type ProposalService, type RavenClient } from '../src/agent/tools.ts';
 import { createApp } from '../src/app.ts';
 
 const ORIGIN = 'https://nest.test';
 const offlineRaven: RavenClient = { callTool: async () => ({ status: 'not_connected' }) };
+const noProposals: ProposalService = {
+  proposeSwap: async () => {
+    throw new Error('not used');
+  },
+};
 
 async function createConversation(): Promise<string> {
   const response = await exports.default.fetch(`${ORIGIN}/api/agent/conversations`, { method: 'POST' });
@@ -234,7 +240,7 @@ describe('admission', () => {
 
 describe('list_markets', () => {
   it('sorts yield pools by APY when asked', async () => {
-    const [tool] = createTools({ raven: offlineRaven });
+    const [tool] = createTools({ raven: offlineRaven, proposals: noProposals });
     const result = await tool?.execute('call-2', { kind: 'yield_pools', sort: 'apy', limit: 5 }, undefined);
     const text = result?.content[0]?.type === 'text' ? result.content[0].text : '';
     const { rows } = JSON.parse(text.slice(text.indexOf('\n') + 1, text.lastIndexOf('\n')));
@@ -243,7 +249,7 @@ describe('list_markets', () => {
   });
 
   it('returns dated snapshot rows inside an untrusted envelope', async () => {
-    const [tool] = createTools({ raven: offlineRaven });
+    const [tool] = createTools({ raven: offlineRaven, proposals: noProposals });
     const result = await tool?.execute('call-1', { kind: 'protocols', category: 'lending', limit: 2 }, undefined);
     const text = result?.content[0]?.type === 'text' ? result.content[0].text : '';
 
@@ -258,7 +264,7 @@ describe('list_markets', () => {
 
 describe('Raven tools', () => {
   function ravenTools(raven: RavenClient) {
-    const tools = createTools({ raven });
+    const tools = createTools({ raven, proposals: noProposals });
     return {
       search: tools.find((tool) => tool.name === 'raven_search'),
       run: tools.find((tool) => tool.name === 'raven_execute'),
@@ -294,5 +300,62 @@ describe('Raven tools', () => {
     const result = await offline.search?.execute('call-3', { query: 'soroswap' }, undefined);
     expect(result?.isError).toBe(true);
     expect(result?.content[0]).toMatchObject({ text: expect.stringContaining('not connected') });
+  });
+});
+
+describe('propose_intent', () => {
+  const proposeTool = (proposals: ProposalService) =>
+    createTools({ raven: offlineRaven, proposals }).find((tool) => tool.name === 'propose_intent');
+
+  it('creates a proposal and explains the application quote, not its own numbers', async () => {
+    const calls: unknown[] = [];
+    const tool = proposeTool({
+      proposeSwap: async (input) => {
+        calls.push(input);
+        return {
+          intentId: 'intent-1',
+          sell: { symbol: 'USDC', amount: '100' },
+          buy: { symbol: 'XLM' },
+          quote: {
+            expectedOut: '260',
+            minimumOut: '258.7',
+            slippageBps: 50,
+            priceImpactBps: 12,
+            protocols: ['soroswap'],
+          },
+        };
+      },
+    });
+    const result = await tool?.execute('call-1', { kind: 'swap', sell: 'USDC', buy: 'XLM', amount: '100' }, undefined);
+    const text = result?.content[0]?.type === 'text' ? result.content[0].text : '';
+
+    expect(calls).toEqual([{ sell: 'USDC', buy: 'XLM', amount: '100' }]);
+    expect(text).toContain('about 260 XLM');
+    expect(text).toContain('at least 258.7');
+    expect(text).toContain('nothing executes until they do');
+    expect(result?.details).toEqual({ intentId: 'intent-1', kind: 'swap' });
+  });
+
+  it('reports a refused proposal as a tool error', async () => {
+    const tool = proposeTool({
+      proposeSwap: async () => {
+        throw new Error('Choose two different assets to swap.');
+      },
+    });
+    const result = await tool?.execute('call-2', { kind: 'swap', sell: 'XLM', buy: 'XLM', amount: '1' }, undefined);
+    expect(result?.isError).toBe(true);
+  });
+
+  it('turns only a successful propose_intent result into a proposal event', () => {
+    const end = (toolName: string, isError: boolean, details: unknown) =>
+      ({ type: 'tool_execution_end', toolCallId: 'c', toolName, isError, result: { content: [], details } }) as const;
+    expect(proposalOf(end('propose_intent', false, { intentId: 'intent-1' }))).toEqual({
+      type: 'proposal',
+      kind: 'swap',
+      intentId: 'intent-1',
+    });
+    expect(proposalOf(end('propose_intent', true, { intentId: 'intent-1' }))).toBeNull();
+    expect(proposalOf(end('raven_search', false, { intentId: 'intent-1' }))).toBeNull();
+    expect(proposalOf(end('propose_intent', false, {}))).toBeNull();
   });
 });

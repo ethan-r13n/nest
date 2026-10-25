@@ -1,8 +1,25 @@
 import { Button } from '@nest/ui/components/button';
-import { Card } from '@nest/ui/components/card';
 import { Separator } from '@nest/ui/components/separator';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@nest/ui/components/sheet';
 import { Link } from '@tanstack/react-router';
-import { ArrowUpRight, BookOpen, Clock3, PanelLeftClose, PanelLeftOpen, Plus } from 'lucide-react';
+import {
+  ArrowUpRight,
+  BookOpen,
+  Clock3,
+  LockKeyhole,
+  MessageSquare,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Plus,
+} from 'lucide-react';
 import { useState } from 'react';
 
 import { ConversationDraft } from '../components/conversation-draft.tsx';
@@ -17,16 +34,30 @@ const HISTORY_LINKS = [
 
 export function ChatPage() {
   const { setDraft, chat } = useWorkspaceSession();
-  const [expanded, setExpanded] = useState(() => window.matchMedia('(min-width: 1024px)').matches);
+  const [expanded, setExpanded] = useState(true);
+
+  function newConversation() {
+    setDraft('');
+    chat.reset();
+  }
+
   return (
     <div
-      className={`grid h-[calc(100svh-10rem)] min-h-[28rem] min-w-0 gap-6 ${expanded ? 'lg:grid-cols-[220px_minmax(0,1fr)]' : 'lg:grid-cols-[52px_minmax(0,1fr)]'}`}
+      className={`grid h-full min-h-0 min-w-0 gap-6 lg:gap-8 ${expanded ? 'lg:grid-cols-[224px_minmax(0,1fr)]' : 'lg:grid-cols-[52px_minmax(0,1fr)]'}`}
     >
-      <aside className="min-w-0 lg:border-r lg:pr-3" aria-label="Conversation history">
-        <div className={`flex items-center gap-2 ${expanded ? 'justify-between' : 'lg:flex-col'}`}>
+      <aside
+        className={`hidden min-h-0 min-w-0 flex-col border-r lg:flex ${expanded ? 'pr-5' : 'pr-2'}`}
+        aria-label="Conversation history"
+      >
+        <div className={`mb-4 flex items-center gap-2 ${expanded ? 'justify-between' : 'flex-col'}`}>
+          {expanded ? (
+            <h2 className="font-sans text-xs font-medium tracking-wider text-muted-foreground uppercase">
+              Conversations
+            </h2>
+          ) : null}
           <Button
             variant="ghost"
-            className="min-h-11"
+            className="size-11 text-muted-foreground"
             size="icon"
             aria-label={expanded ? 'Collapse conversation history' : 'Expand conversation history'}
             aria-expanded={expanded}
@@ -35,60 +66,115 @@ export function ChatPage() {
           >
             {expanded ? <PanelLeftClose /> : <PanelLeftOpen />}
           </Button>
-          <Button
-            variant="ghost"
-            className="min-h-11"
-            size="icon"
-            aria-label="New conversation"
-            title="New conversation"
-            onClick={() => {
-              setDraft('');
-              chat.reset();
-            }}
-          >
-            <Plus />
-          </Button>
         </div>
-        <div
-          id="conversation-history"
-          className={`${expanded ? 'flex' : 'hidden lg:flex'} min-w-0 flex-col gap-3 pt-3`}
+        <Button
+          variant="outline"
+          className={`mb-6 min-h-11 gap-2 bg-transparent dark:bg-transparent ${expanded ? 'w-full justify-start px-3' : 'size-11'}`}
+          aria-label="New conversation"
+          title="New conversation"
+          onClick={newConversation}
         >
-          {expanded ? (
-            <>
-              <h2 className="font-sans text-xs font-medium uppercase tracking-wider text-subtle">Conversations</h2>
-              <Card className="gap-1 p-3">
-                <p className="text-sm font-medium">Current conversation</p>
-                <p className="text-xs text-subtle">Guest · not saved</p>
-              </Card>
-              <Separator />
-            </>
-          ) : null}
-          {HISTORY_LINKS.map((link) => (
-            <Link
-              key={link.to}
-              to={link.to}
-              aria-label={link.label}
-              title={link.label}
-              className="flex min-h-11 min-w-11 items-center gap-2 rounded-lg px-2 text-sm text-muted-foreground hover:bg-accent hover:text-foreground"
-            >
-              <link.icon className="size-4 shrink-0" />
-              {expanded ? link.label : <span className="sr-only">{link.label}</span>}
-            </Link>
-          ))}
-          {expanded ? (
-            <p className="hidden text-xs leading-relaxed text-subtle lg:block">
-              Saved conversations require wallet sign-in. This conversation only stays in the current session.
-            </p>
-          ) : null}
+          <Plus />
+          {expanded ? 'New conversation' : null}
+        </Button>
+        <div id="conversation-history" className="flex min-h-0 flex-1 flex-col">
+          <HistoryContents expanded={expanded} />
         </div>
       </aside>
-      <section className="flex min-h-0 min-w-0 flex-col gap-5">
-        <PageHeader
-          title="Ask Nest"
-          description="One workspace for researching Stellar DeFi and reviewing your next move."
-        />
+
+      <section className="flex min-h-0 min-w-0 flex-col gap-4 sm:gap-5">
+        <div className="relative mx-auto w-full max-w-3xl shrink-0 border-b pb-4 sm:pb-5 [&_h1]:pr-24 lg:[&_h1]:pr-0">
+          <PageHeader
+            title="Ask Nest"
+            description="Research Stellar DeFi, compare opportunities, and plan your next move."
+            actions={
+              <div className="absolute top-0 right-0 flex items-center gap-1 lg:hidden">
+                <Sheet>
+                  <SheetTrigger
+                    render={
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-11 text-muted-foreground"
+                        aria-label="Open conversation history"
+                      />
+                    }
+                  >
+                    <PanelLeftOpen />
+                  </SheetTrigger>
+                  <SheetContent side="left" className="w-[min(90vw,320px)] gap-5">
+                    <SheetHeader>
+                      <SheetTitle>Conversations</SheetTitle>
+                      <SheetDescription>Your current session and workspace.</SheetDescription>
+                    </SheetHeader>
+                    <div className="flex min-h-0 flex-1 flex-col px-5 pb-6">
+                      <SheetClose
+                        render={<Button variant="outline" className="mb-6 min-h-11 justify-start gap-2 px-3" />}
+                        onClick={newConversation}
+                      >
+                        <Plus />
+                        New conversation
+                      </SheetClose>
+                      <HistoryContents expanded />
+                    </div>
+                  </SheetContent>
+                </Sheet>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="size-11 text-muted-foreground"
+                  aria-label="New conversation"
+                  onClick={newConversation}
+                >
+                  <Plus />
+                </Button>
+              </div>
+            }
+          />
+        </div>
         <ConversationDraft />
       </section>
     </div>
+  );
+}
+
+function HistoryContents({ expanded }: { expanded: boolean }) {
+  return (
+    <>
+      {expanded ? (
+        <div className="mb-5 rounded-xl border border-primary/20 bg-primary/5 px-3.5 py-4">
+          <div className="mb-2 flex items-center gap-2.5">
+            <MessageSquare className="size-4 shrink-0 text-primary" aria-hidden="true" />
+            <p className="text-sm font-medium">Current conversation</p>
+          </div>
+          <p className="pl-6.5 text-xs text-muted-foreground">Guest session · not saved</p>
+        </div>
+      ) : null}
+      <Separator className="mb-4" />
+      <nav aria-label="Conversation resources" className="space-y-1">
+        {HISTORY_LINKS.map((link) => (
+          <Link
+            key={link.to}
+            to={link.to}
+            aria-label={link.label}
+            title={link.label}
+            className={`flex min-h-11 min-w-11 items-center gap-3 rounded-lg text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground ${expanded ? 'px-3' : 'justify-center'}`}
+          >
+            <link.icon className="size-4 shrink-0" aria-hidden="true" />
+            {expanded ? link.label : <span className="sr-only">{link.label}</span>}
+          </Link>
+        ))}
+      </nav>
+      {expanded ? (
+        <div className="mt-auto pt-6">
+          <div className="rounded-xl border border-dashed px-3.5 py-4">
+            <LockKeyhole className="mb-2.5 size-4 text-subtle" aria-hidden="true" />
+            <p className="text-xs leading-relaxed text-muted-foreground">
+              This conversation stays in your current session. Connect your wallet to save conversations.
+            </p>
+          </div>
+        </div>
+      ) : null}
+    </>
   );
 }

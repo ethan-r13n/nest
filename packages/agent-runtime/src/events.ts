@@ -5,6 +5,8 @@ export type PublicAgentEvent =
   | { type: 'text_delta'; delta: string }
   | { type: 'tool_started'; toolCallId: string; name: string }
   | { type: 'tool_completed'; toolCallId: string; name: string; isError: boolean }
+  /** An application-created proposal the browser renders from its own records, never from model text. */
+  | { type: 'proposal'; kind: 'swap'; intentId: string }
   | { type: 'settled' }
   /** `stopped`: the user stopped it. `lost`: the process running it went away. */
   | { type: 'interrupted'; reason: 'stopped' | 'lost' }
