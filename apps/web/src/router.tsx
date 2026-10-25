@@ -31,9 +31,7 @@ const rootRoute = createRootRoute({
 const indexRoute = createRoute({
   getParentRoute: () => rootRoute,
   path: '/',
-  beforeLoad: () => {
-    throw redirect({ to: '/research' });
-  },
+  component: lazy(() => import('./routes/landing.tsx').then((module) => ({ default: module.LandingPage }))),
 });
 const workspaceRoute = createRoute({ getParentRoute: () => rootRoute, id: 'workspace', component: AppShell });
 const ChatPage = lazy(() => import('./routes/chat.tsx').then((module) => ({ default: module.ChatPage })));
