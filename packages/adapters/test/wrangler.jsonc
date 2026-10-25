@@ -1,0 +1,6 @@
+// Test-only Worker configuration with the production compatibility date and no Node.js compatibility flag,
+// so these tests show whether the Stellar SDK runs in workerd as Nest deploys it.
+{
+  "name": "nest-adapters-test",
+  "compatibility_date": "2026-10-15"
+}
