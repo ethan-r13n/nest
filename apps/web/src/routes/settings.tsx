@@ -5,6 +5,8 @@ import { ShieldCheck, Wallet } from 'lucide-react';
 
 import { GuardrailsEditor } from '../components/guardrails-drawer.tsx';
 import { DraftNotice, PageHeader } from '../components/workspace.tsx';
+import { useHealth } from '../lib/health.ts';
+import { useWallet } from '../lib/wallet.tsx';
 
 export function GuardrailsPage() {
   return (
@@ -44,11 +46,7 @@ export function WalletPage() {
           <CardDescription>Selected wallet for the first release</CardDescription>
         </CardHeader>
         <CardContent className="space-y-5">
-          <p className="text-sm text-muted-foreground">
-            Wallet connection and sign-in are not available in this build. No account is connected, and no balances or
-            saved history are being loaded.
-          </p>
-          <Button disabled>Connect Freighter</Button>
+          <FreighterConnection />
           <DraftNotice>
             Never enter a wallet seed phrase or private key in Nest. You review and sign in your wallet.
           </DraftNotice>
@@ -71,6 +69,46 @@ export function WalletPage() {
       </Card>
       <Button nativeButton={false} variant="outline" render={<Link to="/research" />}>
         Explore public research
+      </Button>
+    </div>
+  );
+}
+
+const PASSPHRASES = {
+  mainnet: 'Public Global Stellar Network ; September 2015',
+  testnet: 'Test SDF Network ; September 2015',
+} as const;
+
+function FreighterConnection() {
+  const wallet = useWallet();
+  const health = useHealth();
+  const expected = health.data ? PASSPHRASES[health.data.network] : null;
+  if (!wallet.address) {
+    return (
+      <div className="space-y-3">
+        <p className="text-sm text-muted-foreground">
+          Connect Freighter to review and sign swaps. Nest only asks for your public address; every transaction still
+          needs your approval in Freighter.
+        </p>
+        <Button onClick={wallet.connect} disabled={wallet.connecting}>
+          {wallet.connecting ? 'Connecting…' : 'Connect Freighter'}
+        </Button>
+        {wallet.error ? <p className="text-sm text-destructive">{wallet.error}</p> : null}
+      </div>
+    );
+  }
+  return (
+    <div className="space-y-3">
+      <p className="break-all font-mono text-sm">{wallet.address}</p>
+      {expected && wallet.networkPassphrase !== expected ? (
+        <p className="text-sm text-destructive">
+          Freighter is on a different network than Nest ({health.data?.network}). Switch networks in Freighter.
+        </p>
+      ) : (
+        <p className="text-sm text-muted-foreground">Connected on {health.data?.network ?? 'the expected network'}.</p>
+      )}
+      <Button variant="outline" onClick={wallet.disconnect}>
+        Disconnect
       </Button>
     </div>
   );

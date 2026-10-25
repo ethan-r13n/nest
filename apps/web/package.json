@@ -11,6 +11,7 @@
     "deploy:check": "vite build && wrangler deploy --dry-run"
   },
   "dependencies": {
+    "@creit.tech/stellar-wallets-kit": "catalog:",
     "@nest/agent-runtime": "workspace:*",
     "@nest/data": "workspace:*",
     "@nest/policy": "workspace:*",

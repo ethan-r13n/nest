@@ -24,6 +24,7 @@ import { type KeyboardEvent, useId, useLayoutEffect, useRef, useState } from 're
 import symbolUrl from '../../../../design/nest/assets/nest-symbol-cream.svg';
 import { ChatRequestError } from '../lib/agent-chat.ts';
 import { MessageContent } from './message-content.tsx';
+import { SwapProposalCard } from './swap-proposal.tsx';
 import { useWorkspaceSession } from './workspace-session.tsx';
 
 const PROMPTS = [
@@ -147,6 +148,13 @@ export function ConversationDraft({ compact = false }: { compact?: boolean }) {
                         <AlertTriangle className="mt-0.5 size-4 shrink-0" aria-hidden="true" />
                         {message.error}
                       </p>
+                    ) : null}
+                    {message.proposals?.length ? (
+                      <div className="mt-4 space-y-3">
+                        {message.proposals.map((intentId) => (
+                          <SwapProposalCard key={intentId} intentId={intentId} />
+                        ))}
+                      </div>
                     ) : null}
                     {message.preparation?.length ? (
                       <details className="group mt-5 border-t border-border/70 pt-1">

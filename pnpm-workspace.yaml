@@ -5,6 +5,7 @@ packages:
 # One exact version per dependency for the whole workspace. Renovate proposes upgrades;
 # Pi stays on the version the spec pins until a compatibility test passes on the next one.
 catalog:
+  "@creit.tech/stellar-wallets-kit": 2.7.1
   "@base-ui/react": 1.9.0
   "@biomejs/biome": 2.6.3
   "@cloudflare/vite-plugin": 1.65.0
@@ -54,7 +55,8 @@ allowBuilds:
   # Pulled in by Pi's provider SDKs; their install scripts are not needed at runtime.
   "@google/genai": false
   protobufjs: false
+  # Pulled in by the wallet kit's WalletConnect support. The browser bundle uses their JS fallbacks.
   "@reown/appkit": false
-  "bufferutil": false
-  "secp256k1": false
-  "utf-8-validate": false
+  bufferutil: false
+  secp256k1: false
+  utf-8-validate: false
