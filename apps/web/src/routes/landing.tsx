@@ -8,6 +8,7 @@ import '@fontsource/geist-mono/400.css';
 import { Link, useNavigate } from '@tanstack/react-router';
 import { type FormEvent, useEffect, useId, useState } from 'react';
 
+import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
 import { Murmuration } from '../components/murmuration.tsx';
 import { formatPercentPoints, formatUsd } from '../lib/format.ts';
 import { research } from '../lib/research.ts';
@@ -96,9 +97,8 @@ export function LandingPage() {
 function Header() {
   return (
     <header className={`flex flex-wrap items-center justify-between gap-5 py-7 ${GUTTER}`}>
-      <Link to="/" className={`flex items-baseline gap-2 ${SERIF} text-[32px] leading-none text-[#f1ece2]`}>
-        <span className="inline-block size-[9px] rounded-full bg-[#ff5b1f]" aria-hidden="true" />
-        Nest
+      <Link to="/" aria-label="Nest home" className="flex items-center">
+        <img src={lockupUrl} alt="Nest" className="h-9 w-auto" />
       </Link>
       <nav aria-label="Landing" className="flex flex-wrap gap-8 text-sm text-[#b9b3a8]">
         <a href="#how" className="hover:text-[#ff5b1f]">
@@ -115,7 +115,7 @@ function Header() {
         to="/research"
         className={`${PILL} bg-[#f1ece2] py-[13px] font-medium text-[#08090a] hover:bg-white hover:text-[#08090a]`}
       >
-        Request access →
+        Launch App →
       </Link>
     </header>
   );
