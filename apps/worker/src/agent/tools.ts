@@ -33,6 +33,9 @@ interface SwapProposal {
     | { unavailable: string };
 }
 
+type LendingProposalKind = 'supply' | 'borrow' | 'repay' | 'withdraw' | 'withdraw_collateral';
+const EXIT_LABELS = { repay: 'debt', withdraw: 'supplied', withdraw_collateral: 'collateral' } as const;
+
 export interface LendingOffer {
   pool: string;
   poolStatus: string;
@@ -46,7 +49,7 @@ export interface LendingOffer {
 
 interface LendingProposal {
   intentId: string;
-  kind: 'supply' | 'borrow';
+  kind: LendingProposalKind;
   asset: { symbol: string; amount: string };
   offers: LendingOffer[];
   excluded: { name: string; reason: string }[];
@@ -57,7 +60,7 @@ interface LendingProposal {
 export interface ProposalService {
   proposeSwap(input: { sell: 'USDC' | 'XLM'; buy: 'USDC' | 'XLM'; amount: string }): Promise<SwapProposal>;
   proposeLending(input: {
-    kind: 'supply' | 'borrow';
+    kind: LendingProposalKind;
     asset: 'USDC' | 'XLM';
     amount: string;
     collateralAsset?: 'USDC' | 'XLM' | undefined;
@@ -204,21 +207,32 @@ export function createTools(deps: { raven: RavenClient; proposals: ProposalServi
         'amount); Nest gets a live quote (Soroswap on mainnet, Stellar’s DEX on testnet). kind "supply": lend',
         'asset to earn interest (asset, amount). kind "borrow": borrow asset against collateral (asset, amount,',
         'optional collateral; defaults to the other asset). For supply and borrow, Nest compares every Blend pool',
-        'and picks the best rate, sizing borrow collateral for a safe health factor. The user sees a proposal card,',
+        'and picks the best rate, sizing borrow collateral for a safe health factor. kind "repay": pay back a Blend',
+        'loan of asset; kind "withdraw": take back asset the user lent; kind "withdraw_collateral": take back',
+        'collateral. For these three, amount may be "all" for the whole position; the card reads the position once',
+        'the wallet is connected. The user sees a proposal card,',
         'connects their wallet, reviews the exact transaction and signs it there. You cannot approve, sign or submit.',
         'Explain the result from the tool output; do not compute amounts or rates yourself.',
       ].join(' '),
       parameters: Type.Object({
-        kind: Type.Union([Type.Literal('swap'), Type.Literal('supply'), Type.Literal('borrow')]),
+        kind: Type.Union([
+          Type.Literal('swap'),
+          Type.Literal('supply'),
+          Type.Literal('borrow'),
+          Type.Literal('repay'),
+          Type.Literal('withdraw'),
+          Type.Literal('withdraw_collateral'),
+        ]),
         amount: Type.String({
-          pattern: '^(0|[1-9][0-9]*)([.][0-9]{1,7})?$',
+          pattern: '^((0|[1-9][0-9]*)([.][0-9]{1,7})?|all)$',
           maxLength: 30,
-          description: 'Plain decimal such as "100": the amount sold, supplied or borrowed.',
+          description:
+            'Plain decimal such as "100": the amount sold, supplied, borrowed, repaid or withdrawn. "all" for a whole repay or withdrawal.',
         }),
         sell: Type.Optional(Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Swap only.' })),
         buy: Type.Optional(Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Swap only.' })),
         asset: Type.Optional(
-          Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Supply or borrow: the asset.' }),
+          Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Lending actions: the asset.' }),
         ),
         collateral: Type.Optional(
           Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Borrow only: the collateral.' }),
@@ -269,6 +283,29 @@ function swapOutput(proposal: SwapProposal): ToolOutput {
 }
 
 function lendingOutput(proposal: LendingProposal): ToolOutput {
+  if (proposal.kind === 'repay' || proposal.kind === 'withdraw' || proposal.kind === 'withdraw_collateral') {
+    const verb = proposal.kind === 'repay' ? 'Repay' : 'Withdraw';
+    const amount =
+      proposal.asset.amount === 'all'
+        ? `all ${proposal.asset.symbol}`
+        : `${proposal.asset.amount} ${proposal.asset.symbol}`;
+    return {
+      text: [
+        `${verb} proposal for ${amount} ${EXIT_LABELS[proposal.kind]} on Blend.`,
+        'Once the user connects their wallet, the card reads their position in each Blend pool and shows what is held and the amount,',
+        proposal.kind === 'repay'
+          ? 'and any amount above the debt is refunded in the same transaction.'
+          : 'and checks the pool has the liquidity to pay it out.',
+        proposal.kind === 'withdraw_collateral'
+          ? 'If they still owe, Nest checks the health factor after the withdrawal and blocks it at 1 or below.'
+          : '',
+        'Nest fee: 0. The user reviews and signs in their wallet; nothing executes until they do.',
+      ]
+        .filter(Boolean)
+        .join(' '),
+      details: { intentId: proposal.intentId, kind: proposal.kind },
+    };
+  }
   const verb = proposal.kind === 'supply' ? 'Supply' : 'Borrow';
   const [best] = proposal.offers;
   const excluded = proposal.excluded.map((entry) => `${entry.name}: ${entry.reason}`).join(' ');

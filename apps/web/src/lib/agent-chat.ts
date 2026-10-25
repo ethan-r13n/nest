@@ -1,4 +1,4 @@
-import type { PublicAgentEvent } from '@nest/agent-runtime/events';
+import type { ProposalKind, PublicAgentEvent } from '@nest/agent-runtime/events';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 interface PreparationStep {
@@ -16,7 +16,7 @@ interface ConversationMessage {
   /** The user stopped this answer; what arrived before the stop stays. */
   stopped?: boolean;
   /** Intents Nest created for this answer; each renders as a proposal card. */
-  proposals?: { intentId: string; kind: 'swap' | 'supply' | 'borrow' }[];
+  proposals?: { intentId: string; kind: ProposalKind }[];
 }
 
 export interface AgentChat {

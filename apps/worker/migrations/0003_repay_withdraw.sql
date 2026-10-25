@@ -1,0 +1,1 @@
+ALTER TABLE `intents` ADD `whole_position` integer DEFAULT 0 NOT NULL;

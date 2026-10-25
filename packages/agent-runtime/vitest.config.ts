@@ -1,7 +1,7 @@
 import { cloudflareTest } from '@cloudflare/vitest-plugin';
 import { defineConfig } from 'vitest/config';
 
-// Pi compatibility gate (docs/spikes/pi-workers.md): these tests run Pi inside workerd with the
+// Pi compatibility gate (docs/architecture-decisions.md): these tests run Pi inside workerd with the
 // production compatibility date. Live Raven checks run only with NEST_LIVE_RAVEN=1.
 export default defineConfig({
   plugins: [

@@ -18,13 +18,15 @@ const SwapIntentSchema = z.strictObject({
   sellAmount: z.string().min(1).max(40),
 });
 const LendingIntentSchema = z.strictObject({
-  kind: z.enum(['supply', 'borrow']),
+  kind: z.enum(['supply', 'borrow', 'repay', 'withdraw', 'withdraw_collateral']),
   asset: z.enum(LENDING_SYMBOLS),
+  // "all" repays or withdraws the whole position.
   amount: z.string().min(1).max(40),
   collateralAsset: z.enum(LENDING_SYMBOLS).optional(),
   collateralAmount: z.string().min(1).max(40).optional(),
   poolId: z.string().length(56).optional(),
 });
+const CompareSchema = z.strictObject({ accountId: z.string().min(1).max(64).optional() });
 const IntentSchema = z.discriminatedUnion('kind', [SwapIntentSchema, LendingIntentSchema]);
 const PlanSchema = z.strictObject({ intentId: z.uuid(), quoteId: z.uuid(), accountId: z.string().min(1).max(64) });
 const ApproveSchema = z.strictObject({
@@ -83,7 +85,9 @@ export function createExecutionRoutes() {
   routes.get('/intents/:id', async (c) => c.json(await readIntent(executionDeps(c.env), uuid(c.req.param('id')))));
 
   routes.post('/intents/:id/compare', async (c) => {
-    return c.json(await compareIntent(executionDeps(c.env), uuid(c.req.param('id'))));
+    const body = CompareSchema.safeParse(await c.req.json().catch(() => ({})));
+    if (!body.success) throw new AppError('INVALID_REQUEST', 'Send accountId as a Stellar account, or no body.');
+    return c.json(await compareIntent(executionDeps(c.env), uuid(c.req.param('id')), body.data.accountId));
   });
 
   routes.post('/plans', async (c) => {

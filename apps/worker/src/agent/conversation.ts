@@ -1,7 +1,7 @@
 import { DurableObject } from 'cloudflare:workers';
 import type { Agent, AgentEvent, AgentMessage } from '@earendil-works/pi-agent-core';
 import { createNestAgent, DEFAULT_TURN_LIMITS, runTurn, type TurnOutcome } from '@nest/agent-runtime/agent';
-import { isTerminal, type PublicAgentEvent, toPublicEvent } from '@nest/agent-runtime/events';
+import { isTerminal, PROPOSAL_KINDS, type PublicAgentEvent, toPublicEvent } from '@nest/agent-runtime/events';
 import { assertExactTools } from '@nest/agent-runtime/tools';
 
 import { type AdmissionLimits, ConfigError, decodeAgentConfig } from '../config.ts';
@@ -255,6 +255,6 @@ export function proposalOf(event: AgentEvent): PublicAgentEvent | null {
   if (event.type !== 'tool_execution_end' || event.toolName !== 'propose_intent' || event.isError) return null;
   const intentId: unknown = event.result?.details?.intentId;
   const kind: unknown = event.result?.details?.kind ?? 'swap';
-  if (typeof intentId !== 'string' || (kind !== 'swap' && kind !== 'supply' && kind !== 'borrow')) return null;
-  return { type: 'proposal', kind, intentId };
+  const known = PROPOSAL_KINDS.find((candidate) => candidate === kind);
+  return typeof intentId === 'string' && known ? { type: 'proposal', kind: known, intentId } : null;
 }

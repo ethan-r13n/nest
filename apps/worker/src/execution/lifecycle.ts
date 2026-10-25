@@ -34,10 +34,13 @@ export async function readIntent(deps: ExecutionDeps, intentId: string) {
   return intent.kind === 'swap' ? swapIntentView(intent) : lendingIntentView(intent);
 }
 
-/** Fresh quotes for a swap, or offers from each eligible pool for a supply or borrow. */
-export async function compareIntent(deps: ExecutionDeps, intentId: string) {
+/**
+ * Fresh quotes for a swap, or offers from each eligible pool for lending. Repay and withdraw read
+ * the position of `accountId`, so they need it.
+ */
+export async function compareIntent(deps: ExecutionDeps, intentId: string, accountId?: string) {
   const intent = await loadIntent(deps, intentId);
-  return intent.kind === 'swap' ? compareSwap(deps, intent) : compareLending(deps, intent);
+  return intent.kind === 'swap' ? compareSwap(deps, intent) : compareLending(deps, intent, accountId);
 }
 
 export async function createPlan(
