@@ -187,8 +187,12 @@ function WorkspaceShell() {
 }
 
 function WorkspaceContent() {
+  const chatPage = useLocation({ select: (location) => location.pathname === '/chat' });
   return (
-    <main id="workspace" className="mx-auto w-full min-w-0 max-w-[1440px] flex-1 px-4 pt-6 pb-24 sm:px-6 xl:pb-8">
+    <main
+      id="workspace"
+      className={`mx-auto w-full min-w-0 max-w-[1440px] px-4 pt-5 sm:px-6 sm:pt-6 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 xl:pb-6' : 'flex-1 pb-24 xl:pb-8'}`}
+    >
       <Suspense
         fallback={
           <div role="status" className="flex min-h-48 items-center justify-center text-sm text-muted-foreground">
