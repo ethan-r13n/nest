@@ -254,5 +254,7 @@ function terminalEvent(outcome: TurnOutcome, stopRequested: boolean): PublicAgen
 export function proposalOf(event: AgentEvent): PublicAgentEvent | null {
   if (event.type !== 'tool_execution_end' || event.toolName !== 'propose_intent' || event.isError) return null;
   const intentId: unknown = event.result?.details?.intentId;
-  return typeof intentId === 'string' ? { type: 'proposal', kind: 'swap', intentId } : null;
+  const kind: unknown = event.result?.details?.kind ?? 'swap';
+  if (typeof intentId !== 'string' || (kind !== 'swap' && kind !== 'supply' && kind !== 'borrow')) return null;
+  return { type: 'proposal', kind, intentId };
 }

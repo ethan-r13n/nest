@@ -15,17 +15,17 @@ import {
 } from '@stellar/stellar-sdk';
 import { describe, expect, it } from 'vitest';
 import type { ExecutionConfig } from '../src/config.ts';
-import type { SwapRpc } from '../src/execution/rpc.ts';
 import {
   approvePlan,
-  compareSwap,
-  createSwapIntent,
-  createSwapPlan,
-  type ExecutionDeps,
+  compareIntent,
+  createPlan as createSwapPlan,
   preparePlan,
   readPlan,
   submitPlan,
-} from '../src/execution/swap.ts';
+} from '../src/execution/lifecycle.ts';
+import type { SwapRpc } from '../src/execution/rpc.ts';
+import type { ExecutionDeps } from '../src/execution/store.ts';
+import { createSwapIntent } from '../src/execution/swap.ts';
 
 const ORIGIN = 'https://nest.test';
 const START_MS = 1_800_000_000_000;
@@ -91,6 +91,7 @@ function createFixture(overrides: Partial<ExecutionConfig> = {}): ExecutionFixtu
       }),
       build: async (request) => aggregatorSwap(request.from, clock.now, build.minOut).toXDR(),
     },
+    lending: null,
     rpc,
     now: () => clock.now,
     sleep: async (ms) => {
@@ -146,9 +147,15 @@ function walletSign(xdrText: string, signer: Keypair): string {
   return tx.toXDR();
 }
 
+async function firstQuote(deps: ExecutionDeps, intentId: string) {
+  const [quote] = (await compareIntent(deps, intentId)).quotes;
+  if (!quote) throw new Error('no quote');
+  return quote;
+}
+
 async function preparedPlan(h: ExecutionFixture) {
   const intent = await createSwapIntent(h.deps, { sell: 'USDC', buy: 'XLM', amount: '100', source: 'chat' });
-  const quote = await compareSwap(h.deps, intent.id);
+  const quote = await firstQuote(h.deps, intent.id);
   const plan = await createSwapPlan(h.deps, {
     intentId: intent.id,
     quoteId: quote.id,
@@ -262,7 +269,7 @@ describe('swap lifecycle', () => {
   it('expires a plan whose quote went stale before preparation', async () => {
     const h = createFixture();
     const intent = await createSwapIntent(h.deps, { sell: 'USDC', buy: 'XLM', amount: '100', source: 'chat' });
-    const quote = await compareSwap(h.deps, intent.id);
+    const quote = await firstQuote(h.deps, intent.id);
     const plan = await createSwapPlan(h.deps, {
       intentId: intent.id,
       quoteId: quote.id,
@@ -353,7 +360,7 @@ describe('swap lifecycle', () => {
   it('returns the same plan for a repeated idempotency key and refuses a different body under it', async () => {
     const h = createFixture();
     const intent = await createSwapIntent(h.deps, { sell: 'USDC', buy: 'XLM', amount: '1', source: 'form' });
-    const quote = await compareSwap(h.deps, intent.id);
+    const quote = await firstQuote(h.deps, intent.id);
     const key = crypto.randomUUID();
     const input = { intentId: intent.id, quoteId: quote.id, accountId: h.user.publicKey(), idempotencyKey: key };
     const first = await createSwapPlan(h.deps, input);
