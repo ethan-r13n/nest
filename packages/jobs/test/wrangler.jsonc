@@ -1,0 +1,12 @@
+// Test-only Worker configuration: a local D1 database for the jobs tests.
+{
+  "name": "nest-jobs-test",
+  "compatibility_date": "2026-10-15",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nest-jobs-test",
+      "database_id": "00000000-0000-4000-8000-000000000000"
+    }
+  ]
+}

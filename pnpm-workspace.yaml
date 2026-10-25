@@ -6,11 +6,18 @@ packages:
 # Pi stays on the version the spec pins until a compatibility test passes on the next one.
 catalog:
   "@biomejs/biome": 2.6.3
+  "@cloudflare/vitest-plugin": 1.4.7
+  "@cloudflare/workers-types": 5.20261023.1
+  "@types/node": 24.19.2
+  drizzle-kit: 0.31.11
+  drizzle-orm: 0.45.4
+  hono: 4.13.13
   knip: 6.43.0
   lefthook: 2.2.2
   turbo: 2.11.10
   typescript: 7.0.2
   vitest: 5.0.5
+  wrangler: 4.152.0
   zod: 4.6.7
 
 # pnpm runs no dependency install scripts unless they are listed here.

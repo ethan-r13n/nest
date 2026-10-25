@@ -1,0 +1,50 @@
+// Nest's application Worker: same-origin /api/*, SSE and (later) the scheduled handler.
+// D1 resources come from infra/cloudflare/d1-resources.json. The default environment binds
+// mainnet; `--env testnet` binds the Testnet database. Financial writes stay disabled.
+// No cron trigger yet: it is added with the first real job dispatcher.
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nest-runtime",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-15",
+  "observability": {
+    "enabled": true
+  },
+  "upload_source_maps": true,
+  "preview_urls": false,
+  "assets": {
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "STELLAR_NETWORK": "mainnet",
+    "EXECUTION_ENABLED": "false"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "nest-runtime-mainnet",
+      "database_id": "00000000-0000-0000-0000-000000000001",
+      "migrations_dir": "migrations",
+      "remote": false
+    }
+  ],
+  "env": {
+    "testnet": {
+      "preview_urls": false,
+      "vars": {
+        "STELLAR_NETWORK": "testnet",
+        "EXECUTION_ENABLED": "false"
+      },
+      "d1_databases": [
+        {
+          "binding": "DB",
+          "database_name": "nest-runtime-testnet",
+          "database_id": "00000000-0000-0000-0000-000000000002",
+          "migrations_dir": "migrations",
+          "remote": false
+        }
+      ]
+    }
+  }
+}
