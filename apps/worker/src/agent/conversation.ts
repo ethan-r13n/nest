@@ -1,5 +1,5 @@
 import { DurableObject } from 'cloudflare:workers';
-import type { Agent, AgentMessage } from '@earendil-works/pi-agent-core';
+import type { Agent, AgentEvent, AgentMessage } from '@earendil-works/pi-agent-core';
 import { createNestAgent, DEFAULT_TURN_LIMITS, runTurn, type TurnOutcome } from '@nest/agent-runtime/agent';
 import { isTerminal, type PublicAgentEvent, toPublicEvent } from '@nest/agent-runtime/events';
 import { assertExactTools } from '@nest/agent-runtime/tools';
@@ -9,6 +9,7 @@ import { TEAM_CONNECTION } from '../raven/connection.ts';
 import { ADMISSION_SCOPE } from './admission.ts';
 import { createModelSource } from './models.ts';
 import { SYSTEM_PROMPT } from './prompt.ts';
+import { createProposalService } from './proposals.ts';
 import { APPROVED_TOOLS, createTools } from './tools.ts';
 
 export type AdmitResult =
@@ -154,7 +155,10 @@ export class ConversationAgent extends DurableObject<Env> {
     let outcome: TurnOutcome;
     try {
       const source = createModelSource(decodeAgentConfig(this.env));
-      const tools = createTools({ raven: this.env.RAVEN.getByName(TEAM_CONNECTION) });
+      const tools = createTools({
+        raven: this.env.RAVEN.getByName(TEAM_CONNECTION),
+        proposals: createProposalService(this.env),
+      });
       assertExactTools(tools, APPROVED_TOOLS);
       const agent = createNestAgent({
         model: source.model,
@@ -170,6 +174,8 @@ export class ConversationAgent extends DurableObject<Env> {
         if (event.type === 'message_end') this.#messages.push(event.message);
         const publicEvent = toPublicEvent(event);
         if (publicEvent) this.#emit(publicEvent);
+        const proposal = proposalOf(event);
+        if (proposal) this.#emit(proposal);
       });
       run.agent = agent;
       outcome = run.stopRequested
@@ -242,4 +248,11 @@ function terminalEvent(outcome: TurnOutcome, stopRequested: boolean): PublicAgen
     };
   }
   return { type: 'error', code: 'failed', message: 'The assistant could not answer. Try again in a moment.' };
+}
+
+/** The intent ID comes from the application's tool result, so the card shows Nest's record, not model text. */
+export function proposalOf(event: AgentEvent): PublicAgentEvent | null {
+  if (event.type !== 'tool_execution_end' || event.toolName !== 'propose_intent' || event.isError) return null;
+  const intentId: unknown = event.result?.details?.intentId;
+  return typeof intentId === 'string' ? { type: 'proposal', kind: 'swap', intentId } : null;
 }

@@ -4,3 +4,4 @@
 *.jpg binary
 **/OFL.txt -text
 licenses/*.txt -text
+apps/web/public/licenses/*.txt -text

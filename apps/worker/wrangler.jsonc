@@ -26,10 +26,14 @@
     "PI_PROVIDER": "openrouter",
     "PI_MODEL_ID": "thinkingmachines/inkling:free",
     "AGENT_GUEST_TURNS_PER_15_MIN": "5",
-    "AGENT_MAX_ACTIVE_RUNS": "4"
+    "AGENT_MAX_ACTIVE_RUNS": "4",
+    "ENABLED_WRITE_ADAPTERS": "",
+    "STELLAR_TESTNET_RPC_URL": "https://soroban-testnet.stellar.org"
   },
+  // Provider RPC URLs often embed an API key, so the mainnet URL is a secret. Only declared names
+  // are read from .dev.vars.
   "secrets": {
-    "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY"]
+    "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY", "SOROSWAP_API_KEY", "STELLAR_MAINNET_RPC_URL"]
   },
   "durable_objects": {
     "bindings": [
@@ -61,10 +65,12 @@
         "PI_PROVIDER": "openrouter",
         "PI_MODEL_ID": "thinkingmachines/inkling:free",
         "AGENT_GUEST_TURNS_PER_15_MIN": "5",
-        "AGENT_MAX_ACTIVE_RUNS": "4"
+        "AGENT_MAX_ACTIVE_RUNS": "4",
+        "ENABLED_WRITE_ADAPTERS": "",
+        "STELLAR_TESTNET_RPC_URL": "https://soroban-testnet.stellar.org"
       },
       "secrets": {
-        "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY"]
+        "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY", "SOROSWAP_API_KEY"]
       },
       "durable_objects": {
         "bindings": [

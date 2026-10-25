@@ -15,6 +15,8 @@ interface ConversationMessage {
   error?: string;
   /** The user stopped this answer; what arrived before the stop stays. */
   stopped?: boolean;
+  /** Swap intents Nest created for this answer; each renders as a proposal card. */
+  proposals?: string[];
 }
 
 export interface AgentChat {
@@ -37,6 +39,7 @@ const TOOL_LABELS: Record<string, string> = {
   list_markets: 'Read the dated research snapshot',
   raven_search: 'Searched Raven',
   raven_execute: 'Ran a Raven research script',
+  propose_intent: 'Prepared a swap proposal for your review',
 };
 
 export class ChatRequestError extends Error {
@@ -176,6 +179,8 @@ function apply(message: ConversationMessage, event: PublicAgentEvent): Conversat
       return event.reason === 'stopped'
         ? { ...message, stopped: true }
         : { ...message, error: 'The answer was interrupted. Send the message again.' };
+    case 'proposal':
+      return { ...message, proposals: [...(message.proposals ?? []), event.intentId] };
     case 'settled':
       return message;
   }

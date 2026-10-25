@@ -90,6 +90,46 @@ export function decodeAdmissionLimits(env: unknown): AdmissionLimits {
   };
 }
 
+/** SDF's public Testnet RPC. Mainnet has no public default: an operator-chosen provider is required. */
+const TESTNET_RPC_URL = 'https://soroban-testnet.stellar.org';
+// `.dev.vars` templates leave unset values as empty strings.
+const optional = <T extends z.ZodType>(schema: T) =>
+  z.preprocess((value) => (value === '' ? undefined : value), schema.optional());
+
+const ExecutionSchema = z.object({
+  ENABLED_WRITE_ADAPTERS: z.string().default(''),
+  SOROSWAP_API_KEY: optional(z.string().min(1)),
+  STELLAR_MAINNET_RPC_URL: optional(z.url()),
+  STELLAR_TESTNET_RPC_URL: optional(z.url()),
+});
+
+export interface ExecutionConfig extends Config {
+  /** Adapters allowed to submit; each stays off until its lifecycle is validated on this network. */
+  writeAdapters: ReadonlySet<string>;
+  soroswapApiKey: string | null;
+  rpcUrl: string | null;
+}
+
+export function decodeExecutionConfig(env: unknown): ExecutionConfig {
+  const base = decodeConfig(env);
+  const parsed = ExecutionSchema.safeParse(env);
+  if (!parsed.success) throw new ConfigError(variablesOf(parsed.error));
+  const data = parsed.data;
+  return {
+    ...base,
+    writeAdapters: new Set(
+      data.ENABLED_WRITE_ADAPTERS.split(',')
+        .map((name) => name.trim())
+        .filter(Boolean),
+    ),
+    soroswapApiKey: data.SOROSWAP_API_KEY ?? null,
+    rpcUrl:
+      base.network === 'mainnet'
+        ? (data.STELLAR_MAINNET_RPC_URL ?? null)
+        : (data.STELLAR_TESTNET_RPC_URL ?? TESTNET_RPC_URL),
+  };
+}
+
 export function decodeAgentConfig(env: unknown): AgentConfig {
   const parsed = AgentConfigSchema.safeParse(env);
   if (!parsed.success) throw new ConfigError(variablesOf(parsed.error));

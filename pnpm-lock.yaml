@@ -386,6 +386,9 @@ importers:
       '@earendil-works/pi-mcp':
         specifier: 'catalog:'
         version: 1.4.0
+      '@nest/adapters':
+        specifier: workspace:*
+        version: link:../../packages/adapters
       '@nest/agent-runtime':
         specifier: workspace:*
         version: link:../../packages/agent-runtime
@@ -395,6 +398,12 @@ importers:
       '@nest/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@nest/policy':
+        specifier: workspace:*
+        version: link:../../packages/policy
+      '@stellar/stellar-sdk':
+        specifier: 'catalog:'
+        version: 17.3.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       drizzle-orm:
         specifier: 'catalog:'
         version: 0.45.4(@cloudflare/workers-types@5.20261023.1)
