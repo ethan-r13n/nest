@@ -1578,7 +1578,7 @@
     {
       "path": "ui/spec/resources/manifest.json",
       "bytes": 386,
-      "sha256": "b3d1670f6c5ee02fe576c338e922e76008300bd77f3dc2303bba563a7abcc107"
+      "sha256": "50fe2f750ad33364eb8954bee64d6e12af4d187b5bb774203ada33f2ab3d595c"
     },
     {
       "path": "ui/spec/resources/repository-readme.md",
@@ -1587,8 +1587,8 @@
     },
     {
       "path": "ui/spec/resources/technical-spec.md",
-      "bytes": 153170,
-      "sha256": "20273d922f47cef3e7ccc213344f6e758659712ea28b09ece360ae76b95d006d"
+      "bytes": 153164,
+      "sha256": "6a7a39e1f700f118e659263148553464e763de46a9d88c063d89f6c5e7a55b8e"
     },
     {
       "path": "ui/spec/rwa-access-observations.json",

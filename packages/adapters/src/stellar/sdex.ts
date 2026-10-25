@@ -4,23 +4,18 @@ import { Account, Asset, Operation, TransactionBuilder } from '@stellar/stellar-
 import { z } from 'zod';
 
 import { type SwapVenue, VenueRefusal } from '../venue.ts';
+import { HORIZON_URLS, loadClassicAccount, requireFunds } from './accounts.ts';
 import { NETWORK_PASSPHRASES } from './networks.ts';
 
 /**
- * Stellar's built-in DEX through Horizon: path finding and account reads are Classic data the RPC
- * does not serve. Used where Soroswap's API has no routes, which today is Testnet.
+ * Stellar's built-in DEX through Horizon: path finding is Classic data the RPC does not serve.
+ * Used where Soroswap's API has no routes, which today is Testnet.
  */
-const HORIZON_URLS: Record<StellarNetwork, string> = {
-  mainnet: 'https://horizon.stellar.org',
-  testnet: 'https://horizon-testnet.stellar.org',
-};
 const TIMEOUT_MS = 15_000;
 const DECIMALS = 7;
 /** 0.001 XLM: well above the base fee for one operation. */
 const FEE_STROOPS = '10000';
 const VALIDITY_SECONDS = 180;
-// Each account must keep 0.5 XLM per base entry and subentry; spending into the reserve fails.
-const BASE_RESERVE_RAW = 5_000_000n;
 
 const PathAsset = z.looseObject({
   asset_type: z.string(),
@@ -33,20 +28,6 @@ const PathsSchema = z.looseObject({
       z.looseObject({ source_amount: z.string(), destination_amount: z.string(), path: z.array(PathAsset) }),
     ),
   }),
-});
-const AccountSchema = z.looseObject({
-  sequence: z.string(),
-  subentry_count: z.number().int().nonnegative(),
-  num_sponsoring: z.number().int().nonnegative().optional(),
-  num_sponsored: z.number().int().nonnegative().optional(),
-  balances: z.array(
-    z.looseObject({
-      asset_type: z.string(),
-      asset_code: z.string().optional(),
-      asset_issuer: z.string().optional(),
-      balance: z.string(),
-    }),
-  ),
 });
 
 export function createSdexVenue(options: {
@@ -109,17 +90,17 @@ export function createSdexVenue(options: {
           buy: z.string(),
         })
         .parse(quote);
-      const { status, body } = await get(`/accounts/${from}`);
-      if (status === 404)
-        throw new VenueRefusal('ACCOUNT_NOT_FOUND', 'This account does not exist on this network yet. Fund it first.');
-      const account = AccountSchema.safeParse(body);
-      if (status !== 200 || !account.success) throw new Error(`Horizon account read answered ${status}.`);
+      const account = await loadClassicAccount(network, from, send);
       const sell = assetFromId(raw.sell);
       const buy = assetFromId(raw.buy);
       const amountIn = BigInt(raw.amountInRaw);
-      checkFunds(account.data, sell, buy, amountIn);
+      requireFunds(account, {
+        spend: [{ asset: sell, amount: amountIn }],
+        receive: [buy],
+        feeStroops: BigInt(FEE_STROOPS),
+      });
 
-      const tx = new TransactionBuilder(new Account(from, account.data.sequence), {
+      const tx = new TransactionBuilder(new Account(from, account.sequence), {
         fee: FEE_STROOPS,
         networkPassphrase: NETWORK_PASSPHRASES[network],
         timebounds: { minTime: 0, maxTime: Math.floor(now() / 1000) + VALIDITY_SECONDS },
@@ -146,37 +127,6 @@ export function createSdexVenue(options: {
       return parseDecimalAmount(record.amount, DECIMALS, MAX_CLASSIC_RAW);
     },
   };
-}
-
-/** Refuses before signing what would fail on chain: a missing trustline or too little balance. */
-function checkFunds(account: z.infer<typeof AccountSchema>, sell: Asset, buy: Asset, amountIn: bigint): void {
-  const balanceOf = (asset: Asset) =>
-    account.balances.find((balance) =>
-      asset.isNative()
-        ? balance.asset_type === 'native'
-        : balance.asset_code === asset.getCode() && balance.asset_issuer === asset.getIssuer(),
-    );
-  if (!buy.isNative() && !balanceOf(buy)) {
-    throw new VenueRefusal('TRUSTLINE_MISSING', `Add ${buy.getCode()} to your wallet before buying it.`);
-  }
-  const held = balanceOf(sell);
-  if (!held)
-    throw new VenueRefusal(
-      'INSUFFICIENT_BALANCE',
-      `This account holds no ${sell.isNative() ? 'XLM' : sell.getCode()}.`,
-    );
-  let available = parseDecimalAmount(held.balance, DECIMALS, MAX_CLASSIC_RAW);
-  if (sell.isNative()) {
-    const entries =
-      2n + BigInt(account.subentry_count) + BigInt(account.num_sponsoring ?? 0) - BigInt(account.num_sponsored ?? 0);
-    available -= entries * BASE_RESERVE_RAW + BigInt(FEE_STROOPS);
-  }
-  if (amountIn > available) {
-    throw new VenueRefusal(
-      'INSUFFICIENT_BALANCE',
-      'This account does not hold enough to sell that amount (after the XLM reserve).',
-    );
-  }
 }
 
 function assetId(asset: Asset): string {

@@ -50,7 +50,7 @@ The primary prototype test is: a newcomer can discover a usable opportunity, und
 
 ## Reference decisions
 
-Apply Raven's visual system consistently across all screens. Use DefiLlama/RWA.xyz for analytics hierarchy, IRIS for credit intent capture, and shared for vault navigation and chart/ticket layout. The screen contracts below are authoritative; reference sites supply visual patterns rather than application behavior.
+Apply Raven's visual system consistently across all screens. Use DefiLlama/RWA.xyz for analytics hierarchy, IRIS for credit intent capture, and a shared vault, chart and order-ticket layout. The screen contracts below are authoritative; reference sites supply visual patterns rather than application behavior.
 
 | Reference | Implementation requirement |
 | --- | --- |

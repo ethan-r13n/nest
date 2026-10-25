@@ -5,8 +5,12 @@
   "type": "module",
   "sideEffects": false,
   "exports": {
+    "./blend/markets": "./src/blend/markets.ts",
+    "./blend/reader": "./src/blend/reader.ts",
+    "./blend/submit": "./src/blend/submit.ts",
     "./soroswap/client": "./src/soroswap/client.ts",
     "./soroswap/contracts": "./src/soroswap/contracts.ts",
+    "./stellar/accounts": "./src/stellar/accounts.ts",
     "./stellar/assets": "./src/stellar/assets.ts",
     "./stellar/inspect": "./src/stellar/inspect.ts",
     "./stellar/networks": "./src/stellar/networks.ts",
@@ -18,6 +22,7 @@
     "test": "vitest run"
   },
   "dependencies": {
+    "@blend-capital/blend-sdk": "catalog:",
     "@nest/domain": "workspace:*",
     "@stellar/stellar-sdk": "catalog:",
     "zod": "catalog:"

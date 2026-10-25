@@ -182,6 +182,9 @@ catalogs:
     '@biomejs/biome':
       specifier: 2.6.3
       version: 2.6.3
+    '@blend-capital/blend-sdk':
+      specifier: 3.3.1
+      version: 3.3.1
     '@cloudflare/vite-plugin':
       specifier: 1.65.0
       version: 1.65.0
@@ -444,6 +447,9 @@ importers:
 
   packages/adapters:
     dependencies:
+      '@blend-capital/blend-sdk':
+        specifier: 'catalog:'
+        version: 3.3.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
       '@nest/domain':
         specifier: workspace:*
         version: link:../domain
@@ -942,6 +948,9 @@ packages:
     engines: {node: '>=14.21.3'}
     cpu: [x64]
     os: [win32]
+
+  '@blend-capital/blend-sdk@3.3.1':
+    resolution: {integrity: sha512-rfSZd3GkhJ1lisa2f96e0X/BpqzzSI0FaGQyUQz2s0n/VYJiUTPz1s1PKYBk9U4Duo8NftDXjjqTJablB4KOBg==}
 
   '@bufbuild/protobuf@2.16.0':
     resolution: {integrity: sha512-FWa0sPlqYGJgpTs6OxBRcL/AW4JT0OIO+W1ajerluoTVh8CV0B7XM1qsNCRgnkSCkRCgOICKHRQlY17jrsm0+Q==}
@@ -2782,9 +2791,18 @@ packages:
   '@stellar/freighter-api@6.0.0':
     resolution: {integrity: sha512-8CTQcKQmTq/wL715ZUzn1x1POpR0eYhYPKEiaeA7AT0WYBOauOGTxfWPFtSidX3ohAlJZP5HFXy1kG29cVjqxw==}
 
+  '@stellar/js-xdr@4.0.0':
+    resolution: {integrity: sha512-+NmNa7Tk5BI5XFdy/6xGTqAN4J9a9KgCrCGhj2uEUTCBhLkch0M+QbKzNH8zEnejWe0p8w+0q5hUVX6L3OzoVA==}
+    engines: {node: '>=20.0.0', pnpm: '>=9.0.0'}
+
   '@stellar/js-xdr@5.0.0':
     resolution: {integrity: sha512-HBDNKnxr+ecdaEmbZ0mcKkirOF8tXXEbWSw34P3wT40Tn3g+u+cCH17xAWZymzscq8cojHB8340pR8QNVaD32w==}
     engines: {node: '>=22.0.0', pnpm: '>=10.0.0'}
+
+  '@stellar/stellar-sdk@16.3.0':
+    resolution: {integrity: sha512-pnB1t4bdnkN8M7tRIcLXnNboq+Hof62NzPMnQrl5MWBNC/d1vUbdrzXgy7yw8I+0hbfz5YN64uVb84BqzIpYiQ==}
+    engines: {node: '>=22.0.0'}
+    hasBin: true
 
   '@stellar/stellar-sdk@17.3.0':
     resolution: {integrity: sha512-E9olNBk1FDTYSdGphd+U4EMlbRdkCQfveuK7/fhEtlEBl7GIoXtHHr0Hh6WcxIiO0/sRutsgapZDhhGpdd/Bqg==}
@@ -3448,6 +3466,9 @@ packages:
     peerDependencies:
       axios: 0.x || 1.x
 
+  axios@1.18.0:
+    resolution: {integrity: sha512-E32NzpYKp++W7XRe52rHiXV2ehxmh3wbdgO7MHeFM+vqxLBYHzt0ElkiImtOBxtOmyp0yoC8C6uESVV84Y2/hw==}
+
   axios@1.20.0:
     resolution: {integrity: sha512-r8aOh8j9cGKpgQAqpzrUHnSIc6a59Y3Xf/cv8sy1DrHCkZHzQGEuoq1tARk6qSyDdtQGSDgpb9kFlruzPvrgwg==}
 
@@ -3460,6 +3481,10 @@ packages:
 
   base-x@5.0.1:
     resolution: {integrity: sha512-M7uio8Zt++eg3jPj+rHMfCC+IuygQHHCOU+IYsVtik6FWjuYpVt/+MRKcgsAMHh8mMFAwnB+Bs+mTrFiXjMzKg==}
+
+  base32.js@0.1.0:
+    resolution: {integrity: sha512-n3TkB02ixgBOhTvANakDb4xaMXnYUVkNoRFJjQflcqMQhyEKxEHdj3E6N8t8sUQ0mjH/3/JxzlXuz3ul/J90pQ==}
+    engines: {node: '>=0.12.0'}
 
   base64-js@1.5.1:
     resolution: {integrity: sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==}
@@ -6577,6 +6602,15 @@ snapshots:
   '@biomejs/cli-win32-x64@2.6.3':
     optional: true
 
+  '@blend-capital/blend-sdk@3.3.1(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)':
+    dependencies:
+      '@stellar/stellar-sdk': 16.3.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+      buffer: 6.0.3
+      follow-redirects: 1.16.1(debug@4.4.3(supports-color@10.2.2))
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+
   '@bufbuild/protobuf@2.16.0': {}
 
   '@cloudflare/kv-asset-handler@0.5.0': {}
@@ -8718,7 +8752,27 @@ snapshots:
       buffer: 6.0.3
       semver: 7.7.1
 
+  '@stellar/js-xdr@4.0.0': {}
+
   '@stellar/js-xdr@5.0.0': {}
+
+  '@stellar/stellar-sdk@16.3.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)':
+    dependencies:
+      '@noble/ed25519': 3.2.0
+      '@noble/hashes': 2.4.0
+      '@stellar/js-xdr': 4.0.0
+      axios: 1.18.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
+      base32.js: 0.1.0
+      bignumber.js: 11.1.5
+      buffer: 6.0.3
+      commander: 14.0.3
+      eventsource: 4.1.1
+      feaxios: 0.0.23
+      smol-toml: 1.9.1
+      uint8array-extras: 1.6.0
+    transitivePeerDependencies:
+      - debug
+      - supports-color
 
   '@stellar/stellar-sdk@17.3.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)':
     dependencies:
@@ -9671,6 +9725,16 @@ snapshots:
       is-retry-allowed: 2.2.0
     optional: true
 
+  axios@1.18.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2):
+    dependencies:
+      follow-redirects: 1.16.1(debug@4.4.3(supports-color@10.2.2))
+      form-data: 4.0.6
+      https-proxy-agent: 5.0.1(supports-color@10.2.2)
+      proxy-from-env: 2.1.0
+    transitivePeerDependencies:
+      - debug
+      - supports-color
+
   axios@1.20.0(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2):
     dependencies:
       follow-redirects: 1.16.1(debug@4.4.3(supports-color@10.2.2))
@@ -9688,6 +9752,8 @@ snapshots:
       safe-buffer: 5.2.1
 
   base-x@5.0.1: {}
+
+  base32.js@0.1.0: {}
 
   base64-js@1.5.1: {}
 

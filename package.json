@@ -1,5 +1,5 @@
 {
-  "name": "nest-runtime",
+  "name": "nest",
   "private": true,
   "type": "module",
   "packageManager": "pnpm@12.15.0",
