@@ -1,6 +1,15 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@nest/ui/components/dropdown-menu';
+import {
   type PanelImperativeHandle,
   ResizableHandle,
   ResizablePanel,
@@ -9,7 +18,7 @@ import {
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@nest/ui/components/sheet';
 import { Skeleton } from '@nest/ui/components/skeleton';
 import { Link, Outlet, useLocation } from '@tanstack/react-router';
-import { Bell, Menu, Wallet } from 'lucide-react';
+import { Bell, Check, ChevronDown, LoaderCircle, Menu, Wallet } from 'lucide-react';
 import { type ReactNode, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
@@ -82,13 +91,13 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2 [&_button]:h-11! [&_button]:min-w-11! sm:[&_button]:h-8! sm:[&_button]:min-w-8!">
           <div className="hidden lg:block">
             <NetworkStatus />
           </div>
           <Link
             to="/alerts"
-            className="hidden rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground sm:flex"
+            className="hidden size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground sm:flex"
             aria-label="Alerts"
           >
             <Bell className="size-4" />
@@ -229,16 +238,87 @@ function isActiveGroup(pathname: string, route: string) {
 }
 
 function WalletButton() {
-  const { address } = useWallet();
+  const { address, connecting, connect, disconnect, error } = useWallet();
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle');
+
+  async function copyAddress() {
+    if (!address) return;
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopyStatus('copied');
+    } catch {
+      setCopyStatus('failed');
+    }
+  }
+
   return (
-    <Button
-      nativeButton={false}
-      variant={address ? 'outline' : 'default'}
-      render={<Link to="/wallet" />}
-      aria-label={address ? `Wallet ${shortAddress(address)}` : 'Connect wallet'}
-    >
-      <Wallet />
-      <span className="hidden font-mono sm:inline">{address ? shortAddress(address) : 'Connect wallet'}</span>
-    </Button>
+    <div className="relative">
+      {address ? (
+        <DropdownMenu
+          onOpenChange={(open) => {
+            if (open) setCopyStatus('idle');
+          }}
+        >
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="outline"
+                disabled={connecting}
+                aria-label={`Manage wallet ${shortAddress(address)}`}
+                title={address}
+              />
+            }
+          >
+            <Wallet className="sm:hidden" />
+            <span className="hidden font-mono sm:inline">{shortAddress(address)}</span>
+            <ChevronDown className="hidden size-3 sm:block" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            sideOffset={8}
+            aria-label="Wallet account"
+            className="w-52 rounded-xl border p-1.5"
+          >
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="px-3 pt-2 pb-1.5 font-normal">
+                Account
+                <span className="mt-1 block font-mono text-[11px] sm:hidden">{shortAddress(address)}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuItem closeOnClick={false} onClick={copyAddress} className="min-h-11 px-3 py-2 font-normal">
+                {copyStatus === 'copied' ? 'Address copied' : 'Copy address'}
+                {copyStatus === 'copied' ? <Check className="ml-auto size-4 text-success" aria-hidden="true" /> : null}
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={disconnect} className="min-h-11 px-3 py-2 font-normal">
+              Disconnect
+            </DropdownMenuItem>
+            {copyStatus === 'failed' ? (
+              <p role="alert" className="px-3 py-2 text-xs leading-relaxed text-destructive">
+                Couldn’t copy the address. Please try again.
+              </p>
+            ) : null}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Button
+          onClick={connect}
+          disabled={connecting}
+          aria-label={connecting ? 'Connecting wallet' : 'Connect wallet'}
+          aria-haspopup="dialog"
+        >
+          {connecting ? <LoaderCircle className="animate-spin motion-reduce:animate-none" /> : <Wallet />}
+          <span className="hidden sm:inline">{connecting ? 'Connecting…' : 'Connect wallet'}</span>
+        </Button>
+      )}
+      {error ? (
+        <p
+          role="alert"
+          className="absolute top-full right-0 z-50 mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-destructive/30 bg-popover p-3 text-xs leading-relaxed text-destructive shadow-lg"
+        >
+          {error}
+        </p>
+      ) : null}
+    </div>
   );
 }

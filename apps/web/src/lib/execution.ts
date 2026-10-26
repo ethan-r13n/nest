@@ -173,7 +173,7 @@ export class ExecutionRequestError extends Error {
   }
 }
 
-async function call<T>(
+export async function call<T>(
   path: string,
   init?: { method?: string; body?: unknown; headers?: Record<string, string> },
 ): Promise<NoInfer<T>> {

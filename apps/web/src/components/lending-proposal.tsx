@@ -332,7 +332,7 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
         ) : null}
         {(phase === 'needs_wallet' || (phase === 'compared' && offer && !expired)) && !wallet.address ? (
           <Button size="sm" onClick={wallet.connect} disabled={wallet.connecting}>
-            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect Freighter to review'}
+            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect wallet to review'}
           </Button>
         ) : null}
         {phase === 'compared' && offer && !expired && wallet.address ? (
@@ -347,12 +347,12 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
         ) : null}
         {phase === 'review' && !expired ? (
           <Button size="sm" onClick={sign}>
-            <Wallet /> Sign in Freighter
+            <Wallet /> Sign in wallet
           </Button>
         ) : null}
         {phase === 'signing' ? (
           <Button size="sm" disabled>
-            <LoaderCircle className="animate-spin" /> Waiting for Freighter…
+            <LoaderCircle className="animate-spin" /> Waiting for wallet…
           </Button>
         ) : null}
       </div>

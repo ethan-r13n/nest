@@ -29,6 +29,13 @@
       "when": 1792965551191,
       "tag": "0003_repay_withdraw",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1792968746611,
+      "tag": "0004_automations",
+      "breakpoints": true
     }
   ]
 }

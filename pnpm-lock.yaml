@@ -437,6 +437,9 @@ importers:
       '@nest/domain':
         specifier: workspace:*
         version: link:../../packages/domain
+      '@nest/jobs':
+        specifier: workspace:*
+        version: link:../../packages/jobs
       '@nest/policy':
         specifier: workspace:*
         version: link:../../packages/policy

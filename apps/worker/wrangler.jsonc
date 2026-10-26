@@ -1,7 +1,8 @@
-// Nest's application Worker: same-origin /api/*, SSE and (later) the scheduled handler.
+// Nest's application Worker: same-origin /api/*, SSE and the scheduled handler.
 // D1 resources come from infra/cloudflare/d1-resources.json. The default environment binds
 // mainnet; `--env testnet` binds the Testnet database. Financial writes stay disabled.
-// No cron trigger yet: it is added with the first real job dispatcher.
+// A one-minute cron wakes the automation dispatcher (src/automations/dispatch.ts); due rules,
+// jobs and leases live in D1, so the cron is only a wake-up signal.
 // Each agent conversation is a SQLite-backed Durable Object (src/agent/conversation.ts).
 // PI_MODEL_ID must be a free OpenRouter model; src/agent/models.ts refuses anything else.
 {
@@ -16,6 +17,9 @@
   },
   "upload_source_maps": true,
   "preview_urls": false,
+  "triggers": {
+    "crons": ["* * * * *"]
+  },
   "assets": {
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
