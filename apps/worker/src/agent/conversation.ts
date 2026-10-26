@@ -1,5 +1,6 @@
 import { DurableObject } from 'cloudflare:workers';
 import type { Agent, AgentEvent, AgentMessage } from '@earendil-works/pi-agent-core';
+import { fauxAssistantMessage, fauxText } from '@earendil-works/pi-ai';
 import { createNestAgent, DEFAULT_TURN_LIMITS, runTurn, type TurnOutcome } from '@nest/agent-runtime/agent';
 import { isTerminal, PROPOSAL_KINDS, type PublicAgentEvent, toPublicEvent } from '@nest/agent-runtime/events';
 import { assertExactTools } from '@nest/agent-runtime/tools';
@@ -61,6 +62,8 @@ export class ConversationAgent extends DurableObject<Env> {
   async admit(input: {
     messageId: string;
     text: string;
+    history?: TranscriptEntry[] | undefined;
+    researchOnly?: boolean | undefined;
     subject: string;
     limits: AdmissionLimits;
   }): Promise<AdmitResult> {
@@ -78,6 +81,18 @@ export class ConversationAgent extends DurableObject<Env> {
       this.#admitting = false;
     }
 
+    if (this.#messages.length === 0 && input.history?.length) {
+      // Browser text restores conversational context only, never tool results or financial authority.
+      this.#messages.push(
+        ...input.history.map(
+          (message): AgentMessage =>
+            message.role === 'user'
+              ? { role: 'user', content: message.text, timestamp: Date.now() }
+              : fauxAssistantMessage([fauxText(message.text)]),
+        ),
+      );
+    }
+
     const run: Run = {
       id: runId,
       messageId: input.messageId,
@@ -91,7 +106,7 @@ export class ConversationAgent extends DurableObject<Env> {
     this.#events = [];
     this.#active = run;
     // #execute never rejects. Pending I/O and timers keep this object alive until the turn ends.
-    this.ctx.waitUntil(this.#execute(run, input.text));
+    this.ctx.waitUntil(this.#execute(run, input.text, input.researchOnly === true));
     return { status: 'started', runId, afterEventId: run.afterEventId };
   }
 
@@ -151,20 +166,26 @@ export class ConversationAgent extends DurableObject<Env> {
     return { messages, activeRunId: this.#active?.id ?? null };
   }
 
-  async #execute(run: Run, text: string): Promise<void> {
+  async #execute(run: Run, text: string, researchOnly: boolean): Promise<void> {
     let outcome: TurnOutcome;
     try {
       const source = createModelSource(decodeAgentConfig(this.env));
       const tools = createTools({
         raven: this.env.RAVEN.getByName(TEAM_CONNECTION),
         proposals: createProposalService(this.env),
-      });
-      assertExactTools(tools, APPROVED_TOOLS);
+      }).filter((tool) => !researchOnly || tool.name !== 'propose_intent');
+      assertExactTools(
+        tools,
+        APPROVED_TOOLS.filter((name) => !researchOnly || name !== 'propose_intent'),
+      );
       const agent = createNestAgent({
         model: source.model,
         streamFn: source.streamFn,
         ...(source.getApiKey ? { getApiKey: source.getApiKey } : {}),
-        systemPrompt: SYSTEM_PROMPT,
+        systemPrompt: researchOnly
+          ? SYSTEM_PROMPT +
+            '\nThis is a read-only research session. Compare and explain directly. Action preparation is unavailable here; never claim a proposal was prepared.'
+          : SYSTEM_PROMPT,
         tools,
         messages: [...this.#messages],
         limits: DEFAULT_TURN_LIMITS,

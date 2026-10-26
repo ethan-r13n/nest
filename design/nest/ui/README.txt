@@ -31,3 +31,24 @@ Screen examples cover research, trade, credit, Earn, positions, portfolio,
 chat and Lab. Layout and interaction examples do not establish backend
 availability. Always use the real application's typed services, network
 registry, policy checks, explicit wallet review and receipt reconciliation.
+
+Live chat
+  Chat sends real messages to the application assistant API, with streamed
+  answers, follow-up context, cancellation and visible connection errors.
+  Start the application with pnpm dev, then from the repository root run:
+    python3 design/nest/ui/scripts/serve-preview.py
+  Open http://127.0.0.1:8878/ui/index.html#chat. For an application running on
+  another port, pass --upstream http://127.0.0.1:PORT. An existing preview on
+  port 8765 can use the same bridge after reloading.
+  Credentials stay in the application backend. The bridge permits only chat
+  and health endpoints; preview sessions cannot prepare financial actions.
+  Guest context stays in browser memory and is bounded when sent for recovery
+  after an idle server session is discarded. No tool results or financial
+  approvals are restored from browser text.
+  Conversations use the page scrollbar with a sticky composer. Scrolling up
+  pauses following, and Latest returns to the end of the page.
+  Action-card specimens in Design States remain separate from live messages.
+
+Checks
+  node design/nest/ui/scripts/verify-live-chat.js
+  python3 design/nest/ui/scripts/test_live_chat.py
