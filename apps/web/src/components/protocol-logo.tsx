@@ -6,9 +6,14 @@ const LOGOS = import.meta.glob<string>('../../../../design/nest/ui/assets/logos/
   import: 'default',
   query: '?url',
 });
+const LOGO_NAMES: Record<string, string> = {
+  aquarius: 'aquariusstellar',
+  sentora: 'sentorausdc',
+};
 
 export function ProtocolLogo({ name, fallback }: { name: string; fallback?: string | undefined }) {
-  const key = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const normalized = name.toLowerCase().replace(/[^a-z0-9]/g, '');
+  const key = LOGO_NAMES[normalized] ?? normalized;
   const local = Object.entries(LOGOS).find(([path]) => path.split('/').at(-1)?.startsWith(`${key}-`));
   const src = local?.[1] ?? safeResearchUrl(fallback ?? '');
   return (

@@ -510,6 +510,10 @@
     }
   },
   "researchAssignments": {
+    "sentora-campaign": {
+      "default": "campaign",
+      "symbols": {}
+    },
     "blend-pools-v2": {
       "default": "blend",
       "symbols": {}

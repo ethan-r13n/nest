@@ -34,12 +34,29 @@ const PROJECT_NAMES: Record<string, string> = {
   'gami-labs': 'Gami Labs',
   aquarius: 'Aquarius',
   defindex: 'DeFindex',
+  sentora: 'Sentora',
   'ondo-yield-assets': 'Ondo',
+};
+const SENTORA_XLM_CAMPAIGN: EarnOpportunity = {
+  id: 'sentora-xlm-campaign',
+  kind: 'campaign',
+  symbol: 'XLM',
+  project: 'sentora',
+  category: 'Campaigns',
+  meta: 'Sentora XLM Campaign',
+  rateKind: 'APY',
+  totalRatePct: null,
+  baseRatePct: null,
+  rewardRatePct: null,
+  tvlUsd: null,
+  searchText: 'Sentora XLM Campaign Stellar DeFi Hub',
+  poolType: null,
+  feeBps: null,
 };
 
 type EarnOpportunity = {
   id: string;
-  kind: 'yield' | 'liquidity' | 'vault';
+  kind: 'yield' | 'liquidity' | 'vault' | 'campaign';
   vault?: VaultSummary;
   network?: 'mainnet' | 'testnet' | undefined;
   symbol: string;
@@ -72,6 +89,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
   const [fee, setFee] = useState('all');
   const [page, setPage] = useState(0);
   const opportunities: EarnOpportunity[] = [
+    SENTORA_XLM_CAMPAIGN,
     ...(vaults.data?.vaults ?? []).map(
       (vault): EarnOpportunity => ({
         id: vault.address,
@@ -114,6 +132,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
       (pool): EarnOpportunity => ({
         id: pool.id,
         kind: 'liquidity',
+        network: pool.network,
         symbol: pool.tokens.map((token) => token.symbol).join(' / '),
         project: 'aquarius',
         category: 'Liquidity',
@@ -464,10 +483,54 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
 }
 
 export function VaultDetailPage({ vaultId }: { vaultId: string }) {
+  if (vaultId === SENTORA_XLM_CAMPAIGN.id) return <CampaignDetailPage />;
   return /^C[A-Z2-7]{55}$/.test(vaultId) ? (
     <LiveVaultDetailPage vaultId={vaultId} />
   ) : (
     <ResearchVaultDetailPage vaultId={vaultId} />
+  );
+}
+
+function CampaignDetailPage() {
+  const strategy = strategyFor('sentora-campaign', 'XLM');
+  return (
+    <div className="flex min-w-0 flex-col gap-6">
+      <Link
+        to="/earn"
+        className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="size-4" />
+        Earn
+      </Link>
+      <PageHeader title="Sentora XLM Campaign" kicker="Sentora / Campaign" description={strategy?.description ?? ''} />
+      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+        <div className="min-w-0 space-y-5">
+          <VaultStrategyMain strategy={strategy} />
+        </div>
+        <aside className="min-w-0 space-y-5">
+          <Card>
+            <CardHeader>
+              <CardTitle>Campaign access</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="rounded-lg border border-warning/40 bg-warning/5 p-4 text-xs leading-relaxed">
+                <p className="mb-2 font-medium">Withdrawal timing</p>
+                <p className="text-muted-foreground">{strategy?.withdrawal}</p>
+              </div>
+              <Button
+                nativeButton={false}
+                className="min-h-11 w-full"
+                render={<a href="https://stellardefihub.com/vaults" target="_blank" rel="noreferrer" />}
+              >
+                View on Stellar DeFi Hub ↗
+              </Button>
+              <p className="text-xs text-muted-foreground">Campaign transactions are not connected in Nest.</p>
+            </CardContent>
+          </Card>
+          <VaultStrategyAside strategy={strategy} />
+        </aside>
+      </div>
+    </div>
   );
 }
 
@@ -647,11 +710,13 @@ function OpportunityRow({ row }: { row: EarnOpportunity }) {
   const displayName =
     row.kind === 'vault'
       ? row.vault?.name
-      : row.project === 'gami-labs'
-        ? `Gami ${row.symbol.replace('EARN', '')} Vault`
-        : row.project === 'blend-pools-v2'
-          ? `Blend ${row.symbol} Supply`
-          : row.symbol;
+      : row.kind === 'campaign'
+        ? row.meta
+        : row.project === 'gami-labs'
+          ? `Gami ${row.symbol.replace('EARN', '')} Vault`
+          : row.project === 'blend-pools-v2'
+            ? `Blend ${row.symbol} Supply`
+            : row.symbol;
   return (
     <Card className="earn-opportunity">
       <CardContent>
@@ -669,7 +734,11 @@ function OpportunityRow({ row }: { row: EarnOpportunity }) {
             )}
             <small>
               {projectName(row.project)}
-              {row.network ? ` · ${row.network === 'testnet' ? 'Testnet' : 'Mainnet'} · live` : ' · Mainnet snapshot'}
+              {row.kind === 'campaign'
+                ? ' · Mainnet reference'
+                : row.network
+                  ? ` · ${row.network === 'testnet' ? 'Testnet' : 'Mainnet'} · ${row.kind === 'vault' ? 'live' : 'indexed observation'}`
+                  : ' · Mainnet snapshot'}
             </small>
             <small>
               {row.category}
@@ -679,7 +748,7 @@ function OpportunityRow({ row }: { row: EarnOpportunity }) {
         </div>
         <OpportunityMetric
           label={`${row.kind === 'vault' ? 'Live' : 'Reported'} ${row.rateKind}`}
-          value={formatApy(row.totalRatePct)}
+          value={row.kind === 'campaign' ? '' : formatApy(row.totalRatePct)}
           detail={
             row.kind === 'vault'
               ? '30-day APY · net of vault fee'
@@ -696,9 +765,11 @@ function OpportunityRow({ row }: { row: EarnOpportunity }) {
         <OpportunityMetric
           label={row.kind === 'vault' ? 'Vault assets' : 'Reported TVL'}
           value={
-            row.vault
-              ? `${new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(Number(row.vault.totalRaw) / 1e7)} ${row.symbol}`
-              : formatUsd(row.tvlUsd)
+            row.kind === 'campaign'
+              ? ''
+              : row.vault
+                ? `${new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(Number(row.vault.totalRaw) / 1e7)} ${row.symbol}`
+                : formatUsd(row.tvlUsd)
           }
           detail={
             row.kind === 'vault'
@@ -710,8 +781,24 @@ function OpportunityRow({ row }: { row: EarnOpportunity }) {
         />
         <OpportunityMetric
           label="Withdrawal"
-          value={row.kind === 'vault' ? 'Review required' : 'Unverified'}
-          detail={row.kind === 'vault' ? 'Liquidity and strategy unwind apply' : 'Current exit terms need verification'}
+          value={
+            row.kind === 'liquidity'
+              ? 'Instantly liquid (IL risk)'
+              : row.kind === 'campaign'
+                ? 'Principal withdrawable'
+                : row.kind === 'vault'
+                  ? 'Review required'
+                  : 'Unverified'
+          }
+          detail={
+            row.kind === 'liquidity'
+              ? ''
+              : row.kind === 'campaign'
+                ? 'Early withdrawal forfeits rewards'
+                : row.kind === 'vault'
+                  ? 'Liquidity and strategy unwind apply'
+                  : 'Current exit terms need verification'
+          }
         />
         <div className="earn-opportunity-actions">
           {row.kind === 'vault' && row.vault && row.network ? (
