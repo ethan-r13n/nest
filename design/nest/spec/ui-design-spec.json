@@ -99,7 +99,7 @@
         "Nest forest/cream/orange and IBM Plex families",
         "Horizon replaces universal Maturity; actual term/maturity is market-capability dependent",
         "Comparison works before wallet connection",
-        "Blend, Templar and XOXNO compared at identical inputs",
+        "Blend and XOXNO compared at identical inputs",
         "Presets are illustrative until generated from verified current quotes"
       ]
     },
@@ -1059,8 +1059,7 @@
           "providers": [
             "DeFindex",
             "Upshift/Gami",
-            "Sentora evergreen USDC via Upshift",
-            "Templar curated vaults"
+            "Sentora evergreen USDC via Upshift"
           ],
           "accounting": "Verified share decimals/conversion and net asset value; receipt and backing are not double-counted",
           "actions": [
@@ -1247,7 +1246,6 @@
           "default": "Best available",
           "content": [
             "Blend",
-            "Templar",
             "XOXNO"
           ],
           "validation": "Eligibility is specific to account, network, asset, market and current capability, not protocol name alone."
@@ -1288,7 +1286,7 @@
       "acceptance": [
         "The five intent terms stay visible while any editor is open.",
         "Guest users can compare without supplying a fabricated account ID.",
-        "Blend, Templar and XOXNO use identical requested collateral/debt/horizon inputs.",
+        "Blend and XOXNO use identical requested collateral/debt/horizon inputs.",
         "Insufficient capacity produces an exclusion instead of silently changing debt.",
         "Rates, fees, horizon assumptions, source timestamps and exit conditions are explicit.",
         "No common health number is invented across incompatible native metrics.",
@@ -1380,7 +1378,6 @@
       "capability_conditional_facts": {
         "Blend": "Use pool-native accounting and risk/receipt conversions. No backstop or recursive leverage in P0.",
         "XOXNO": "Bind wallet, NFT-backed lending account, spoke, hub and market IDs separately. Reverify current account ownership before prepare and submit. No P0 migration, NFT transfer, flash loan or looping.",
-        "Templar": "Preserve Stellar-origin funding, protocol authorization, external settlement and debt delivery as distinct receipts. Funding confirmation does not mean borrowing completed. Queued supply withdrawals have actual request/queue/execution/cancellation states.",
         "term_market": "Only when returned by the adapter: fixed/floating type, maturity, overdue rate, grace end, liquidation phase, full-term interest/early-close rule and settlement/repayment state. IRIS reference values do not supply Nest terms."
       },
       "states": {
@@ -1402,7 +1399,6 @@
         "Liquidatable and unsafe post-action withdrawals cannot reach signing.",
         "Collateral additions show withdrawal duration/restrictions before approval.",
         "Repay and close display actual venue costs rather than assuming IRIS mechanics.",
-        "A Templar funding receipt cannot mark borrowing complete.",
         "XOXNO ownership, native amount semantics and protocol IDs are revalidated.",
         "Every action uses the same prepared-plan review, expiry/policy binding and confirmed receipt reconciliation."
       ],
