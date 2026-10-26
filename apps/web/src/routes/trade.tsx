@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { AssetIcon } from '../components/asset-icon.tsx';
 import { AssetSelect, DecimalField, ReviewRequirements, UnavailableFacts } from '../components/financial-draft.tsx';
 import { MarketChart } from '../components/market-chart.tsx';
-import { SwapProposalCard } from '../components/swap-proposal.tsx';
+import { SwapProposalCard, useCountdown } from '../components/swap-proposal.tsx';
 import { EmptyState } from '../components/workspace.tsx';
 import { amountDraftIssue } from '../lib/draft-validation.ts';
 import { execution, type Quote, venueName } from '../lib/execution.ts';
@@ -23,6 +23,7 @@ export function TradePage() {
   const [interactionLocked, setInteractionLocked] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const health = useHealth();
+  const secondsLeft = useCountdown(quote?.expiresAt);
   const chartAsset = inputAsset === 'USDC' ? outputAsset : inputAsset;
 
   function invalidate() {
@@ -100,7 +101,7 @@ export function TradePage() {
           <div className="space-y-5 p-5">
             {quote ? (
               <>
-                <Badge variant="outline">{venueName(quote.venue)}</Badge>
+                <Badge variant="outline">{secondsLeft === 0 ? 'Quote expired' : venueName(quote.venue)}</Badge>
                 <dl className="space-y-4 text-xs">
                   <div>
                     <dt className="text-subtle">Expected output</dt>

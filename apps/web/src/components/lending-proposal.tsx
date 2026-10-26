@@ -75,12 +75,12 @@ export function LendingProposalCard({
     onInteractionLock?.(phase === 'preparing' || phase === 'signing' || phase === 'confirming');
   }, [phase, onInteractionLock]);
   const mounted = useRef(true);
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
       mounted.current = false;
-    },
-    [],
-  );
+    };
+  }, []);
 
   const fail = useCallback((caught: unknown) => {
     setError(
