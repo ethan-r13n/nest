@@ -8,9 +8,9 @@ import { type ReactNode, useId } from 'react';
 import { EmptyState } from '../components/workspace.tsx';
 
 const LAB_LINKS = [
-  { to: '/lab/memory', label: 'Memory' },
-  { to: '/lab/backtests', label: 'Backtests' },
-  { to: '/lab/automations', label: 'Automations' },
+  { to: '/lab/backtests', label: 'Backtest' },
+  { to: '/lab/automations', label: 'Set automation' },
+  { to: '/lab/memory', label: 'History' },
 ] as const;
 
 const PORTFOLIO_LINKS = [
@@ -22,17 +22,33 @@ const PORTFOLIO_LINKS = [
 ] as const;
 
 export function PersonalNav({ area, active }: { area: 'lab' | 'portfolio'; active: string }) {
-  const links = area === 'lab' ? LAB_LINKS : PORTFOLIO_LINKS;
+  const links =
+    area === 'lab'
+      ? LAB_LINKS
+      : PORTFOLIO_LINKS.filter((link) => link.label === 'Overview' || link.label === 'Activity');
   return (
-    <nav
-      aria-label={area === 'lab' ? 'Lab navigation' : 'Portfolio navigation'}
-      className="flex flex-wrap gap-2 border-b pb-4"
-    >
+    <nav aria-label={area === 'lab' ? 'Lab navigation' : 'Portfolio navigation'} className="flex flex-wrap gap-2">
       {links.map((link) => (
         <Button
           nativeButton={false}
           key={link.to}
-          variant={active === link.label ? 'secondary' : 'ghost'}
+          className="workspace-action"
+          aria-current={
+            active === link.label ||
+            (active === 'Backtests' && link.label === 'Backtest') ||
+            (active === 'Automations' && link.label === 'Set automation') ||
+            (active === 'Memory' && link.label === 'History')
+              ? 'page'
+              : undefined
+          }
+          variant={
+            active === link.label ||
+            (active === 'Backtests' && link.label === 'Backtest') ||
+            (active === 'Automations' && link.label === 'Set automation') ||
+            (active === 'Memory' && link.label === 'History')
+              ? 'secondary'
+              : 'ghost'
+          }
           render={<Link to={link.to} />}
         >
           {link.label}

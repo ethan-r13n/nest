@@ -2,150 +2,126 @@ import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Input } from '@nest/ui/components/input';
 import { Link } from '@tanstack/react-router';
-import { ArrowDownLeft, ArrowUpRight, Bell, CreditCard, Download, History, Wallet } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, Bell, CreditCard, Download } from 'lucide-react';
 import { useState } from 'react';
 
-import { DraftNotice, EmptyState, PageHeader, StatCard, UnavailableBadge } from '../components/workspace.tsx';
+import { DraftNotice, EmptyState, PageHeader, UnavailableBadge } from '../components/workspace.tsx';
 import { useHealth } from '../lib/health.ts';
 import { PersonalEmptyTable, PersonalFact, PersonalField, PersonalNav, PersonalPanel } from './personal-shared.tsx';
 
-const POSITION_GROUPS = ['Wallet', 'Supply', 'Vaults', 'Credit'] as const;
 const ACTIVITY_FILTERS = ['All', 'Trades', 'Credit', 'Vaults', 'Transfers'] as const;
 const ALERT_FILTERS = ['All', 'Risk', 'Market', 'Workflow', 'Source'] as const;
 
 export function PortfolioPage() {
-  const [group, setGroup] = useState('Wallet');
   const [allocationView, setAllocationView] = useState('mix');
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Portfolio"
-        description="Your assets, liabilities and pending actions in one place, with the evidence behind each value."
+        title="Your portfolio"
+        kicker="Wallet"
+        description="Balances and positions, with direct access to each market."
         actions={
           <div className="flex flex-wrap gap-2">
-            <Button nativeButton={false} variant="outline" render={<Link to="/portfolio/receive" />}>
+            <Button
+              nativeButton={false}
+              variant="outline"
+              className="workspace-action"
+              render={<Link to="/portfolio/receive" />}
+            >
               <ArrowDownLeft /> Receive
             </Button>
-            <Button nativeButton={false} variant="outline" render={<Link to="/portfolio/send" />}>
+            <Button
+              nativeButton={false}
+              variant="outline"
+              className="workspace-action"
+              render={<Link to="/portfolio/send" />}
+            >
               <ArrowUpRight /> Send
             </Button>
-            <Button nativeButton={false} variant="outline" render={<Link to="/portfolio/spend" />}>
+            <Button
+              nativeButton={false}
+              variant="outline"
+              className="workspace-action"
+              render={<Link to="/portfolio/spend" />}
+            >
               <CreditCard /> Spend preview
             </Button>
           </div>
         }
       />
       <PersonalNav area="portfolio" active="Overview" />
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Net value" value="—" detail="Gross assets less debt · unavailable" />
-        <StatCard label="Gross assets" value="—" detail="Wallet, supply and vault exposure · unavailable" />
-        <StatCard label="Debt" value="—" detail="No verified liabilities loaded" />
-        <StatCard label="Valuation coverage" value="—" detail="No verified prices or source time" />
-      </div>
-      <PersonalPanel
-        title="Allocation"
-        description="Asset exposure and net value use the same accounting. Collateral and receipt backing are counted once."
-      >
-        <fieldset aria-label="Portfolio allocation view" className="mb-4 flex flex-wrap gap-2">
-          <Button
-            variant={allocationView === 'mix' ? 'secondary' : 'ghost'}
-            aria-pressed={allocationView === 'mix'}
-            onClick={() => setAllocationView('mix')}
-          >
-            Asset mix
-          </Button>
-          <Button
-            variant={allocationView === 'net' ? 'secondary' : 'ghost'}
-            aria-pressed={allocationView === 'net'}
-            onClick={() => setAllocationView('net')}
-          >
-            Net value
-          </Button>
-        </fieldset>
-        {allocationView === 'mix' ? (
+      <section className="workspace-panel" aria-labelledby="portfolio-composition-title">
+        <div className="flex flex-wrap items-center justify-between gap-5 border-b p-6">
           <div>
-            <dl className="grid gap-x-6 sm:grid-cols-3">
-              <PersonalFact label="Wallet" value="Unavailable" />
-              <PersonalFact label="Direct supply" value="Unavailable" />
-              <PersonalFact label="Vault receipts" value="Unavailable" />
-            </dl>
-            <p className="mt-3 text-xs text-subtle">
-              Allocation percentages require verified balances and a common valuation time. No chart is inferred from
-              missing positions.
-            </p>
+            <h2 id="portfolio-composition-title" className="font-serif text-[22px] font-semibold">
+              Portfolio composition
+            </h2>
+            <p className="my-2 font-mono text-[38px] leading-tight text-subtle">—</p>
+            <p className="text-[11px] text-subtle">Net portfolio value · valuation unavailable</p>
           </div>
-        ) : (
-          <div>
-            <dl className="grid gap-x-6 sm:grid-cols-3">
-              <PersonalFact label="Gross assets" value="Unavailable" />
-              <PersonalFact label="Less debt" value="Unavailable" />
-              <PersonalFact label="Net value" value="Unavailable" />
-            </dl>
-            <p className="mt-3 text-xs text-subtle">
-              Net value = gross assets − debt. P&amp;L requires confirmed history and cost basis; neither is available.
-            </p>
-          </div>
-        )}
-      </PersonalPanel>
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_320px]">
-        <PersonalPanel title="Positions" description="Receipt tokens and their underlying assets are counted once.">
-          <div className="mb-4 flex flex-wrap gap-2">
-            {POSITION_GROUPS.map((item) => (
-              <Button
-                key={item}
-                variant={group === item ? 'secondary' : 'ghost'}
-                aria-pressed={group === item}
-                onClick={() => setGroup(item)}
-              >
-                {item}
-              </Button>
-            ))}
-          </div>
-          <PersonalEmptyTable
-            headers={['Position', 'Asset', 'Value', 'Source time', 'Actions']}
-            title={`No ${group.toLowerCase()} positions loaded`}
-            description="Wallet sign-in and position loading are not available in this build. Missing balances are not shown as zero."
-          />
-        </PersonalPanel>
-        <div className="flex flex-col gap-6">
-          <PersonalPanel title="Wallet access">
-            <div className="flex flex-col gap-4">
-              <UnavailableBadge />
-              <p className="text-sm text-muted-foreground">
-                No wallet is connected or verified here. Connecting a wallet never approves a transaction.
-              </p>
-              <Button disabled>
-                <Wallet /> Connect wallet
-              </Button>
-            </div>
-          </PersonalPanel>
-          <PersonalPanel title="Valuation coverage">
-            <dl>
-              <PersonalFact label="Latest valuation" value="Unavailable" />
-              <PersonalFact label="Price coverage" value="Not loaded" />
-              <PersonalFact label="Cost basis" value="Unknown" />
-            </dl>
-          </PersonalPanel>
-        </div>
-      </div>
-      <div className="grid gap-6 lg:grid-cols-2">
-        <PersonalPanel title="Pending workflows">
-          <EmptyState
-            title="No workflows loaded"
-            description="Submitted and externally settling actions remain visible until their actual outcomes are reconciled."
-          />
-        </PersonalPanel>
-        <PersonalPanel title="Activity" description="Only confirmed records establish financial history.">
-          <EmptyState
-            title="No activity loaded"
-            description="No swap, deposit, borrowing action or transfer is implied by visiting this workspace."
-          >
-            <Button nativeButton={false} variant="outline" render={<Link to="/portfolio/activity" />}>
-              <History /> Open activity
+          <fieldset aria-label="Portfolio allocation view" className="flex gap-2">
+            <Button
+              className="workspace-action"
+              variant={allocationView === 'mix' ? 'outline' : 'ghost'}
+              aria-pressed={allocationView === 'mix'}
+              onClick={() => setAllocationView('mix')}
+            >
+              Asset mix
             </Button>
-          </EmptyState>
-        </PersonalPanel>
-      </div>
+            <Button
+              className="workspace-action"
+              variant={allocationView === 'net' ? 'outline' : 'ghost'}
+              aria-pressed={allocationView === 'net'}
+              onClick={() => setAllocationView('net')}
+            >
+              Net value
+            </Button>
+          </fieldset>
+        </div>
+        <div className="p-6">
+          <p className="mb-5 text-xs text-subtle">
+            {allocationView === 'mix'
+              ? 'Gross assets · receipt backing is counted once'
+              : 'Net value = gross assets − debt'}
+          </p>
+          <div className="mb-6 flex min-h-8 items-center rounded-lg border border-dashed px-3 text-xs text-subtle">
+            Composition requires verified balances and prices.
+          </div>
+          <dl className="grid gap-5 sm:grid-cols-3">
+            {(allocationView === 'mix'
+              ? ['Wallet', 'Direct supply', 'Vault receipts']
+              : ['Gross assets', 'Less debt', 'Net value']
+            ).map((label) => (
+              <div key={label} className="border-l-2 pl-3">
+                <dt className="text-xs text-muted-foreground">{label}</dt>
+                <dd className="my-2 font-mono text-2xl text-subtle">—</dd>
+                <p className="text-[11px] text-subtle">Valuation unavailable</p>
+              </div>
+            ))}
+          </dl>
+        </div>
+        <p className="border-t px-6 py-4 text-xs leading-6 text-muted-foreground">
+          Performance needs confirmed history and cost basis. P&amp;L and historical performance remain unavailable.
+        </p>
+      </section>
+      <PersonalPanel
+        title="Positions & exits"
+        description="Manage each position with its identity, ownership and exit conditions preserved."
+      >
+        <PersonalEmptyTable
+          headers={['Position', 'Value', 'Accounting', 'Manage']}
+          title="No verified positions loaded"
+          description="Wallet assets, collateral, debt and vault receipts need confirmed position reads before appearing here. Missing data is not a zero balance."
+        />
+        <div className="mt-4 flex flex-wrap gap-4">
+          <Link to="/credit/positions" className="inline-flex min-h-11 items-center text-sm text-primary">
+            Manage credit positions <ArrowUpRight className="ml-2 size-4" />
+          </Link>
+          <Link to="/earn" className="inline-flex min-h-11 items-center text-sm text-primary">
+            Explore supply and vaults <ArrowUpRight className="ml-2 size-4" />
+          </Link>
+        </div>
+      </PersonalPanel>
     </div>
   );
 }

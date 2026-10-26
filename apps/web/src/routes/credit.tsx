@@ -1,4 +1,3 @@
-import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nest/ui/components/card';
 import { Input } from '@nest/ui/components/input';
@@ -6,21 +5,22 @@ import { Label } from '@nest/ui/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { Link } from '@tanstack/react-router';
-import { ArrowRight, ShieldCheck } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
-
+import { AssetIcon } from '../components/asset-icon.tsx';
 import {
   AssetSelect,
   CreditNavigation,
   DecimalField,
   ReviewRequirements,
-  UnavailableFacts,
-  VenueAvailability,
   WithdrawalTiming,
 } from '../components/financial-draft.tsx';
-import { DraftNotice, EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
-
+import { LendingProposalCard } from '../components/lending-proposal.tsx';
+import { LiveLendingRates } from '../components/live-lending.tsx';
+import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
+import { useWorkspaceSession } from '../components/workspace-session.tsx';
 import { amountDraftIssue } from '../lib/draft-validation.ts';
+import { execution } from '../lib/execution.ts';
 
 const INTENT_FIELDS = [
   { id: 'collateral', label: 'Collateral', shortLabel: 'Collat.', number: '01' },
@@ -32,13 +32,12 @@ const INTENT_FIELDS = [
 const VENUES = ['Best available', 'Blend', 'Templar', 'XOXNO'];
 
 export function CreditPage() {
-  const [activeField, setActiveField] = useState('collateral');
-  const [draftChecked, setDraftChecked] = useState(false);
+  const { setDraft, setAssistantOpen } = useWorkspaceSession();
+  const [activeField, setActiveField] = useState('debt');
   const [focusRequest, setFocusRequest] = useState(0);
-  const [draftStatus, setDraftStatus] = useState('');
   useEffect(() => {
     if (focusRequest) document.getElementById(`borrow-${activeField}`)?.focus();
-  }, [focusRequest, activeField]);
+  }, [activeField, focusRequest]);
   const [collateralAsset, setCollateralAsset] = useState('XLM');
   const [collateralAmount, setCollateralAmount] = useState('');
   const [debtAsset, setDebtAsset] = useState('USDC');
@@ -46,226 +45,288 @@ export function CreditPage() {
   const [horizonDays, setHorizonDays] = useState('');
   const [maxApr, setMaxApr] = useState('');
   const [venue, setVenue] = useState('Best available');
-  useEffect(() => {
-    setDraftStatus('');
-  }, [collateralAmount, debtAmount, horizonDays, maxApr, venue]);
+  const [checked, setChecked] = useState(false);
+  const [status, setStatus] = useState('');
   const values: Record<string, string> = {
     collateral: collateralAmount ? `${collateralAmount} ${collateralAsset}` : 'Choose asset and amount',
     debt: debtAmount ? `${debtAmount} ${debtAsset}` : 'Choose asset and amount',
-    horizon: horizonDays ? `${horizonDays} days` : 'Optional',
-    rate: maxApr ? `${maxApr}%` : 'Optional',
+    horizon: horizonDays ? `${horizonDays} days · comparison` : 'Optional',
+    rate: maxApr ? `Up to ${maxApr}% APR` : 'Optional',
     venue,
   };
+  const selected = INTENT_FIELDS.find((field) => field.id === activeField);
+  const headings: Record<string, string> = {
+    collateral: 'What will you put up?',
+    debt: 'What would you like to borrow?',
+    horizon: 'How long is your horizon?',
+    rate: 'Set your maximum rate.',
+    venue: 'Keep your options visible.',
+  };
+  const labels: Record<string, string> = {
+    collateral: 'Use collateral',
+    debt: 'Use debt amount',
+    horizon: 'Use comparison horizon',
+    rate: 'Use maximum APR',
+    venue: 'Use venue preference',
+  };
+
+  function validate() {
+    setChecked(true);
+    const invalid = amountDraftIssue(collateralAmount, true)
+      ? 'collateral'
+      : amountDraftIssue(debtAmount, true)
+        ? 'debt'
+        : horizonDays && !/^[1-9]\d*$/.test(horizonDays)
+          ? 'horizon'
+          : amountDraftIssue(maxApr, false, true)
+            ? 'rate'
+            : null;
+    if (invalid) {
+      setActiveField(invalid);
+      setFocusRequest((value) => value + 1);
+      setStatus('Check the highlighted amount or duration.');
+      return false;
+    }
+    return true;
+  }
+
+  function ask() {
+    if (!validate()) return;
+    setDraft(
+      'Compare borrowing ' +
+        debtAmount +
+        ' ' +
+        debtAsset +
+        ' against ' +
+        collateralAmount +
+        ' ' +
+        collateralAsset +
+        (horizonDays ? ` for a comparison horizon of ${horizonDays} days` : '') +
+        (maxApr ? `, with maximum borrow APR ${maxApr}%` : '') +
+        '. Venue preference: ' +
+        venue +
+        '. Preserve these exact constraints and explain any unsupported terms before proposing an action.',
+    );
+    setAssistantOpen(true);
+    setStatus('Your complete intent is in Ask Nest for review. It has not been sent.');
+  }
+
+  function reset() {
+    setCollateralAmount('');
+    setDebtAmount('');
+    setHorizonDays('');
+    setMaxApr('');
+    setCollateralAsset('XLM');
+    setDebtAsset('USDC');
+    setVenue('Best available');
+    setChecked(false);
+    setStatus('');
+    setActiveField('debt');
+  }
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Credit, on your terms."
-        kicker="Borrow"
-        description="Start with what you want to borrow. Compare the same collateral, debt and horizon across supported venues."
+        title="Borrow on your terms."
+        kicker="Credit / Amount-aware borrowing"
+        description="Set the collateral, debt and constraints. Compare the same intent across integrated venues."
+        actions={
+          <Button variant="ghost" className="workspace-action" onClick={ask}>
+            Ask Nest <ArrowUpRight />
+          </Button>
+        }
       />
       <CreditNavigation current="borrow" />
-      <div className="grid min-w-0 gap-6 xl:grid-cols-[24rem_minmax(0,1fr)]">
-        <Card className="min-w-0 gap-0 py-0">
-          <CardHeader className="border-b py-5">
-            <CardTitle className="text-2xl">Your borrowing intent</CardTitle>
-            <CardDescription>All five terms stay in view.</CardDescription>
-          </CardHeader>
-          <CardContent className="p-0">
-            <div className="grid grid-cols-1 sm:grid-cols-[10rem_minmax(0,1fr)] xl:grid-cols-[8rem_minmax(0,1fr)]">
-              <fieldset className="grid grid-cols-5 border-b bg-muted/40 sm:block sm:border-r sm:border-b-0">
-                <legend className="sr-only">Borrowing terms</legend>
-                {INTENT_FIELDS.map((field) => (
-                  <Button
-                    variant="ghost"
-                    key={field.id}
-                    type="button"
-                    aria-pressed={activeField === field.id}
-                    onClick={() => setActiveField(field.id)}
-                    className={`flex h-auto min-h-20 w-full min-w-0 flex-col items-start justify-center gap-1 rounded-none border-b p-2 text-left sm:min-h-24 sm:p-3 whitespace-normal transition-colors ${activeField === field.id ? 'bg-accent' : 'hover:bg-muted'}`}
-                  >
-                    <span className="font-mono text-xs text-subtle">{field.number}</span>
-                    <span className="max-w-full break-words text-xs font-medium sm:text-sm">
-                      <span className="sm:hidden">{field.shortLabel}</span>
-                      <span className="hidden sm:inline">{field.label}</span>
-                    </span>
-                    <span className="hidden max-w-full break-words text-xs text-muted-foreground sm:block">
-                      {values[field.id]}
-                    </span>
-                  </Button>
-                ))}
-              </fieldset>
-              <div className="min-w-0 space-y-5 p-4">
-                {activeField === 'collateral' ? (
-                  <>
-                    <h2 className="text-xl font-semibold">Put up collateral</h2>
-                    <AssetSelect label="Collateral asset" value={collateralAsset} onChange={setCollateralAsset} />
-                    <DecimalField
-                      label="Collateral amount"
-                      unit={collateralAsset}
-                      inputId="borrow-collateral"
-                      required={draftChecked}
-                      value={collateralAmount}
-                      onChange={setCollateralAmount}
-                    />
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      Collateral value and borrowing capacity need verified prices and venue terms.
-                    </p>
-                  </>
-                ) : null}
-                {activeField === 'debt' ? (
-                  <>
-                    <h2 className="text-xl font-semibold">Choose your debt</h2>
-                    <AssetSelect label="Debt asset" value={debtAsset} onChange={setDebtAsset} />
-                    <DecimalField
-                      label="Debt amount"
-                      unit={debtAsset}
-                      inputId="borrow-debt"
-                      required={draftChecked}
-                      value={debtAmount}
-                      onChange={setDebtAmount}
-                    />
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      Your requested amount will not be silently reduced to fit a venue.
-                    </p>
-                  </>
-                ) : null}
-                {activeField === 'horizon' ? (
-                  <>
-                    <h2 className="text-xl font-semibold">Set your horizon</h2>
-                    <div className="space-y-2">
-                      <Label htmlFor="borrow-horizon">Expected duration · days</Label>
-                      <Input
-                        aria-invalid={horizonDays !== '' && !/^[1-9]\d*$/.test(horizonDays)}
-                        aria-describedby="borrow-horizon-help"
-                        id="borrow-horizon"
-                        className="min-h-11 font-mono"
-                        inputMode="numeric"
-                        placeholder="Days"
-                        value={horizonDays}
-                        onChange={(event) => setHorizonDays(event.currentTarget.value)}
-                      />
-                    </div>
-                    <p id="borrow-horizon-help" className="text-xs leading-relaxed text-muted-foreground">
-                      Optional. Use a positive whole number of days. A horizon helps compare estimated costs; variable
-                      rates can change.
-                    </p>
-                  </>
-                ) : null}
-                {activeField === 'rate' ? (
-                  <>
-                    <h2 className="text-xl font-semibold">Limit financing cost</h2>
-                    <DecimalField
-                      label="Maximum borrow APR"
-                      unit="%"
-                      inputId="borrow-rate"
-                      allowZero
-                      value={maxApr}
-                      onChange={setMaxApr}
-                      placeholder="Optional APR"
-                      hint="Incentive yield is separate from the cost of borrowing."
-                    />
-                  </>
-                ) : null}
-                {activeField === 'venue' ? (
-                  <>
-                    <h2 className="text-xl font-semibold">Choose a venue preference</h2>
-                    <div className="space-y-2">
-                      <Label htmlFor="borrow-venue">Venue</Label>
-                      <Select value={venue} onValueChange={(next) => next !== null && setVenue(next)}>
-                        <SelectTrigger id="borrow-venue" className="min-h-11 w-full">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {VENUES.map((item) => (
-                            <SelectItem className="min-h-11" key={item} value={item}>
-                              {item}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <p className="text-xs leading-relaxed text-muted-foreground">
-                      A preference is not evidence of asset support, current liquidity or eligibility.
-                    </p>
-                  </>
-                ) : null}
-              </div>
-            </div>
-            <div className="space-y-4 border-t p-4">
-              <DraftNotice />
+      <div className="credit-builder">
+        <section className="workspace-panel credit-terms" aria-labelledby="credit-terms-title">
+          <p className="mb-3 font-mono text-[11px] tracking-widest text-subtle uppercase">Build an intent</p>
+          <h2 id="credit-terms-title">Your terms</h2>
+          <fieldset>
+            <legend className="sr-only">Borrowing terms</legend>
+            {INTENT_FIELDS.map((field) => (
               <Button
-                variant="outline"
-                className="min-h-11 w-full"
+                key={field.id}
+                type="button"
+                variant="ghost"
+                className="credit-step"
+                aria-pressed={activeField === field.id}
+                aria-controls="credit-term-editor"
                 onClick={() => {
-                  setDraftChecked(true);
-                  const invalidField = amountDraftIssue(collateralAmount, true)
-                    ? 'collateral'
-                    : amountDraftIssue(debtAmount, true)
-                      ? 'debt'
-                      : horizonDays && !/^[1-9]\d*$/.test(horizonDays)
-                        ? 'horizon'
-                        : amountDraftIssue(maxApr, false, true)
-                          ? 'rate'
-                          : null;
-                  if (invalidField) {
-                    setActiveField(invalidField);
-                    setFocusRequest((value) => value + 1);
-                    setDraftStatus('Check the highlighted amount or duration.');
-                  } else
-                    setDraftStatus(
-                      'Draft format checked. Asset eligibility, liquidity and loan terms still require current venue data.',
-                    );
+                  setActiveField(field.id);
+                  setStatus('');
                 }}
               >
-                Check draft
+                <span className="flex items-center gap-3 text-sm font-normal">
+                  <span className="font-mono text-[11px] text-subtle">{field.number}</span>
+                  {field.id === 'rate' ? 'Max rate' : field.label}
+                </span>
+                <span className="credit-step-value flex items-center gap-2">
+                  {values[field.id]} <ChevronRight className="size-3 shrink-0" />
+                </span>
               </Button>
-              <p role="status" className="text-xs text-muted-foreground">
-                {draftStatus}
-              </p>
-              <Button disabled className="min-h-11 w-full" aria-describedby="borrow-compare-status">
-                Compare venues
-                <ArrowRight />
-              </Button>
-              <p id="borrow-compare-status" className="text-xs leading-relaxed text-muted-foreground">
-                Live credit comparison is not available in this build. These inputs remain an unsaved draft.
-              </p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <div className="min-w-0 space-y-5">
-          <div className="flex flex-wrap items-center justify-between gap-3">
-            <h2 className="text-2xl font-semibold">Compare at the same size</h2>
-            <Badge variant="outline">Current terms unavailable</Badge>
+            ))}
+          </fieldset>
+          <div className="mt-6 flex gap-3">
+            <Button className="workspace-action flex-1" onClick={ask}>
+              Compare venues <ArrowRight />
+            </Button>
+            <Button variant="ghost" className="workspace-action" onClick={reset}>
+              Reset
+            </Button>
           </div>
-          <VenueAvailability />
-          <Card>
-            <CardContent>
-              <EmptyState
-                title="No amount-specific quotes yet"
-                description="Borrowing rates, fees, capacity and the resulting native risk must be verified for your exact request. Dated research yields are not live loan offers."
-              />
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-lg">
-                <ShieldCheck className="size-4" />
-                Before you borrow
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <p className="text-sm leading-relaxed text-muted-foreground">
-                Review collateral and debt changes, native liquidation constraints, all fee maxima and the settlement
-                path. A venue's health measure is not interchangeable with another venue's.
-              </p>
-              <WithdrawalTiming />
-              <ReviewRequirements />
-            </CardContent>
-          </Card>
-        </div>
+          <p className="mt-4 font-mono text-[11px] leading-6 text-subtle">
+            Compare before connecting a wallet.
+            <br />
+            No funds move until you review and sign a transaction.
+          </p>
+          <p role="status" className="mt-3 text-xs text-muted-foreground">
+            {status}
+          </p>
+        </section>
+        <section
+          id="credit-term-editor"
+          className="workspace-panel credit-editor"
+          aria-labelledby="credit-editor-title"
+        >
+          <div className="flex-1">
+            <p className="mb-3 font-mono text-[11px] tracking-widest text-subtle uppercase">
+              {selected?.number} / {selected?.label}
+            </p>
+            <h2 id="credit-editor-title">{headings[activeField]}</h2>
+            {activeField === 'collateral' || activeField === 'debt' ? (
+              <>
+                <div className="credit-asset-picker">
+                  <AssetIcon symbol={activeField === 'debt' ? debtAsset : collateralAsset} />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold">
+                      {activeField === 'debt' ? 'Borrow asset' : 'Collateral asset'}
+                    </p>
+                    <p className="mt-1 text-[11px] text-subtle">Stellar · verified asset identity required</p>
+                  </div>
+                  <div className="w-28 min-w-0 [&_label]:sr-only">
+                    <AssetSelect
+                      label={activeField === 'debt' ? 'Debt asset' : 'Collateral asset'}
+                      value={activeField === 'debt' ? debtAsset : collateralAsset}
+                      onChange={activeField === 'debt' ? setDebtAsset : setCollateralAsset}
+                    />
+                  </div>
+                </div>
+                <div className="credit-amount-editor">
+                  <DecimalField
+                    label={activeField === 'debt' ? 'Desired debt amount' : 'Collateral amount'}
+                    inputId={activeField === 'debt' ? 'borrow-debt' : 'borrow-collateral'}
+                    unit={activeField === 'debt' ? debtAsset : collateralAsset}
+                    value={activeField === 'debt' ? debtAmount : collateralAmount}
+                    onChange={activeField === 'debt' ? setDebtAmount : setCollateralAmount}
+                    required={checked}
+                  />
+                </div>
+                {activeField === 'debt' ? (
+                  <div className="mt-4 rounded-xl border p-4">
+                    <div role="img" aria-label="LTV unavailable" className="h-2 rounded-full border bg-secondary" />
+                    <p className="mt-2 text-[11px] text-subtle">
+                      LTV and maximum debt require verified prices and venue collateral terms.
+                    </p>
+                  </div>
+                ) : null}
+                <p className="credit-explainer">
+                  {activeField === 'debt'
+                    ? 'Borrow exactly the amount requested. Any unavailable pair, capacity or collateral requirement must remain visible before review.'
+                    : 'Collateral value and borrowing capacity come from verified prices and venue terms. Review withdrawal timing before any deposit.'}
+                </p>
+              </>
+            ) : null}
+            {activeField === 'horizon' ? (
+              <div className="space-y-5">
+                <Label htmlFor="borrow-horizon">Comparison horizon · days</Label>
+                <Input
+                  id="borrow-horizon"
+                  inputMode="numeric"
+                  className="min-h-16 bg-background font-mono text-2xl"
+                  value={horizonDays}
+                  onChange={(event) => setHorizonDays(event.currentTarget.value)}
+                  placeholder="Enter days"
+                  aria-invalid={Boolean(horizonDays && !/^[1-9]\d*$/.test(horizonDays))}
+                />
+                <p className="credit-explainer">
+                  A comparison horizon does not promise a fixed rate, maturity or guaranteed exit.
+                </p>
+              </div>
+            ) : null}
+            {activeField === 'rate' ? (
+              <div className="credit-amount-editor">
+                <DecimalField
+                  label="Maximum borrow APR"
+                  unit="% APR"
+                  value={maxApr}
+                  onChange={setMaxApr}
+                  inputId="borrow-rate"
+                  allowZero
+                />
+                <p className="credit-explainer">
+                  Optional. A ceiling constrains your request; it never changes saved Guardrails. Presets require
+                  current venue quotes.
+                </p>
+              </div>
+            ) : null}
+            {activeField === 'venue' ? (
+              <div className="space-y-5">
+                <Label htmlFor="borrow-venue">Compare venues</Label>
+                <Select value={venue} onValueChange={(next) => next !== null && setVenue(next)}>
+                  <SelectTrigger id="borrow-venue" className="min-h-11 w-full bg-background">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {VENUES.map((item) => (
+                      <SelectItem key={item} value={item}>
+                        {item}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="credit-explainer">
+                  Best available means eligible integrated venues at the same inputs. The review must disclose
+                  unsupported constraints, missing capacity and excluded markets.
+                </p>
+              </div>
+            ) : null}
+          </div>
+          <Button
+            className="workspace-action mt-6 w-full"
+            onClick={() => {
+              setChecked(true);
+              const issue =
+                activeField === 'collateral'
+                  ? amountDraftIssue(collateralAmount, true)
+                  : activeField === 'debt'
+                    ? amountDraftIssue(debtAmount, true)
+                    : activeField === 'rate'
+                      ? amountDraftIssue(maxApr, false, true)
+                      : activeField === 'horizon' && horizonDays && !/^[1-9]\d*$/.test(horizonDays)
+                        ? 'Use a positive whole number of days.'
+                        : null;
+              setStatus(issue || 'Selection retained in your local intent. Compare venues when ready.');
+            }}
+          >
+            {labels[activeField]}
+          </Button>
+        </section>
       </div>
+      <section className="credit-comparison space-y-5" aria-label="Borrow comparison">
+        <LiveLendingRates />
+        <div className="workspace-panel p-6">
+          <h2 className="mb-3 font-serif text-2xl font-semibold">One review, wherever you start.</h2>
+          <p className="mb-4 text-xs leading-6 text-muted-foreground">
+            The table shows current reference rates. Ask Nest carries your exact collateral, debt, horizon and rate
+            constraints into a draft; the transaction card must obtain its own amount-specific quote. Templar and XOXNO
+            execution are not connected yet.
+          </p>
+          <WithdrawalTiming />
+          <div className="mt-4">
+            <ReviewRequirements />
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
@@ -274,62 +335,120 @@ export function SupplyPage() {
   const [asset, setAsset] = useState('USDC');
   const [amount, setAmount] = useState('');
   const [horizon, setHorizon] = useState('');
+  const [intentId, setIntentId] = useState<string | null>(null);
+  const [creating, setCreating] = useState(false);
+  const [interactionLocked, setInteractionLocked] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  async function compare() {
+    const issue = amountDraftIssue(amount, true);
+    if (issue) {
+      setError(issue);
+      return;
+    }
+    if (asset !== 'USDC' && asset !== 'XLM') {
+      setError('This asset is not supported by the connected lending adapter.');
+      return;
+    }
+    setCreating(true);
+    setError(null);
+    setIntentId(null);
+    try {
+      const intent = await execution.createLending({ kind: 'supply', asset, amount: amount.trim() });
+      setIntentId(intent.id);
+    } catch (caught) {
+      setError(caught instanceof Error ? caught.message : 'Supply comparison is unavailable.');
+    } finally {
+      setCreating(false);
+    }
+  }
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Put idle assets to work."
-        kicker="Direct supply"
-        description="Compare direct lending at your amount, keeping base yield, incentives and exit conditions separate."
+        title="Put your assets to work."
+        kicker="Credit / Direct supply"
+        description="Compare direct lending at the same amount. Keep base yield, incentives and withdrawal conditions in view."
       />
       <CreditNavigation current="supply" />
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[21rem_minmax(0,1fr)]">
-        <Card className="min-w-0 self-start">
-          <CardHeader>
-            <CardTitle className="text-2xl">Supply draft</CardTitle>
-            <CardDescription>No funds move from this form.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <AssetSelect label="Supply asset" value={asset} onChange={setAsset} />
-            <DecimalField unit={asset} label="Supply amount" value={amount} onChange={setAmount} />
+      <div className="supply-workspace space-y-6">
+        <section className="workspace-panel p-6" aria-labelledby="supply-intent-title">
+          <p className="mb-3 font-mono text-[11px] tracking-widest text-subtle uppercase">Build an intent</p>
+          <h2 id="supply-intent-title" className="mb-6 font-serif text-[28px] font-semibold">
+            Supply intent
+          </h2>
+          <div className="grid items-start gap-6 sm:grid-cols-2">
+            <AssetSelect
+              label="Supply asset"
+              disabled={Boolean(intentId) || creating}
+              value={asset}
+              onChange={(value) => {
+                setAsset(value);
+                setIntentId(null);
+              }}
+            />
+            <DecimalField
+              unit={asset}
+              label="Supply amount"
+              disabled={Boolean(intentId) || creating}
+              value={amount}
+              onChange={(value) => {
+                setAmount(value);
+                setIntentId(null);
+              }}
+            />
             <div className="space-y-2">
-              <Label htmlFor="supply-horizon">Expected horizon · days</Label>
+              <Label htmlFor="supply-horizon">Comparison horizon · days</Label>
               <Input
                 id="supply-horizon"
-                className="min-h-11 font-mono"
+                className="min-h-11 bg-background font-mono"
                 inputMode="numeric"
                 value={horizon}
                 placeholder="Optional"
                 onChange={(event) => setHorizon(event.currentTarget.value)}
               />
+              <p className="text-xs text-subtle">Research context only. The connected pool offers a variable rate.</p>
             </div>
             <WithdrawalTiming />
-            <Button disabled className="min-h-11 w-full" aria-describedby="supply-status">
-              Compare supply venues
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-4">
+            <Button
+              className="workspace-action min-w-52"
+              disabled={Boolean(intentId) || creating || !amount.trim()}
+              onClick={() => void compare()}
+            >
+              {creating ? 'Comparing…' : 'Compare supply venues'} <ArrowRight />
             </Button>
-            <p id="supply-status" className="text-xs leading-relaxed text-muted-foreground">
-              Current rates, capacity and exit terms are not connected yet. No deposit can be reviewed.
+            <p className="text-xs text-subtle">Comparison uses live Blend pools. Your wallet signs every deposit.</p>
+          </div>
+          {intentId ? (
+            <Button
+              variant="ghost"
+              className="workspace-action mt-4"
+              disabled={interactionLocked}
+              onClick={() => setIntentId(null)}
+            >
+              Edit supply intent
+            </Button>
+          ) : null}
+          {error ? (
+            <p role="alert" className="mt-3 text-sm text-destructive">
+              {error}
             </p>
-            <DraftNotice />
-          </CardContent>
-        </Card>
-        <div className="min-w-0 space-y-5">
-          <h2 className="text-2xl font-semibold">Direct lending venues</h2>
-          <VenueAvailability />
-          <Card>
-            <CardContent>
-              <EmptyState
-                title="Supply comparison unavailable"
-                description="A meaningful comparison needs current base yield, rewards, fees and withdrawable liquidity at the same amount and horizon."
-              >
-                <Link to="/research" className="inline-flex min-h-11 items-center text-sm text-primary hover:underline">
-                  Explore dated research
-                  <ArrowRight className="ml-2 size-4" />
-                </Link>
-              </EmptyState>
-            </CardContent>
-          </Card>
-          <ReviewRequirements />
-        </div>
+          ) : null}
+        </section>
+        <section className="workspace-panel p-6" aria-labelledby="supply-comparison-title">
+          <h2 id="supply-comparison-title" className="mb-5 font-serif text-[28px] font-semibold">
+            Supply comparison
+          </h2>
+          {intentId ? (
+            <LendingProposalCard key={intentId} intentId={intentId} onInteractionLock={setInteractionLocked} />
+          ) : (
+            <LiveLendingRates />
+          )}
+          <p className="mt-4 text-xs leading-6 text-subtle">
+            Templar and XOXNO are research coverage; their execution adapters are not connected. No rates or
+            availability are inferred for them.
+          </p>
+        </section>
       </div>
     </div>
   );
@@ -346,11 +465,11 @@ export function PositionsPage() {
       />
       <CreditNavigation current="positions" />
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {['Confirmed collateral', 'Outstanding debt', 'Net credit value', 'Pending workflows'].map((label) => (
+        {['Confirmed collateral', 'Outstanding debt', 'Net credit value', 'Supplied liquidity'].map((label) => (
           <StatCard key={label} label={label} value="—" detail="No verified position loaded" />
         ))}
       </div>
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="flex min-w-0 flex-col gap-6">
         <div className="min-w-0 space-y-5">
           <Card>
             <CardHeader>
@@ -376,35 +495,15 @@ export function PositionsPage() {
               </EmptyState>
             </CardContent>
           </Card>
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-xl">Native position health</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <UnavailableFacts
-                labels={[
-                  'Risk metric',
-                  'Liquidation boundary',
-                  'Collateral valuation',
-                  'Accrued debt',
-                  'Observation time',
-                ]}
-              />
-              <p className="mt-5 text-xs leading-relaxed text-muted-foreground">
-                No common health factor is inferred. Each position keeps its venue's metric, ownership and withdrawal
-                constraints.
-              </p>
-            </CardContent>
-          </Card>
         </div>
-        <Card className="min-w-0 self-start">
+        <Card className="min-w-0 w-full">
           <CardHeader>
             <CardTitle className="text-2xl">Manage position</CardTitle>
             <CardDescription>Choose a verified position first.</CardDescription>
           </CardHeader>
           <CardContent className="space-y-5">
             <Tabs defaultValue="add">
-              <TabsList className="h-auto flex-wrap">
+              <TabsList className="h-auto w-full justify-start overflow-x-auto whitespace-nowrap">
                 <TabsTrigger className="min-h-11" value="add">
                   Add collateral
                 </TabsTrigger>
@@ -446,17 +545,6 @@ export function PositionsPage() {
           </CardContent>
         </Card>
       </div>
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Position activity</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <EmptyState
-            title="No loaded receipts or workflows"
-            description="A funding confirmation is not proof that borrowing completed. Actual receipts and pending settlement will appear separately when connected."
-          />
-        </CardContent>
-      </Card>
     </div>
   );
 }

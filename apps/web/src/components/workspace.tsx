@@ -15,7 +15,7 @@ export function PageHeader({
   actions?: ReactNode;
 }) {
   return (
-    <header className="flex flex-wrap items-start justify-between gap-4">
+    <header className="workspace-page-header flex flex-wrap items-start justify-between gap-4">
       <div className="min-w-0 space-y-2">
         {kicker ? <p className="font-mono text-xs uppercase tracking-wider text-subtle">{kicker}</p> : null}
         <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
@@ -56,7 +56,7 @@ export function DraftNotice({ children }: { children?: ReactNode }) {
 
 export function StatCard({ label, value, detail }: { label: string; value: string; detail?: string }) {
   return (
-    <Card size="sm">
+    <Card size="sm" className="workspace-stat">
       <CardHeader>
         <CardDescription>{label}</CardDescription>
         <CardTitle className="font-mono text-2xl tabular-nums">{value}</CardTitle>
