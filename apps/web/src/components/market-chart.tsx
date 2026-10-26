@@ -4,15 +4,13 @@ import { Maximize, Minus, Plus } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { formatUtc } from '../lib/format.ts';
-import { PRICE_INTERVALS, type PriceInterval, usePriceHistory } from '../lib/market.ts';
 import { aggregateCandles, type MarketHistory, parseMarketHistory } from '../lib/market-history.ts';
 
-const INTERVAL_SECONDS: Record<PriceInterval, number> = { '15m': 900, '1h': 3600, '4h': 14400, '1d': 86400 };
-const INTERVALS = PRICE_INTERVALS.map((value) => ({
-  label: value.toUpperCase(),
-  value,
-  seconds: INTERVAL_SECONDS[value],
-}));
+const INTERVALS = [
+  { label: '1H', seconds: 3600 },
+  { label: '4H', seconds: 14400 },
+  { label: '1D', seconds: 86400 },
+];
 
 export interface ChartContext {
   close: number;
@@ -27,37 +25,31 @@ export function MarketChart({
   asset: string;
   onContext?: (context: ChartContext | null) => void;
 }) {
-  const [interval, setInterval] = useState<PriceInterval>('1h');
-  const live = usePriceHistory(interval);
-  const inverted = asset === 'USDC';
-  const unit = inverted ? 'XLM' : 'USDC';
-  const history = useMemo<MarketHistory | null>(() => {
-    if (!live.data) return null;
-    return parseMarketHistory(
-      {
-        [asset]: {
-          rows: live.data.candles.map((candle) => ({
-            time: candle.timeMs / 1000,
-            open: inverted ? 1 / candle.open : candle.open,
-            high: inverted ? 1 / candle.low : candle.high,
-            low: inverted ? 1 / candle.high : candle.low,
-            close: inverted ? 1 / candle.close : candle.close,
-          })),
-          source: live.data.source,
-          fetchedAt: Math.floor(live.data.observedAtMs / 1000),
-          note: `Live ${live.data.network} history.`,
-        },
-      },
-      asset,
-    );
-  }, [live.data, asset, inverted]);
-  const failed = live.isError;
+  const [history, setHistory] = useState<MarketHistory | null>(null);
+  const [failed, setFailed] = useState(false);
+  const [interval, setInterval] = useState(3600);
   const host = useRef<HTMLDivElement>(null);
   const chart = useRef<IChartApi | null>(null);
-  const rows = useMemo(
-    () => aggregateCandles(history?.rows ?? [], INTERVALS.find((item) => item.value === interval)?.seconds ?? 3600),
-    [history, interval],
-  );
+  const rows = useMemo(() => aggregateCandles(history?.rows ?? [], interval), [history, interval]);
+  useEffect(() => {
+    let active = true;
+    setHistory(null);
+    setFailed(false);
+    import('../../../../design/nest/ui/trade-market-history.json')
+      .then((module) => {
+        const parsed = parseMarketHistory(module.default, asset);
+        if (active) {
+          setHistory(parsed);
+          setFailed(!parsed);
+        }
+      })
+      .catch(() => {
+        if (active) setFailed(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, [asset]);
   useEffect(() => {
     const element = host.current;
     if (!element || !rows.length) return;
@@ -122,16 +114,16 @@ export function MarketChart({
     <div className="min-w-0">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3">
         <h2 className="text-lg font-semibold">
-          {asset} / {unit} {INTERVALS.find((item) => item.value === interval)?.label} Candles
+          {asset} / USDC {INTERVALS.find((item) => item.seconds === interval)?.label} Candles
         </h2>
         <fieldset aria-label="Chart interval" className="flex gap-1">
           {INTERVALS.map((item) => (
             <Button
               key={item.seconds}
               size="sm"
-              variant={interval === item.value ? 'secondary' : 'ghost'}
-              aria-pressed={interval === item.value}
-              onClick={() => setInterval(item.value)}
+              variant={interval === item.seconds ? 'secondary' : 'ghost'}
+              aria-pressed={interval === item.seconds}
+              onClick={() => setInterval(item.seconds)}
             >
               {item.label}
             </Button>
@@ -141,8 +133,8 @@ export function MarketChart({
       <div className="flex flex-wrap items-center justify-between gap-3 px-5 py-3">
         <p className="font-mono text-[10px] text-subtle">
           {history
-            ? `${history.source} · updated ${formatUtc(new Date(history.fetchedAt * 1000).toISOString())}`
-            : 'Live network observations'}
+            ? `${history.source} · captured ${formatUtc(new Date(history.fetchedAt * 1000).toISOString())}`
+            : 'Historical observations'}
         </p>
         <div className="flex gap-1">
           <Button
@@ -177,21 +169,18 @@ export function MarketChart({
       <div
         ref={host}
         role="img"
-        aria-label={`${asset} live reference candlesticks in ${unit}; not an execution quote`}
-        className={`h-[390px] min-w-0 ${live.isPlaceholderData ? 'opacity-50' : ''}`}
+        aria-label={`${asset} captured reference candlesticks in USDC; not a live execution quote`}
+        className="h-[390px] min-w-0"
       >
         {!history ? (
           <p className="flex h-full items-center justify-center px-5 text-center text-sm text-muted-foreground">
-            {failed
-              ? 'Live price history is unavailable. Try another interval.'
-              : live.data?.candles.length === 0
-                ? 'No trades in this window. Try another interval.'
-                : 'Loading live price history…'}
+            {failed ? 'Verified history is unavailable for this asset.' : 'Loading price history…'}
           </p>
         ) : null}
       </div>
       <p className="border-t px-5 py-3 text-[11px] leading-5 text-subtle">
-        {history?.note} Reference trades include Stellar DEX and classic AMM activity. Get a fresh quote before trading.
+        {history?.note} Captured Mainnet context, independent of your execution network. Get a fresh quote before
+        trading.
       </p>
     </div>
   );

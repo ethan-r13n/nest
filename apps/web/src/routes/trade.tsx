@@ -13,31 +13,28 @@ import { type ChartContext, MarketChart } from '../components/market-chart.tsx';
 import { SwapProposalCard, useCountdown } from '../components/swap-proposal.tsx';
 import { balanceHint, RouteFacts, useSwapDraft, WalletActivity } from '../components/trade-live.tsx';
 import { EmptyState } from '../components/workspace.tsx';
-import { execution, type SwapSymbol } from '../lib/execution.ts';
-import { formatPercentPoints } from '../lib/format.ts';
+import { execution } from '../lib/execution.ts';
 import { useHealth } from '../lib/health.ts';
-import { usePriceHistory } from '../lib/market.ts';
+import { MARKET_SYMBOLS } from '../lib/market-assets.ts';
 import { maxSwapAmount } from '../lib/trade-amount.ts';
 import { useWallet } from '../lib/wallet.tsx';
 
-const SWAP_ASSETS: readonly SwapSymbol[] = ['XLM', 'USDC'];
-const VOLUME = new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 });
-
 export function TradePage() {
-  const [inputAsset, setInputAsset] = useState<SwapSymbol>('XLM');
+  const [marketAsset, setMarketAsset] = useState('XLM');
+  const [inputAsset, setInputAsset] = useState('XLM');
+  const [outputAsset, setOutputAsset] = useState('USDC');
   const [amount, setAmount] = useState('');
   const [chartContext, setChartContext] = useState<ChartContext | null>(null);
   const [interactionLocked, setInteractionLocked] = useState(false);
-  const outputAsset = inputAsset === 'XLM' ? 'USDC' : 'XLM';
+  const supportedPair =
+    (inputAsset === 'XLM' && outputAsset === 'USDC') || (inputAsset === 'USDC' && outputAsset === 'XLM');
+  const swapAsset = inputAsset === 'XLM' || inputAsset === 'USDC' ? inputAsset : null;
   const health = useHealth();
   const wallet = useWallet();
   const queryClient = useQueryClient();
-  const history = usePriceHistory('1h');
   const draft = useSwapDraft(inputAsset, outputAsset, amount);
   const { intentId, quote } = draft;
   const secondsLeft = useCountdown(quote?.expiresAt);
-  const day = history.data?.day;
-  const change = day ? (inputAsset === 'USDC' ? (day.open / day.close - 1) * 100 : day.changePct) : null;
   const balances = useQuery({
     queryKey: ['balances', wallet.address],
     queryFn: () => execution.balances(wallet.address ?? ''),
@@ -45,16 +42,43 @@ export function TradePage() {
     refetchInterval: 30_000,
   });
   const spendable = balances.data?.balances.find((balance) => balance.symbol === inputAsset)?.spendable ?? null;
-  const maximum = spendable === null ? null : maxSwapAmount(spendable, inputAsset);
+  const maximum = spendable === null || swapAsset === null ? null : maxSwapAmount(spendable, swapAsset);
   const refreshWallet = useCallback(() => {
     void queryClient.invalidateQueries({ queryKey: ['balances'] });
     void queryClient.invalidateQueries({ queryKey: ['activity'] });
   }, [queryClient]);
 
-  function chooseInput(value: string) {
-    if (value !== 'USDC' && value !== 'XLM') return;
+  function chooseMarket(value: string) {
+    setMarketAsset(value);
+    if (value !== marketAsset) setChartContext(null);
     setInputAsset(value);
-    setChartContext(null);
+    setOutputAsset('USDC');
+    setAmount('');
+  }
+
+  function chooseInput(value: string) {
+    setInputAsset(value);
+    setOutputAsset(value === 'USDC' ? marketAsset : 'USDC');
+    if (value !== 'USDC') {
+      setMarketAsset(value);
+      if (value !== marketAsset) setChartContext(null);
+    }
+    setAmount('');
+  }
+
+  function chooseOutput(value: string) {
+    setOutputAsset(value);
+    setInputAsset(value === 'USDC' ? marketAsset : 'USDC');
+    if (value !== 'USDC') {
+      setMarketAsset(value);
+      if (value !== marketAsset) setChartContext(null);
+    }
+    setAmount('');
+  }
+
+  function reversePair() {
+    setInputAsset(outputAsset);
+    setOutputAsset(inputAsset);
     setAmount('');
   }
 
@@ -62,38 +86,28 @@ export function TradePage() {
     <div className="trade-workspace flex min-w-0 flex-col gap-5">
       <header className="flex flex-wrap items-center justify-between gap-5">
         <div className="flex items-center gap-3">
-          <AssetIcon symbol={inputAsset} className="size-11" />
+          <AssetIcon symbol={marketAsset} className="size-11" />
           <div>
-            <h1 className="font-serif text-[32px] font-semibold">
-              {inputAsset} / {outputAsset}
-            </h1>
+            <h1 className="font-serif text-[32px] font-semibold">{marketAsset} / USDC</h1>
             <p className="mt-1 text-xs text-subtle">Stellar spot · market orders</p>
           </div>
           <AssetPicker
             compact
             label="Choose market asset"
-            value={inputAsset}
+            value={marketAsset}
             disabled={interactionLocked}
-            assets={SWAP_ASSETS}
-            onChange={chooseInput}
+            assets={MARKET_SYMBOLS}
+            onChange={chooseMarket}
           />
         </div>
         <div className="trade-market-context">
           <div>
             <span>Spot / reference</span>
-            <strong>{chartContext ? `${chartContext.close.toFixed(6)} ${outputAsset}` : 'Unavailable'}</strong>
+            <strong>{chartContext ? `${chartContext.close.toFixed(6)} USDC` : 'Unavailable'}</strong>
           </div>
           <div>
-            <span>24h change</span>
-            <strong>{change === null ? 'Unavailable' : formatPercentPoints(change)}</strong>
-          </div>
-          <div>
-            <span>24h volume</span>
-            <strong>{day ? `${VOLUME.format(day.counterVolume)} USDC` : 'Unavailable'}</strong>
-          </div>
-          <div>
-            <span>24h trades</span>
-            <strong>{day ? VOLUME.format(day.trades) : 'Unavailable'}</strong>
+            <span>Captured change · 24h</span>
+            <strong>{chartContext?.changePct == null ? 'Unavailable' : `${chartContext.changePct.toFixed(2)}%`}</strong>
           </div>
           <div>
             <span>History coverage</span>
@@ -101,13 +115,13 @@ export function TradePage() {
           </div>
           <div>
             <span>Data</span>
-            <strong>Live · {health.data?.network ?? 'Loading'}</strong>
+            <strong>Captured · {health.data?.network ?? 'Loading'} execution</strong>
           </div>
         </div>
       </header>
       <div className="trade-grid">
         <section className="workspace-panel trade-chart min-w-0" aria-label="Price context">
-          <MarketChart asset={inputAsset} onContext={setChartContext} />
+          <MarketChart asset={marketAsset} onContext={setChartContext} />
         </section>
         <section className="workspace-panel trade-routes min-w-0" aria-labelledby="trade-routes-title">
           <div className="border-b px-5 py-4">
@@ -116,7 +130,13 @@ export function TradePage() {
             </h2>
           </div>
           <div className="space-y-5 p-5">
-            <RouteFacts quote={quote} referencePrice={chartContext?.close ?? null} network={health.data?.network} />
+            {supportedPair ? (
+              <RouteFacts quote={quote} referencePrice={null} network={health.data?.network} />
+            ) : (
+              <p className="text-xs leading-relaxed text-subtle">
+                This market is available for research. Swap execution for this pair is not connected.
+              </p>
+            )}
           </div>
         </section>
         <section className="workspace-panel trade-ticket min-w-0" aria-labelledby="trade-ticket-title">
@@ -140,16 +160,12 @@ export function TradePage() {
                   onChange={(event) => setAmount(event.currentTarget.value)}
                   className="trade-amount-input"
                 />
-                <AssetPicker
-                  label="You pay"
-                  value={inputAsset}
-                  disabled={interactionLocked}
-                  assets={SWAP_ASSETS}
-                  onChange={chooseInput}
-                />
+                <AssetPicker label="You pay" value={inputAsset} disabled={interactionLocked} onChange={chooseInput} />
               </div>
               <p className="mt-3 text-[10px] leading-5 text-subtle">
-                {balanceHint(wallet.address, balances.data, spendable, inputAsset, balances.isError)}
+                {swapAsset
+                  ? balanceHint(wallet.address, balances.data, spendable, swapAsset, balances.isError)
+                  : 'Research asset · execution is not connected.'}
               </p>
             </div>
             {maximum ? (
@@ -164,7 +180,7 @@ export function TradePage() {
                 className="size-11"
                 disabled={interactionLocked}
                 aria-label="Reverse input and output assets"
-                onClick={() => chooseInput(outputAsset)}
+                onClick={reversePair}
               >
                 <ArrowDownUp />
               </Button>
@@ -185,8 +201,7 @@ export function TradePage() {
                   label="You receive"
                   value={outputAsset}
                   disabled={interactionLocked}
-                  assets={SWAP_ASSETS}
-                  onChange={(value) => chooseInput(value === 'USDC' ? 'XLM' : 'USDC')}
+                  onChange={chooseOutput}
                 />
               </div>
               <p className="mt-3 text-[10px] leading-5 text-subtle">
@@ -241,7 +256,11 @@ export function TradePage() {
             <p className="text-xs text-subtle">
               Balances and maximum fees are verified during transaction preparation. A chart price is context only.
             </p>
-            {intentId ? (
+            {!supportedPair ? (
+              <p className="text-xs text-subtle">
+                Execution is unavailable for this pair. You can still inspect its captured chart and research.
+              </p>
+            ) : intentId ? (
               <SwapProposalCard
                 key={intentId}
                 intentId={intentId}

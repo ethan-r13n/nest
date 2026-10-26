@@ -5,6 +5,10 @@
   align-items: start;
 }
 
+.nest-workspace .trade-workspace button.trade-market-picker {
+  border: 2px solid var(--nest-accent);
+}
+
 .trade-chart {
   grid-column: 1;
 }

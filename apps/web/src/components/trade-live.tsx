@@ -7,7 +7,6 @@ import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, RefreshCw, Wallet } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { amountDraftIssue } from '../lib/draft-validation.ts';
 import {
   type ActivityItem,
   ExecutionRequestError,
@@ -17,6 +16,7 @@ import {
   venueName,
 } from '../lib/execution.ts';
 import { formatPercentPoints } from '../lib/format.ts';
+import { swapDraftRequest } from '../lib/swap-draft.ts';
 import { useWallet } from '../lib/wallet.tsx';
 import { Fact, useCountdown } from './swap-proposal.tsx';
 import { EmptyState } from './workspace.tsx';
@@ -32,22 +32,23 @@ function formatPrice(price: number): string {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: 6 }).format(price);
 }
 
-export function useSwapDraft(sell: SwapSymbol, buy: SwapSymbol, amount: string) {
+export function useSwapDraft(sell: string, buy: string, amount: string) {
   const [intentId, setIntentId] = useState<string | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [draftKey, setDraftKey] = useState<string | null>(null);
   const key = `${sell}:${buy}:${amount}`;
-  const ready = amountDraftIssue(amount, true) === null;
+  const ready = swapDraftRequest(sell, buy, amount) !== null;
 
   useEffect(() => {
     setIntentId(null);
     setQuote(null);
     setError(null);
-    if (!ready) return;
+    const request = swapDraftRequest(sell, buy, amount);
+    if (!request) return;
     let active = true;
     const timer = setTimeout(() => {
-      execution.createSwap({ sellAsset: sell, buyAsset: buy, sellAmount: amount }).then(
+      execution.createSwap(request).then(
         (intent) => {
           if (active) {
             setDraftKey(key);
@@ -65,7 +66,7 @@ export function useSwapDraft(sell: SwapSymbol, buy: SwapSymbol, amount: string) 
     };
   }, [sell, buy, amount, ready, key]);
 
-  const current = draftKey === key;
+  const current = ready && draftKey === key;
   return {
     intentId: current ? intentId : null,
     quote: current ? quote : null,

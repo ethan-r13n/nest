@@ -105,7 +105,7 @@ Live Blend rates on Research support click, text selection and keyboard activati
 
 ### Live Trade integration
 
-Keep the restored candlestick layout and searchable asset selector. `/api/markets/price-history?interval=15m|1h|4h|1d` supplies network-specific Stellar DEX/classic AMM observations; reverse a pair by inverting open/close and exchanging inverted high/low. Empty or failed history remains explicit. Market observations provide context, never an execution quote. Swap input currently enables XLM/USDC, matching actual adapter support.
+Keep the approved candlestick chart, captured reference series, and full searchable market window: XLM, AQUA, EURC, USDT0, PYUSD, SolvBTC and EUTBL, all quoted in USDC. Preserve source capture times and labels; choosing a research asset must not substitute a live Testnet candle series. Swap controls additionally allow USDC as a payment asset. Only the integrated XLM/USDC pair creates executable swap intents; other markets remain inspectable with an explicit execution-unavailable state. The separate `/api/markets/price-history?interval=15m|1h|4h|1d` endpoint supplies network-specific Stellar observations for future live contexts. Neither a captured chart nor a live history observation is an execution quote.
 
 Debounce edited swap amounts for 600ms before creating a fresh typed intent. Quote and review state must match the current assets and amount; changing them discards the old display. Preserve signing/submission locks. Read spendable balances from the account endpoint, calculate Use max with bigint amounts and an explicit XLM fee buffer, and refresh balances and recorded activity after settlement. Missing cost basis remains unavailable rather than becoming invented positions or P&L.
 

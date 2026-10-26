@@ -9,7 +9,7 @@ export interface MarketHistory {
 
 export function parseMarketHistory(value: unknown, asset: string): MarketHistory | null {
   if (!isRecord(value)) return null;
-  const item = value[asset];
+  const item = value[asset] ?? value[asset.toUpperCase()];
   if (!isRecord(item) || !Array.isArray(item.rows) || !item.rows.length || !item.rows.every(isCandle)) return null;
   if (
     typeof item.source !== 'string' ||
