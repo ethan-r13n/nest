@@ -20,6 +20,7 @@ import { createLimitCloseIntent, createLimitOrderIntent, limitPool, listLimitOrd
 import { executionDeps } from './store.ts';
 import { createSwapIntent, swapBalances } from './swap.ts';
 import { prepareTrustline, submitTrustline } from './trustline.ts';
+import { createVaultWithdrawalIntent, listVaultPositions } from './vault-withdrawals.ts';
 import { createVaultIntent } from './vaults.ts';
 
 const SwapIntentSchema = z.strictObject({
@@ -36,6 +37,10 @@ const LendingIntentSchema = z.strictObject({
   collateralAsset: z.enum(LENDING_SYMBOLS).optional(),
   collateralAmount: z.string().min(1).max(40).optional(),
   poolId: z.string().length(56).optional(),
+  lendingAccountId: z
+    .string()
+    .regex(/^[1-9]\d{0,19}$/)
+    .optional(),
 });
 const DECIMAL = z.string().regex(/^(0|[1-9]\d{0,11})(\.\d{1,7})?$/);
 const LimitOrderSchema = z.strictObject({
@@ -57,10 +62,16 @@ const VaultIntentSchema = z.strictObject({
   vaultId: z.string().regex(/^C[A-Z2-7]{55}$/),
   amount: z.string().min(1).max(40),
 });
+const VaultWithdrawalIntentSchema = z.strictObject({
+  kind: z.literal('vault_withdraw'),
+  vaultId: z.string().regex(/^C[A-Z2-7]{55}$/),
+  amount: z.string().min(1).max(80),
+});
 const IntentSchema = z.discriminatedUnion('kind', [
   SwapIntentSchema,
   LendingIntentSchema,
   VaultIntentSchema,
+  VaultWithdrawalIntentSchema,
   LimitOrderSchema,
   LimitCloseSchema,
 ]);
@@ -103,6 +114,11 @@ export function createExecutionRoutes() {
     }
     if (body.kind === 'vault_deposit')
       return c.json(await createVaultIntent(deps, { vaultId: body.vaultId, amount: body.amount, source: 'form' }), 201);
+    if (body.kind === 'vault_withdraw')
+      return c.json(
+        await createVaultWithdrawalIntent(deps, { vaultId: body.vaultId, amount: body.amount, source: 'form' }),
+        201,
+      );
     if (body.kind === 'limit_order')
       return c.json(await createLimitOrderIntent(deps, { ...body, source: 'form' }), 201);
     if (body.kind === 'limit_close')
@@ -122,7 +138,9 @@ export function createExecutionRoutes() {
   routes.get('/vaults', async (c) => {
     const deps = executionDeps(c.env);
     if (!deps.vaults) throw new AppError('UNAVAILABLE', 'Vault deposits need a DeFindex API key on this server.');
-    const vaults = await deps.vaults.vaults();
+    const vaults = await deps.vaults.vaults().catch(() => {
+      throw new AppError('UNAVAILABLE', 'The complete vault catalog could not be read right now. Try again shortly.');
+    });
     return c.json({
       network: deps.config.network,
       vaults: vaults.map((vault) => ({
@@ -144,6 +162,9 @@ export function createExecutionRoutes() {
   /** What the wallet can spend of each swap asset, for the swap form. Read-only. */
   routes.get('/balances', async (c) =>
     c.json(await swapBalances(executionDeps(c.env).config.network, c.req.query('account') ?? '')),
+  );
+  routes.get('/vaults/positions', async (c) =>
+    c.json(await listVaultPositions(executionDeps(c.env), c.req.query('account') ?? '')),
   );
 
   /** The wallet's Blend and XOXNO lending positions, for Portfolio. Read-only. */

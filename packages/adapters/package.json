@@ -19,6 +19,7 @@
     "./blend/submit": "./src/blend/submit.ts",
     "./defindex/deposit": "./src/defindex/deposit.ts",
     "./defindex/vaults": "./src/defindex/vaults.ts",
+    "./defindex/withdraw": "./src/defindex/withdraw.ts",
     "./stellar/accounts": "./src/stellar/accounts.ts",
     "./stellar/trustline": "./src/stellar/trustline.ts",
     "./amm/arbitrage": "./src/amm/arbitrage.ts",

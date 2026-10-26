@@ -4,7 +4,7 @@
   "ignoreDependencies": ["cloudflare"],
   "workspaces": {
     ".": {
-      "entry": ["scripts/collect-aquarius.mjs"]
+      "entry": ["scripts/collect-aquarius.mjs", "scripts/prepare-deployment.mjs"]
     }
   }
 }

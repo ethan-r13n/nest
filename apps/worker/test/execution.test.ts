@@ -24,6 +24,7 @@ import {
   readPlan,
   submitPlan,
 } from '../src/execution/lifecycle.ts';
+import { recoverPendingPlans } from '../src/execution/recovery.ts';
 import type { SwapRpc } from '../src/execution/rpc.ts';
 import type { ExecutionDeps } from '../src/execution/store.ts';
 import { createSwapIntent, swapBalances } from '../src/execution/swap.ts';
@@ -399,6 +400,100 @@ describe('swap lifecycle', () => {
     await expect(createSwapPlan(h.deps, { ...input, accountId: Keypair.random().publicKey() })).rejects.toThrow(
       /idempotency/,
     );
+  });
+});
+
+describe('scheduled receipt recovery', () => {
+  it('recovers the original transaction after the caller disappears without submitting again', async () => {
+    const original = createFixture();
+    original.rpcScript.send = ['THROW'];
+    const { plan, signedXdr } = await signedPlan(original);
+    expect(await submitPlan(original.deps, plan.id, signedXdr)).toMatchObject({ status: 'submitted' });
+    const restarted = createFixture();
+    const rpc = restarted.deps.rpc;
+    if (!rpc) throw new Error('Missing recovery RPC fixture.');
+    const hashes: string[] = [];
+    restarted.deps.rpc = {
+      ...rpc,
+      get: async (hash) => {
+        hashes.push(hash);
+        return { status: 'SUCCESS', ledger: 123, returnValue: AMOUNT_OUT };
+      },
+    };
+    expect(await recoverPendingPlans(restarted.deps)).toMatchObject({ checked: 1, confirmed: 1 });
+    expect(hashes).toEqual([plan.prepared?.hash]);
+    expect(restarted.sent).toEqual([]);
+    expect(await readPlan(restarted.deps, plan.id)).toMatchObject({ status: 'confirmed', ledger: 123 });
+  });
+
+  it('keeps an uncertain submission pending when the provider fails and never rebroadcasts it', async () => {
+    const h = createFixture();
+    h.rpcScript.send = ['THROW'];
+    const { plan, signedXdr } = await signedPlan(h);
+    await submitPlan(h.deps, plan.id, signedXdr);
+    const rpc = h.deps.rpc;
+    if (!rpc) throw new Error('Missing recovery RPC fixture.');
+    h.deps.rpc = {
+      ...rpc,
+      get: async () => {
+        throw new Error('RPC unavailable');
+      },
+    };
+    expect(await recoverPendingPlans(h.deps)).toMatchObject({ checked: 1, pending: 1, confirmed: 0, failed: 0 });
+    const row = await h.deps.db.prepare('SELECT status, tx_hash FROM plans WHERE id = ?').bind(plan.id).first();
+    expect(row).toMatchObject({ status: 'submitted', tx_hash: plan.prepared?.hash });
+    expect(h.sent).toEqual([]);
+    h.deps.rpc = rpc;
+    h.rpcScript.get = ['SUCCESS'];
+    await readPlan(h.deps, plan.id, { rebroadcast: false });
+  });
+
+  it('records an expired unseen transaction without creating another transaction', async () => {
+    const h = createFixture();
+    h.rpcScript.send = ['THROW'];
+    const { plan, signedXdr } = await signedPlan(h);
+    await submitPlan(h.deps, plan.id, signedXdr);
+    h.rpcScript.get = ['NOT_FOUND'];
+    h.clock.now += 10 * 60_000;
+    expect(await recoverPendingPlans(h.deps)).toMatchObject({ checked: 1, failed: 1 });
+    expect(await readPlan(h.deps, plan.id)).toMatchObject({ status: 'failed', errorCode: 'NOT_INCLUDED' });
+    expect(h.sent).toEqual([]);
+  });
+
+  it('persists an on-chain failed receipt without another send', async () => {
+    const h = createFixture();
+    h.rpcScript.send = ['THROW'];
+    const { plan, signedXdr } = await signedPlan(h);
+    await submitPlan(h.deps, plan.id, signedXdr);
+    h.rpcScript.get = ['FAILED'];
+    const summary = await recoverPendingPlans(h.deps);
+    expect(summary.failed).toBeGreaterThanOrEqual(1);
+    expect(await readPlan(h.deps, plan.id)).toMatchObject({
+      status: 'failed',
+      errorCode: 'FAILED_ON_CHAIN',
+      ledger: 124,
+    });
+    expect(h.sent).toEqual([]);
+  });
+
+  it('excludes other networks and plans that never reached submission', async () => {
+    const h = createFixture();
+    await preparedPlan(h);
+    const { plan } = await preparedPlan(h);
+    await h.deps.db
+      .prepare("UPDATE plans SET network = 'testnet', status = 'submitted', tx_hash = prepared_hash WHERE id = ?")
+      .bind(plan.id)
+      .run();
+    const rpc = h.deps.rpc;
+    if (!rpc) throw new Error('Missing recovery RPC fixture.');
+    h.deps.rpc = {
+      ...rpc,
+      get: async () => {
+        throw new Error('Other-network hash must not be polled.');
+      },
+    };
+    expect(await recoverPendingPlans(h.deps)).toMatchObject({ checked: 0 });
+    expect(h.sent).toEqual([]);
   });
 });
 

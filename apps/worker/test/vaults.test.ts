@@ -2,6 +2,7 @@ import { env } from 'cloudflare:workers';
 import { lendingAsset } from '@nest/adapters/blend/markets';
 import type { VaultDeposit } from '@nest/adapters/defindex/deposit';
 import type { VaultView } from '@nest/adapters/defindex/vaults';
+import type { VaultWithdrawal } from '@nest/adapters/defindex/withdraw';
 import { NETWORK_PASSPHRASES } from '@nest/adapters/stellar/networks';
 import { VenueRefusal } from '@nest/adapters/venue';
 import { Account, Address, Keypair, nativeToScVal, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
@@ -16,6 +17,7 @@ import {
   submitPlan,
 } from '../src/execution/lifecycle.ts';
 import { type ExecutionDeps, loadIntent } from '../src/execution/store.ts';
+import { createVaultWithdrawalIntent, listVaultPositions } from '../src/execution/vault-withdrawals.ts';
 import { compareVault, createVaultIntent } from '../src/execution/vaults.ts';
 
 const START_MS = 1_800_000_000_000;
@@ -94,6 +96,11 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
     tamper: 0n,
     refusal: null as VenueRefusal | null,
     built: [] as VaultDeposit[],
+    withdrawals: [] as VaultWithdrawal[],
+    sharesRaw: 20_000_000_000n,
+    sharesUnavailable: false,
+    underlyingContract: usdc,
+    returnValue: null as unknown,
   };
   const deps: ExecutionDeps = {
     db: env.DB,
@@ -118,6 +125,24 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
         state.built.push(deposit);
         return depositTransaction(deposit, clock.now, state.tamper);
       },
+      shareDecimals: async () => 9,
+      position: async (_vault, account) => {
+        if (state.sharesUnavailable) throw new Error('Unavailable');
+        return {
+          account,
+          assetContract: state.underlyingContract,
+          balanceRaw: state.sharesRaw,
+          decimals: 9,
+          underlyingRaw: state.sharesRaw / 100n,
+        };
+      },
+      shareAmount: async (_vault, shares) => shares / 100n,
+      withdraw: async (withdrawal) => {
+        if (state.refusal) throw state.refusal;
+        state.withdrawals.push(withdrawal);
+        state.returnValue = [withdrawal.shares / 100n];
+        return withdrawalTransaction(withdrawal, clock.now, state.tamper);
+      },
     },
     buildTrustline: async () => {
       throw new Error('not used');
@@ -125,7 +150,7 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
     rpc: {
       simulate: async () => ({ ok: true, minResourceFee: 0n, returnValue: null }),
       send: async () => ({ status: 'PENDING', error: null }),
-      get: async () => ({ status: 'SUCCESS', ledger: 777, returnValue: null }),
+      get: async () => ({ status: 'SUCCESS', ledger: 777, returnValue: state.returnValue }),
     },
     now: () => clock.now,
     sleep: async (ms) => {
@@ -256,5 +281,160 @@ describe('vault deposits', () => {
     if (!plan.prepared) throw new Error('not prepared');
     await approvePlan(h.deps, plan.id, { digest: plan.digest, preparedHash: plan.prepared.hash });
     await expect(submitPlan(h.deps, plan.id, plan.prepared.xdr)).rejects.toThrow('turned off');
+  });
+});
+
+function withdrawalTransaction(withdrawal: VaultWithdrawal, nowMs: number, tamper = 0n) {
+  const args = [
+    nativeToScVal(withdrawal.shares + tamper, { type: 'i128' }),
+    xdr.ScVal.scvVec([nativeToScVal(withdrawal.minAmount, { type: 'i128' })]),
+    new Address(withdrawal.account).toScVal(),
+  ];
+  const call = new xdr.InvokeContractArgs({
+    contractAddress: new Address(withdrawal.vault).toScAddress(),
+    functionName: 'withdraw',
+    args,
+  });
+  const auth = new xdr.SorobanAuthorizationEntry({
+    credentials: xdr.SorobanCredentials.sorobanCredentialsSourceAccount(),
+    rootInvocation: new xdr.SorobanAuthorizedInvocation({
+      function: xdr.SorobanAuthorizedFunction.sorobanAuthorizedFunctionTypeContractFn(call),
+      subInvocations: [],
+    }),
+  });
+  return new TransactionBuilder(new Account(withdrawal.account, '9'), {
+    fee: '300000',
+    networkPassphrase: NETWORK_PASSPHRASES.mainnet,
+    timebounds: { minTime: 0, maxTime: Math.floor(nowMs / 1000) + 180 },
+  })
+    .addOperation(
+      Operation.invokeContractFunction({ contract: withdrawal.vault, function: 'withdraw', args, auth: [auth] }),
+    )
+    .build()
+    .toXDR();
+}
+
+async function comparedWithdrawal(h: ReturnType<typeof createFixture>, amount = 'all') {
+  const intent = await createVaultWithdrawalIntent(h.deps, { vaultId: VAULT, amount, source: 'form' });
+  const compared = await compareIntent(h.deps, intent.id, h.user.publicKey());
+  return { intent, compared };
+}
+
+async function preparedWithdrawal(h: ReturnType<typeof createFixture>, amount = 'all') {
+  const { intent, compared } = await comparedWithdrawal(h, amount);
+  if (!compared.selectedQuoteId) throw new Error('No withdrawal quote');
+  const plan = await createPlan(h.deps, {
+    intentId: intent.id,
+    quoteId: compared.selectedQuoteId,
+    accountId: h.user.publicKey(),
+    idempotencyKey: crypto.randomUUID(),
+  });
+  return { intent, compared, plan: await preparePlan(h.deps, plan.id) };
+}
+
+describe('vault withdrawals', () => {
+  it('reads owned share decimals and underlying rather than assuming the asset decimals', async () => {
+    const h = createFixture();
+    expect(await listVaultPositions(h.deps, h.user.publicKey())).toMatchObject({
+      available: true,
+      positions: [
+        { shares: { raw: '20000000000', amount: '20', decimals: 9 }, underlying: { amount: '20', symbol: 'USDC' } },
+      ],
+    });
+    const { compared } = await comparedWithdrawal(h, '5.123456789');
+    expect(compared.quotes[0]).toMatchObject({
+      kind: 'vault_withdraw',
+      shares: { raw: '5123456789', amount: '5.123456789', decimals: 9 },
+      asset: { amount: '5.1234567' },
+    });
+  });
+
+  it('withdraws all owned shares through review, exact signature and original-hash reconciliation', async () => {
+    const h = createFixture();
+    const { plan } = await preparedWithdrawal(h);
+    expect(plan).toMatchObject({
+      status: 'awaiting_review',
+      kind: 'vault_withdraw',
+      prepared: { shares: { amount: '20' }, expected: { amount: '20' }, minimum: { amount: '19.9' } },
+    });
+    if (!plan.prepared) throw new Error('Not prepared');
+    await approvePlan(h.deps, plan.id, { digest: plan.digest, preparedHash: plan.prepared.hash });
+    const tx = TransactionBuilder.fromXDR(plan.prepared.xdr, NETWORK_PASSPHRASES.mainnet);
+    tx.sign(h.user);
+    expect(await submitPlan(h.deps, plan.id, tx.toXDR())).toMatchObject({ status: 'confirmed', ledger: 777 });
+    expect((await listActivity(h.deps, h.user.publicKey())).items[0]).toMatchObject({
+      kind: 'vault_withdraw',
+      title: 'Withdraw USDC',
+      received: [{ symbol: 'USDC', amount: '20' }],
+    });
+  });
+
+  it('does not make shares reserved by an unresolved signed review available twice', async () => {
+    const h = createFixture();
+    await preparedWithdrawal(h);
+    expect((await comparedWithdrawal(h)).compared).toMatchObject({ quotes: [], selectedQuoteId: null });
+  });
+
+  it('does not offer an amount larger than the owned share balance', async () => {
+    const h = createFixture();
+    expect((await comparedWithdrawal(h, '21')).compared).toMatchObject({
+      quotes: [],
+      excluded: [{ reason: 'The requested shares exceed the available owned balance.' }],
+    });
+  });
+
+  it('re-checks share ownership at preparation and blocks a changed balance', async () => {
+    const h = createFixture();
+    const { intent, compared } = await comparedWithdrawal(h);
+    if (!compared.selectedQuoteId) throw new Error('No withdrawal quote');
+    const plan = await createPlan(h.deps, {
+      intentId: intent.id,
+      quoteId: compared.selectedQuoteId,
+      accountId: h.user.publicKey(),
+      idempotencyKey: crypto.randomUUID(),
+    });
+    h.state.sharesRaw = 1n;
+    expect(await preparePlan(h.deps, plan.id)).toMatchObject({ status: 'blocked', errorCode: 'INSUFFICIENT_SHARES' });
+    expect(h.state.withdrawals).toEqual([]);
+  });
+
+  it('blocks a transaction that burns a different share amount', async () => {
+    const h = createFixture();
+    h.state.tamper = 1n;
+    expect((await preparedWithdrawal(h)).plan).toMatchObject({ status: 'blocked', errorCode: 'ARGUMENTS_MISMATCH' });
+  });
+
+  it('reports an unavailable source instead of zero shares', async () => {
+    const h = createFixture();
+    h.state.sharesUnavailable = true;
+    expect(await listVaultPositions(h.deps, h.user.publicKey())).toMatchObject({ available: false, positions: [] });
+  });
+
+  it('rejects source metadata that disagrees with the on-chain vault asset', async () => {
+    const h = createFixture();
+    h.state.underlyingContract = lendingAsset('mainnet', 'XLM').contractId;
+    await expect(comparedWithdrawal(h)).rejects.toThrow('The vault’s code, asset or share decimals changed');
+    expect(h.state.withdrawals).toEqual([]);
+  });
+
+  it('keeps shares owned and blocks the review when strategy liquidity cannot unwind', async () => {
+    const h = createFixture();
+    h.state.refusal = new VenueRefusal('SIMULATION_FAILED', 'Strategy liquidity cannot unwind now.');
+    expect((await preparedWithdrawal(h)).plan).toMatchObject({ status: 'blocked', errorCode: 'SIMULATION_FAILED' });
+    expect(h.state.sharesRaw).toBe(20_000_000_000n);
+  });
+
+  it('binds the compared share owner to the plan account', async () => {
+    const h = createFixture();
+    const { intent, compared } = await comparedWithdrawal(h);
+    if (!compared.selectedQuoteId) throw new Error('No withdrawal quote');
+    expect(
+      await createPlan(h.deps, {
+        intentId: intent.id,
+        quoteId: compared.selectedQuoteId,
+        accountId: Keypair.random().publicKey(),
+        idempotencyKey: crypto.randomUUID(),
+      }),
+    ).toMatchObject({ status: 'blocked', errorCode: 'ACCOUNT_MISMATCH' });
   });
 });

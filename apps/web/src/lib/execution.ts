@@ -132,7 +132,8 @@ export interface LendingPlan extends PlanBase {
     requests: (AssetAmount & { type: LendingRequestType })[];
     health: { before: number | null; after: number | null; warning: boolean };
     /** XOXNO loans take two transactions: the collateral, then the loan. Null on Blend. */
-    step: 'collateral' | 'borrow' | null;
+    step: 'collateral' | 'borrow' | 'repay' | 'withdraw' | null;
+    accountId?: string | null;
     validUntil: string | null;
   } | null;
 }
@@ -209,6 +210,62 @@ export interface VaultPlan extends PlanBase {
     deposit: AssetAmount;
     minimum: AssetAmount;
     invest: boolean;
+    validUntil: string | null;
+  } | null;
+}
+
+interface VaultShares {
+  symbol: 'shares';
+  amount: string;
+  raw: string;
+  decimals: number;
+}
+
+export interface VaultPosition {
+  vault: { id: string; name: string };
+  shares: VaultShares;
+  underlying: AssetAmount & { raw: string };
+  assetContract: string;
+  withdrawalTiming: { lockup: string; cooldown: string; summary: string };
+  verified: boolean;
+}
+
+export type VaultPositions =
+  | { network: 'mainnet' | 'testnet'; available: true; positions: VaultPosition[] }
+  | { network: 'mainnet' | 'testnet'; available: false; reason: string; positions: [] };
+
+export interface VaultWithdrawIntent {
+  id: string;
+  network: 'mainnet' | 'testnet';
+  kind: 'vault_withdraw';
+  asset: AssetAmount;
+  vault: { id: string; name?: string };
+  wholePosition: boolean;
+}
+
+export interface VaultWithdrawOffer {
+  id: string;
+  kind: 'vault_withdraw';
+  vault: { id: string; name: string };
+  asset: AssetAmount;
+  minimum: AssetAmount;
+  shares: VaultShares;
+  position: { account: string; shares: VaultShares };
+  withdrawalTiming: { lockup: string; cooldown: string; summary: string };
+  expiresAt: string;
+}
+
+export interface VaultWithdrawPlan extends PlanBase {
+  kind: 'vault_withdraw';
+  offer: VaultWithdrawOffer;
+  prepared: {
+    xdr: string;
+    hash: string;
+    networkPassphrase: string;
+    fee: AssetAmount;
+    shares: VaultShares;
+    expected: AssetAmount;
+    minimum: AssetAmount;
     validUntil: string | null;
   } | null;
 }
@@ -343,6 +400,7 @@ export interface LendingPositions {
     | {
         available: true;
         name: string;
+        poolId?: string;
         accounts: {
           accountId: string;
           spokeId: number;
@@ -399,8 +457,13 @@ export const execution = {
       `/api/plans?account=${encodeURIComponent(account)}`,
     ),
   lendingIntent: (id: string) => call<LendingIntent>(`/api/intents/${id}`),
-  createLending: (input: { kind: LendingKind; asset: 'USDC' | 'XLM'; amount: string; poolId?: string }) =>
-    call<LendingIntent>('/api/intents', { method: 'POST', body: input }),
+  createLending: (input: {
+    kind: LendingKind;
+    asset: 'USDC' | 'XLM';
+    amount: string;
+    poolId?: string;
+    lendingAccountId?: string;
+  }) => call<LendingIntent>('/api/intents', { method: 'POST', body: input }),
   compareLending: (intentId: string, accountId?: string) =>
     call<LendingComparison>(`/api/intents/${intentId}/compare`, {
       method: 'POST',
@@ -408,6 +471,15 @@ export const execution = {
     }),
   lendingMarkets: () => call<LendingMarkets>('/api/markets/lending'),
   vaults: () => call<{ network: 'mainnet' | 'testnet'; vaults: VaultSummary[] }>('/api/vaults'),
+  vaultPositions: (account: string) =>
+    call<VaultPositions>(`/api/vaults/positions?account=${encodeURIComponent(account)}`),
+  createVaultWithdraw: (input: { vaultId: string; amount: string }) =>
+    call<VaultWithdrawIntent>('/api/intents', { method: 'POST', body: { kind: 'vault_withdraw', ...input } }),
+  compareVaultWithdraw: (intentId: string, accountId: string) =>
+    call<{ quotes: VaultWithdrawOffer[]; selectedQuoteId: string | null; excluded: LendingComparison['excluded'] }>(
+      `/api/intents/${intentId}/compare`,
+      { method: 'POST', body: { accountId } },
+    ),
   vaultIntent: (id: string) => call<VaultIntent>(`/api/intents/${id}`),
   createVaultDeposit: (input: { vaultId: string; amount: string }) =>
     call<VaultIntent>('/api/intents', { method: 'POST', body: { kind: 'vault_deposit', ...input } }),

@@ -7,7 +7,11 @@ import {
   type LendingPositions,
   type LimitOrders,
   type SwapBalances,
+  type VaultPosition,
+  type VaultPositions,
 } from './execution.ts';
+import { useHealth } from './health.ts';
+import { type LendingExit, lendingExits } from './position-management.ts';
 
 const REFRESH_MS = 30_000;
 
@@ -22,6 +26,8 @@ export interface PositionRow {
   usd: number | null;
   accounting: string;
   manage: { to: '/trade' | '/credit/positions' | '/portfolio/send'; label: string };
+  lendingAction?: LendingExit | undefined;
+  vault?: VaultPosition;
 }
 
 export interface Valuation {
@@ -30,6 +36,7 @@ export interface Valuation {
   gross: number | null;
   debt: number | null;
   net: number | null;
+  vaults: number | null;
 }
 
 /**
@@ -39,33 +46,41 @@ export interface Valuation {
  */
 export function usePortfolio(address: string | null) {
   const account = address ?? '';
-  const enabled = Boolean(address);
+  const health = useHealth();
+  const network = health.data?.network;
+  const enabled = Boolean(address && network);
   const balances = useQuery({
-    queryKey: ['balances', address],
+    queryKey: ['balances', network, address],
     queryFn: () => execution.balances(account),
     enabled,
     refetchInterval: REFRESH_MS,
   });
   const positions = useQuery({
-    queryKey: ['positions', address],
+    queryKey: ['positions', network, address],
     queryFn: () => execution.positions(account),
     enabled,
     refetchInterval: REFRESH_MS,
   });
   const limits = useQuery({
-    queryKey: ['limit-orders', address],
+    queryKey: ['limit-orders', network, address],
     queryFn: () => execution.limitOrders(account),
     enabled,
     refetchInterval: REFRESH_MS,
   });
   const activity = useQuery({
-    queryKey: ['activity', address],
+    queryKey: ['activity', network, address],
     queryFn: () => execution.activity(account),
     enabled,
     refetchInterval: REFRESH_MS,
   });
+  const vaults = useQuery({
+    queryKey: ['vault-positions', network, address],
+    queryFn: () => execution.vaultPositions(account),
+    enabled,
+    refetchInterval: REFRESH_MS,
+  });
   const price = useQuery({
-    queryKey: ['xlm-reference-price'],
+    queryKey: ['xlm-reference-price', network],
     queryFn: async () => {
       const history = await call<{ day: { close: number } | null; candles: { close: number }[] }>(
         '/api/markets/price-history?interval=1h',
@@ -73,11 +88,15 @@ export function usePortfolio(address: string | null) {
       return history.day?.close ?? history.candles.at(-1)?.close ?? null;
     },
     staleTime: 60_000,
+    refetchInterval: 60_000,
   });
   const xlmUsd = price.data ?? null;
-  const rows = positionRows(balances.data, positions.data, limits.data, xlmUsd);
-  const loading = enabled && (balances.isPending || positions.isPending || limits.isPending);
-  const failed = [balances, positions, limits].some((query) => query.isError);
+  const sameNetwork = [balances.data, positions.data, vaults.data].every((data) => !data || data.network === network);
+  const rows = sameNetwork
+    ? positionRows(balances.data, positions.data, limits.data, xlmUsd, vaults.data, address ?? undefined)
+    : [];
+  const loading = enabled && (balances.isPending || positions.isPending || limits.isPending || vaults.isPending);
+  const failed = !sameNetwork || [balances, positions, limits, vaults].some((query) => query.isError);
   return {
     rows,
     valuation:
@@ -86,13 +105,19 @@ export function usePortfolio(address: string | null) {
         : valuationOf(rows, {
             lending: positions.data?.blend.available === false || positions.data?.xoxno.available === false,
             limits: limits.data?.available === false,
+            vaults: vaults.data?.available === false,
           }),
     activity: activity.data?.items ?? ([] as ActivityItem[]),
     activityLoading: enabled && activity.isPending,
+    activityFailed: activity.isError,
     loading,
     failed,
     xlmUsd,
-    notices: noticesOf(balances.data, positions.data, limits.data),
+    network,
+    notices: [
+      ...noticesOf(balances.data, positions.data, limits.data, vaults.data),
+      ...(!sameNetwork ? ['Position data does not match the active network. Actions are unavailable.'] : []),
+    ],
   };
 }
 
@@ -101,6 +126,8 @@ export function positionRows(
   positions: LendingPositions | undefined,
   limits: LimitOrders | undefined,
   xlmUsd: number | null,
+  vaults?: VaultPositions,
+  owner?: string,
 ): PositionRow[] {
   const usd = (amounts: { symbol: string; amount: string }[]) =>
     amounts.reduce<number | null>((total, { symbol, amount }) => {
@@ -109,6 +136,7 @@ export function positionRows(
       return unit === null ? null : total + Number(amount) * unit;
     }, 0);
   const rows: PositionRow[] = [];
+  const actions = positions && owner ? lendingExits(positions, owner) : [];
   for (const balance of balances?.balances ?? []) {
     if (balance.spendable === null || Number(balance.spendable) === 0) continue;
     const amounts = [{ symbol: balance.symbol, amount: balance.spendable }];
@@ -147,6 +175,13 @@ export function positionRows(
             usd: usd(amounts),
             accounting: part.detail,
             manage: { to: '/credit/positions', label: part.what === 'Debt' ? 'Repay' : 'Withdraw' },
+            lendingAction: actions.find(
+              (action) =>
+                action.poolId === pool.poolId &&
+                action.symbol === part.amount.symbol &&
+                action.kind ===
+                  (part.what === 'Debt' ? 'repay' : part.what === 'Supplied' ? 'withdraw' : 'withdraw_collateral'),
+            ),
           });
         }
       }
@@ -155,30 +190,57 @@ export function positionRows(
   if (positions?.xoxno.available) {
     for (const account of positions.xoxno.accounts) {
       const health = account.healthFactor === null ? 'no debt' : `health ${account.healthFactor.toFixed(2)}`;
-      if (account.collateral.length) {
+      for (const amount of account.collateral) {
         rows.push({
-          key: `xoxno-${account.accountId}-collateral`,
-          label: `Collateral ${account.collateral.map((amount) => amount.symbol).join(' + ')}`,
+          key: `xoxno-${account.accountId}-collateral-${amount.symbol}`,
+          label: `Collateral ${amount.symbol}`,
           venue: `${positions.xoxno.name} · account ${account.accountId}`,
           side: 'asset',
-          amounts: account.collateral,
-          usd: usd(account.collateral),
+          amounts: [amount],
+          usd: usd([amount]),
           accounting: health,
           manage: { to: '/credit/positions', label: 'Manage on XOXNO' },
+          lendingAction: actions.find(
+            (action) =>
+              action.lendingAccountId === account.accountId &&
+              action.kind === 'withdraw_collateral' &&
+              action.symbol === amount.symbol,
+          ),
         });
       }
-      if (account.debt.length) {
+      for (const amount of account.debt) {
         rows.push({
-          key: `xoxno-${account.accountId}-debt`,
-          label: `Debt ${account.debt.map((amount) => amount.symbol).join(' + ')}`,
+          key: `xoxno-${account.accountId}-debt-${amount.symbol}`,
+          label: `Debt ${amount.symbol}`,
           venue: `${positions.xoxno.name} · account ${account.accountId}`,
           side: 'debt',
-          amounts: account.debt,
-          usd: usd(account.debt),
+          amounts: [amount],
+          usd: usd([amount]),
           accounting: health,
           manage: { to: '/credit/positions', label: 'Manage on XOXNO' },
+          lendingAction: actions.find(
+            (action) =>
+              action.lendingAccountId === account.accountId &&
+              action.kind === 'repay' &&
+              action.symbol === amount.symbol,
+          ),
         });
       }
+    }
+  }
+  if (vaults?.available) {
+    for (const position of vaults.positions) {
+      rows.push({
+        key: `vault-${position.vault.id}`,
+        label: position.vault.name,
+        venue: 'DeFindex',
+        side: 'asset',
+        amounts: [position.underlying],
+        usd: usd([position.underlying]),
+        accounting: `${position.shares.amount} shares · underlying estimate`,
+        manage: { to: '/credit/positions', label: 'Withdraw' },
+        vault: position,
+      });
     }
   }
   for (const order of limits?.orders ?? []) {
@@ -199,21 +261,28 @@ export function positionRows(
   return rows;
 }
 
-export function valuationOf(rows: PositionRow[], unknown: { lending: boolean; limits: boolean }): Valuation {
+export function valuationOf(
+  rows: PositionRow[],
+  unknown: { lending: boolean; limits: boolean; vaults?: boolean },
+): Valuation {
   const sum = (filter: (row: PositionRow) => boolean) =>
     rows
       .filter(filter)
       .reduce<number | null>((total, row) => (total === null || row.usd === null ? null : total + row.usd), 0);
-  const assetsUnknown = unknown.lending || unknown.limits;
+  const assetsUnknown = unknown.lending || unknown.limits || unknown.vaults;
   const wallet = sum((row) => row.venue === 'Wallet');
   const gross = assetsUnknown ? null : sum((row) => row.side === 'asset');
   const debt = unknown.lending ? null : sum((row) => row.side === 'debt');
   return {
     wallet,
-    supplied: assetsUnknown ? null : sum((row) => row.side === 'asset' && row.venue !== 'Wallet'),
+    supplied:
+      unknown.lending || unknown.limits
+        ? null
+        : sum((row) => row.side === 'asset' && row.venue !== 'Wallet' && !row.vault),
     gross,
     debt,
     net: gross === null || debt === null ? null : gross - debt,
+    vaults: unknown.vaults ? null : sum((row) => Boolean(row.vault)),
   };
 }
 
@@ -221,11 +290,13 @@ function noticesOf(
   balances: SwapBalances | undefined,
   positions: LendingPositions | undefined,
   limits: LimitOrders | undefined,
+  vaults?: VaultPositions,
 ): string[] {
   const notices: string[] = [];
   if (balances && !balances.funded) notices.push('This account is not funded on this network yet.');
   if (positions && !positions.blend.available) notices.push(positions.blend.reason);
   if (positions && !positions.xoxno.available) notices.push(positions.xoxno.reason);
   if (limits && !limits.available) notices.push(limits.reason);
+  if (vaults && !vaults.available) notices.push(vaults.reason);
   return notices;
 }

@@ -13,6 +13,7 @@ import {
   XOXNO,
   type XoxnoCall,
   type XoxnoMarket,
+  xoxnoWithdrawalHealth,
 } from '../src/xoxno/lending.ts';
 
 const NOW = 1_800_000_000;
@@ -30,6 +31,8 @@ function reserve(symbol: 'XLM' | 'USDC', priceUsd: number | null, threshold: num
     contractId: DEPLOYMENT.assets[symbol].contractId,
     hubId: 1,
     priceUsd,
+    priceWad: priceUsd === null ? null : BigInt(Math.round(priceUsd * 1e8)) * 10_000_000_000n,
+    liquidationThresholdBps: BigInt(Math.round(threshold * 10_000)),
     borrowApyPct: 0,
     supplyApyPct: 0,
     utilizationPct: 0,
@@ -67,6 +70,29 @@ describe('XOXNO rates and health', () => {
     const account = { collateralRaw: { XLM: XLM_2000, USDC: 0n }, debtRaw: { XLM: 0n, USDC: USDC_100 } };
     expect(healthAfter(MARKET, account, { debt: { symbol: 'USDC', amount: USDC_100 } })).toBeCloseTo(1.2658, 3);
     expect(healthAfter(MARKET, null, { collateral: { symbol: 'XLM', amount: XLM_2000 } })).toBeNull();
+  });
+
+  it('checks partial withdrawals with exact raw prices and thresholds', () => {
+    const account = {
+      accountId: 126n,
+      spokeId: 1,
+      collateralRaw: { XLM: XLM_2000, USDC: 0n },
+      debtRaw: { XLM: 0n, USDC: USDC_100 },
+      healthFactor: 2.53,
+    };
+    expect(xoxnoWithdrawalHealth(MARKET, account, { symbol: 'XLM', amount: 10_000_000_000n })).toMatchObject({
+      solvent: true,
+    });
+    expect(xoxnoWithdrawalHealth(MARKET, account, { symbol: 'XLM', amount: 19_000_000_000n })).toMatchObject({
+      solvent: false,
+    });
+    expect(
+      xoxnoWithdrawalHealth(
+        MARKET,
+        { ...account, debtRaw: { XLM: 0n, USDC: 0n }, healthFactor: null },
+        { symbol: 'XLM', amount: XLM_2000 },
+      ),
+    ).toEqual({ solvent: true, health: null });
   });
 
   it('refuses to guess a health factor without a price', () => {
@@ -194,6 +220,52 @@ describe('inspectXoxnoCall', () => {
           transfers: [transfer(XLM, user.publicKey(), DEPLOYMENT.pool, 1n)],
         }),
         BORROW,
+      ),
+    ).toBe('AUTH_UNEXPECTED');
+  });
+
+  it('accepts a bounded repayment and rejects an excessive or redirected authorization', () => {
+    const repayment: XoxnoCall = { method: 'repay', accountId: 126n, assets: [{ symbol: 'USDC', amount: USDC_100 }] };
+    const args = borrowArgs().slice(0, 3);
+    expect(
+      codeOf(
+        call({ method: 'repay', args, transfers: [transfer(USDC, user.publicKey(), DEPLOYMENT.pool, USDC_100)] }),
+        repayment,
+      ),
+    ).toBe('ACCEPTED');
+    expect(
+      codeOf(
+        call({ method: 'repay', args, transfers: [transfer(USDC, user.publicKey(), DEPLOYMENT.pool, USDC_100 + 1n)] }),
+        repayment,
+      ),
+    ).toBe('AUTH_UNEXPECTED');
+    expect(
+      codeOf(
+        call({ method: 'repay', args, transfers: [transfer(USDC, user.publicKey(), stranger.publicKey(), USDC_100)] }),
+        repayment,
+      ),
+    ).toBe('AUTH_UNEXPECTED');
+  });
+
+  it('accepts a bounded withdrawal only to the caller, without authorizing outgoing tokens', () => {
+    const withdrawal: XoxnoCall = {
+      method: 'withdraw',
+      accountId: 126n,
+      assets: [{ symbol: 'USDC', amount: USDC_100 }],
+    };
+    expect(codeOf(call({ method: 'withdraw', args: borrowArgs(), transfers: [] }), withdrawal)).toBe('ACCEPTED');
+    const redirected = [...borrowArgs().slice(0, 3), new Address(stranger.publicKey()).toScVal()];
+    expect(codeOf(call({ method: 'withdraw', args: redirected, transfers: [] }), withdrawal)).toBe(
+      'ARGUMENTS_MISMATCH',
+    );
+    expect(
+      codeOf(
+        call({
+          method: 'withdraw',
+          args: borrowArgs(),
+          transfers: [transfer(USDC, user.publicKey(), DEPLOYMENT.pool, 1n)],
+        }),
+        withdrawal,
       ),
     ).toBe('AUTH_UNEXPECTED');
   });

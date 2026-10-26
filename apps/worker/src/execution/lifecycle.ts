@@ -20,10 +20,18 @@ import {
   newPlanRow,
   type PlanRow,
   type QuoteRow,
+  rawAmount,
   transition,
   transitionOrReload,
 } from './store.ts';
 import { compareSwap, prepareSwap, swapIntentView, swapPlanPolicy, swapPlanView, swapReceived } from './swap.ts';
+import {
+  compareVaultWithdrawal,
+  prepareVaultWithdrawal,
+  vaultWithdrawalIntentView,
+  vaultWithdrawalPlanView,
+  vaultWithdrawalPolicy,
+} from './vault-withdrawals.ts';
 import { compareVault, prepareVault, vaultIntentView, vaultPlanPolicy, vaultPlanView } from './vaults.ts';
 
 const CONFIRM_POLL_MS = 1_000;
@@ -45,6 +53,7 @@ const OUTGOING_REQUESTS = new Set(['supply', 'supplyCollateral', 'repay']);
 export async function readIntent(deps: ExecutionDeps, intentId: string) {
   const intent = await loadIntent(deps, intentId);
   if (intent.kind === 'vault_deposit') return vaultIntentView(intent);
+  if (intent.kind === 'vault_withdraw') return vaultWithdrawalIntentView(intent);
   if (intent.kind === 'swap') return swapIntentView(intent);
   return isLimit(intent.kind) ? limitIntentView(intent) : lendingIntentView(intent);
 }
@@ -56,6 +65,7 @@ export async function readIntent(deps: ExecutionDeps, intentId: string) {
 export async function compareIntent(deps: ExecutionDeps, intentId: string, accountId?: string) {
   const intent = await loadIntent(deps, intentId);
   if (intent.kind === 'vault_deposit') return compareVault(deps, intent);
+  if (intent.kind === 'vault_withdraw') return compareVaultWithdrawal(deps, intent, accountId);
   if (intent.kind === 'swap') return compareSwap(deps, intent);
   return isLimit(intent.kind) ? compareLimit(deps, intent, accountId) : compareLending(deps, intent, accountId);
 }
@@ -96,6 +106,7 @@ export async function createPlan(
     withdraw: lendingPlanPolicy,
     withdraw_collateral: lendingPlanPolicy,
     vault_deposit: vaultPlanPolicy,
+    vault_withdraw: vaultWithdrawalPolicy,
     limit_order: limitPlanPolicy,
     limit_close: limitPlanPolicy,
   }[intent.kind];
@@ -151,9 +162,10 @@ export async function listActivity(deps: ExecutionDeps, account: string) {
   };
 }
 
-export async function readPlan(deps: ExecutionDeps, planId: string) {
+export async function readPlan(deps: ExecutionDeps, planId: string, options: { rebroadcast?: boolean } = {}) {
   let plan = await loadPlan(deps, planId);
-  if ((plan.status === 'submitted' || plan.status === 'confirming') && deps.rpc) plan = await reconcile(deps, plan);
+  if ((plan.status === 'submitted' || plan.status === 'confirming') && deps.rpc)
+    plan = await reconcile(deps, plan, options);
   return planView(deps, plan);
 }
 
@@ -186,6 +198,7 @@ export async function preparePlan(deps: ExecutionDeps, planId: string) {
     withdraw: prepareLending,
     withdraw_collateral: prepareLending,
     vault_deposit: prepareVault,
+    vault_withdraw: prepareVaultWithdrawal,
     limit_order: prepareLimit,
     limit_close: prepareLimit,
   }[intent.kind];
@@ -314,7 +327,11 @@ export async function submitPlan(deps: ExecutionDeps, planId: string, signedXdr:
 }
 
 /** Settles a submitted plan from the network's record of its hash. Never builds or signs anything new. */
-async function reconcile(deps: ExecutionDeps, plan: PlanRow): Promise<PlanRow> {
+async function reconcile(
+  deps: ExecutionDeps,
+  plan: PlanRow,
+  options: { rebroadcast?: boolean } = {},
+): Promise<PlanRow> {
   if (!deps.rpc || !plan.tx_hash) return plan;
   let outcome: Awaited<ReturnType<SwapRpc['get']>>;
   try {
@@ -328,7 +345,13 @@ async function reconcile(deps: ExecutionDeps, plan: PlanRow): Promise<PlanRow> {
     const result =
       intent.kind === 'swap'
         ? { ledger: outcome.ledger, amountOutRaw: await swapReceived(deps, plan.tx_hash, outcome.returnValue) }
-        : { ledger: outcome.ledger };
+        : intent.kind === 'vault_withdraw' &&
+            Array.isArray(outcome.returnValue) &&
+            outcome.returnValue.length === 1 &&
+            typeof outcome.returnValue[0] === 'bigint' &&
+            outcome.returnValue[0] >= 0n
+          ? { ledger: outcome.ledger, amountOutRaw: outcome.returnValue[0].toString() }
+          : { ledger: outcome.ledger };
     return transitionOrReload(
       deps,
       plan,
@@ -359,7 +382,7 @@ async function reconcile(deps: ExecutionDeps, plan: PlanRow): Promise<PlanRow> {
     );
   }
   // Still unseen and still valid: rebroadcasting the identical signed bytes is safe (same hash).
-  if (plan.status === 'submitted' && plan.signed_xdr) {
+  if (options.rebroadcast !== false && plan.status === 'submitted' && plan.signed_xdr) {
     try {
       const tx = TransactionBuilder.fromXDR(plan.signed_xdr, NETWORK_PASSPHRASES[plan.network]) as Transaction;
       const sent = await deps.rpc.send(tx);
@@ -379,6 +402,7 @@ async function planView(deps: ExecutionDeps, row: PlanRow) {
 
 function viewOf(row: PlanRow, intent: IntentRow, quote: QuoteRow) {
   if (intent.kind === 'vault_deposit') return vaultPlanView(row, intent, quote);
+  if (intent.kind === 'vault_withdraw') return vaultWithdrawalPlanView(row, intent, quote);
   if (intent.kind === 'swap') return swapPlanView(row, intent, quote);
   return isLimit(intent.kind) ? limitPlanView(row, intent, quote) : lendingPlanView(row, intent, quote);
 }
@@ -422,6 +446,25 @@ function activityItem(plan: PlanRow, intent: IntentRow, quote: QuoteRow) {
       venue: 'Aquarius',
       sent: offer.order ? [amountOf(offer.order.deposit)] : [],
       received: offer.position?.returns.filter((amount) => amount.raw !== '0').map(amountOf) ?? [],
+    };
+  }
+  if (intent.kind === 'vault_withdraw') {
+    const { offer } = vaultWithdrawalPlanView(plan, intent, quote);
+    const result: unknown = plan.result ? JSON.parse(plan.result) : null;
+    const amountOutRaw =
+      result &&
+      typeof result === 'object' &&
+      'amountOutRaw' in result &&
+      typeof result.amountOutRaw === 'string' &&
+      /^(0|[1-9]\d*)$/.test(result.amountOutRaw)
+        ? result.amountOutRaw
+        : null;
+    return {
+      ...base,
+      title: `Withdraw ${offer.asset.symbol}`,
+      venue: `DeFindex · ${offer.vault.name}`,
+      sent: [amountOf(offer.shares)],
+      received: amountOutRaw ? [amountOf(rawAmount(intent.sell_asset, amountOutRaw))] : [],
     };
   }
   const view = lendingPlanView(plan, intent, quote);

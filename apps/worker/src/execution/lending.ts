@@ -29,10 +29,13 @@ import {
 } from './store.ts';
 import {
   compareXoxnoBorrow,
+  compareXoxnoExit,
   listXoxnoAccounts,
   prepareXoxnoBorrow,
+  prepareXoxnoExit,
   XOXNO_VENUE,
   type XoxnoBorrowOffer,
+  type XoxnoExitOffer,
   type XoxnoStep,
 } from './xoxno.ts';
 
@@ -97,7 +100,8 @@ interface Offer {
   /** Health of the new position on its own, from oracle prices at quote time. Borrows only. */
   estimatedHealth: number | null;
   /** Repay and withdraw: the account whose position this is, what it holds now and its health. */
-  position?: { account: string; heldRaw: string; health: number | null };
+  position?: { account: string; heldRaw: string; health: number | null; lendingAccountId?: string };
+  loanAccountId?: string;
   /** XOXNO: the spoke (risk profile) a new account joins. */
   spokeId?: number;
 }
@@ -111,6 +115,7 @@ export async function createLendingIntent(
     collateralAsset?: LendingSymbol | undefined;
     collateralAmount?: string | undefined;
     poolId?: string | undefined;
+    lendingAccountId?: string | undefined;
     source: 'chat' | 'form';
   },
 ) {
@@ -119,8 +124,14 @@ export async function createLendingIntent(
   if (input.poolId && !xoxno && !blendPool(network, input.poolId)) {
     throw new AppError('INVALID_REQUEST', 'That pool is not a registered Blend pool or XOXNO market on this network.');
   }
-  if (xoxno && input.kind !== 'borrow') {
-    throw new AppError('INVALID_REQUEST', 'Nest borrows on XOXNO; lending and its exits go through Blend.');
+  if (xoxno && (input.kind === 'supply' || input.kind === 'withdraw')) {
+    throw new AppError('INVALID_REQUEST', 'Nest lends through Blend; use collateral withdrawal to exit an XOXNO loan.');
+  }
+  if (
+    input.lendingAccountId !== undefined &&
+    (!xoxno || !/^[1-9][0-9]{0,19}$/.test(input.lendingAccountId) || BigInt(input.lendingAccountId) > 0xffffffffn)
+  ) {
+    throw new AppError('INVALID_REQUEST', 'Select a valid XOXNO lending account.');
   }
   const whole = input.amount.trim().toLowerCase() === 'all';
   if (whole && !isExit(input.kind)) {
@@ -147,6 +158,7 @@ export async function createLendingIntent(
     sell_amount_raw: rawToText(raw),
     source: input.source,
     market_id: input.poolId ?? null,
+    lending_account_id: input.lendingAccountId ?? null,
     collateral_asset: collateralAsset,
     collateral_amount_raw: collateralRaw === null ? null : rawToText(collateralRaw),
     whole_position: whole ? 1 : 0,
@@ -165,8 +177,8 @@ export async function createLendingIntent(
  * listed with the reason, never dropped silently.
  */
 export async function compareLending(deps: ExecutionDeps, intent: IntentRow, accountId?: string) {
-  if (!deps.lending) throw new AppError('UNAVAILABLE', 'Lending needs a Stellar RPC on this server.');
   if (isExit(intent.kind)) return compareExit(deps, intent, accountId);
+  if (!deps.lending) throw new AppError('UNAVAILABLE', 'Lending needs a Stellar RPC on this server.');
   const markets = await readMarkets(deps);
   const kind = intent.kind as LendingKind;
   const asset = lendingAsset(intent.network, intent.sell_asset as LendingSymbol);
@@ -269,12 +281,12 @@ export async function compareLending(deps: ExecutionDeps, intent: IntentRow, acc
  * largest position first. Pools where it holds nothing are listed with that reason.
  */
 async function compareExit(deps: ExecutionDeps, intent: IntentRow, accountId: string | undefined) {
-  if (!deps.lending) throw new AppError('UNAVAILABLE', 'Lending needs a Stellar RPC on this server.');
   if (!accountId || !StrKey.isValidEd25519PublicKey(accountId)) {
-    throw new AppError('INVALID_REQUEST', 'Connect your wallet so Nest can read your Blend position.');
+    throw new AppError('INVALID_REQUEST', 'Connect your wallet so Nest can read your lending position.');
   }
   const kind = intent.kind as ExitKind;
-  const [markets, held] = await Promise.all([readMarkets(deps), readPositions(deps, accountId)]);
+  const xoxnoOnly = intent.market_id === XOXNO[intent.network].controller;
+  const [markets, held] = xoxnoOnly ? [[], []] : await Promise.all([readMarkets(deps), readPositions(deps, accountId)]);
   const asset = lendingAsset(intent.network, intent.sell_asset as LendingSymbol);
   const requested = rawFromText(intent.sell_amount_raw);
   const observed = deps.now();
@@ -315,13 +327,18 @@ async function compareExit(deps: ExecutionDeps, intent: IntentRow, accountId: st
       expectedRaw,
     });
   }
+  if (kind !== 'withdraw' && (!intent.market_id || xoxnoOnly)) {
+    const xoxno = await compareXoxnoExit(deps, intent, accountId);
+    candidates.push(...xoxno.offers);
+    excluded.push(...xoxno.excluded);
+  }
   candidates.sort((left, right) =>
     rawFromText(right.offer.position?.heldRaw ?? '0') > rawFromText(left.offer.position?.heldRaw ?? '0') ? 1 : -1,
   );
   const rows: QuoteRow[] = candidates.map(({ offer, sendRaw, expectedRaw }) => ({
     id: crypto.randomUUID(),
     intent_id: intent.id,
-    venue: VENUE,
+    venue: offer.venue ?? VENUE,
     slippage_bps: 0,
     // What the request asks for, and what it repays or returns once Blend applies it.
     amount_in_raw: rawToText(sendRaw),
@@ -497,6 +514,7 @@ export async function lendingPlanPolicy(
       network: intent.network,
       account: accountId,
       poolId: offer.poolId,
+      lendingAccountId: offer.loanAccountId ?? intent.lending_account_id ?? '',
       requests: requests.map((request) => `${request.type}:${request.contractId}:${request.amount}`).join(','),
       maxFeeStroops: MAX_FEE_STROOPS.toString(),
     }),
@@ -513,7 +531,9 @@ export async function prepareLending(
 ): Promise<PlanRow> {
   const offer = JSON.parse(quote.provider_quote) as Offer;
   if (offer.venue === XOXNO_VENUE) {
-    return prepareXoxnoBorrow(deps, plan, intent, quote, offer as XoxnoBorrowOffer, HEALTH_WARNING);
+    return isExit(intent.kind)
+      ? prepareXoxnoExit(deps, plan, intent, quote, offer as XoxnoExitOffer)
+      : prepareXoxnoBorrow(deps, plan, intent, quote, offer as XoxnoBorrowOffer, HEALTH_WARNING);
   }
   if (!deps.lending) throw new AppError('UNAVAILABLE', 'Lending needs a Stellar RPC on this server.');
   const requests = requestsOf(intent, quote);
@@ -621,6 +641,14 @@ function healthChange(intent: IntentRow, requests: readonly LendingRequest[]) {
 function requestsOf(intent: IntentRow, quote: QuoteRow): LendingRequest[] {
   if ((JSON.parse(quote.provider_quote) as Offer).venue === XOXNO_VENUE) {
     const contractOf = (symbol: string | null) => xoxnoAsset(intent.network, symbol as XoxnoSymbol).contractId;
+    if (isExit(intent.kind))
+      return [
+        {
+          type: EXIT_REQUEST[intent.kind],
+          contractId: contractOf(intent.sell_asset),
+          amount: rawFromText(quote.amount_in_raw),
+        },
+      ];
     return [
       {
         type: 'supplyCollateral',
@@ -707,6 +735,7 @@ export function lendingIntentView(row: IntentRow) {
         }
       : null,
     poolId: row.market_id,
+    lendingAccountId: row.lending_account_id ?? null,
     source: row.source,
     createdAt: new Date(row.created_at_ms).toISOString(),
   };
@@ -734,6 +763,7 @@ function lendingQuoteView(row: QuoteRow, intent: IntentRow) {
           held: rawAmount(intent.sell_asset, offer.position.heldRaw),
           kind: isExit(kind) ? HELD[kind] : null,
           health: offer.position.health,
+          lendingAccountId: offer.position.lendingAccountId ?? null,
           requested: rawAmount(intent.sell_asset, row.amount_in_raw),
         }
       : null,
@@ -755,6 +785,7 @@ export function lendingPlanView(row: PlanRow, intent: IntentRow, quote: QuoteRow
         healthAfter: number | null;
         /** XOXNO: which of the loan's two transactions this plan built. */
         step?: XoxnoStep;
+        accountId?: string;
       })
     : null;
   return {
@@ -778,6 +809,7 @@ export function lendingPlanView(row: PlanRow, intent: IntentRow, quote: QuoteRow
               warning: facts.healthAfter !== null && facts.healthAfter < HEALTH_WARNING,
             },
             step: facts.step ?? null,
+            accountId: facts.accountId ?? null,
             validUntil: row.valid_until_ms ? new Date(row.valid_until_ms).toISOString() : null,
           }
         : null,

@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { decodeEncryptionKey } from '../src/config.ts';
 import { checkRavenTools, type RavenConnection, TEAM_CONNECTION } from '../src/raven/connection.ts';
 import { importEncryptionKey, seal, unseal } from '../src/raven/crypto.ts';
+import { requireRavenCallbackTransport, requireRavenOperator } from '../src/raven/operator.ts';
 
 const LOCAL = 'http://localhost:5287';
 const REMOTE = 'https://nest.test';
@@ -38,11 +39,28 @@ describe('Raven routes', () => {
     expect(await response.json()).toEqual({ connected: false });
   });
 
-  it('only lets a local session connect or complete authorization', async () => {
-    for (const path of ['/api/raven/connect', '/api/raven/callback?code=c&state=s', '/api/raven/tools']) {
+  it('requires operator authorization to connect or inspect Raven from a hosted session', async () => {
+    for (const path of ['/api/raven/connect', '/api/raven/tools']) {
       const response = await exports.default.fetch(`${REMOTE}${path}`);
       expect(response.status).toBe(403);
     }
+  });
+
+  it('accepts only the configured operator token over HTTPS, while preserving local access', () => {
+    const config = { RAVEN_OPERATOR_KEY: 'test-operator-credential-32-characters' };
+    expect(() => requireRavenOperator(REMOTE, undefined, config)).toThrow(/Only the operator/);
+    expect(() => requireRavenOperator(REMOTE, 'Bearer incorrect', config)).toThrow(/Only the operator/);
+    expect(() => requireRavenOperator(REMOTE, `Bearer ${config.RAVEN_OPERATOR_KEY}`, {})).toThrow(/Only the operator/);
+    expect(() => requireRavenOperator(REMOTE, `Bearer ${config.RAVEN_OPERATOR_KEY}`, config)).not.toThrow();
+    expect(() => requireRavenOperator(LOCAL, undefined, {})).not.toThrow();
+    expect(() => requireRavenOperator('http://nest.test', `Bearer ${config.RAVEN_OPERATOR_KEY}`, config)).toThrow();
+    expect(() => requireRavenCallbackTransport('http://nest.test')).toThrow();
+  });
+
+  it('accepts a hosted callback only when its OAuth state matches a pending grant', async () => {
+    const response = await exports.default.fetch(`${REMOTE}/api/raven/callback?code=c&state=forged`);
+    expect(response.status).toBe(400);
+    expect(await connection().status()).toEqual({ connected: false });
   });
 
   it('rejects a callback when no authorization was started', async () => {

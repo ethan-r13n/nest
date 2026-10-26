@@ -4,9 +4,7 @@ import { z } from 'zod';
 
 import type { AppEnv } from '../app.ts';
 import { TEAM_CONNECTION } from './connection.ts';
-
-// Until operator sign-in exists, only a local session may connect the team's Raven account.
-const LOCAL_HOSTS = new Set(['localhost', '127.0.0.1', '[::1]']);
+import { requireRavenCallbackTransport, requireRavenOperator } from './operator.ts';
 
 const CallbackSchema = z.object({
   code: z.string().min(1).max(2_048),
@@ -20,7 +18,7 @@ export function createRavenRoutes() {
   routes.get('/status', async (c) => c.json(await raven(c.env).status()));
 
   routes.get('/connect', async (c) => {
-    requireLocal(c.req.url);
+    requireRavenOperator(c.req.url, c.req.header('authorization'), c.env);
     const result = await raven(c.env).beginAuthorization(new URL('/api/raven/callback', c.req.url).href);
     if (result.status !== 'redirect')
       throw new AppError('UNAVAILABLE', 'Raven did not start authorization. Try again.');
@@ -28,7 +26,7 @@ export function createRavenRoutes() {
   });
 
   routes.get('/callback', async (c) => {
-    requireLocal(c.req.url);
+    requireRavenCallbackTransport(c.req.url);
     if (c.req.query('error')) throw new AppError('INVALID_REQUEST', 'Raven authorization was declined or failed.');
     const parsed = CallbackSchema.safeParse(c.req.query());
     if (!parsed.success) throw new AppError('INVALID_REQUEST', 'Raven did not return an authorization code.');
@@ -45,7 +43,7 @@ export function createRavenRoutes() {
 
   // Operator check of what the connected Raven server exposes; the agent's tools stay fixed in code.
   routes.get('/tools', async (c) => {
-    requireLocal(c.req.url);
+    requireRavenOperator(c.req.url, c.req.header('authorization'), c.env);
     const tools = await raven(c.env).listTools();
     if (!tools) throw new AppError('UNAVAILABLE', 'Raven is not connected.');
     return c.json({ tools });
@@ -56,10 +54,4 @@ export function createRavenRoutes() {
 
 function raven(env: Env) {
   return env.RAVEN.getByName(TEAM_CONNECTION);
-}
-
-function requireLocal(url: string): void {
-  if (!LOCAL_HOSTS.has(new URL(url).hostname)) {
-    throw new AppError('FORBIDDEN', 'Connect Raven from a local Nest session.');
-  }
 }
