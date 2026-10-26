@@ -133,6 +133,26 @@ describe('agent conversations', () => {
     }
   });
 
+  it('replays every event of the latest run to a client that connects after it finished', async () => {
+    const conversationId = await createConversation();
+    const response = await sendMessage(conversationId, 'Which Stellar lending protocol is largest?');
+    const admitted: { runId: string; afterEventId: number } = await response.json();
+    for (let attempt = 0; attempt < 50; attempt++) {
+      const body: { activeRunId: string | null } = await (
+        await exports.default.fetch(`${ORIGIN}/api/agent/conversations/${conversationId}`)
+      ).json();
+      if (body.activeRunId === null) break;
+      await new Promise((resolve) => setTimeout(resolve, 20));
+    }
+
+    const events = await readEvents(conversationId, admitted.runId, admitted.afterEventId);
+    const types = events.map((event) => event.type);
+    expect(types).toContain('tool_started');
+    expect(types).toContain('text_delta');
+    expect(types.at(-1)).toBe('settled');
+    expect(types.filter((type) => type === 'settled')).toHaveLength(1);
+  });
+
   it('replays a finished run to a late reconnect', async () => {
     const conversationId = await createConversation();
     const first = await ask(conversationId, 'First question');
