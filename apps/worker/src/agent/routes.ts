@@ -13,6 +13,12 @@ const encoder = new TextEncoder();
 const MessageSchema = z.strictObject({
   messageId: z.uuid(),
   text: z.string().trim().min(1).max(MAX_MESSAGE_CHARS),
+  researchOnly: z.boolean().optional(),
+  history: z
+    .array(z.strictObject({ role: z.enum(['user', 'assistant']), text: z.string().min(1).max(12_000) }))
+    .max(12)
+    .refine((messages) => messages.reduce((total, message) => total + message.text.length, 0) <= 48_000)
+    .optional(),
 });
 const AfterSchema = z.coerce.number().int().min(0).default(0);
 
@@ -27,7 +33,10 @@ export function createAgentRoutes() {
       throw new AppError('INVALID_REQUEST', 'Send a messageId (UUID) and 1 to 4000 characters of text.');
     }
     // Refused before it is stored or reaches a model.
-    if (STELLAR_SECRET_SEED.test(parsed.data.text)) {
+    if (
+      STELLAR_SECRET_SEED.test(parsed.data.text) ||
+      parsed.data.history?.some((message) => STELLAR_SECRET_SEED.test(message.text))
+    ) {
       throw new AppError(
         'INVALID_REQUEST',
         'That message looks like it contains a secret key. Nest never needs one; it was not sent.',
