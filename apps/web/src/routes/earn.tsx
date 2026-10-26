@@ -1,13 +1,14 @@
 import { parseResearchSnapshot, type YieldPoolRow } from '@nest/data/research';
 import { Button } from '@nest/ui/components/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@nest/ui/components/card';
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from '@nest/ui/components/card';
 import { Checkbox } from '@nest/ui/components/checkbox';
 import { Input } from '@nest/ui/components/input';
 import { Label } from '@nest/ui/components/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { Link } from '@tanstack/react-router';
-import { ArrowLeft, ArrowRight, SlidersHorizontal } from 'lucide-react';
-import { useState } from 'react';
+import { ArrowLeft, ArrowRight, RotateCcw, SlidersHorizontal } from 'lucide-react';
+import { useId, useState } from 'react';
 
 import snapshotJson from '../../../../research/data/stellar-research-ui.json' with { type: 'json' };
 import { AssetIcon } from '../components/asset-icon.tsx';
@@ -29,6 +30,21 @@ import { useVaults } from '../lib/vaults.ts';
 
 const research = parseResearchSnapshot(snapshotJson);
 const CATEGORIES = ['All opportunities', 'Direct supply', 'Vaults', 'Campaigns', 'Liquidity'];
+const POOL_TYPE_OPTIONS = [
+  { value: 'all', label: 'All types' },
+  { value: 'stable', label: 'Stable' },
+  { value: 'volatile', label: 'Volatile' },
+];
+const EXIT_OPTIONS = [
+  { value: 'all', label: 'Any exit condition' },
+  { value: 'supported', label: 'Connected vaults' },
+  { value: 'unknown', label: 'Research only' },
+];
+const SORT_OPTIONS = [
+  { value: 'tvl', label: 'Reported TVL' },
+  { value: 'apy', label: 'Reported annualized rate' },
+  { value: 'name', label: 'Asset name' },
+];
 const PROJECT_NAMES: Record<string, string> = {
   'blend-pools-v2': 'Blend',
   'xoxno-lending': 'XOXNO',
@@ -177,12 +193,34 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
     );
   const currentPage = Math.min(page, Math.max(0, Math.ceil(rows.length / 25) - 1));
   const visibleRows = rows.slice(currentPage * 25, currentPage * 25 + 25);
+  const activeFilterCount =
+    selectedAssets.length +
+    [
+      query !== '',
+      exitFilter !== 'all',
+      assetQuery !== '',
+      project !== 'all',
+      withoutRewards,
+      poolType !== 'all',
+      fee !== 'all',
+    ].filter(Boolean).length;
 
   function chooseCategory(value: string) {
     setCategory(value);
     setPage(0);
     setPoolType('all');
     setFee('all');
+  }
+  function resetPanelFilters() {
+    setSelectedAssets([]);
+    setExitFilter('all');
+    setQuery('');
+    setAssetQuery('');
+    setProject('all');
+    setWithoutRewards(false);
+    setPoolType('all');
+    setFee('all');
+    setPage(0);
   }
   function resetFilters() {
     setCategory('All opportunities');
@@ -244,14 +282,28 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
       </fieldset>
       <div className="earn-list-layout">
         <Card className="min-w-0 self-start">
-          <CardHeader className="flex flex-row items-center justify-between">
+          <CardHeader className="min-h-11 items-center">
             <CardTitle className="flex items-center gap-2 text-lg">
               <SlidersHorizontal className="size-4" />
               Filters
             </CardTitle>
-            <Button variant="ghost" className="min-h-11" onClick={resetFilters}>
-              Reset
-            </Button>
+            {activeFilterCount > 0 && (
+              <CardAction className="self-center">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="min-h-11 sm:min-h-8"
+                  aria-label={`Reset ${activeFilterCount} ${activeFilterCount === 1 ? 'filter' : 'filters'}`}
+                  onClick={resetPanelFilters}
+                >
+                  <RotateCcw data-icon="inline-start" />
+                  Reset
+                  <span className="rounded-full bg-primary/15 px-1.5 font-mono text-[0.7rem] tabular-nums text-primary">
+                    {activeFilterCount}
+                  </span>
+                </Button>
+              </CardAction>
+            )}
           </CardHeader>
           <CardContent className="earn-filter-content space-y-5">
             <div className="space-y-2">
@@ -285,39 +337,27 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
                 </label>
               ))}
             </fieldset>
-            <label className="flex flex-col gap-2 text-sm">
-              Protocol
-              <select
-                className="min-h-11 rounded-lg border bg-background px-3"
-                value={project}
-                onChange={(event) => {
-                  setProject(event.currentTarget.value);
-                  setPage(0);
-                }}
-              >
-                <option value="all">All protocols</option>
-                {projects.map((item) => (
-                  <option key={item} value={item}>
-                    {projectName(item)}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <label className="flex flex-col gap-2 text-sm">
-              Exit availability
-              <select
-                className="min-h-11 rounded-lg border bg-background px-3"
-                value={exitFilter}
-                onChange={(event) => {
-                  setExitFilter(event.currentTarget.value);
-                  setPage(0);
-                }}
-              >
-                <option value="all">Any exit condition</option>
-                <option value="supported">Connected vaults</option>
-                <option value="unknown">Research only</option>
-              </select>
-            </label>
+            <FilterSelect
+              label="Protocol"
+              value={project}
+              options={[
+                { value: 'all', label: 'All protocols' },
+                ...projects.map((item) => ({ value: item, label: projectName(item) })),
+              ]}
+              onChange={(next) => {
+                setProject(next);
+                setPage(0);
+              }}
+            />
+            <FilterSelect
+              label="Exit availability"
+              value={exitFilter}
+              options={EXIT_OPTIONS}
+              onChange={(next) => {
+                setExitFilter(next);
+                setPage(0);
+              }}
+            />
             <details className="border-t pt-4">
               <summary className="cursor-pointer text-xs text-muted-foreground">More filters</summary>
               <div className="mt-3 space-y-3">
@@ -346,39 +386,27 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
             </details>
             {category === 'Liquidity' && (
               <>
-                <label className="flex flex-col gap-2 text-sm">
-                  Pool type
-                  <select
-                    className="min-h-11 rounded-lg border bg-background px-3"
-                    value={poolType}
-                    onChange={(event) => {
-                      setPoolType(event.currentTarget.value);
-                      setPage(0);
-                    }}
-                  >
-                    <option value="all">All types</option>
-                    <option value="stable">Stable</option>
-                    <option value="volatile">Volatile</option>
-                  </select>
-                </label>
-                <label className="flex flex-col gap-2 text-sm">
-                  Fee tier
-                  <select
-                    className="min-h-11 rounded-lg border bg-background px-3"
-                    value={fee}
-                    onChange={(event) => {
-                      setFee(event.currentTarget.value);
-                      setPage(0);
-                    }}
-                  >
-                    <option value="all">All fees</option>
-                    {fees.map((value) => (
-                      <option key={value} value={String(value)}>
-                        {value / 100}%
-                      </option>
-                    ))}
-                  </select>
-                </label>
+                <FilterSelect
+                  label="Pool type"
+                  value={poolType}
+                  options={POOL_TYPE_OPTIONS}
+                  onChange={(next) => {
+                    setPoolType(next);
+                    setPage(0);
+                  }}
+                />
+                <FilterSelect
+                  label="Fee tier"
+                  value={fee}
+                  options={[
+                    { value: 'all', label: 'All fees' },
+                    ...fees.map((value) => ({ value: String(value), label: `${value / 100}%` })),
+                  ]}
+                  onChange={(next) => {
+                    setFee(next);
+                    setPage(0);
+                  }}
+                />
               </>
             )}
           </CardContent>
@@ -388,21 +416,16 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
             <p className="text-sm text-muted-foreground" aria-live="polite">
               {rows.length} opportunities
             </p>
-            <label className="flex items-center gap-2 text-xs">
-              Sort
-              <select
-                className="min-h-11 rounded-lg border bg-background px-3 text-sm"
-                value={sort}
-                onChange={(event) => {
-                  setSort(event.currentTarget.value);
-                  setPage(0);
-                }}
-              >
-                <option value="tvl">Reported TVL</option>
-                <option value="apy">Reported annualized rate</option>
-                <option value="name">Asset name</option>
-              </select>
-            </label>
+            <FilterSelect
+              label="Sort"
+              inline
+              value={sort}
+              options={SORT_OPTIONS}
+              onChange={(next) => {
+                setSort(next);
+                setPage(0);
+              }}
+            />
           </div>
           {vaults.isPending ? (
             <p role="status" className="text-xs text-muted-foreground">
@@ -923,6 +946,51 @@ function LiveVaultDetailPage({ vaultId }: { vaultId: string }) {
           </CardContent>
         </Card>
       </div>
+    </div>
+  );
+}
+
+function FilterSelect({
+  label,
+  value,
+  options,
+  onChange,
+  inline = false,
+}: {
+  label: string;
+  value: string;
+  options: readonly { value: string; label: string }[];
+  onChange: (value: string) => void;
+  /** Label beside the control, as for Sort, instead of above it. */
+  inline?: boolean;
+}) {
+  const id = useId();
+  return (
+    <div className={inline ? 'flex items-center gap-2' : 'space-y-2'}>
+      <Label htmlFor={id} className={inline ? 'text-xs' : undefined}>
+        {label}
+      </Label>
+      <Select
+        value={value}
+        onValueChange={(next) => {
+          if (next !== null) onChange(next);
+        }}
+      >
+        <SelectTrigger id={id} className={inline ? 'min-h-11' : 'min-h-11 w-full'}>
+          <SelectValue>{options.find((option) => option.value === value)?.label ?? value}</SelectValue>
+        </SelectTrigger>
+        <SelectContent
+          {...(inline
+            ? { align: 'end' as const, alignItemWithTrigger: false, className: 'w-auto min-w-(--anchor-width)' }
+            : {})}
+        >
+          {options.map((option) => (
+            <SelectItem className="min-h-11" key={option.value} value={option.value}>
+              {option.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }
