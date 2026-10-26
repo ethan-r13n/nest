@@ -25,7 +25,7 @@ The browser audit covered 37 distinct desktop route instances, nine mobile views
 | Research | DeFi ranking, filtering, column controls, RWAs, composition/history, league table, MCP map/catalog and bookmarks. Restored the all-chain TVL column and RWA table fields. Asset names open the captured RWA.xyz URLs in a new tab. |
 | Protocols | All five leading entries, sidebar, yield tables, read groups, audit/repository/contract disclosures, source links and mobile layout. |
 | Earn | Main list and categories; live DeFindex deposits; sourced Gami and Sentora campaign details; vault management state; Aquarius list and pool-detail route. Restored vault titles, metric hierarchy, sidebar placement, counterparty icons and deposit/withdraw tabs. |
-| Credit | Borrow, collateral/debt/horizon/rate/venue editors, Supply and Positions. Reference headings and amount sizing are retained. Amount-aware execution still uses the existing lending proposals. |
+| Credit | Borrow, collateral/debt/horizon/rate/venue editors, Supply and Positions. Debt input text measures 26px with a 44px input height, including invalid input. Supply restores Asset/Amount, Horizon/Venue, then a full-width withdrawal disclosure. Only the current Credit tab is highlighted. Amount-aware execution still uses the existing lending proposals. |
 | Trade | Chart, intervals, routes, ticket, positions/history and market/pay/receive selectors. Replaced the small asset dropdowns with the searchable asset window, retaining existing asset identifiers and handlers. |
 | Lab | Backtest, automation, history, learning, unavailable backtest run and a saved monitor’s history. Restored the common header, history filters/search and empty-state composition while retaining actual monitor records and controls. |
 | Portfolio | Overview, activity, receive, send, spend concept and requested-plan status. Restored the overview Activity area and reference headings. |
@@ -49,3 +49,11 @@ These are not reported as visually matched populated states:
 | Landing | Preserved independently; the workspace reference does not replace the current landing page. |
 
 The UI changes do not modify the Worker, adapters, transaction policies, runtime permissions, migrations, execution switches or landing implementation. The preview still reaches live vault/lending reads, the previously confirmed vault deposit and the existing active monitor through the same backend.
+
+## Brand artwork coverage
+
+The shared identity resolver uses the captured logo manifest's 275 normalized aliases. RWA asset and Platform cells render their own marks; an issuer mark is not substituted for a missing asset mark. The same resolver serves protocol headers, MCP nodes and inspectors, Earn rows and counterparties, asset filters, Trade selectors, Credit asset cards and the X connection identity. Logo backgrounds use the theme's pale foreground surface so dark artwork remains visible.
+
+Automated coverage verifies all 44 protocol identities, all documented aliases and the hashes of all 180 captured artwork files. Of 109 RWA assets, 93 have dedicated artwork; the remaining 16 match the manifest's explicit missing-artwork list. Of 28 RWA platforms, 27 have captured artwork; Stablecorp Digital Currencies Inc. has none. Names remain visible where artwork is unavailable, without fabricated initials or generic brand substitutes.
+
+The browser checks include all three RWA pages at 50 rows per page, all 26 expanded MCP nodes, the five leading protocol pages, Earn categories and eight asset filters, the three Trade selection windows, Credit and Connections. No broken image was observed. Offscreen lazy images are tracked separately from failed images. Nest's shell, assistant and landing marks remain in place. The supplied financial layout specimens are not copied as account balances, quotes or LTV values.

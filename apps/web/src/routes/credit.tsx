@@ -335,6 +335,7 @@ export function SupplyPage() {
   const [asset, setAsset] = useState('USDC');
   const [amount, setAmount] = useState('');
   const [horizon, setHorizon] = useState('');
+  const [venue, setVenue] = useState('Best available');
   const [intentId, setIntentId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [interactionLocked, setInteractionLocked] = useState(false);
@@ -370,14 +371,11 @@ export function SupplyPage() {
       />
       <CreditNavigation current="supply" />
       <div className="supply-workspace space-y-6">
-        <section className="workspace-panel p-6" aria-labelledby="supply-intent-title">
-          <p className="mb-3 font-mono text-[11px] tracking-widest text-subtle uppercase">Build an intent</p>
-          <h2 id="supply-intent-title" className="mb-6 font-serif text-[28px] font-semibold">
-            Supply intent
-          </h2>
-          <div className="grid items-start gap-6 sm:grid-cols-2">
+        <section className="workspace-panel supply-intent" aria-labelledby="supply-intent-title">
+          <h2 id="supply-intent-title">Supply Intent</h2>
+          <div className="supply-intent-fields">
             <AssetSelect
-              label="Supply asset"
+              label="Asset"
               disabled={Boolean(intentId) || creating}
               value={asset}
               onChange={(value) => {
@@ -386,8 +384,7 @@ export function SupplyPage() {
               }}
             />
             <DecimalField
-              unit={asset}
-              label="Supply amount"
+              label="Amount"
               disabled={Boolean(intentId) || creating}
               value={amount}
               onChange={(value) => {
@@ -405,17 +402,39 @@ export function SupplyPage() {
                 placeholder="Optional"
                 onChange={(event) => setHorizon(event.currentTarget.value)}
               />
-              <p className="text-xs text-subtle">Research context only. The connected pool offers a variable rate.</p>
+              <p className="text-xs text-subtle">An assumption, not a maturity date.</p>
             </div>
-            <WithdrawalTiming />
+            <div className="space-y-2">
+              <Label htmlFor="supply-venue">Venue</Label>
+              <Select
+                value={venue}
+                disabled={Boolean(intentId) || creating}
+                onValueChange={(value) => value !== null && setVenue(value)}
+              >
+                <SelectTrigger id="supply-venue" className="min-h-11 w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Best available">Best available</SelectItem>
+                  <SelectItem value="Blend">Blend</SelectItem>
+                  <SelectItem value="Templar" disabled>
+                    Templar · research only
+                  </SelectItem>
+                  <SelectItem value="XOXNO" disabled>
+                    XOXNO · not connected
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+          <WithdrawalTiming heading="When can I withdraw?" className="supply-withdrawal" />
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <Button
               className="workspace-action min-w-52"
               disabled={Boolean(intentId) || creating || !amount.trim()}
               onClick={() => void compare()}
             >
-              {creating ? 'Comparing…' : 'Compare supply venues'} <ArrowRight />
+              {creating ? 'Comparing…' : 'Compare supply'} <ArrowRight />
             </Button>
             <p className="text-xs text-subtle">Comparison uses live Blend pools. Your wallet signs every deposit.</p>
           </div>

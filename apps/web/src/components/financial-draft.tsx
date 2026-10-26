@@ -3,6 +3,7 @@ import { Field, FieldDescription, FieldError, FieldLabel } from '@nest/ui/compon
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@nest/ui/components/input-group';
 import { Label } from '@nest/ui/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
+import { cn } from '@nest/ui/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { Clock3, ShieldCheck } from 'lucide-react';
 import { useId } from 'react';
@@ -97,12 +98,18 @@ export function DecimalField({
   );
 }
 
-export function WithdrawalTiming() {
+export function WithdrawalTiming({
+  heading = 'Withdrawal timing',
+  className,
+}: {
+  heading?: string;
+  className?: string;
+}) {
   return (
-    <div className="rounded-lg border border-warning/40 bg-warning/5 p-4">
+    <div className={cn('rounded-lg border border-warning/40 bg-warning/5 p-4', className)}>
       <div className="mb-2 flex items-center gap-2 text-sm font-medium">
         <Clock3 className="size-4 text-warning" aria-hidden="true" />
-        Withdrawal timing
+        {heading}
         <Badge variant="outline" className="ml-auto">
           Unknown
         </Badge>
@@ -136,6 +143,7 @@ export function CreditNavigation({ current }: { current: 'borrow' | 'supply' | '
     <nav aria-label="Credit views" className="flex flex-wrap gap-2 text-sm">
       <Link
         to="/credit"
+        activeOptions={{ exact: true }}
         className={creditLink(current === 'borrow')}
         aria-current={current === 'borrow' ? 'page' : undefined}
       >

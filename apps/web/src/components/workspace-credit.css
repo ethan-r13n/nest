@@ -84,11 +84,11 @@
 }
 
 .credit-amount-editor input {
-  min-height: 52px;
+  min-height: 44px;
   padding: 0;
   font-family: var(--nest-font-mono);
-  font-size: 38px;
-  line-height: 1.3;
+  font-size: 26px;
+  line-height: 1.4;
   letter-spacing: -0.05em;
 }
 
@@ -130,10 +130,45 @@
   }
 }
 
-@media (max-width: 767px) {
-  .credit-amount-editor input {
-    font-size: 32px;
-  }
+.supply-intent {
+  padding: 24px 20px;
+}
+
+.supply-intent h2 {
+  margin-bottom: 32px;
+  font-family: var(--nest-font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-transform: capitalize;
+}
+
+.supply-intent-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 16px;
+  margin-bottom: 24px;
+}
+
+.supply-intent-fields label {
+  font-family: var(--nest-font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--nest-text-secondary);
+  text-transform: uppercase;
+}
+
+.supply-intent-fields input,
+.supply-intent-fields [data-slot="select-trigger"] {
+  font-size: 12px;
+}
+
+.supply-withdrawal {
+  margin-bottom: 24px;
+  border-color: var(--nest-border);
+  background: var(--nest-surface-raised);
 }
 
 @media (max-width: 600px) {
@@ -147,5 +182,8 @@
   }
   .credit-step-value {
     max-width: 50%;
+  }
+  .supply-intent-fields {
+    grid-template-columns: minmax(0, 1fr);
   }
 }
