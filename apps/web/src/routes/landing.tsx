@@ -75,6 +75,7 @@ export function LandingPage() {
         <Header />
         <main>
           <Hero />
+          <Problem />
           <Purpose />
           <Features />
           <Harness />
@@ -95,6 +96,9 @@ function Header() {
         aria-label="Landing"
         className="order-3 flex w-full flex-wrap justify-between gap-x-7 text-sm text-[#b9b3a8] sm:order-2 sm:w-auto sm:justify-start"
       >
+        <a href="#problem" className="flex min-h-11 items-center hover:text-[#ff7a45]">
+          Problem
+        </a>
         <a href="#how" className="flex min-h-11 items-center hover:text-[#ff7a45]">
           Features
         </a>
@@ -122,6 +126,36 @@ function Hero() {
         <br />
         <em className="text-[#ff7a45]">One harness.</em>
       </h1>
+    </section>
+  );
+}
+
+function Problem() {
+  return (
+    <section
+      id="problem"
+      className={`scroll-mt-6 border-y bg-[rgba(4,10,6,.78)] py-[clamp(64px,8vw,112px)] ${GUTTER} ${RULE}`}
+      aria-labelledby="nest-problem"
+    >
+      <div className="grid gap-x-16 gap-y-8 lg:grid-cols-[minmax(0,.7fr)_minmax(0,1.3fr)]">
+        <h2 id="nest-problem" className={SECTION_HEADING}>
+          The problem.
+        </h2>
+        <ul className="m-0 list-disc space-y-6 pl-5 text-[clamp(17px,1.5vw,21px)] leading-[1.6] font-light text-[#cfc9bd] marker:text-[#ff7a45]">
+          <li>
+            <strong className="font-medium text-[#f1ece2]">An awareness gap.</strong> Many EVM and SVM users don’t know
+            what Stellar DeFi offers, or that it has smart contracts.
+          </li>
+          <li>
+            <strong className="font-medium text-[#f1ece2]">A fragmented experience.</strong> Finding asset support,
+            usable liquidity and comparable product terms means piecing together multiple venues.
+          </li>
+          <li>
+            <strong className="font-medium text-[#f1ece2]">Missed opportunities.</strong> Understanding each protocol
+            and Stellar’s mechanics takes time, leaving competitive opportunities undiscovered.
+          </li>
+        </ul>
+      </div>
     </section>
   );
 }
