@@ -79,18 +79,7 @@ export function usePortfolio(address: string | null) {
     enabled,
     refetchInterval: REFRESH_MS,
   });
-  const price = useQuery({
-    queryKey: ['xlm-reference-price', network],
-    queryFn: async () => {
-      const history = await call<{ day: { close: number } | null; candles: { close: number }[] }>(
-        '/api/markets/price-history?interval=1h',
-      );
-      return history.day?.close ?? history.candles.at(-1)?.close ?? null;
-    },
-    staleTime: 60_000,
-    refetchInterval: 60_000,
-  });
-  const xlmUsd = price.data ?? null;
+  const xlmUsd = useXlmUsd(network);
   const sameNetwork = [balances.data, positions.data, vaults.data].every((data) => !data || data.network === network);
   const rows = sameNetwork
     ? positionRows(balances.data, positions.data, limits.data, xlmUsd, vaults.data, address ?? undefined)
@@ -119,6 +108,22 @@ export function usePortfolio(address: string | null) {
       ...(!sameNetwork ? ['Position data does not match the active network. Actions are unavailable.'] : []),
     ],
   };
+}
+
+/** The Stellar DEX XLM reference price in USDC, which Portfolio and Trade value XLM at. */
+export function useXlmUsd(network: string | undefined) {
+  const price = useQuery({
+    queryKey: ['xlm-reference-price', network],
+    queryFn: async () => {
+      const history = await call<{ day: { close: number } | null; candles: { close: number }[] }>(
+        '/api/markets/price-history?interval=1h',
+      );
+      return history.day?.close ?? history.candles.at(-1)?.close ?? null;
+    },
+    staleTime: 60_000,
+    refetchInterval: 60_000,
+  });
+  return price.data ?? null;
 }
 
 export function positionRows(

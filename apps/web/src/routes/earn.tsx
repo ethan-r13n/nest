@@ -621,7 +621,7 @@ function ResearchVaultDetailPage({ vaultId }: { vaultId: string }) {
                     Withdraw
                   </TabsTrigger>
                 </TabsList>
-                <TabsContent value="deposit" className="space-y-4">
+                <TabsContent value="deposit" className="space-y-4 pt-3">
                   <DecimalField unit={depositAsset} label="Amount" value={amount} onChange={setAmount} />
                   {strategy?.withdrawal ? (
                     <div className="rounded-lg border border-warning/40 bg-warning/5 p-4 text-xs leading-relaxed">
@@ -635,7 +635,7 @@ function ResearchVaultDetailPage({ vaultId }: { vaultId: string }) {
                     Review deposit
                   </Button>
                 </TabsContent>
-                <TabsContent value="withdraw" className="space-y-4">
+                <TabsContent value="withdraw" className="space-y-4 pt-3">
                   {strategy?.withdrawal && (
                     <p className="text-sm leading-relaxed text-muted-foreground">{strategy.withdrawal}</p>
                   )}

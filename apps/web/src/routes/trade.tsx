@@ -1,5 +1,4 @@
 import { Button } from '@nest/ui/components/button';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@nest/ui/components/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowDownUp, LoaderCircle, Route } from 'lucide-react';
@@ -11,9 +10,8 @@ import { ReviewRequirements } from '../components/financial-draft.tsx';
 import { LimitOrderPanel } from '../components/limit-order.tsx';
 import { type ChartContext, MarketChart } from '../components/market-chart.tsx';
 import { SwapProposalCard, useCountdown } from '../components/swap-proposal.tsx';
-import { balanceHint, RouteFacts, useSwapDraft, WalletActivity } from '../components/trade-live.tsx';
-import { EmptyState } from '../components/workspace.tsx';
-import { execution } from '../lib/execution.ts';
+import { balanceHint, RouteFacts, SpotPositions, useSwapDraft, WalletActivity } from '../components/trade-live.tsx';
+import { execution, type SwapSymbol } from '../lib/execution.ts';
 import { useHealth } from '../lib/health.ts';
 import { MARKET_SYMBOLS } from '../lib/market-assets.ts';
 import { maxSwapAmount } from '../lib/trade-amount.ts';
@@ -27,6 +25,7 @@ export function TradePage() {
   const [chartContext, setChartContext] = useState<ChartContext | null>(null);
   const [interactionLocked, setInteractionLocked] = useState(false);
   const [limitInteractionLocked, setLimitInteractionLocked] = useState(false);
+  const [ticketTab, setTicketTab] = useState('market');
   const orderLocked = interactionLocked || limitInteractionLocked;
   const supportedPair =
     (inputAsset === 'XLM' && outputAsset === 'USDC') || (inputAsset === 'USDC' && outputAsset === 'XLM');
@@ -76,6 +75,17 @@ export function TradePage() {
       if (value !== marketAsset) setChartContext(null);
     }
     setAmount('');
+  }
+
+  /** From a position row: load the XLM / USDC market swap selling `symbol`. */
+  function swapFrom(symbol: SwapSymbol) {
+    if (marketAsset !== 'XLM') setChartContext(null);
+    setMarketAsset('XLM');
+    setInputAsset(symbol);
+    setOutputAsset(symbol === 'XLM' ? 'USDC' : 'XLM');
+    setAmount('');
+    setTicketTab('market');
+    document.getElementById('trade-amount')?.focus();
   }
 
   function reversePair() {
@@ -142,16 +152,24 @@ export function TradePage() {
           </div>
         </section>
         <section className="workspace-panel trade-ticket min-w-0" aria-labelledby="trade-ticket-title">
-          <Tabs defaultValue="market" className="gap-0">
+          {/* Controlled, and only the other tab is disabled while an order is in progress: Base UI
+              drops a disabled selection, which would hide the ticket mid-swap. */}
+          <Tabs
+            value={ticketTab}
+            onValueChange={(value) => {
+              if (typeof value === 'string') setTicketTab(value);
+            }}
+            className="gap-0"
+          >
             <h2 id="trade-ticket-title" className="sr-only">
               Trade order ticket
             </h2>
             <div className="trade-ticket-heading">
               <TabsList variant="line" className="trade-ticket-tabs" aria-label="Order type">
-                <TabsTrigger value="market" disabled={orderLocked}>
+                <TabsTrigger value="market" disabled={orderLocked && ticketTab !== 'market'}>
                   Market swap
                 </TabsTrigger>
-                <TabsTrigger value="limit" disabled={orderLocked}>
+                <TabsTrigger value="limit" disabled={orderLocked && ticketTab !== 'limit'}>
                   Limit order
                 </TabsTrigger>
               </TabsList>
@@ -308,33 +326,7 @@ export function TradePage() {
               </TabsTrigger>
             </TabsList>
             <TabsContent value="positions">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    {[
-                      'Asset / Market',
-                      'Quantity',
-                      'USD notional',
-                      'Avg. entry',
-                      'Mark',
-                      'Unrealized P&L',
-                      'Action',
-                    ].map((label) => (
-                      <TableHead key={label}>{label}</TableHead>
-                    ))}
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  <TableRow>
-                    <TableCell colSpan={7} className="p-0">
-                      <EmptyState
-                        title="No verified spot positions loaded"
-                        description="Confirmed balances and cost basis are needed before position size, value or P&L can be shown. Missing data is not a zero balance."
-                      />
-                    </TableCell>
-                  </TableRow>
-                </TableBody>
-              </Table>
+              <SpotPositions disabled={orderLocked} onSwap={swapFrom} />
             </TabsContent>
             <TabsContent value="history">
               <WalletActivity />
