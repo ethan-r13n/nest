@@ -36,7 +36,6 @@ const HISTORY_LINKS = [
 export function ChatPage({ ask }: { ask?: string | undefined }) {
   const { setDraft, chat } = useWorkspaceSession();
   const [expanded, setExpanded] = useState(false);
-  const [pinned, setPinned] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,48 +51,34 @@ export function ChatPage({ ask }: { ask?: string | undefined }) {
 
   return (
     <div
+      data-history={expanded ? 'expanded' : 'collapsed'}
       className={`chat-workspace grid h-full min-h-0 min-w-0 gap-6 lg:gap-8 ${expanded ? 'lg:grid-cols-[224px_minmax(0,1fr)]' : 'lg:grid-cols-[52px_minmax(0,1fr)]'}`}
     >
       <aside
         className={`hidden min-h-0 min-w-0 flex-col border-r lg:flex ${expanded ? 'pr-5' : 'pr-2'}`}
         aria-label="Conversation history"
-        onMouseEnter={() => setExpanded(true)}
-        onMouseLeave={() => {
-          if (!pinned) setExpanded(false);
-        }}
-        onFocusCapture={() => setExpanded(true)}
-        onBlurCapture={(event) => {
-          if (!pinned && !event.currentTarget.contains(event.relatedTarget)) setExpanded(false);
-        }}
       >
-        {expanded ? (
-          <div className={`mb-4 flex items-center gap-2 ${expanded ? 'justify-between' : 'flex-col'}`}>
-            {expanded ? (
-              <h2 className="font-sans text-xs font-medium tracking-wider text-muted-foreground uppercase">
-                Conversations
-              </h2>
-            ) : null}
-            <Button
-              variant="ghost"
-              className="size-11 text-muted-foreground"
-              size="icon"
-              aria-label={expanded ? 'Collapse conversation history' : 'Expand conversation history'}
-              aria-expanded={expanded}
-              aria-controls="conversation-history"
-              onClick={() => {
-                setPinned(!pinned);
-                setExpanded(!pinned);
-              }}
-            >
-              {expanded ? <PanelLeftClose /> : <PanelLeftOpen />}
-            </Button>
-          </div>
-        ) : null}
+        <div className="mb-4 flex min-h-11 items-center gap-2">
+          <Button
+            variant="ghost"
+            className="size-11 text-muted-foreground"
+            size="icon"
+            aria-label={expanded ? 'Collapse conversation history' : 'Expand conversation history'}
+            aria-expanded={expanded}
+            aria-controls="conversation-history"
+            onClick={() => setExpanded(!expanded)}
+          >
+            {expanded ? <PanelLeftClose /> : <PanelLeftOpen />}
+          </Button>
+          {expanded ? (
+            <h2 className="font-mono text-[11px] font-normal tracking-[0.1em] text-subtle uppercase">Conversations</h2>
+          ) : null}
+        </div>
         <Button
           variant="outline"
-          className={`mb-6 min-h-11 gap-2 bg-transparent dark:bg-transparent ${expanded ? 'w-full justify-start px-3' : 'size-11'}`}
+          className={`mb-6 min-h-11 gap-2 bg-transparent dark:bg-transparent ${expanded ? 'w-full justify-start px-3.5' : 'size-11'}`}
           aria-label="New conversation"
-          title="New conversation"
+          title={expanded ? undefined : 'New conversation'}
           onClick={newConversation}
         >
           <Plus />
@@ -106,19 +91,6 @@ export function ChatPage({ ask }: { ask?: string | undefined }) {
 
       <section className="flex min-h-0 min-w-0 flex-col gap-4 sm:gap-5">
         <div className="chat-title-row relative w-full shrink-0 border-b pb-4 sm:pb-5 [&_h1]:pr-24 lg:[&_h1]:pr-0">
-          <Button
-            variant="outline"
-            size="icon"
-            className="absolute top-0 left-0 hidden size-11 lg:flex"
-            aria-label="Toggle conversation history"
-            aria-expanded={expanded}
-            onClick={() => {
-              setPinned(!pinned);
-              setExpanded(!pinned);
-            }}
-          >
-            <PanelLeftOpen />
-          </Button>
           <PageHeader
             title="Ask Nest"
             description=""
@@ -177,12 +149,12 @@ function HistoryContents({ expanded }: { expanded: boolean }) {
   return (
     <>
       {expanded ? (
-        <div className="mb-5 rounded-xl border border-primary/20 bg-primary/5 px-3.5 py-4">
-          <div className="mb-2 flex items-center gap-2.5">
+        <div className="mb-5 rounded-xl border border-primary/20 bg-primary/5 px-3.5 py-3.5">
+          <div className="mb-1.5 flex items-center gap-3">
             <MessageSquare className="size-4 shrink-0 text-primary" aria-hidden="true" />
-            <p className="text-sm font-medium">Current conversation</p>
+            <p className="text-[13px] font-medium">Current conversation</p>
           </div>
-          <p className="pl-6.5 text-xs text-muted-foreground">Guest session · not saved</p>
+          <p className="pl-7 text-xs text-muted-foreground">Guest session · not saved</p>
         </div>
       ) : null}
       <Separator className="mb-4" />
@@ -202,7 +174,7 @@ function HistoryContents({ expanded }: { expanded: boolean }) {
             to={link.to}
             aria-label={link.label}
             title={link.label}
-            className={`flex min-h-11 min-w-11 items-center gap-3 rounded-lg text-sm text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground ${expanded ? 'px-3' : 'justify-center'}`}
+            className={`flex min-h-11 min-w-11 items-center gap-3 rounded-lg text-[13px] text-muted-foreground transition-colors hover:bg-secondary/60 hover:text-foreground ${expanded ? 'px-3.5' : 'justify-center'}`}
           >
             <link.icon className="size-4 shrink-0" aria-hidden="true" />
             {expanded ? link.label : <span className="sr-only">{link.label}</span>}

@@ -201,7 +201,7 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
           <Link
             key={route.to}
             to={route.to}
-            className={`flex min-h-14 min-w-0 items-center justify-center text-[11px] sm:text-xs ${isActiveGroup(pathname, route.to) ? 'text-primary' : 'text-muted-foreground'}`}
+            className={`flex min-h-14 min-w-0 items-center justify-center text-[10.5px] tracking-tight sm:text-xs sm:tracking-normal ${isActiveGroup(pathname, route.to) ? 'text-primary' : 'text-muted-foreground'}`}
             aria-current={isActiveGroup(pathname, route.to) ? 'page' : undefined}
           >
             {route.label}

@@ -313,23 +313,6 @@ export function CreditPage() {
           </Button>
         </section>
       </div>
-      <section className="credit-comparison space-y-5" aria-label="Borrow comparison">
-        <SelectionCommand>
-          <LiveLendingRates />
-        </SelectionCommand>
-        <div className="workspace-panel p-6">
-          <h2 className="mb-3 font-serif text-2xl font-semibold">One review, wherever you start.</h2>
-          <p className="mb-4 text-xs leading-6 text-muted-foreground">
-            The table shows current reference rates. Ask Nest carries your exact collateral, debt, horizon and rate
-            constraints into a draft; the transaction card must obtain its own amount-specific quote. Borrowing compares
-            Blend and XOXNO at the same inputs; Templar remains research-only.
-          </p>
-          <WithdrawalTiming />
-          <div className="mt-4">
-            <ReviewRequirements />
-          </div>
-        </div>
-      </section>
     </div>
   );
 }

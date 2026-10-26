@@ -418,7 +418,7 @@ function AllocationDraft({ onDraft }: { onDraft: (text: string) => void }) {
             Horizon
           </Label>
           <Select value={horizon} onValueChange={(next) => next !== null && setHorizon(next)}>
-            <SelectTrigger id={`${id}-horizon`} className="min-h-11 w-full bg-background text-xs">
+            <SelectTrigger id={`${id}-horizon`} className="min-h-11 w-full bg-background">
               <SelectValue>{horizon} days</SelectValue>
             </SelectTrigger>
             <SelectContent>

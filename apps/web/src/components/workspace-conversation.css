@@ -1,15 +1,10 @@
 .lab-workspace {
   width: 100%;
-  max-width: 1180px;
-  margin-inline: auto;
 }
 
 .chat-workspace .workspace-page-header h1 {
   font-size: 30px;
-}
-
-.lab-workspace {
-  max-width: 1120px;
+  line-height: 1.1;
 }
 
 .lab-thesis-body {
@@ -33,15 +28,56 @@
   max-width: 740px;
 }
 
+.chat-workspace {
+  --chat-column: 800px;
+  --chat-rail: 52px;
+}
+
+.chat-workspace[data-history="expanded"] {
+  --chat-rail: 224px;
+}
+
 .chat-workspace > section {
   width: 100%;
-  max-width: 1040px;
+  max-width: var(--chat-column);
   margin-inline: auto;
 }
 
+.chat-workspace :is(.conversation-draft, .conversation-prompts, .allocation-draft) {
+  max-width: none;
+}
+
+/* An 8px gutter on both edges, pulled back by the gutter and the 4px padding, keeps the transcript on the column edges. */
+.chat-workspace [role="log"] {
+  margin-inline: -12px;
+  scrollbar-gutter: stable both-edges;
+}
+
+.chat-workspace [role="log"]::-webkit-scrollbar {
+  width: 8px;
+}
+
+.chat-workspace [role="log"]::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: var(--nest-border-strong);
+}
+
+@media (min-width: 1024px) {
+  /* Centred on the whole workspace rather than the space beside the rail, so opening history does not move it. */
+  .chat-workspace > section {
+    width: auto;
+    margin-right: 0;
+    margin-left: max(0px, calc((100% - var(--chat-column) - var(--chat-rail) - 32px) / 2));
+  }
+}
+
 .chat-title-row .workspace-page-header {
-  padding-left: 56px;
   min-height: 44px;
+  align-items: center;
+}
+
+.lab-thesis-body > .conversation-draft {
+  max-width: 800px;
 }
 
 .chat-title-row .workspace-page-header p {
@@ -94,12 +130,6 @@
   min-height: 84px;
 }
 
-@media (max-width: 1023px) {
-  .chat-title-row .workspace-page-header {
-    padding-left: 0;
-  }
-}
-
 .conversation-strategy .conversation-welcome {
   padding-block: 12px;
   gap: 18px;
@@ -116,5 +146,28 @@
 }
 .allocation-draft [data-slot="label"] {
   font: 500 10px / 1.5 var(--nest-font-mono);
+  letter-spacing: 0.08em;
+  color: var(--nest-text-secondary);
   text-transform: uppercase;
+}
+
+.conversation-research .conversation-welcome-title h2 {
+  font-size: 30px;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+@media (max-width: 639px) {
+  .chat-workspace .workspace-page-header h1 {
+    font-size: 26px;
+  }
+  .conversation-research .conversation-welcome-title {
+    gap: 10px;
+  }
+  .conversation-research .conversation-welcome-title img {
+    width: 28px;
+  }
+  .conversation-research .conversation-welcome-title h2 {
+    font-size: 22px;
+  }
 }
