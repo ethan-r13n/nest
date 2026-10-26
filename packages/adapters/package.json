@@ -23,7 +23,8 @@
     "./stellar/trustline": "./src/stellar/trustline.ts",
     "./amm/arbitrage": "./src/amm/arbitrage.ts",
     "./amm/pools": "./src/amm/pools.ts",
-    "./aquarius/range": "./src/aquarius/range.ts"
+    "./aquarius/range": "./src/aquarius/range.ts",
+    "./xoxno/lending": "./src/xoxno/lending.ts"
   },
   "scripts": {
     "typecheck": "tsc && tsc -p tsconfig.node.json",

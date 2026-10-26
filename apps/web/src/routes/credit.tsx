@@ -321,8 +321,8 @@ export function CreditPage() {
           <h2 className="mb-3 font-serif text-2xl font-semibold">One review, wherever you start.</h2>
           <p className="mb-4 text-xs leading-6 text-muted-foreground">
             The table shows current reference rates. Ask Nest carries your exact collateral, debt, horizon and rate
-            constraints into a draft; the transaction card must obtain its own amount-specific quote. XOXNO execution is
-            not connected yet; Templar remains research-only.
+            constraints into a draft; the transaction card must obtain its own amount-specific quote. Borrowing compares
+            Blend and XOXNO at the same inputs; Templar remains research-only.
           </p>
           <WithdrawalTiming />
           <div className="mt-4">
@@ -424,7 +424,7 @@ export function SupplyPage() {
                     Templar · research only
                   </SelectItem>
                   <SelectItem value="XOXNO" disabled>
-                    XOXNO · not connected
+                    XOXNO · borrowing only
                   </SelectItem>
                 </SelectContent>
               </Select>
@@ -469,8 +469,8 @@ export function SupplyPage() {
             </SelectionCommand>
           )}
           <p className="mt-4 text-xs leading-6 text-subtle">
-            Templar and XOXNO are research coverage; their execution adapters are not connected. No rates or
-            availability are inferred for them.
+            Nest lends through Blend. XOXNO is connected for borrowing, and Templar is research coverage only; no rates
+            or availability are inferred for it.
           </p>
         </section>
       </div>

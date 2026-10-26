@@ -1,20 +1,56 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Input } from '@nest/ui/components/input';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@nest/ui/components/table';
 import { Link } from '@tanstack/react-router';
-import { ArrowDownLeft, ArrowUpRight, Bell, CreditCard, Download } from 'lucide-react';
+import { ArrowDownLeft, ArrowUpRight, Bell, CreditCard, Download, Wallet } from 'lucide-react';
 import { useState } from 'react';
 
 import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { DraftNotice, EmptyState, PageHeader, UnavailableBadge } from '../components/workspace.tsx';
 import { useHealth } from '../lib/health.ts';
+import { usePortfolio } from '../lib/portfolio.ts';
+import { useWallet } from '../lib/wallet.tsx';
 import { PersonalEmptyTable, PersonalFact, PersonalField, PersonalNav, PersonalPanel } from './personal-shared.tsx';
 
 const ACTIVITY_FILTERS = ['All', 'Trades', 'Credit', 'Vaults', 'Transfers'] as const;
 const ALERT_FILTERS = ['All', 'Risk', 'Market', 'Workflow', 'Source'] as const;
+const USD = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 2 });
+const ACTIVITY_STATES: Record<string, string> = {
+  confirmed: 'Confirmed',
+  submitted: 'Pending',
+  confirming: 'Pending',
+  failed: 'Failed',
+  expired: 'Expired',
+};
 
 export function PortfolioPage() {
   const [allocationView, setAllocationView] = useState('mix');
+  const wallet = useWallet();
+  const portfolio = usePortfolio(wallet.address);
+  const valuation = portfolio.valuation;
+  const share = (part: number | null) =>
+    part === null || !valuation?.gross ? null : `${Math.round((part / valuation.gross) * 100)}%`;
+  const figures =
+    allocationView === 'mix'
+      ? [
+          {
+            label: 'Wallet',
+            value: valuation?.wallet ?? null,
+            note: share(valuation?.wallet ?? null) ?? 'Spendable balances',
+          },
+          {
+            label: 'Supply & collateral',
+            value: valuation?.supplied ?? null,
+            note: share(valuation?.supplied ?? null) ?? 'Blend, XOXNO and limit orders',
+          },
+          { label: 'Vault receipts', value: null, note: 'DeFindex shares are not read here yet' },
+        ]
+      : [
+          { label: 'Gross assets', value: valuation?.gross ?? null, note: 'Wallet, supply, collateral and orders' },
+          { label: 'Less debt', value: valuation?.debt ?? null, note: 'Blend and XOXNO loans' },
+          { label: 'Net value', value: valuation?.net ?? null, note: 'Gross assets − debt' },
+        ];
   return (
     <div className="portfolio-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
@@ -29,8 +65,16 @@ export function PortfolioPage() {
             <h2 id="portfolio-composition-title" className="font-serif text-[22px] font-semibold">
               Portfolio composition
             </h2>
-            <p className="my-2 font-mono text-[38px] leading-tight text-subtle">—</p>
-            <p className="text-[11px] text-subtle">Net portfolio value · valuation unavailable</p>
+            <p className={`my-2 font-mono text-[38px] leading-tight ${valuation?.net == null ? 'text-subtle' : ''}`}>
+              {formatValue(valuation?.net ?? null)}
+            </p>
+            <p className="text-[11px] text-subtle">
+              {!wallet.address
+                ? 'Net portfolio value · connect a wallet to value it'
+                : portfolio.xlmUsd === null
+                  ? 'Net portfolio value · no XLM reference price right now'
+                  : `Net portfolio value · XLM at $${portfolio.xlmUsd.toFixed(4)} (Stellar DEX), USDC at $1`}
+            </p>
           </div>
           <fieldset aria-label="Portfolio allocation view" className="flex gap-2">
             <Button
@@ -57,35 +101,90 @@ export function PortfolioPage() {
               ? 'Gross assets · receipt backing is counted once'
               : 'Net value = gross assets − debt'}
           </p>
-          <div className="mb-6 flex min-h-8 items-center rounded-lg border border-dashed px-3 text-xs text-subtle">
-            Composition requires verified balances and prices.
-          </div>
           <dl className="grid gap-5 sm:grid-cols-3">
-            {(allocationView === 'mix'
-              ? ['Wallet', 'Direct supply', 'Vault receipts']
-              : ['Gross assets', 'Less debt', 'Net value']
-            ).map((label) => (
-              <div key={label} className="border-l-2 pl-3">
-                <dt className="text-xs text-muted-foreground">{label}</dt>
-                <dd className="my-2 font-mono text-2xl text-subtle">—</dd>
-                <p className="text-[11px] text-subtle">Valuation unavailable</p>
+            {figures.map((figure) => (
+              <div key={figure.label} className="border-l-2 pl-3">
+                <dt className="text-xs text-muted-foreground">{figure.label}</dt>
+                <dd className={`my-2 font-mono text-2xl ${figure.value === null ? 'text-subtle' : ''}`}>
+                  {formatValue(figure.value)}
+                </dd>
+                <p className="text-[11px] text-subtle">{figure.note}</p>
               </div>
             ))}
           </dl>
         </div>
         <p className="border-t px-6 py-4 text-xs leading-6 text-muted-foreground">
-          Performance needs confirmed history and cost basis. P&amp;L and historical performance remain unavailable.
+          Values are read live and priced at the current reference price. P&amp;L and historical performance need cost
+          basis, so they stay unavailable.
         </p>
       </section>
       <PersonalPanel
         title="Positions & exits"
         description="Manage each position with its identity, ownership and exit conditions preserved."
       >
-        <PersonalEmptyTable
-          headers={['Position', 'Value', 'Accounting', 'Manage']}
-          title="No verified positions loaded"
-          description="Wallet assets, collateral, debt and vault receipts need confirmed position reads before appearing here. Missing data is not a zero balance."
-        />
+        {!wallet.address ? (
+          <EmptyState
+            title="Connect a wallet to see its positions"
+            description="Wallet balances, Blend supply and collateral, XOXNO loans and Aquarius limit orders appear here, read live."
+          >
+            <Button onClick={wallet.connect} disabled={wallet.connecting}>
+              <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect wallet'}
+            </Button>
+          </EmptyState>
+        ) : portfolio.loading ? (
+          <p role="status" className="py-8 text-center text-sm text-muted-foreground">
+            Reading balances and positions…
+          </p>
+        ) : portfolio.rows.length === 0 ? (
+          <PersonalEmptyTable
+            headers={['Position', 'Value', 'Accounting', 'Manage']}
+            title={portfolio.failed ? 'Positions could not be read' : 'No positions found'}
+            description={
+              portfolio.failed
+                ? 'A source did not answer. Missing data is not a zero balance; try again shortly.'
+                : 'This wallet holds no XLM, USDC, lending positions or limit orders that Nest reads.'
+            }
+          />
+        ) : (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Position</TableHead>
+                <TableHead>Value</TableHead>
+                <TableHead>Accounting</TableHead>
+                <TableHead className="text-right">Manage</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {portfolio.rows.map((row) => (
+                <TableRow key={row.key}>
+                  <TableCell>
+                    <p className="font-medium">{row.label}</p>
+                    <p className="text-xs text-muted-foreground">{row.venue}</p>
+                  </TableCell>
+                  <TableCell className="font-mono tabular-nums">
+                    <p>
+                      {row.side === 'debt' ? '−' : ''}
+                      {row.amounts.map((amount) => `${amount.amount} ${amount.symbol}`).join(' + ') || '—'}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{formatValue(row.usd)}</p>
+                  </TableCell>
+                  <TableCell className="text-sm text-muted-foreground">{row.accounting}</TableCell>
+                  <TableCell className="text-right">
+                    <Link to={row.manage.to} className="inline-flex min-h-11 items-center text-sm text-primary">
+                      {row.manage.label} <ArrowUpRight className="ml-1 size-3.5" />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+        {portfolio.notices.map((notice) => (
+          <p key={notice} className="mt-3 text-xs text-muted-foreground">
+            {notice}
+          </p>
+        ))}
         <div className="mt-4 flex flex-wrap gap-4">
           <Link to="/credit/positions" className="inline-flex min-h-11 items-center text-sm text-primary">
             Manage credit positions <ArrowUpRight className="ml-2 size-4" />
@@ -96,11 +195,59 @@ export function PortfolioPage() {
         </div>
       </PersonalPanel>
       <PersonalPanel title="Activity">
-        <PersonalEmptyTable
-          headers={['Action', 'Amount', 'State']}
-          title="No verified activity loaded"
-          description="Action history requires confirmed account records. No sample receipts appear as personal activity."
-        />
+        {portfolio.activity.length ? (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Action</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>State</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {portfolio.activity.slice(0, 5).map((item) => (
+                <TableRow key={item.id}>
+                  <TableCell>
+                    <p className="font-medium">{item.title}</p>
+                    <p className="text-xs text-muted-foreground">{item.venue}</p>
+                  </TableCell>
+                  <TableCell className="font-mono text-sm tabular-nums">
+                    {[
+                      ...item.sent.map((amount) => `−${amount.amount} ${amount.symbol}`),
+                      ...item.received.map((amount) => `+${amount.amount} ${amount.symbol}`),
+                    ].join(' ') || '—'}
+                  </TableCell>
+                  <TableCell>
+                    {item.explorerUrl ? (
+                      <a
+                        href={item.explorerUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-sm text-primary hover:underline"
+                      >
+                        {ACTIVITY_STATES[item.status] ?? item.status}
+                      </a>
+                    ) : (
+                      (ACTIVITY_STATES[item.status] ?? item.status)
+                    )}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        ) : (
+          <PersonalEmptyTable
+            headers={['Action', 'Amount', 'State']}
+            title={
+              wallet.address
+                ? portfolio.activityLoading
+                  ? 'Reading activity…'
+                  : 'No activity yet'
+                : 'Connect a wallet to see its activity'
+            }
+            description="Swaps, loans, deposits and limit orders this wallet signs through Nest appear here once they reach the network."
+          />
+        )}
         <Button nativeButton={false} variant="ghost" className="mt-3" render={<Link to="/portfolio/activity" />}>
           All activity ↗
         </Button>
@@ -594,4 +741,8 @@ export function SpendPage() {
       </div>
     </div>
   );
+}
+
+function formatValue(value: number | null): string {
+  return value === null ? '—' : USD.format(value);
 }

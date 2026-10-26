@@ -5,13 +5,14 @@ import { hex, InspectionError, verifySignedTransaction } from '@nest/adapters/st
 import { NETWORK_PASSPHRASES } from '@nest/adapters/stellar/networks';
 import { inspectTrustline } from '@nest/adapters/stellar/trustline';
 import { VenueRefusal } from '@nest/adapters/venue';
+import { xoxnoAsset } from '@nest/adapters/xoxno/lending';
 import { AppError } from '@nest/domain/errors';
 import { type Asset, StrKey } from '@stellar/stellar-sdk';
 
 import { type ExecutionDeps, logFailure } from './store.ts';
 
-/** Which feature the asset is for: on Testnet, swaps, Blend and Aquarius each list a different USDC. */
-export type TrustlineUse = 'swap' | 'lending' | 'aquarius';
+/** Which feature the asset is for: on Testnet, swaps, Blend, Aquarius and XOXNO do not all list the same USDC. */
+export type TrustlineUse = 'swap' | 'lending' | 'aquarius' | 'xoxno';
 
 const CONFIRM_POLL_MS = 1_000;
 const CONFIRM_WAIT_MS = 20_000;
@@ -87,6 +88,7 @@ function assetFor(deps: ExecutionDeps, input: { accountId: string; use: Trustlin
   }
   if (input.use === 'lending') return lendingAsset(deps.config.network, 'USDC').classic;
   if (input.use === 'swap') return swapAsset(deps.config.network, 'USDC').classic;
+  if (input.use === 'xoxno') return xoxnoAsset(deps.config.network, 'USDC').classic;
   const pool = RANGE_POOLS[deps.config.network][0];
   if (!pool) throw new AppError('UNAVAILABLE', 'Aquarius limit orders are not available on this network.');
   return rangeAssets(deps.config.network, pool).usdc.classic;

@@ -16,6 +16,7 @@ import {
   planProblem,
   signAndSubmit,
 } from '../lib/execution.ts';
+import { continuationQuote } from '../lib/lending-continuation.ts';
 import { shortAddress, useWallet } from '../lib/wallet.tsx';
 import { Fact, useCountdown } from './swap-proposal.tsx';
 import { TrustlineStep } from './trustline-step.tsx';
@@ -49,9 +50,10 @@ const VERBS = {
 const HELD_LABELS = { debt: 'You owe', supplied: 'You supplied', collateral: 'Your collateral' } as const;
 
 /**
- * A Blend proposal. Supply and borrow compare every registered pool; repay and withdraw read the
- * connected wallet's position in each. Excluded pools show their reason, then the card shows the
- * exact pool transaction the wallet will sign.
+ * A lending proposal. Supply compares every registered Blend pool, borrow adds XOXNO, and repay
+ * and withdraw read the connected wallet's Blend position in each pool. Excluded venues show their
+ * reason, then the card shows the exact transaction the wallet will sign. A first XOXNO loan takes
+ * two: the collateral, then the loan, which the card builds once the collateral confirms.
  */
 export function LendingProposalCard({
   intentId,
@@ -66,6 +68,9 @@ export function LendingProposalCard({
   const [comparison, setComparison] = useState<LendingComparison | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [plan, setPlan] = useState<LendingPlan | null>(null);
+  /** The confirmed XOXNO collateral deposit, kept while its loan is reviewed. */
+  const [collateralPlan, setCollateralPlan] = useState<LendingPlan | null>(null);
+  const continuationPoolId = useRef<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const offer = comparison?.quotes.find((quote) => quote.id === selectedId) ?? null;
   const secondsLeft = useCountdown(
@@ -90,7 +95,8 @@ export function LendingProposalCard({
 
   /** Compares again; returns the fresh offer from `poolId` when given, else the best one. */
   const compare = useCallback(
-    async (poolId?: string): Promise<string | null> => {
+    async (poolId = continuationPoolId.current): Promise<string | null> => {
+      continuationPoolId.current = poolId;
       setPhase('comparing');
       setError(null);
       setPlan(null);
@@ -102,8 +108,15 @@ export function LendingProposalCard({
           return null;
         }
         const compared = await execution.compareLending(intentId, wallet.address ?? undefined);
-        const chosen = compared.quotes.find((quote) => quote.pool.id === poolId)?.id ?? compared.selectedQuoteId;
         setComparison(compared);
+        const continuation = poolId ? continuationQuote(compared, poolId) : null;
+        if (continuation && 'stop' in continuation) {
+          setSelectedId(null);
+          setError(continuation.stop);
+          setPhase('stopped');
+          return null;
+        }
+        const chosen = continuation?.quoteId ?? compared.selectedQuoteId;
         setSelectedId(chosen);
         setPhase('compared');
         return chosen;
@@ -135,7 +148,8 @@ export function LendingProposalCard({
     }
   }
 
-  async function continueAfterTrustline(poolId: string) {
+  /** Compares again and prepares the fresh offer from the same venue, after a step it needed first. */
+  async function continueOn(poolId: string) {
     const quoteId = await compare(poolId);
     if (quoteId) await review(quoteId);
   }
@@ -153,6 +167,10 @@ export function LendingProposalCard({
       });
       setPlan(settled);
       setPhase(settled.status === 'confirmed' ? 'done' : isPending(settled) ? 'confirming' : 'stopped');
+      if (settled.status === 'confirmed' && settled.prepared?.step === 'collateral') {
+        setCollateralPlan(settled);
+        await continueOn(settled.offer.pool.id);
+      }
     } catch (caught) {
       fail(caught);
       setPhase('review');
@@ -168,6 +186,9 @@ export function LendingProposalCard({
       : `${verb} ${intent.asset.amount} ${intent.asset.symbol}${intent.collateral ? ` against ${intent.collateral.symbol}` : ''}`
     : '…';
   const expired = secondsLeft !== null && secondsLeft <= 0;
+  const venue =
+    (plan?.offer ?? offer)?.venue === 'xoxno' ? 'XOXNO' : kind === 'borrow' && !offer ? 'Blend · XOXNO' : 'Blend';
+  const step = plan?.prepared?.step ?? null;
   const warnings = plan?.policy.reasons.filter((reason) => !reason.pass && reason.severity === 'warn') ?? [];
 
   return (
@@ -176,14 +197,18 @@ export function LendingProposalCard({
         <p className="font-medium">{title}</p>
         <div className="flex gap-1.5">
           {intent ? <Badge variant="outline">{intent.network === 'mainnet' ? 'Mainnet' : 'Testnet'}</Badge> : null}
-          <Badge variant="secondary">Blend</Badge>
+          <Badge variant="secondary">{venue}</Badge>
         </div>
       </div>
 
       {phase === 'comparing' ? (
         <p className="flex items-center gap-2 text-muted-foreground">
           <LoaderCircle className="size-4 animate-spin" />{' '}
-          {exit ? 'Reading your Blend positions…' : 'Comparing Blend pools…'}
+          {exit
+            ? 'Reading your Blend positions…'
+            : kind === 'borrow'
+              ? 'Comparing Blend and XOXNO…'
+              : 'Comparing Blend pools…'}
         </p>
       ) : null}
       {phase === 'needs_wallet' ? (
@@ -207,7 +232,11 @@ export function LendingProposalCard({
             </ul>
           ) : (
             <p className="text-destructive">
-              {exit ? 'Nest found no matching position in a Blend pool.' : 'No Blend pool can take this right now.'}
+              {exit
+                ? 'Nest found no matching position in a Blend pool.'
+                : kind === 'borrow'
+                  ? 'Neither Blend nor XOXNO can take this right now.'
+                  : 'No Blend pool can take this right now.'}
             </p>
           )}
           {offer ? (
@@ -250,7 +279,9 @@ export function LendingProposalCard({
           {offer && !exit ? <WithdrawalTiming summary={offer.withdrawalTiming.summary} /> : null}
           {offer && (kind === 'borrow' || kind === 'withdraw_collateral') ? (
             <p className="text-xs text-muted-foreground">
-              Blend liquidates a position whose health factor falls below 1. Rates are variable.
+              {offer.venue === 'xoxno'
+                ? 'XOXNO liquidates a position whose health factor falls below 1. Rates are variable. A first XOXNO loan takes two signatures: the collateral, then the loan.'
+                : 'Blend liquidates a position whose health factor falls below 1. Rates are variable.'}
             </p>
           ) : null}
           {comparison.excluded.length ? (
@@ -268,11 +299,35 @@ export function LendingProposalCard({
         </div>
       ) : null}
 
+      {collateralPlan && collateralPlan.id !== plan?.id ? (
+        <p className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+          <CheckCircle2 className="size-3.5 text-primary" /> Step 1 of 2 done: collateral deposited on{' '}
+          {collateralPlan.offer.pool.name}.
+          {collateralPlan.explorerUrl ? (
+            <a
+              href={collateralPlan.explorerUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="text-primary hover:underline"
+            >
+              View transaction
+            </a>
+          ) : null}
+        </p>
+      ) : null}
+
       {plan?.prepared && (phase === 'review' || phase === 'signing') ? (
         <div className="space-y-2">
           <p className="text-xs uppercase tracking-wider text-subtle">
+            {step === 'collateral' ? 'Step 1 of 2 · ' : step === 'borrow' && collateralPlan ? 'Step 2 of 2 · ' : ''}
             Exact transaction you will sign · {plan.offer.pool.name}
           </p>
+          {step === 'collateral' ? (
+            <p className="text-xs text-muted-foreground">
+              XOXNO takes collateral and the loan in separate transactions. Once this deposit confirms, Nest builds the
+              loan for you to review and sign.
+            </p>
+          ) : null}
           <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
             {plan.prepared.requests.map((request) => (
               <Fact
@@ -309,16 +364,27 @@ export function LendingProposalCard({
       {phase === 'done' && plan ? (
         <p className="flex items-center gap-2">
           <CheckCircle2 className="size-4 text-primary" />
-          {done} on {plan.offer.pool.name}. Confirmed in ledger {plan.ledger}.
+          {step === 'collateral' ? 'Collateral deposited' : done} on {plan.offer.pool.name}. Confirmed in ledger{' '}
+          {plan.ledger}.
         </p>
       ) : null}
       {plan && phase === 'stopped' ? (
         <p className="text-destructive">{planProblem(plan) ?? 'This action stopped.'}</p>
       ) : null}
       {plan && phase === 'stopped' && plan.errorCode === 'TRUSTLINE_MISSING' ? (
-        <TrustlineStep use="lending" onAdded={() => continueAfterTrustline(plan.offer.pool.id)} />
+        <TrustlineStep
+          use={plan.offer.venue === 'xoxno' ? 'xoxno' : 'lending'}
+          onAdded={() => continueOn(plan.offer.pool.id)}
+        />
       ) : null}
-      {error ? <p className="text-destructive">{error}</p> : null}
+      {error ? (
+        <p className="text-destructive">
+          {error}
+          {phase === 'stopped' && collateralPlan?.offer.venue === 'xoxno'
+            ? ' Your collateral stays deposited on XOXNO; compare again to continue there.'
+            : null}
+        </p>
+      ) : null}
       {plan?.explorerUrl ? (
         <a
           href={plan.explorerUrl}
@@ -334,7 +400,7 @@ export function LendingProposalCard({
         {secondsLeft !== null && !expired ? (
           <span className="text-xs text-subtle">Valid for {secondsLeft}s</span>
         ) : null}
-        {((phase === 'compared' || phase === 'review') && expired) || (phase === 'stopped' && !error) ? (
+        {((phase === 'compared' || phase === 'review') && expired) || phase === 'stopped' ? (
           <Button variant="outline" size="sm" onClick={() => compare()}>
             <RefreshCw /> Compare again
           </Button>

@@ -92,6 +92,8 @@ export interface LendingIntent {
 export interface LendingOffer {
   id: string;
   kind: LendingKind;
+  /** Blend for lending and exits; borrows also compare XOXNO. */
+  venue: 'blend' | 'xoxno';
   pool: { id: string; name: string; status: string };
   asset: AssetAmount;
   collateral: AssetAmount | null;
@@ -129,6 +131,8 @@ export interface LendingPlan extends PlanBase {
     fee: AssetAmount;
     requests: (AssetAmount & { type: LendingRequestType })[];
     health: { before: number | null; after: number | null; warning: boolean };
+    /** XOXNO loans take two transactions: the collateral, then the loan. Null on Blend. */
+    step: 'collateral' | 'borrow' | null;
     validUntil: string | null;
   } | null;
 }
@@ -210,7 +214,7 @@ export interface VaultPlan extends PlanBase {
 }
 
 /** On Testnet, swaps, Blend and Aquarius each list a different USDC, so the trustline depends on the feature. */
-export type TrustlineUse = 'swap' | 'lending' | 'aquarius';
+export type TrustlineUse = 'swap' | 'lending' | 'aquarius' | 'xoxno';
 
 type LimitKind = 'limit_order' | 'limit_close';
 
@@ -314,6 +318,42 @@ export interface ActivityItem {
   received: AssetAmount[];
 }
 
+/** The wallet's Blend positions and XOXNO accounts; each side says when it could not be read. */
+export interface LendingPositions {
+  network: 'mainnet' | 'testnet';
+  blend:
+    | {
+        available: true;
+        pools: {
+          poolId: string;
+          name: string;
+          health: number | null;
+          positions: {
+            symbol: string;
+            supplied: AssetAmount;
+            collateral: AssetAmount;
+            debt: AssetAmount;
+            supplyApyPct: number;
+            borrowApyPct: number;
+          }[];
+        }[];
+      }
+    | { available: false; reason: string; pools: [] };
+  xoxno:
+    | {
+        available: true;
+        name: string;
+        accounts: {
+          accountId: string;
+          spokeId: number;
+          collateral: AssetAmount[];
+          debt: AssetAmount[];
+          healthFactor: number | null;
+        }[];
+      }
+    | { available: false; reason: string; accounts: [] };
+}
+
 interface PreparedTrustline {
   asset: { code: string; issuer: string };
   xdr: string;
@@ -353,6 +393,7 @@ export const execution = {
   createSwap: (input: { sellAsset: SwapSymbol; buyAsset: SwapSymbol; sellAmount: string }) =>
     call<Intent>('/api/intents', { method: 'POST', body: { kind: 'swap', ...input } }),
   balances: (account: string) => call<SwapBalances>(`/api/balances?account=${encodeURIComponent(account)}`),
+  positions: (account: string) => call<LendingPositions>(`/api/positions?account=${encodeURIComponent(account)}`),
   activity: (account: string) =>
     call<{ network: 'mainnet' | 'testnet'; items: ActivityItem[] }>(
       `/api/plans?account=${encodeURIComponent(account)}`,

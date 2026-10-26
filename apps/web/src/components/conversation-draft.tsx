@@ -2,6 +2,7 @@ import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Input } from '@nest/ui/components/input';
 import { Label } from '@nest/ui/components/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
 import { Textarea } from '@nest/ui/components/textarea';
 import {
   AlertTriangle,
@@ -29,6 +30,8 @@ import { AssetSelect } from './financial-draft.tsx';
 import { MessageContent } from './message-content.tsx';
 import { ProposalCard } from './proposal-card.tsx';
 import { useWorkspaceSession } from './workspace-session.tsx';
+
+const HORIZON_DAYS = ['7', '30', '90'];
 
 const PROMPTS = [
   { label: 'Swap 1,000 XLM for USDC', text: 'Compare a swap of 1000 XLM for USDC.', icon: Coins, description: '' },
@@ -414,16 +417,18 @@ function AllocationDraft({ onDraft }: { onDraft: (text: string) => void }) {
           <Label htmlFor={`${id}-horizon`} className="font-mono text-[10px] uppercase">
             Horizon
           </Label>
-          <select
-            id={`${id}-horizon`}
-            value={horizon}
-            onChange={(event) => setHorizon(event.currentTarget.value)}
-            className="min-h-11 w-full rounded-lg border bg-background px-3 text-xs"
-          >
-            <option value="7">7 days</option>
-            <option value="30">30 days</option>
-            <option value="90">90 days</option>
-          </select>
+          <Select value={horizon} onValueChange={(next) => next !== null && setHorizon(next)}>
+            <SelectTrigger id={`${id}-horizon`} className="min-h-11 w-full bg-background text-xs">
+              <SelectValue>{horizon} days</SelectValue>
+            </SelectTrigger>
+            <SelectContent>
+              {HORIZON_DAYS.map((days) => (
+                <SelectItem className="min-h-11" key={days} value={days}>
+                  {days} days
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <Button className="workspace-action" type="submit" disabled={!capital.trim() || Boolean(issue)}>
           Compare with Nest <ArrowUpRight />
