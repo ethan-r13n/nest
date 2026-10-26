@@ -1,5 +1,4 @@
 import { Badge } from '@nest/ui/components/badge';
-import { Card, CardContent, CardHeader, CardTitle } from '@nest/ui/components/card';
 import { Field, FieldDescription, FieldError, FieldLabel } from '@nest/ui/components/field';
 import { InputGroup, InputGroupAddon, InputGroupInput } from '@nest/ui/components/input-group';
 import { Label } from '@nest/ui/components/label';
@@ -16,16 +15,18 @@ export function AssetSelect({
   label,
   value,
   onChange,
+  disabled = false,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }) {
   const id = useId();
   return (
     <div className="space-y-2">
       <Label htmlFor={id}>{label}</Label>
-      <Select value={value} onValueChange={(next) => next !== null && onChange(next)}>
+      <Select disabled={disabled} value={value} onValueChange={(next) => next !== null && onChange(next)}>
         <SelectTrigger id={id} className="min-h-11 w-full">
           <SelectValue />
         </SelectTrigger>
@@ -132,38 +133,35 @@ export function UnavailableFacts({ labels }: { labels: string[] }) {
 
 export function CreditNavigation({ current }: { current: 'borrow' | 'supply' | 'positions' }) {
   return (
-    <nav aria-label="Credit views" className="flex flex-wrap gap-1 border-b pb-3 text-sm">
-      <Link to="/credit" className={creditLink(current === 'borrow')}>
+    <nav aria-label="Credit views" className="flex flex-wrap gap-2 text-sm">
+      <Link
+        to="/credit"
+        className={creditLink(current === 'borrow')}
+        aria-current={current === 'borrow' ? 'page' : undefined}
+      >
         Borrow
       </Link>
-      <Link to="/credit/supply" className={creditLink(current === 'supply')}>
+      <Link
+        to="/credit/supply"
+        className={creditLink(current === 'supply')}
+        aria-current={current === 'supply' ? 'page' : undefined}
+      >
         Supply
       </Link>
-      <Link to="/credit/positions" className={creditLink(current === 'positions')}>
+      <Link
+        to="/credit/positions"
+        className={creditLink(current === 'positions')}
+        aria-current={current === 'positions' ? 'page' : undefined}
+      >
         My positions
       </Link>
+      <Link
+        to="/earn"
+        className="inline-flex min-h-11 items-center px-4 text-xs text-muted-foreground hover:text-foreground"
+      >
+        Supply opportunities ↗
+      </Link>
     </nav>
-  );
-}
-
-export function VenueAvailability() {
-  return (
-    <div className="grid gap-3 lg:grid-cols-3">
-      {['Blend', 'Templar', 'XOXNO'].map((venue) => (
-        <Card key={venue} size="sm">
-          <CardHeader className="flex-row items-center justify-between gap-2">
-            <CardTitle className="text-base">{venue}</CardTitle>
-            <Badge variant="outline">No quote</Badge>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <UnavailableFacts labels={['Current rate', 'Available capacity', 'Fees', 'Native risk']} />
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              A current quote for your exact assets and amount is needed before comparing this venue.
-            </p>
-          </CardContent>
-        </Card>
-      ))}
-    </div>
   );
 }
 

@@ -99,6 +99,7 @@ const optional = <T extends z.ZodType>(schema: T) =>
 const ExecutionSchema = z.object({
   ENABLED_WRITE_ADAPTERS: z.string().default(''),
   SOROSWAP_API_KEY: optional(z.string().min(1)),
+  DEFINDEX_API_KEY: optional(z.string().min(1)),
   STELLAR_MAINNET_RPC_URL: optional(z.url()),
   STELLAR_TESTNET_RPC_URL: optional(z.url()),
 });
@@ -107,6 +108,7 @@ export interface ExecutionConfig extends Config {
   /** Adapters allowed to submit; each stays off until its lifecycle is validated on this network. */
   writeAdapters: ReadonlySet<string>;
   soroswapApiKey: string | null;
+  defindexApiKey: string | null;
   rpcUrl: string | null;
 }
 
@@ -123,6 +125,7 @@ export function decodeExecutionConfig(env: unknown): ExecutionConfig {
         .filter(Boolean),
     ),
     soroswapApiKey: data.SOROSWAP_API_KEY ?? null,
+    defindexApiKey: data.DEFINDEX_API_KEY ?? null,
     rpcUrl:
       base.network === 'mainnet'
         ? (data.STELLAR_MAINNET_RPC_URL ?? null)

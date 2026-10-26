@@ -1,5 +1,8 @@
-import type { HealthEstimate, MarketView } from '@nest/adapters/blend/reader';
+import { lendingAsset } from '@nest/adapters/blend/markets';
+import type { HealthEstimate, MarketView, PoolPositions } from '@nest/adapters/blend/reader';
 import { buildBlendSubmit, type LendingRequest } from '@nest/adapters/blend/submit';
+import { buildVaultDeposit, type VaultDeposit } from '@nest/adapters/defindex/deposit';
+import { createDefindexClient, isDefindexVault, type VaultView } from '@nest/adapters/defindex/vaults';
 import { createSoroswapVenue, SoroswapError } from '@nest/adapters/soroswap/client';
 import { createSdexVenue } from '@nest/adapters/stellar/sdex';
 import { buildTrustline } from '@nest/adapters/stellar/trustline';
@@ -23,6 +26,7 @@ type IntentKind = (typeof INTENT_KINDS)[number];
 /** Blend reads and builds, injected so tests can run without a network. */
 interface LendingVenue {
   markets(): Promise<MarketView[]>;
+  positions(account: string): Promise<PoolPositions[]>;
   health(input: {
     poolId: string;
     account: string;
@@ -32,12 +36,22 @@ interface LendingVenue {
   build(input: { poolId: string; account: string; requests: readonly LendingRequest[] }): Promise<string>;
 }
 
+/** DeFindex reads, code verification and deposit builds, injected so tests can run without a network. */
+interface VaultVenue {
+  vaults(): Promise<VaultView[]>;
+  vault(address: string): Promise<VaultView>;
+  /** Whether the contract runs DeFindex's published vault code. */
+  verify(address: string): Promise<boolean>;
+  build(input: VaultDeposit): Promise<string>;
+}
+
 export interface ExecutionDeps {
   db: D1Database;
   config: ExecutionConfig;
   /** Where swaps are quoted and built on this network, or null when it is not configured. */
   venue: SwapVenue | null;
   lending: LendingVenue | null;
+  vaults: VaultVenue | null;
   buildTrustline: typeof buildTrustline;
   rpc: SwapRpc | null;
   now(): number;
@@ -55,15 +69,38 @@ export function executionDeps(env: Env): ExecutionDeps {
       ? {
           // Blend's SDK is large, so it loads on the first lending read rather than with every request.
           markets: async () => (await blendReader()).loadBlendMarkets(config.network, rpcUrl),
+          positions: async (account) => (await blendReader()).loadBlendPositions(config.network, rpcUrl, account),
           health: async (input) =>
             (await blendReader()).estimateBlendHealth({ network: config.network, rpcUrl, ...input }),
           build: (input) => buildBlendSubmit({ network: config.network, rpcUrl, nowMs: Date.now(), ...input }),
         }
       : null,
+    vaults: vaultVenue(config, rpcUrl),
     buildTrustline,
     rpc: rpcUrl ? createSwapRpc(rpcUrl) : null,
     now: Date.now,
     sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  };
+}
+
+function vaultVenue(config: ExecutionConfig, rpcUrl: string | null): VaultVenue | null {
+  if (!config.defindexApiKey || !rpcUrl) return null;
+  const client = createDefindexClient({ apiKey: config.defindexApiKey, network: config.network });
+  const network = config.network;
+  return {
+    vaults: client.vaults,
+    vault: client.vault,
+    verify: (address) => isDefindexVault(network, rpcUrl, address),
+    build: async (input) => {
+      const symbol = input.assetContract === lendingAsset(network, 'XLM').contractId ? 'XLM' : 'USDC';
+      return buildVaultDeposit({
+        ...input,
+        network,
+        rpcUrl,
+        asset: lendingAsset(network, symbol).classic,
+        nowMs: Date.now(),
+      });
+    },
   };
 }
 
@@ -93,6 +130,8 @@ export interface IntentRow {
   market_id: string | null;
   collateral_asset: string | null;
   collateral_amount_raw: string | null;
+  /** Repay and withdraw: 1 for the whole position. */
+  whole_position: number;
   created_at_ms: number;
 }
 
@@ -153,8 +192,8 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
   await deps.db
     .prepare(
       `INSERT INTO intents (id, network, kind, sell_asset, buy_asset, sell_amount_raw, source, market_id,
-         collateral_asset, collateral_amount_raw, created_at_ms)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         collateral_asset, collateral_amount_raw, whole_position, created_at_ms)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       row.id,
@@ -167,6 +206,7 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
       row.market_id,
       row.collateral_asset,
       row.collateral_amount_raw,
+      row.whole_position,
       row.created_at_ms,
     )
     .run();

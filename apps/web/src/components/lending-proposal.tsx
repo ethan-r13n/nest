@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ExecutionRequestError,
   execution,
+  isExitKind,
   isPending,
   type LendingComparison,
   type LendingIntent,
@@ -19,15 +20,46 @@ import { shortAddress, useWallet } from '../lib/wallet.tsx';
 import { Fact, useCountdown } from './swap-proposal.tsx';
 import { TrustlineStep } from './trustline-step.tsx';
 
-type Phase = 'comparing' | 'compared' | 'preparing' | 'review' | 'signing' | 'confirming' | 'done' | 'stopped';
+type Phase =
+  | 'needs_wallet'
+  | 'comparing'
+  | 'compared'
+  | 'preparing'
+  | 'review'
+  | 'signing'
+  | 'confirming'
+  | 'done'
+  | 'stopped';
 
-const REQUEST_LABELS = { supply: 'Supply', supplyCollateral: 'Deposit collateral', borrow: 'Borrow' } as const;
+const REQUEST_LABELS = {
+  supply: 'Supply',
+  supplyCollateral: 'Deposit collateral',
+  borrow: 'Borrow',
+  repay: 'Repay',
+  withdraw: 'Withdraw',
+  withdrawCollateral: 'Withdraw collateral',
+} as const;
+const VERBS = {
+  supply: ['Supply', 'Supplied'],
+  borrow: ['Borrow', 'Borrowed'],
+  repay: ['Repay', 'Repaid'],
+  withdraw: ['Withdraw', 'Withdrew'],
+  withdraw_collateral: ['Withdraw collateral', 'Withdrew collateral'],
+} as const;
+const HELD_LABELS = { debt: 'You owe', supplied: 'You supplied', collateral: 'Your collateral' } as const;
 
 /**
- * A supply or borrow proposal. Nest compares every registered Blend pool, shows the excluded ones
- * with their reason, then the exact pool transaction the wallet will sign.
+ * A Blend proposal. Supply and borrow compare every registered pool; repay and withdraw read the
+ * connected wallet's position in each. Excluded pools show their reason, then the card shows the
+ * exact pool transaction the wallet will sign.
  */
-export function LendingProposalCard({ intentId }: { intentId: string }) {
+export function LendingProposalCard({
+  intentId,
+  onInteractionLock,
+}: {
+  intentId: string;
+  onInteractionLock?: (locked: boolean) => void;
+}) {
   const wallet = useWallet();
   const [phase, setPhase] = useState<Phase>('comparing');
   const [intent, setIntent] = useState<LendingIntent | null>(null);
@@ -39,13 +71,16 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
   const secondsLeft = useCountdown(
     phase === 'compared' ? offer?.expiresAt : phase === 'review' ? plan?.prepared?.validUntil : undefined,
   );
+  useEffect(() => {
+    onInteractionLock?.(phase === 'preparing' || phase === 'signing' || phase === 'confirming');
+  }, [phase, onInteractionLock]);
   const mounted = useRef(true);
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
       mounted.current = false;
-    },
-    [],
-  );
+    };
+  }, []);
 
   const fail = useCallback((caught: unknown) => {
     setError(
@@ -60,8 +95,13 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
       setError(null);
       setPlan(null);
       try {
-        setIntent(await execution.lendingIntent(intentId));
-        const compared = await execution.compareLending(intentId);
+        const loaded = await execution.lendingIntent(intentId);
+        setIntent(loaded);
+        if (isExitKind(loaded.kind) && !wallet.address) {
+          setPhase('needs_wallet');
+          return null;
+        }
+        const compared = await execution.compareLending(intentId, wallet.address ?? undefined);
         const chosen = compared.quotes.find((quote) => quote.pool.id === poolId)?.id ?? compared.selectedQuoteId;
         setComparison(compared);
         setSelectedId(chosen);
@@ -73,7 +113,7 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
         return null;
       }
     },
-    [intentId, fail],
+    [intentId, fail, wallet.address],
   );
 
   useEffect(() => {
@@ -119,19 +159,21 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
     }
   }
 
-  const supply = intent?.kind === 'supply';
-  const verb = supply ? 'Supply' : 'Borrow';
+  const kind = intent?.kind ?? 'supply';
+  const exit = isExitKind(kind);
+  const [verb, done] = VERBS[kind];
+  const title = intent
+    ? exit
+      ? `${verb} ${intent.wholePosition ? `all ${intent.asset.symbol}` : `${intent.asset.amount} ${intent.asset.symbol}`}`
+      : `${verb} ${intent.asset.amount} ${intent.asset.symbol}${intent.collateral ? ` against ${intent.collateral.symbol}` : ''}`
+    : '…';
   const expired = secondsLeft !== null && secondsLeft <= 0;
   const warnings = plan?.policy.reasons.filter((reason) => !reason.pass && reason.severity === 'warn') ?? [];
 
   return (
     <section aria-label={`${verb} proposal`} className="mt-3 space-y-3 rounded-lg border bg-background p-4 text-sm">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className="font-medium">
-          {intent
-            ? `${verb} ${intent.asset.amount} ${intent.asset.symbol}${intent.collateral ? ` against ${intent.collateral.symbol}` : ''}`
-            : '…'}
-        </p>
+        <p className="font-medium">{title}</p>
         <div className="flex gap-1.5">
           {intent ? <Badge variant="outline">{intent.network === 'mainnet' ? 'Mainnet' : 'Testnet'}</Badge> : null}
           <Badge variant="secondary">Blend</Badge>
@@ -140,8 +182,12 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
 
       {phase === 'comparing' ? (
         <p className="flex items-center gap-2 text-muted-foreground">
-          <LoaderCircle className="size-4 animate-spin" /> Comparing Blend pools…
+          <LoaderCircle className="size-4 animate-spin" />{' '}
+          {exit ? 'Reading your Blend positions…' : 'Comparing Blend pools…'}
         </p>
+      ) : null}
+      {phase === 'needs_wallet' ? (
+        <p className="text-muted-foreground">Connect your wallet so Nest can read your position in each Blend pool.</p>
       ) : null}
 
       {comparison && (phase === 'compared' || phase === 'preparing') ? (
@@ -160,10 +206,27 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
               ))}
             </ul>
           ) : (
-            <p className="text-destructive">No Blend pool can take this right now.</p>
+            <p className="text-destructive">
+              {exit ? 'Nest found no matching position in a Blend pool.' : 'No Blend pool can take this right now.'}
+            </p>
           )}
           {offer ? (
             <dl className="grid grid-cols-[auto_1fr] gap-x-4 gap-y-1">
+              {offer.position ? (
+                <>
+                  <Fact
+                    label={HELD_LABELS[offer.position.kind]}
+                    value={`${offer.position.held.amount} ${offer.position.held.symbol}`}
+                  />
+                  <Fact
+                    label="Request"
+                    value={`${offer.position.requested.amount} ${offer.position.requested.symbol}`}
+                  />
+                  {offer.position.health !== null ? (
+                    <Fact label="Health factor now" value={offer.position.health.toFixed(2)} />
+                  ) : null}
+                </>
+              ) : null}
               {offer.collateral ? (
                 <Fact label="Collateral" value={`${offer.collateral.amount} ${offer.collateral.symbol}`} />
               ) : null}
@@ -177,8 +240,15 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
               <Fact label="Nest fee" value="0" />
             </dl>
           ) : null}
-          {offer ? <WithdrawalTiming summary={offer.withdrawalTiming.summary} /> : null}
-          {offer && !supply ? (
+          {offer && kind === 'repay' ? (
+            <p className="text-xs text-muted-foreground">
+              {intent?.wholePosition
+                ? 'The request is slightly above the debt to cover interest that accrues before it lands; Blend refunds the excess in the same transaction.'
+                : 'Any amount above what you owe is refunded in the same transaction.'}
+            </p>
+          ) : null}
+          {offer && !exit ? <WithdrawalTiming summary={offer.withdrawalTiming.summary} /> : null}
+          {offer && (kind === 'borrow' || kind === 'withdraw_collateral') ? (
             <p className="text-xs text-muted-foreground">
               Blend liquidates a position whose health factor falls below 1. Rates are variable.
             </p>
@@ -217,7 +287,7 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
             <Fact label="Network fee" value={`${plan.prepared.fee.amount} XLM (limit ${plan.maxFee.amount})`} />
             <Fact label="From and to" value={shortAddress(plan.account)} />
           </dl>
-          <WithdrawalTiming summary={plan.offer.withdrawalTiming.summary} />
+          {exit ? null : <WithdrawalTiming summary={plan.offer.withdrawalTiming.summary} />}
           {warnings.map((reason) => (
             <p key={reason.code} className="flex items-center gap-2 text-xs text-muted-foreground">
               <AlertTriangle className="size-3.5 shrink-0" /> {reason.detail}
@@ -239,7 +309,7 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
       {phase === 'done' && plan ? (
         <p className="flex items-center gap-2">
           <CheckCircle2 className="size-4 text-primary" />
-          {supply ? 'Supplied' : 'Borrowed'} on {plan.offer.pool.name}. Confirmed in ledger {plan.ledger}.
+          {done} on {plan.offer.pool.name}. Confirmed in ledger {plan.ledger}.
         </p>
       ) : null}
       {plan && phase === 'stopped' ? (
@@ -269,9 +339,9 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
             <RefreshCw /> Compare again
           </Button>
         ) : null}
-        {phase === 'compared' && offer && !expired && !wallet.address ? (
+        {(phase === 'needs_wallet' || (phase === 'compared' && offer && !expired)) && !wallet.address ? (
           <Button size="sm" onClick={wallet.connect} disabled={wallet.connecting}>
-            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect Freighter to review'}
+            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect wallet to review'}
           </Button>
         ) : null}
         {phase === 'compared' && offer && !expired && wallet.address ? (
@@ -286,12 +356,12 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
         ) : null}
         {phase === 'review' && !expired ? (
           <Button size="sm" onClick={sign}>
-            <Wallet /> Sign in Freighter
+            <Wallet /> Sign in wallet
           </Button>
         ) : null}
         {phase === 'signing' ? (
           <Button size="sm" disabled>
-            <LoaderCircle className="animate-spin" /> Waiting for Freighter…
+            <LoaderCircle className="animate-spin" /> Waiting for wallet…
           </Button>
         ) : null}
       </div>
@@ -311,7 +381,7 @@ function OfferOption({
   selected: boolean;
   onSelect(): void;
 }) {
-  const apy = offer.kind === 'supply' ? offer.supplyApyPct : offer.borrowApyPct;
+  const apy = offer.kind === 'supply' || offer.kind === 'withdraw' ? offer.supplyApyPct : offer.borrowApyPct;
   return (
     <button
       type="button"
@@ -326,13 +396,17 @@ function OfferOption({
         <span className="font-medium">{offer.pool.name}</span>
         <span className="block text-xs text-subtle">
           {offer.pool.status}
-          {best ? ' · best rate' : ''}
+          {offer.position
+            ? ` · ${HELD_LABELS[offer.position.kind].toLowerCase()} ${offer.position.held.amount} ${offer.position.held.symbol}`
+            : best
+              ? ' · best rate'
+              : ''}
         </span>
       </span>
       <span className="text-right font-mono tabular-nums">
         {apy.toFixed(2)}%
         <span className="block font-sans text-xs text-subtle">
-          {offer.kind === 'supply' ? 'supply APY' : 'borrow APY'}
+          {offer.kind === 'supply' || offer.kind === 'withdraw' ? 'supply APY' : 'borrow APY'}
         </span>
       </span>
     </button>

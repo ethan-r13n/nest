@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-// Compatibility gate result (docs/spikes/pi-workers.md): pi-coding-agent 1.4.0 cannot load in workerd,
+// Compatibility gate result (docs/architecture-decisions.md): pi-coding-agent 1.4.0 cannot load in workerd,
 // with or without nodejs_compat, because its undici 8 dependency needs Node internals at import time.
 // These are expected failures; when a Pi release fixes it they start passing and Vitest reports them,
 // which is the signal to revisit the hosting decision.

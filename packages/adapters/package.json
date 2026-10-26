@@ -16,8 +16,12 @@
     "./blend/markets": "./src/blend/markets.ts",
     "./blend/reader": "./src/blend/reader.ts",
     "./blend/submit": "./src/blend/submit.ts",
+    "./defindex/deposit": "./src/defindex/deposit.ts",
+    "./defindex/vaults": "./src/defindex/vaults.ts",
     "./stellar/accounts": "./src/stellar/accounts.ts",
-    "./stellar/trustline": "./src/stellar/trustline.ts"
+    "./stellar/trustline": "./src/stellar/trustline.ts",
+    "./amm/arbitrage": "./src/amm/arbitrage.ts",
+    "./amm/pools": "./src/amm/pools.ts"
   },
   "scripts": {
     "typecheck": "tsc && tsc -p tsconfig.node.json",

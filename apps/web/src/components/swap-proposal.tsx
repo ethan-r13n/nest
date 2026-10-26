@@ -21,9 +21,17 @@ type Phase = 'quoting' | 'quoted' | 'preparing' | 'review' | 'signing' | 'confir
 
 /**
  * A swap proposal from chat. Everything shown comes from Nest's own records: the live quote, then
- * the exact transaction the wallet will sign. Only the user's signature in Freighter executes it.
+ * the exact transaction the wallet will sign. Only the user's signature in their wallet executes it.
  */
-export function SwapProposalCard({ intentId }: { intentId: string }) {
+export function SwapProposalCard({
+  intentId,
+  onQuote,
+  onInteractionLock,
+}: {
+  intentId: string;
+  onQuote?: (quote: Quote | null) => void;
+  onInteractionLock?: (locked: boolean) => void;
+}) {
   const wallet = useWallet();
   const [phase, setPhase] = useState<Phase>('quoting');
   const [intent, setIntent] = useState<Intent | null>(null);
@@ -33,13 +41,16 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
   const secondsLeft = useCountdown(
     phase === 'quoted' ? quote?.expiresAt : phase === 'review' ? plan?.prepared?.validUntil : undefined,
   );
+  useEffect(() => {
+    onInteractionLock?.(phase === 'preparing' || phase === 'signing' || phase === 'confirming');
+  }, [phase, onInteractionLock]);
   const mounted = useRef(true);
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
       mounted.current = false;
-    },
-    [],
-  );
+    };
+  }, []);
 
   const fail = useCallback((caught: unknown) => {
     setError(
@@ -57,6 +68,7 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
       setIntent(await execution.intent(intentId));
       const fresh = (await execution.quote(intentId)) ?? null;
       setQuote(fresh);
+      if (mounted.current) onQuote?.(fresh);
       setPhase('quoted');
       return fresh?.id ?? null;
     } catch (caught) {
@@ -64,7 +76,7 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
       setPhase('stopped');
       return null;
     }
-  }, [intentId, fail]);
+  }, [intentId, fail, onQuote]);
 
   useEffect(() => {
     void requote();
@@ -227,7 +239,7 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
         ) : null}
         {phase === 'quoted' && !expired && !wallet.address ? (
           <Button size="sm" onClick={wallet.connect} disabled={wallet.connecting}>
-            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect Freighter to review'}
+            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect wallet to review'}
           </Button>
         ) : null}
         {phase === 'quoted' && !expired && wallet.address ? (
@@ -242,12 +254,12 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
         ) : null}
         {phase === 'review' && !expired ? (
           <Button size="sm" onClick={sign}>
-            <Wallet /> Sign in Freighter
+            <Wallet /> Sign in wallet
           </Button>
         ) : null}
         {phase === 'signing' ? (
           <Button size="sm" disabled>
-            <LoaderCircle className="animate-spin" /> Waiting for Freighter…
+            <LoaderCircle className="animate-spin" /> Waiting for wallet…
           </Button>
         ) : null}
       </div>

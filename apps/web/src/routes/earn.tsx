@@ -17,8 +17,10 @@ import {
   UnavailableFacts,
   WithdrawalTiming,
 } from '../components/financial-draft.tsx';
+import { LiveVaults } from '../components/live-vaults.tsx';
 import { strategyFor, VaultStrategyAside, VaultStrategyMain } from '../components/vault-strategy.tsx';
 import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
+import { useWorkspaceSession } from '../components/workspace-session.tsx';
 import { formatUsd, formatUtc } from '../lib/format.ts';
 import { useLiquidityPools } from '../lib/liquidity.ts';
 
@@ -59,6 +61,7 @@ type EarnOpportunity = {
 };
 
 export function EarnPage({ initialCategory = 'All opportunities' }: { initialCategory?: string }) {
+  const { setDraft, setAssistantOpen } = useWorkspaceSession();
   const liquidity = useLiquidityPools();
   const [category, setCategory] = useState(initialCategory);
   const [query, setQuery] = useState('');
@@ -154,9 +157,21 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="A home for idle capital."
-        kicker="Earn"
+        title="Put your capital in context."
+        kicker="Earn / Stellar opportunities"
         description="Compare lending, vaults, campaigns and liquidity on Stellar."
+        actions={
+          <Button
+            variant="outline"
+            className="workspace-action"
+            onClick={() => {
+              setDraft('Compare earn opportunities at my size, with fees, risks and withdrawal timing.');
+              setAssistantOpen(true);
+            }}
+          >
+            Ask Nest ↗
+          </Button>
+        }
       />
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
         <Badge variant="outline">Research · transactions unavailable</Badge>
@@ -183,6 +198,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
           </Button>
         ))}
       </fieldset>
+      {category === 'All opportunities' || category === 'Vaults' ? <LiveVaults /> : null}
       <div className="grid min-w-0 gap-6 lg:grid-cols-[15rem_minmax(0,1fr)]">
         <Card className="min-w-0 self-start">
           <CardHeader className="flex-row items-center justify-between">

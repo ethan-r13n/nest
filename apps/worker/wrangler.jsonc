@@ -1,7 +1,8 @@
-// Nest's application Worker: same-origin /api/*, SSE and (later) the scheduled handler.
+// Nest's application Worker: same-origin /api/*, SSE and the scheduled handler.
 // D1 resources come from infra/cloudflare/d1-resources.json. The default environment binds
 // mainnet; `--env testnet` binds the Testnet database. Financial writes stay disabled.
-// No cron trigger yet: it is added with the first real job dispatcher.
+// A one-minute cron wakes the automation dispatcher (src/automations/dispatch.ts); due rules,
+// jobs and leases live in D1, so the cron is only a wake-up signal.
 // Each agent conversation is a SQLite-backed Durable Object (src/agent/conversation.ts).
 // PI_MODEL_ID must be a free OpenRouter model; src/agent/models.ts refuses anything else.
 {
@@ -16,6 +17,9 @@
   },
   "upload_source_maps": true,
   "preview_urls": false,
+  "triggers": {
+    "crons": ["* * * * *"]
+  },
   "assets": {
     "not_found_handling": "single-page-application",
     "run_worker_first": ["/api/*"]
@@ -33,7 +37,13 @@
   // Provider RPC URLs often embed an API key, so the mainnet URL is a secret. Only declared names
   // are read from .dev.vars.
   "secrets": {
-    "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY", "SOROSWAP_API_KEY", "STELLAR_MAINNET_RPC_URL"]
+    "required": [
+      "OPENROUTER_API_KEY",
+      "APP_ENCRYPTION_KEY",
+      "SOROSWAP_API_KEY",
+      "DEFINDEX_API_KEY",
+      "STELLAR_MAINNET_RPC_URL"
+    ]
   },
   "durable_objects": {
     "bindings": [
@@ -70,7 +80,7 @@
         "STELLAR_TESTNET_RPC_URL": "https://soroban-testnet.stellar.org"
       },
       "secrets": {
-        "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY", "SOROSWAP_API_KEY"]
+        "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY", "SOROSWAP_API_KEY", "DEFINDEX_API_KEY"]
       },
       "durable_objects": {
         "bindings": [

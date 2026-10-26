@@ -9,7 +9,6 @@ import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nest/ui/components/card';
 import { Input } from '@nest/ui/components/input';
-import { Label } from '@nest/ui/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@nest/ui/components/table';
 import { useClipboard } from '@nest/ui/hooks/use-clipboard';
@@ -17,6 +16,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowDownUp, ArrowRight, Bookmark, Building2, Download, ExternalLink, Search } from 'lucide-react';
 import { type ReactNode, useId, useState } from 'react';
 
+import { AssetIcon } from '../components/asset-icon.tsx';
 import { LiveLendingRates } from '../components/live-lending.tsx';
 import { ResearchDataTable } from '../components/research-data-table.tsx';
 import { ResearchHistoryChart } from '../components/research-history.tsx';
@@ -28,8 +28,7 @@ const PAGE_SIZE = 12;
 const RESEARCH_LINKS = [
   { to: '/research', label: 'DeFi' },
   { to: '/research/rwas', label: 'RWAs' },
-  { to: '/research/markets', label: 'Markets' },
-  { to: '/research/venues', label: 'Venue map' },
+  { to: '/research/markets', label: 'MCP Contents' },
 ] as const;
 const VENUES = [
   {
@@ -100,40 +99,16 @@ const VENUES = [
 
 export function ResearchPage() {
   return (
-    <div className="min-w-0 space-y-7">
+    <div className="research-workspace min-w-0 space-y-5">
+      <ResearchTabs />
       <ResearchHeader
         title="Stellar DeFi"
-        description="Find the protocols, follow the capital, and compare the next step at your size."
+        description="Track network activity, compare protocols, and inspect their markets."
       />
-      <ResearchTabs />
-      <ResearchIntent />
-      <LiveLendingRates />
-      <section className="grid min-w-0 gap-5 xl:grid-cols-[260px_minmax(0,1fr)]" aria-label="Stellar overview">
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-1">
-          <StatCard
-            label="DeFi TVL"
-            value={formatUsd(research.chain.defiTvlUsd)}
-            detail="DefiLlama · Stellar chain value"
-          />
-          <StatCard
-            label="DEX volume · 24h"
-            value={formatUsd(research.chain.dexVolume24hUsd)}
-            detail="Reported chain activity"
-          />
-          <StatCard
-            label="Fees · 24h"
-            value={formatUsd(research.chain.fees24hUsd)}
-            detail="Coverage differs by venue"
-          />
-          <StatCard
-            label="USD stablecoin value"
-            value={formatUsd(research.chain.stablecoinUsdByPeg.peggedUSD ?? null)}
-            detail="Provider-converted USD value"
-          />
-        </div>
-        <ResearchHistoryChart />
-      </section>
+      <NetworkSummary />
+      <ResearchHistoryChart />
       <ProtocolDirectory />
+      <LiveLendingRates />
       <section className="grid gap-5 lg:grid-cols-2">
         <Card>
           <CardHeader>
@@ -189,6 +164,34 @@ export function ResearchPage() {
   );
 }
 
+function NetworkSummary() {
+  const metrics = [
+    { label: 'DeFi TVL', value: research.chain.defiTvlUsd },
+    {
+      label: 'Stablecoin value · all pegs',
+      value: Object.values(research.chain.stablecoinUsdByPeg).reduce((sum, value) => sum + value, 0),
+    },
+    { label: 'DEX volume · 24h', value: research.chain.dexVolume24hUsd },
+    { label: 'Fees · 24h', value: research.chain.fees24hUsd },
+  ];
+  return (
+    <section className="research-network-summary workspace-panel" aria-label="Stellar network summary">
+      <div className="flex items-center gap-3 p-5">
+        <AssetIcon symbol="XLM" />
+        <strong className="font-serif text-xl font-semibold">Stellar</strong>
+      </div>
+      {metrics.map((metric) => (
+        <div key={metric.label} className="min-w-0 border-l px-5 py-4">
+          <span className="block text-[11px] text-muted-foreground">{metric.label}</span>
+          <strong className="mt-1 block font-mono text-2xl font-normal tracking-tight tabular-nums">
+            {formatUsd(metric.value)}
+          </strong>
+        </div>
+      ))}
+    </section>
+  );
+}
+
 export function RwaPage() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
@@ -210,12 +213,12 @@ export function RwaPage() {
         : a.name.localeCompare(b.name),
     );
   return (
-    <div className="min-w-0 space-y-7">
+    <div className="research-workspace min-w-0 space-y-5">
+      <ResearchTabs />
       <ResearchHeader
         title="Real-world assets"
         description="Explore Stellar's tokenized assets with their source classification, holders and issuer context."
       />
-      <ResearchTabs />
       <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {research.rwaMetrics.map((metric) => (
           <StatCard
@@ -380,12 +383,13 @@ export function MarketsPage() {
       (project === 'all' || pool.project === project),
   );
   return (
-    <div className="min-w-0 space-y-7">
-      <ResearchHeader
-        title="Markets & research reads"
-        description="Inspect observed yield markets and the published research catalog. Neither is an executable quote."
-      />
+    <div className="research-workspace min-w-0 space-y-5">
       <ResearchTabs />
+      <ResearchHeader
+        title="MCP Contents"
+        description="Explore the venue map and inspect Raven’s published research operations and skills."
+      />
+      <VenueMap />
       <div className="grid gap-3 sm:grid-cols-3">
         <StatCard
           label="Observed pools"
@@ -438,6 +442,10 @@ export function MarketsPage() {
 }
 
 export function VenuesPage() {
+  return <MarketsPage />;
+}
+
+function VenueMap() {
   const [query, setQuery] = useState('');
   const [group, setGroup] = useState('all');
   const venues = VENUES.filter(
@@ -447,11 +455,7 @@ export function VenuesPage() {
   );
   return (
     <div className="min-w-0 space-y-7">
-      <ResearchHeader
-        title="The venue map"
-        description="See how routing, lending, vault platforms and curators fit together. Design coverage is separate from verified execution."
-      />
-      <ResearchTabs />
+      <h2 className="font-serif text-2xl font-semibold">The venue map</h2>
       <div className="flex flex-wrap items-end gap-3">
         <SearchField label="Find a venue" value={query} onChange={setQuery} />
         <Filter
@@ -849,7 +853,7 @@ export function SavedResearchPage() {
   return (
     <div className="space-y-7">
       <PageHeader
-        title="Saved research"
+        title="Bookmarks"
         description="Keep protocols, assets, filters and theses together once wallet-verified saving is available."
         kicker="Research / Saved"
       />
@@ -869,20 +873,24 @@ export function SavedResearchPage() {
 
 function ResearchHeader({ title, description }: { title: string; description: string }) {
   return (
-    <div className="space-y-4">
-      <PageHeader
-        title={title}
-        description={description}
-        kicker="Research / Stellar"
-        actions={
-          <Button nativeButton={false} variant="outline" size="sm" render={<Link to="/research/saved" />}>
-            <Bookmark />
-            Saved research
-          </Button>
-        }
-      />
-      <SnapshotNotice />
-    </div>
+    <header className="workspace-page-header flex flex-wrap items-center justify-between gap-4">
+      <div className="space-y-2">
+        <p className="font-mono text-[10px] tracking-widest text-subtle uppercase">Research / Stellar network</p>
+        <h1>{title}</h1>
+        <p className="text-[13px] leading-6 text-muted-foreground">{description}</p>
+      </div>
+      <div className="space-y-2 text-[10px] text-subtle">
+        <Badge variant="outline">Mainnet snapshot · not live</Badge>
+        <div>
+          <SourceStamp source={research.sources.defillama} />
+        </div>
+        {title === 'Real-world assets' ? (
+          <div>
+            <SourceStamp source={research.sources.rwa} />
+          </div>
+        ) : null}
+      </div>
+    </header>
   );
 }
 
@@ -903,44 +911,29 @@ function SnapshotNotice() {
 
 function ResearchTabs() {
   return (
-    <nav aria-label="Research views" className="flex flex-wrap gap-1 border-b pb-3">
-      {RESEARCH_LINKS.map((item) => (
-        <Link
-          key={item.to}
-          to={item.to}
-          activeOptions={{ exact: true }}
-          className="rounded-lg px-4 py-2 text-sm text-muted-foreground hover:text-foreground"
-          activeProps={{ className: 'bg-accent text-foreground' }}
-        >
-          {item.label}
-        </Link>
-      ))}
+    <nav aria-label="Research views" className="flex flex-wrap items-center justify-between gap-3 border-b pb-3">
+      <div className="flex flex-wrap gap-2">
+        {RESEARCH_LINKS.map((item) => (
+          <Link
+            key={item.to}
+            to={item.to}
+            activeOptions={{ exact: true }}
+            className="inline-flex min-h-11 items-center rounded-lg px-4 text-xs text-muted-foreground hover:text-foreground"
+            activeProps={{ className: 'bg-accent text-primary' }}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </div>
+      <Button
+        nativeButton={false}
+        variant="outline"
+        className="workspace-action"
+        render={<Link to="/research/saved" />}
+      >
+        <Bookmark /> Saved ↗
+      </Button>
     </nav>
-  );
-}
-
-function ResearchIntent() {
-  return (
-    <Card size="sm">
-      <CardContent className="flex flex-wrap items-end gap-3">
-        <div className="min-w-40 flex-1 space-y-2">
-          <Label htmlFor="research-capital">Capital to explore</Label>
-          <Input id="research-capital" placeholder="Enter an amount" inputMode="decimal" />
-        </div>
-        <div className="w-32 space-y-2">
-          <Label htmlFor="research-asset">Asset</Label>
-          <Input id="research-asset" defaultValue="USDC" />
-        </div>
-        <div className="w-32 space-y-2">
-          <Label htmlFor="research-horizon">Horizon · days</Label>
-          <Input id="research-horizon" placeholder="Optional" inputMode="numeric" />
-        </div>
-        <Button disabled>Compare with Nest</Button>
-        <p className="w-full text-xs text-subtle">
-          Amount-aware comparison is not connected. These inputs remain a local, unsaved draft.
-        </p>
-      </CardContent>
-    </Card>
   );
 }
 
@@ -961,7 +954,7 @@ function ProtocolDirectory() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 id="protocols" className="text-2xl font-semibold">
-            Protocol directory
+            Protocols <span className="ml-2 font-mono text-[11px] font-normal text-subtle">{rows.length} results</span>
           </h2>
           <p className="mt-1 text-xs text-subtle">
             {research.protocols.length} Stellar-associated records, including exchanges and infrastructure.
@@ -982,33 +975,49 @@ function ProtocolDirectory() {
           Export observations
         </Button>
       </div>
-      <div className="flex flex-wrap items-end gap-3">
-        <SearchField
-          label="Search protocols"
-          value={query}
-          onChange={(value) => {
-            setQuery(value);
-          }}
-        />
-        <Filter
-          label="Category"
-          value={category}
-          onChange={(value) => {
-            setCategory(value);
-          }}
-          options={[{ value: 'all', label: 'All categories' }, ...categories.map((value) => ({ value, label: value }))]}
-        />
-        <Filter
-          label="Order"
-          value={sort}
-          onChange={setSort}
-          options={[
-            { value: 'tvl', label: 'Stellar TVL' },
-            { value: 'name', label: 'Name' },
-          ]}
-        />
-      </div>
       <ResearchDataTable
+        controls={
+          <div className="research-filters flex min-w-0 flex-1 flex-wrap items-end gap-2 [&_label]:sr-only">
+            <SearchField
+              label="Search protocols"
+              value={query}
+              onChange={(value) => {
+                setQuery(value);
+              }}
+            />
+            <Filter
+              label="Category"
+              value={category}
+              onChange={(value) => {
+                setCategory(value);
+              }}
+              options={[
+                { value: 'all', label: 'All categories' },
+                ...categories.map((value) => ({ value, label: value })),
+              ]}
+            />
+            <Filter
+              label="Order"
+              value={sort}
+              onChange={setSort}
+              options={[
+                { value: 'tvl', label: 'Stellar TVL' },
+                { value: 'name', label: 'Name' },
+              ]}
+            />
+            <Button
+              variant="ghost"
+              className="workspace-action"
+              onClick={() => {
+                setQuery('');
+                setCategory('all');
+                setSort('tvl');
+              }}
+            >
+              Reset filters
+            </Button>
+          </div>
+        }
         tableKey="defi-protocols"
         label="Protocols"
         rows={rows}

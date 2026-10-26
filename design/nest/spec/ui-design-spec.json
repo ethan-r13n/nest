@@ -99,7 +99,7 @@
         "Nest forest/cream/orange and IBM Plex families",
         "Horizon replaces universal Maturity; actual term/maturity is market-capability dependent",
         "Comparison works before wallet connection",
-        "Blend, Templar and XOXNO compared at identical inputs",
+        "Blend and XOXNO compared at identical inputs",
         "Presets are illustrative until generated from verified current quotes"
       ]
     },
@@ -126,27 +126,6 @@
       "url": "https://docs.iris.credit/home/user-guide/maturity-and-overdue",
       "inspected": "2026-10-25",
       "observed": "IRIS documents Active, Grace period and Liquidatable phases; quote-bound overdue rates/grace periods and fixed-term early-close interest. These inform a conditional term-loan panel, not generic assumptions about Nest venues."
-    },
-    {
-      "id": "pilot-memory",
-      "url": "https://pilot-two-delta.vercel.app/memory",
-      "inspection": "Browser inspected",
-      "observed": "Knowledge graph beside a note reader; searchable Markdown-note list; linked notes and context summary; separate execution-policy editor lower on the page.",
-      "adapt": "Nest keeps the graph, reader, note search and linked navigation. Accepted preferences and proposals remain distinct; policy editing moves to the existing Guardrails authority. Do not inherit Pilot's automatic-execution or mandatory caps."
-    },
-    {
-      "id": "pilot-backtests",
-      "url": "https://pilot-two-delta.vercel.app/research/backtests",
-      "inspection": "Resolved through the live Backtests navigation because the supplied backtest URL duplicated Memory and included a trailing comma.",
-      "observed": "Bounded configuration, sample/historical modes, post-cost equity and benchmark, drawdown/cost/fill metrics, event audit, saved-run comparison and frozen reproducibility evidence.",
-      "adapt": "Nest uses a compact configuration rail and dominant evidence/results area. Preview calculations use explicitly synthetic XLM/USDC observations. Real historical replay remains a separately implemented service."
-    },
-    {
-      "id": "pilot-strategy",
-      "url": "https://pilot-two-delta.vercel.app/strategy",
-      "inspection": "Browser inspected after asynchronous content loaded",
-      "observed": "Strategy presets, editable bounds, review-first simulated lifecycle, per-event checks, portfolio effect and event timeline.",
-      "adapt": "Nest's P0 builder starts from arbitrary supported conditions, not a fixed strategy menu. Use Source→Condition→Action, one test, explicit revision review and activation. P0 actions notify or propose an action; no unattended signing."
     }
   ],
   "screens": [
@@ -1080,8 +1059,7 @@
           "providers": [
             "DeFindex",
             "Upshift/Gami",
-            "Sentora evergreen USDC via Upshift",
-            "Templar curated vaults"
+            "Sentora evergreen USDC via Upshift"
           ],
           "accounting": "Verified share decimals/conversion and net asset value; receipt and backing are not double-counted",
           "actions": [
@@ -1268,7 +1246,6 @@
           "default": "Best available",
           "content": [
             "Blend",
-            "Templar",
             "XOXNO"
           ],
           "validation": "Eligibility is specific to account, network, asset, market and current capability, not protocol name alone."
@@ -1309,7 +1286,7 @@
       "acceptance": [
         "The five intent terms stay visible while any editor is open.",
         "Guest users can compare without supplying a fabricated account ID.",
-        "Blend, Templar and XOXNO use identical requested collateral/debt/horizon inputs.",
+        "Blend and XOXNO use identical requested collateral/debt/horizon inputs.",
         "Insufficient capacity produces an exclusion instead of silently changing debt.",
         "Rates, fees, horizon assumptions, source timestamps and exit conditions are explicit.",
         "No common health number is invented across incompatible native metrics.",
@@ -1401,7 +1378,6 @@
       "capability_conditional_facts": {
         "Blend": "Use pool-native accounting and risk/receipt conversions. No backstop or recursive leverage in P0.",
         "XOXNO": "Bind wallet, NFT-backed lending account, spoke, hub and market IDs separately. Reverify current account ownership before prepare and submit. No P0 migration, NFT transfer, flash loan or looping.",
-        "Templar": "Preserve Stellar-origin funding, protocol authorization, external settlement and debt delivery as distinct receipts. Funding confirmation does not mean borrowing completed. Queued supply withdrawals have actual request/queue/execution/cancellation states.",
         "term_market": "Only when returned by the adapter: fixed/floating type, maturity, overdue rate, grace end, liquidation phase, full-term interest/early-close rule and settlement/repayment state. IRIS reference values do not supply Nest terms."
       },
       "states": {
@@ -1423,7 +1399,6 @@
         "Liquidatable and unsafe post-action withdrawals cannot reach signing.",
         "Collateral additions show withdrawal duration/restrictions before approval.",
         "Repay and close display actual venue costs rather than assuming IRIS mechanics.",
-        "A Templar funding receipt cannot mark borrowing complete.",
         "XOXNO ownership, native amount semantics and protocol IDs are revalidated.",
         "Every action uses the same prepared-plan review, expiry/policy binding and confirmed receipt reconciliation."
       ],
@@ -1830,7 +1805,7 @@
     {
       "date": "2026-10-25",
       "id": "reference-ui-v02",
-      "decision": "Ingest eight supplied UI images and live references into ten Nest-styled screen views. Vault images3–5 form one detail page. Use original solid-egg logo; Research top tabs DeFi/RWAs; Lab combines Memory/Backtests/Automations. Backtests route resolved via Pilot navigation. P0 economic capabilities continue to follow the technical specification.",
+      "decision": "Ingest eight supplied UI images and live references into ten Nest-styled screen views. Vault images3–5 form one detail page. Use original solid-egg logo; Research top tabs DeFi/RWAs; Lab combines Memory/Backtests/Automations. Backtests use the Lab navigation. P0 economic capabilities continue to follow the technical specification.",
       "source": "User UI-reference instruction and browser inspection"
     }
   ],

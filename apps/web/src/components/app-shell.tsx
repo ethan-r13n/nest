@@ -1,6 +1,15 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@nest/ui/components/dropdown-menu';
+import {
   type PanelImperativeHandle,
   ResizableHandle,
   ResizablePanel,
@@ -9,10 +18,12 @@ import {
 import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@nest/ui/components/sheet';
 import { Skeleton } from '@nest/ui/components/skeleton';
 import { Link, Outlet, useLocation } from '@tanstack/react-router';
-import { Bell, Menu, Wallet } from 'lucide-react';
+import { Bell, Check, ChevronDown, LoaderCircle, Menu, Wallet } from 'lucide-react';
 import { type ReactNode, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
+import './workspace-design.css';
+
+import symbolUrl from '../../../../design/nest/assets/nest-symbol.svg';
 import { useHealth } from '../lib/health.ts';
 import { shortAddress, useWallet, WalletProvider } from '../lib/wallet.tsx';
 import { AdjacentAssistant, AgentPanel } from './agent-panel.tsx';
@@ -25,7 +36,7 @@ const ROUTES = [
   { to: '/earn', label: 'Earn' },
   { to: '/credit', label: 'Credit' },
   { to: '/trade', label: 'Trade' },
-  { to: '/lab/memory', label: 'Lab' },
+  { to: '/lab/backtests', label: 'Lab' },
   { to: '/portfolio', label: 'Portfolio' },
 ] as const;
 
@@ -59,7 +70,7 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
     workspaceScrollRef.current?.scrollTo(0, 0);
   }, [pathname]);
   return (
-    <div className="flex h-svh min-w-0 flex-col overflow-hidden">
+    <div className="nest-workspace flex h-svh min-w-0 flex-col overflow-hidden">
       <a
         href="#workspace"
         className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-background focus:p-3"
@@ -67,35 +78,35 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
         Skip to workspace
       </a>
       <header className="sticky top-0 z-40 flex h-16 min-w-0 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur sm:gap-3 sm:px-5 xl:gap-5">
-        <Link to="/research" className="shrink-0" aria-label="Nest home">
-          <img src={lockupUrl} alt="Nest" className="h-6 w-auto sm:h-7" />
+        <Link to="/research" className="flex shrink-0 items-center gap-2.5" aria-label="Nest home">
+          <img src={symbolUrl} alt="" className="w-8 sm:w-9" />
+          <span className="font-serif text-[30px] font-semibold leading-none tracking-tight">Nest</span>
         </Link>
-        <nav aria-label="Primary" className="hidden items-center gap-1 xl:flex">
+        <nav aria-label="Primary" className="hidden h-full items-center gap-6 xl:flex">
           {ROUTES.map((route) => (
             <Link
               key={route.to}
               to={route.to}
-              className={`rounded-lg px-3 py-2 text-sm transition-colors ${isActiveGroup(pathname, route.to) ? 'bg-accent text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              className="workspace-primary-link transition-colors hover:text-foreground"
               aria-current={isActiveGroup(pathname, route.to) ? 'page' : undefined}
             >
               {route.label}
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2 [&_button]:h-11! [&_button]:min-w-11!">
           <div className="hidden lg:block">
             <NetworkStatus />
           </div>
           <Link
             to="/alerts"
-            className="hidden rounded-lg p-2 text-muted-foreground hover:bg-accent hover:text-foreground sm:flex"
+            className="hidden size-8 items-center justify-center rounded-lg text-muted-foreground hover:bg-accent hover:text-foreground sm:flex"
             aria-label="Alerts"
           >
             <Bell className="size-4" />
           </Link>
           <GuardrailsDrawer />
           <WalletButton />
-          <AgentPanel desktop={desktop} />
           <Sheet>
             <SheetTrigger
               render={<Button variant="ghost" size="icon" aria-label="Open navigation" className="xl:hidden" />}
@@ -183,6 +194,12 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
           </Link>
         ))}
       </nav>
+      {pathname !== '/chat' && !assistantOpen ? (
+        <div className="fixed right-4 bottom-20 z-40 xl:right-7 xl:bottom-6">
+          <AgentPanel desktop={desktop} />
+        </div>
+      ) : null}
+      {!desktop && assistantOpen ? <AgentPanel desktop={false} /> : null}
     </div>
   );
 }
@@ -192,7 +209,7 @@ function WorkspaceContent({ children }: { children: ReactNode }) {
   return (
     <main
       id="workspace"
-      className={`mx-auto w-full min-w-0 max-w-[1440px] px-4 pt-5 sm:px-6 sm:pt-6 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 xl:pb-6' : 'flex-1 pb-24 xl:pb-8'}`}
+      className={`mx-auto w-full min-w-0 max-w-[1920px] px-4 pt-5 sm:px-6 sm:pt-6 lg:px-7 lg:pt-7 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 xl:pb-6' : 'flex-1 pb-24 xl:pb-8'}`}
     >
       <Suspense
         fallback={
@@ -229,16 +246,87 @@ function isActiveGroup(pathname: string, route: string) {
 }
 
 function WalletButton() {
-  const { address } = useWallet();
+  const { address, connecting, connect, disconnect, error } = useWallet();
+  const [copyStatus, setCopyStatus] = useState<'idle' | 'copied' | 'failed'>('idle');
+
+  async function copyAddress() {
+    if (!address) return;
+    try {
+      await navigator.clipboard.writeText(address);
+      setCopyStatus('copied');
+    } catch {
+      setCopyStatus('failed');
+    }
+  }
+
   return (
-    <Button
-      nativeButton={false}
-      variant={address ? 'outline' : 'default'}
-      render={<Link to="/wallet" />}
-      aria-label={address ? `Wallet ${shortAddress(address)}` : 'Connect wallet'}
-    >
-      <Wallet />
-      <span className="hidden font-mono sm:inline">{address ? shortAddress(address) : 'Connect wallet'}</span>
-    </Button>
+    <div className="relative">
+      {address ? (
+        <DropdownMenu
+          onOpenChange={(open) => {
+            if (open) setCopyStatus('idle');
+          }}
+        >
+          <DropdownMenuTrigger
+            render={
+              <Button
+                variant="outline"
+                disabled={connecting}
+                aria-label={`Manage wallet ${shortAddress(address)}`}
+                title={address}
+              />
+            }
+          >
+            <Wallet className="sm:hidden" />
+            <span className="hidden font-mono sm:inline">{shortAddress(address)}</span>
+            <ChevronDown className="hidden size-3 sm:block" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            align="end"
+            sideOffset={8}
+            aria-label="Wallet account"
+            className="w-52 rounded-xl border p-1.5"
+          >
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="px-3 pt-2 pb-1.5 font-normal">
+                Account
+                <span className="mt-1 block font-mono text-[11px] sm:hidden">{shortAddress(address)}</span>
+              </DropdownMenuLabel>
+              <DropdownMenuItem closeOnClick={false} onClick={copyAddress} className="min-h-11 px-3 py-2 font-normal">
+                {copyStatus === 'copied' ? 'Address copied' : 'Copy address'}
+                {copyStatus === 'copied' ? <Check className="ml-auto size-4 text-success" aria-hidden="true" /> : null}
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={disconnect} className="min-h-11 px-3 py-2 font-normal">
+              Disconnect
+            </DropdownMenuItem>
+            {copyStatus === 'failed' ? (
+              <p role="alert" className="px-3 py-2 text-xs leading-relaxed text-destructive">
+                Couldn’t copy the address. Please try again.
+              </p>
+            ) : null}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ) : (
+        <Button
+          onClick={connect}
+          disabled={connecting}
+          aria-label={connecting ? 'Connecting wallet' : 'Connect wallet'}
+          aria-haspopup="dialog"
+        >
+          {connecting ? <LoaderCircle className="animate-spin motion-reduce:animate-none" /> : <Wallet />}
+          <span className="hidden sm:inline">{connecting ? 'Connecting…' : 'Connect wallet'}</span>
+        </Button>
+      )}
+      {error ? (
+        <p
+          role="alert"
+          className="absolute top-full right-0 z-50 mt-3 w-72 max-w-[calc(100vw-2rem)] rounded-xl border border-destructive/30 bg-popover p-3 text-xs leading-relaxed text-destructive shadow-lg"
+        >
+          {error}
+        </p>
+      ) : null}
+    </div>
   );
 }

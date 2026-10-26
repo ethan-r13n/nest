@@ -1,15 +1,15 @@
 import { env } from 'cloudflare:workers';
 import { BLEND_POOLS, lendingAsset } from '@nest/adapters/blend/markets';
-import type { MarketView, ReserveView } from '@nest/adapters/blend/reader';
+import type { MarketView, PoolPositions, ReserveView } from '@nest/adapters/blend/reader';
 import { BLEND_REQUEST_TYPES, type LendingRequest } from '@nest/adapters/blend/submit';
 import { NETWORK_PASSPHRASES } from '@nest/adapters/stellar/networks';
 import { VenueRefusal } from '@nest/adapters/venue';
 import { Account, Address, Keypair, nativeToScVal, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { describe, expect, it } from 'vitest';
 
-import { createLendingIntent } from '../src/execution/lending.ts';
+import { compareLending, createLendingIntent } from '../src/execution/lending.ts';
 import { approvePlan, compareIntent, createPlan, preparePlan, submitPlan } from '../src/execution/lifecycle.ts';
-import type { ExecutionDeps } from '../src/execution/store.ts';
+import { type ExecutionDeps, loadIntent } from '../src/execution/store.ts';
 import { prepareTrustline, submitTrustline } from '../src/execution/trustline.ts';
 
 const START_MS = 1_800_000_000_000;
@@ -72,7 +72,7 @@ function poolSubmit(account: string, poolId: string, requests: readonly LendingR
     args,
   });
   const transfers = requests
-    .filter((request) => request.type !== 'borrow')
+    .filter((request) => ['supply', 'supplyCollateral', 'repay'].includes(request.type))
     .map(
       (request) =>
         new xdr.SorobanAuthorizedInvocation({
@@ -114,6 +114,7 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
     healthAfter: 1.6 as number | null,
     tamper: null as ((requests: readonly LendingRequest[]) => LendingRequest[]) | null,
     refusal: null as VenueRefusal | null,
+    positions: [] as PoolPositions[],
     built: [] as LendingRequest[][],
   };
   const deps: ExecutionDeps = {
@@ -123,9 +124,11 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
       executionEnabled: true,
       writeAdapters: new Set(options.writeAdapters ?? ['blend']),
       soroswapApiKey: null,
+      defindexApiKey: null,
       rpcUrl: 'https://rpc.test',
     },
     venue: null,
+    vaults: null,
     buildTrustline: async () => {
       throw new Error('not used');
     },
@@ -134,6 +137,7 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
         market(FIXED, 'Blend Fixed', 0, { supplyApyPct: 5.88, borrowApyPct: 10.15 }),
         market(YIELDBLOX, 'Blend YieldBlox', 3, { supplyApyPct: 6.39, borrowApyPct: 7.99 }),
       ],
+      positions: async () => state.positions,
       health: async () => ({ before: null, after: state.healthAfter, collateralUsdAfter: 0, liabilitiesUsdAfter: 0 }),
       build: async ({ poolId, account, requests }) => {
         if (state.refusal) throw state.refusal;
@@ -156,7 +160,7 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
 
 async function preparedLending(h: ReturnType<typeof createFixture>, input: Parameters<typeof createLendingIntent>[1]) {
   const intent = await createLendingIntent(h.deps, input);
-  const compared = await compareIntent(h.deps, intent.id);
+  const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
   if (!('excluded' in compared) || !compared.selectedQuoteId) throw new Error('no offer');
   const plan = await createPlan(h.deps, {
     intentId: intent.id,
@@ -171,7 +175,7 @@ describe('lending offers', () => {
   it('ranks supply by APY across pools that accept deposits, with withdrawal timing', async () => {
     const h = createFixture();
     const intent = await createLendingIntent(h.deps, { kind: 'supply', asset: 'USDC', amount: '100', source: 'chat' });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared)) throw new Error('expected lending offers');
     expect(compared.quotes.map((quote) => [quote.pool.name, quote.supplyApyPct])).toEqual([
       ['Blend YieldBlox', 6.39],
@@ -186,7 +190,7 @@ describe('lending offers', () => {
     const h = createFixture();
     const intent = await createLendingIntent(h.deps, { kind: 'borrow', asset: 'USDC', amount: '1000', source: 'chat' });
     expect(intent.collateral).toEqual({ symbol: 'XLM' });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared)) throw new Error('expected lending offers');
     expect(compared.quotes).toHaveLength(1);
     const [offer] = compared.quotes;
@@ -207,7 +211,7 @@ describe('lending offers', () => {
       amount: '50000',
       source: 'form',
     });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared)) throw new Error('expected lending offers');
     expect(compared.selectedQuoteId).toBeNull();
     expect(compared.excluded.map((entry) => entry.reason)).toContain('The pool has 40,000 USDC available to borrow.');
@@ -222,7 +226,7 @@ describe('lending offers', () => {
       collateralAmount: '3000',
       source: 'form',
     });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared) || !compared.selectedQuoteId) throw new Error('no offer');
     const plan = await createPlan(h.deps, {
       intentId: intent.id,
@@ -338,5 +342,137 @@ describe('trustline step', () => {
     expect(
       await submitTrustline(h.deps, { accountId: h.user.publicKey(), use: 'lending', signedXdr: tx.toXDR() }),
     ).toMatchObject({ status: 'confirmed', ledger: 321 });
+  });
+});
+
+function heldIn(poolId: string, held: { debt?: bigint; supplied?: bigint; collateral?: bigint }): PoolPositions {
+  return {
+    poolId,
+    name: poolId === FIXED ? 'Blend Fixed' : 'Blend YieldBlox',
+    statusLabel: 'Active',
+    positions: [
+      {
+        symbol: 'USDC',
+        contractId: usdc.contractId,
+        suppliedRaw: held.supplied ?? 0n,
+        collateralRaw: 0n,
+        debtRaw: held.debt ?? 0n,
+        supplyApyPct: 5,
+        borrowApyPct: 9,
+      },
+      {
+        symbol: 'XLM',
+        contractId: xlm.contractId,
+        suppliedRaw: 0n,
+        collateralRaw: held.collateral ?? 0n,
+        debtRaw: 0n,
+        supplyApyPct: 1,
+        borrowApyPct: 2,
+      },
+    ],
+    health: held.debt ? 1.6 : null,
+    observedAtMs: START_MS,
+  };
+}
+
+async function preparedExit(
+  h: ReturnType<typeof createFixture>,
+  input: Parameters<typeof createLendingIntent>[1],
+  account = h.user.publicKey(),
+) {
+  const intent = await createLendingIntent(h.deps, input);
+  const compared = await compareIntent(h.deps, intent.id, account);
+  if (!('excluded' in compared) || !compared.selectedQuoteId) throw new Error('no offer');
+  const plan = await createPlan(h.deps, {
+    intentId: intent.id,
+    quoteId: compared.selectedQuoteId,
+    accountId: h.user.publicKey(),
+    idempotencyKey: crypto.randomUUID(),
+  });
+  return { compared, plan: plan.status === 'policy_checked' ? await preparePlan(h.deps, plan.id) : plan };
+}
+
+describe('repay and withdraw', () => {
+  it('needs the wallet to read the position, and refuses "all" for new positions', async () => {
+    const h = createFixture();
+    const intent = await createLendingIntent(h.deps, { kind: 'repay', asset: 'USDC', amount: 'all', source: 'chat' });
+    await expect(compareIntent(h.deps, intent.id)).rejects.toThrow('Connect your wallet');
+    await expect(
+      createLendingIntent(h.deps, { kind: 'supply', asset: 'USDC', amount: 'all', source: 'chat' }),
+    ).rejects.toThrow('whole position');
+  });
+
+  it('repays a whole debt with a small buffer Blend refunds, then confirms', async () => {
+    const h = createFixture();
+    h.state.positions = [heldIn(FIXED, { debt: 1_000_000_000n })];
+    const { compared, plan } = await preparedExit(h, { kind: 'repay', asset: 'USDC', amount: 'all', source: 'chat' });
+    expect(compared.excluded).toEqual([
+      { poolId: YIELDBLOX, name: 'Blend YieldBlox', reason: 'You have no USDC debt here.' },
+    ]);
+    expect(compared.quotes[0]).toMatchObject({ position: { kind: 'debt', held: { amount: '100' } } });
+    if (!plan.prepared || !('requests' in plan.prepared)) throw new Error(`not prepared: ${plan.errorCode}`);
+    expect(h.state.built).toEqual([[{ type: 'repay', contractId: usdc.contractId, amount: 1_001_000_001n }]]);
+    await approvePlan(h.deps, plan.id, { digest: plan.digest, preparedHash: plan.prepared.hash });
+    const tx = TransactionBuilder.fromXDR(plan.prepared.xdr, NETWORK_PASSPHRASES.mainnet);
+    tx.sign(h.user);
+    expect(await submitPlan(h.deps, plan.id, tx.toXDR())).toMatchObject({ status: 'confirmed' });
+  });
+
+  it('withdraws a whole supply, and excludes a pool without the liquidity to pay it', async () => {
+    const h = createFixture();
+    h.state.positions = [heldIn(FIXED, { supplied: 500_000_000n }), heldIn(YIELDBLOX, { supplied: 600_000_000_000n })];
+    const { compared, plan } = await preparedExit(h, {
+      kind: 'withdraw',
+      asset: 'USDC',
+      amount: 'all',
+      source: 'form',
+    });
+    expect(compared.excluded).toEqual([
+      {
+        poolId: YIELDBLOX,
+        name: 'Blend YieldBlox',
+        reason: 'The pool has 40,000 USDC available to withdraw right now.',
+      },
+    ]);
+    expect(plan.status).toBe('awaiting_review');
+    expect(h.state.built).toEqual([[{ type: 'withdraw', contractId: usdc.contractId, amount: 500_500_001n }]]);
+  });
+
+  it('blocks a collateral withdrawal that would leave the loan liquidatable', async () => {
+    const h = createFixture();
+    h.state.positions = [heldIn(FIXED, { debt: 1_000_000_000n, collateral: 80_000_000_000n })];
+    h.state.healthAfter = 0.92;
+    const { plan } = await preparedExit(h, {
+      kind: 'withdraw_collateral',
+      asset: 'XLM',
+      amount: '5000',
+      source: 'form',
+    });
+    expect(plan).toMatchObject({ status: 'blocked', errorCode: 'HEALTH_TOO_LOW' });
+  });
+
+  it('stops a collateral withdrawal for health before asking the pool to build it', async () => {
+    const h = createFixture();
+    h.state.positions = [heldIn(FIXED, { debt: 1_000_000_000n, collateral: 80_000_000_000n })];
+    h.state.healthAfter = 0;
+    const { plan } = await preparedExit(h, {
+      kind: 'withdraw_collateral',
+      asset: 'XLM',
+      amount: 'all',
+      source: 'form',
+    });
+    expect(plan).toMatchObject({ status: 'blocked', errorCode: 'HEALTH_TOO_LOW' });
+    expect(h.state.built).toEqual([]);
+  });
+
+  it('blocks a plan for a wallet other than the one whose position was read', async () => {
+    const h = createFixture();
+    h.state.positions = [heldIn(FIXED, { debt: 1_000_000_000n })];
+    const { plan } = await preparedExit(
+      h,
+      { kind: 'repay', asset: 'USDC', amount: '10', source: 'form' },
+      Keypair.random().publicKey(),
+    );
+    expect(plan).toMatchObject({ status: 'blocked', errorCode: 'ACCOUNT_MISMATCH' });
   });
 });

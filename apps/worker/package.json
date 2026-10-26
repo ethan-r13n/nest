@@ -11,7 +11,8 @@
     "types:check": "wrangler types --check",
     "db:generate": "drizzle-kit generate",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
-    "db:migrate:testnet": "wrangler d1 migrations apply DB --remote --env testnet"
+    "db:migrate:testnet": "wrangler d1 migrations apply DB --remote --env testnet",
+    "cron:local": "node scripts/local-cron.mjs"
   },
   "dependencies": {
     "@earendil-works/pi-agent-core": "catalog:",
@@ -21,6 +22,7 @@
     "@nest/agent-runtime": "workspace:*",
     "@nest/data": "workspace:*",
     "@nest/domain": "workspace:*",
+    "@nest/jobs": "workspace:*",
     "@nest/policy": "workspace:*",
     "@stellar/stellar-sdk": "catalog:",
     "drizzle-orm": "catalog:",

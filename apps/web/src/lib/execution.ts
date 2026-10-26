@@ -71,13 +71,21 @@ export interface Plan extends PlanBase {
   received: AssetAmount | null;
 }
 
-export type LendingKind = 'supply' | 'borrow';
+export type LendingKind = 'supply' | 'borrow' | 'repay' | 'withdraw' | 'withdraw_collateral';
+type LendingRequestType = 'supply' | 'supplyCollateral' | 'borrow' | 'repay' | 'withdraw' | 'withdrawCollateral';
+
+/** Repay and withdraw act on a position the connected wallet already holds. */
+export function isExitKind(kind: LendingKind): kind is 'repay' | 'withdraw' | 'withdraw_collateral' {
+  return kind === 'repay' || kind === 'withdraw' || kind === 'withdraw_collateral';
+}
 
 export interface LendingIntent {
   id: string;
   network: 'mainnet' | 'testnet';
   kind: LendingKind;
+  /** `amount` is "all" when the whole position is repaid or withdrawn. */
   asset: AssetAmount;
+  wholePosition: boolean;
   collateral: (Partial<AssetAmount> & { symbol: string }) | null;
 }
 
@@ -93,6 +101,13 @@ export interface LendingOffer {
   available: AssetAmount;
   estimatedHealth: number | null;
   targetHealth: number | null;
+  /** Repay and withdraw: what the account holds in this pool now and what the request asks for. */
+  position: {
+    held: AssetAmount;
+    kind: 'debt' | 'supplied' | 'collateral';
+    health: number | null;
+    requested: AssetAmount;
+  } | null;
   withdrawalTiming: { lockup: string; cooldown: string; summary: string };
   nestFeeBps: number;
   expiresAt: string;
@@ -112,7 +127,7 @@ export interface LendingPlan extends PlanBase {
     hash: string;
     networkPassphrase: string;
     fee: AssetAmount;
-    requests: (AssetAmount & { type: 'supply' | 'supplyCollateral' | 'borrow' })[];
+    requests: (AssetAmount & { type: LendingRequestType })[];
     health: { before: number | null; after: number | null; warning: boolean };
     validUntil: string | null;
   } | null;
@@ -138,6 +153,62 @@ export interface LendingMarkets {
   }[];
 }
 
+export interface VaultSummary {
+  address: string;
+  name: string;
+  symbol: 'USDC' | 'XLM' | null;
+  assetContract: string;
+  apyPct: number | null;
+  totalRaw: string;
+  idleRaw: string;
+  investedRaw: string;
+  vaultFeeBps: number;
+  defindexFeeBps: number;
+  strategies: { name: string; paused: boolean }[];
+  asset: { code: 'USDC' | 'XLM'; issuer: string | null } | null;
+}
+
+export interface VaultOffer {
+  id: string;
+  kind: 'vault_deposit';
+  vault: { id: string; name: string };
+  asset: AssetAmount;
+  minimum: AssetAmount;
+  apyPct: number | null;
+  total: AssetAmount;
+  invested: AssetAmount;
+  fees: { vaultFeeBps: number; defindexFeeBps: number };
+  strategies: { name: string; paused: boolean }[];
+  verified: boolean;
+  invest: boolean;
+  withdrawalTiming: { lockup: string; cooldown: string; summary: string };
+  nestFeeBps: number;
+  expiresAt: string;
+}
+
+export interface VaultIntent {
+  id: string;
+  network: 'mainnet' | 'testnet';
+  kind: 'vault_deposit';
+  asset: AssetAmount;
+  vault: { id: string; name?: string };
+}
+
+export interface VaultPlan extends PlanBase {
+  kind: 'vault_deposit';
+  offer: VaultOffer;
+  prepared: {
+    xdr: string;
+    hash: string;
+    networkPassphrase: string;
+    fee: AssetAmount;
+    deposit: AssetAmount;
+    minimum: AssetAmount;
+    invest: boolean;
+    validUntil: string | null;
+  } | null;
+}
+
 /** On Testnet, swaps and Blend list different USDC issuers, so the trustline depends on the feature. */
 export type TrustlineUse = 'swap' | 'lending';
 
@@ -158,7 +229,7 @@ export class ExecutionRequestError extends Error {
   }
 }
 
-async function call<T>(
+export async function call<T>(
   path: string,
   init?: { method?: string; body?: unknown; headers?: Record<string, string> },
 ): Promise<NoInfer<T>> {
@@ -176,12 +247,27 @@ async function call<T>(
 }
 
 export const execution = {
+  createSwap: (input: { sellAsset: 'XLM' | 'USDC'; buyAsset: 'XLM' | 'USDC'; sellAmount: string }) =>
+    call<Intent>('/api/intents', { method: 'POST', body: { kind: 'swap', ...input } }),
   intent: (id: string) => call<Intent>(`/api/intents/${id}`),
   lendingIntent: (id: string) => call<LendingIntent>(`/api/intents/${id}`),
   createLending: (input: { kind: LendingKind; asset: 'USDC' | 'XLM'; amount: string; poolId?: string }) =>
     call<LendingIntent>('/api/intents', { method: 'POST', body: input }),
-  compareLending: (intentId: string) => call<LendingComparison>(`/api/intents/${intentId}/compare`, { method: 'POST' }),
+  compareLending: (intentId: string, accountId?: string) =>
+    call<LendingComparison>(`/api/intents/${intentId}/compare`, {
+      method: 'POST',
+      ...(accountId ? { body: { accountId } } : {}),
+    }),
   lendingMarkets: () => call<LendingMarkets>('/api/markets/lending'),
+  vaults: () => call<{ network: 'mainnet' | 'testnet'; vaults: VaultSummary[] }>('/api/vaults'),
+  vaultIntent: (id: string) => call<VaultIntent>(`/api/intents/${id}`),
+  createVaultDeposit: (input: { vaultId: string; amount: string }) =>
+    call<VaultIntent>('/api/intents', { method: 'POST', body: { kind: 'vault_deposit', ...input } }),
+  compareVault: (intentId: string) =>
+    call<{ quotes: VaultOffer[]; selectedQuoteId: string | null; excluded: LendingComparison['excluded'] }>(
+      `/api/intents/${intentId}/compare`,
+      { method: 'POST' },
+    ),
   trustline: (input: { accountId: string; use: TrustlineUse }) =>
     call<PreparedTrustline>('/api/trustlines', { method: 'POST', body: input }),
   submitTrustline: (input: { accountId: string; use: TrustlineUse; signedXdr: string }) =>
@@ -263,8 +349,12 @@ export function planProblem(plan: PlanBase): string | null {
       return 'The transaction failed on chain. Nothing changed except the network fee.';
     case 'NOT_INCLUDED':
       return 'The transaction expired without being included. Nothing changed.';
+    case 'VAULT_UNVERIFIED':
+      return 'The vault no longer runs DeFindex’s published vault code, so Nest stopped this.';
+    case 'AMOUNT_MISMATCH':
+      return 'The built transaction did not match what you reviewed, so Nest stopped it.';
     case 'HEALTH_TOO_LOW':
-      return 'This loan would leave your position at or below liquidation. Add collateral or borrow less.';
+      return 'This would leave your loan at or below the point where Blend liquidates. Repay first, or use a smaller amount.';
     case 'POOL_STATUS':
       return 'The pool does not allow this action in its current status.';
     case 'LIQUIDITY_INSUFFICIENT':

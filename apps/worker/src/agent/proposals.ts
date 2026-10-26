@@ -1,6 +1,6 @@
-import { createLendingIntent } from '../execution/lending.ts';
+import { compareLending, createLendingIntent } from '../execution/lending.ts';
 import { compareIntent } from '../execution/lifecycle.ts';
-import { executionDeps } from '../execution/store.ts';
+import { executionDeps, loadIntent } from '../execution/store.ts';
 import { createSwapIntent } from '../execution/swap.ts';
 import type { LendingOffer, ProposalService } from './tools.ts';
 
@@ -40,9 +40,10 @@ export function createProposalService(env: Env): ProposalService {
       const deps = executionDeps(env);
       const intent = await createLendingIntent(deps, { ...input, source: 'chat' });
       const base = { intentId: intent.id, kind: intent.kind, asset: intent.asset };
+      // Repay and withdraw are compared against the user's own position, which only the card can read.
+      if (intent.kind !== 'supply' && intent.kind !== 'borrow') return { ...base, offers: [], excluded: [] };
       try {
-        const compared = await compareIntent(deps, intent.id);
-        if (!('excluded' in compared)) throw new Error('No lending offers were returned.');
+        const compared = await compareLending(deps, await loadIntent(deps, intent.id));
         return {
           ...base,
           offers: compared.quotes.map(
