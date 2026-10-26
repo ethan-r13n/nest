@@ -89,6 +89,11 @@
   letter-spacing: -0.05em;
 }
 
+.credit-amount-editor input::placeholder {
+  font-size: 14px;
+  letter-spacing: normal;
+}
+
 .credit-amount-editor [data-slot="field-label"] {
   margin-bottom: 10px;
   font-family: var(--nest-font-mono);
@@ -119,6 +124,12 @@
   .credit-comparison,
   .supply-workspace {
     max-width: 640px;
+  }
+}
+
+@media (max-width: 767px) {
+  .credit-amount-editor input {
+    font-size: 32px;
   }
 }
 
