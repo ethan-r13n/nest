@@ -9,9 +9,11 @@ import { Link, useNavigate } from '@tanstack/react-router';
 import { type FormEvent, useEffect, useId, useState } from 'react';
 
 import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
+import { LandingEcosystem } from '../components/landing-ecosystem.tsx';
 import { Murmuration } from '../components/murmuration.tsx';
 
 const SERIF = "font-['Instrument_Serif',serif] font-normal";
+const SECTION_HEADING = `${SERIF} m-0 text-[clamp(44px,5.5vw,80px)] leading-none`;
 const MONO = "font-['Geist_Mono',monospace] font-normal";
 const RULE = 'border-[rgba(241,236,226,.16)]';
 const GUTTER = 'px-[clamp(20px,4vw,56px)]';
@@ -24,43 +26,36 @@ const FEATURES = [
     title: 'Research',
     to: '/research',
     description: 'Explore protocols, markets, yields, stablecoins and tokenized real-world assets.',
-    detail: 'DefiLlama · RWA.xyz · Raven MCP · venue data',
   },
   {
     title: 'Trade',
     to: '/trade',
     description: 'Chart major pairs and compare aggregated swap routes before you sign.',
-    detail: 'Soroswap',
   },
   {
     title: 'Credit',
     to: '/credit',
     description: 'Compare rates, capacity and liquidation terms. Manage collateral and repayments.',
-    detail: 'Blend · Templar · XOXNO',
   },
   {
     title: 'Yield',
     to: '/earn',
     description: 'Compare lending, vaults and LPs by fees, incentives, exposure and withdrawal terms.',
-    detail: 'DeFindex · Upshift/Gami · Sentora · Aquarius',
   },
   {
     title: 'Portfolio',
     to: '/portfolio',
     description: 'Track balances, positions, debt and history, with paths to manage or exit.',
-    detail: 'Your capital, in context',
   },
   {
     title: 'Backtesting & automations',
     to: '/lab/backtests',
     description: 'Test ideas against evidence. Turn verifiable conditions into alerts or transaction proposals.',
-    detail: 'Rates · liquidity · market signals',
   },
   {
     title: 'Chat',
     to: '/chat',
     description: 'Express your intent or turn any screen’s data into a plan through the side-chat.',
-    detail: 'Available throughout the workspace',
   },
 ] as const;
 
@@ -144,19 +139,9 @@ function Purpose() {
       >
         Nest unifies Stellar DeFi <em className="text-[#ff7a45]">research and execution.</em>
       </h2>
-      <div className="mt-8 grid gap-x-20 gap-y-6 md:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
-        <p className="m-0 max-w-[700px] text-[clamp(18px,1.8vw,24px)] leading-[1.5] font-light text-pretty text-[#cfc9bd]">
-          Discover trading, credit and yield opportunities for your goals and capital. Queue multi-step transactions
-          across venues for your review and signature.
-        </p>
-        <p
-          className={`${SERIF} m-0 max-w-[380px] text-[clamp(25px,2.4vw,36px)] leading-[1.16] text-pretty text-[#cfc9bd]`}
-        >
-          Clearer decisions. More opportunities to capture alpha. <em>Your capital stays yours.</em>
-        </p>
-      </div>
-      <p className={`${MONO} mt-9 mb-0 text-[11px] leading-[1.8] tracking-[.02em] text-[#8f9b88]`}>
-        Pi-powered conversations · Raven MCP ecosystem research · Protocol-specific execution
+      <p className="mt-8 mb-0 max-w-[1040px] text-[clamp(18px,1.8vw,24px)] leading-[1.5] font-light text-pretty text-[#cfc9bd]">
+        Discover trading, credit and yield opportunities for your goals and capital. Queue multi-step transactions
+        across venues for your review and signature.
       </p>
     </section>
   );
@@ -169,35 +154,32 @@ function Features() {
       className={`scroll-mt-6 bg-[rgba(4,10,6,.90)] py-[clamp(64px,9vw,120px)] ${GUTTER}`}
       aria-labelledby="nest-features"
     >
-      <div className="mb-10 flex flex-wrap items-baseline justify-between gap-4">
-        <h2 id="nest-features" className={`${SERIF} m-0 text-[clamp(44px,5.5vw,80px)] leading-none`}>
-          The full workspace.
-        </h2>
-        <span className={`${MONO} text-[11px] tracking-[.14em] text-[#8f9b88]`}>V1 SCOPE</span>
-      </div>
-      <ul className={`m-0 list-none border-t p-0 ${RULE}`}>
-        {FEATURES.map((feature) => (
-          <li
-            key={feature.title}
-            className={`grid items-start gap-x-10 gap-y-3 border-b py-7 md:grid-cols-[minmax(0,.85fr)_minmax(0,1.3fr)] xl:grid-cols-[minmax(0,.8fr)_minmax(0,1.3fr)_minmax(0,.8fr)] ${RULE}`}
-          >
-            <h3 className={`${SERIF} m-0 text-[clamp(30px,2.8vw,40px)] leading-[1.05]`}>
-              <Link
-                to={feature.to}
-                className="inline-flex min-h-11 items-center hover:text-[#ff7a45] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff7a45]"
+      <div className="grid items-start gap-x-[clamp(40px,5vw,80px)] gap-y-20 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)]">
+        <div className="min-w-0">
+          <h2 id="nest-features" className={`${SECTION_HEADING} mb-10`}>
+            The full workspace.
+          </h2>
+          <ul className={`m-0 list-none border-t p-0 ${RULE}`} data-landing-features>
+            {FEATURES.map((feature) => (
+              <li
+                key={feature.title}
+                className={`grid items-start gap-x-6 gap-y-2 border-b py-6 sm:grid-cols-[minmax(0,.85fr)_minmax(0,1.4fr)] ${RULE}`}
               >
-                {feature.title}
-              </Link>
-            </h3>
-            <p className="m-0 max-w-[610px] text-[16px] leading-[1.55] font-light text-[#cfc9bd]">
-              {feature.description}
-            </p>
-            <p className={`${MONO} m-0 text-[11px] leading-[1.9] text-[#8f9b88] md:col-start-2 xl:col-start-auto`}>
-              {feature.detail}
-            </p>
-          </li>
-        ))}
-      </ul>
+                <h3 className={`${SERIF} m-0 text-[clamp(28px,2.4vw,36px)] leading-[1.1]`}>
+                  <Link
+                    to={feature.to}
+                    className="inline-flex min-h-11 items-center hover:text-[#ff7a45] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff7a45]"
+                  >
+                    {feature.title}
+                  </Link>
+                </h3>
+                <p className="m-0 text-[16px] leading-[1.55] font-light text-[#cfc9bd]">{feature.description}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <LandingEcosystem headingClassName={SECTION_HEADING} />
+      </div>
     </section>
   );
 }
@@ -207,62 +189,47 @@ function Harness() {
     <section
       id="safety"
       className={`scroll-mt-6 bg-[rgba(4,10,6,.75)] py-[clamp(72px,11vw,144px)] ${GUTTER}`}
-      aria-label="A persistent agent harness"
+      aria-labelledby="nest-harness"
     >
-      <p className={`${MONO} mt-0 mb-12 text-[11px] tracking-[.14em] text-[#8f9b88]`}>
-        A CUSTOM, SELF-IMPROVING HARNESS
-      </p>
-      <div className="grid gap-x-[clamp(40px,9vw,140px)] gap-y-16 md:grid-cols-2">
+      <h2 id="nest-harness" className={`${SECTION_HEADING} mb-12 max-w-[1250px]`}>
+        A custom, self-improving harness.
+      </h2>
+      <div className="grid gap-x-[clamp(28px,4vw,64px)] gap-y-16 md:grid-cols-2">
         <article className={`border-t pt-8 ${RULE}`}>
-          <h2 className={`${SERIF} mt-0 mb-6 text-[clamp(40px,4.8vw,68px)] leading-[1.02] tracking-[-.01em]`}>
-            Your <em className="text-[#ff7a45]">eyes</em>
-            <br />
-            while you’re away.
-          </h2>
-          <p className="m-0 max-w-[460px] text-lg leading-[1.55] font-light text-[#cfc9bd]">
+          <h3 className={`${SERIF} mt-0 mb-6 text-[clamp(38px,4.2vw,64px)] leading-[1.02] tracking-[-.01em]`}>
+            Your <em className="text-[#ff7a45]">eyes</em> while you’re away.
+          </h3>
+          <p className="m-0 text-lg leading-[1.55] font-light text-[#cfc9bd]">
             Monitor positions, markets and protocol conditions against your thesis. Surface changes, alerts and
             proposals for review.
           </p>
-          <div className={`mt-8 border-l pl-5 ${RULE}`}>
-            <p className={`${MONO} m-0 text-[10px] tracking-[.1em] text-[#8f9b88]`}>EXAMPLE CONDITION</p>
-            <p className={`${MONO} mt-3 mb-1 text-[13px] leading-[1.6] text-[#f1ece2]`}>XLM/USDC price gap &gt; 1%</p>
-            <p className="mt-0 mb-3 text-sm text-[#b9b3a8]">Aquarius ↔ Soroswap</p>
-            <span className={`${MONO} text-[11px] text-[#ff7a45]`}>Queue a proposal → Your review</span>
-          </div>
+          <HarnessExample>
+            If XLM/USDC prices differ by 1% between Aquarius and Soroswap, queue an arbitrage transaction for review.
+          </HarnessExample>
         </article>
         <article className={`border-t pt-8 ${RULE}`}>
-          <h2 className={`${SERIF} mt-0 mb-6 text-[clamp(40px,4.8vw,68px)] leading-[1.02] tracking-[-.01em]`}>
-            Your persistent
-            <br />
-            <em className="text-[#ff7a45]">brain.</em>
-          </h2>
-          <p className="m-0 max-w-[460px] text-lg leading-[1.55] font-light text-[#cfc9bd]">
+          <h3 className={`${SERIF} mt-0 mb-6 text-[clamp(38px,4.2vw,64px)] leading-[1.02] tracking-[-.01em]`}>
+            Your persistent <em className="text-[#ff7a45]">brain.</em>
+          </h3>
+          <p className="m-0 text-lg leading-[1.55] font-light text-[#cfc9bd]">
             Retain your theses, preferences and action history. Test ideas against evidence and refine a harness built
             around you.
           </p>
-          <ol
-            className={`${MONO} mt-8 mb-0 grid list-none gap-3 p-0 text-[11px] text-[#b9b3a8]`}
-            aria-label="Learning from context"
-          >
-            <li>
-              <span className="mr-3 text-[#ff7a45]">01</span>Keep context
-            </li>
-            <li>
-              <span className="mr-3 text-[#ff7a45]">02</span>Backtest ideas
-            </li>
-            <li>
-              <span className="mr-3 text-[#ff7a45]">03</span>Learn from decisions and outcomes
-            </li>
-          </ol>
+          <HarnessExample>
+            Backtest 5,000 USDC lent on Blend for 365 days: did it earn over 5% APR with accessible withdrawals?
+          </HarnessExample>
         </article>
       </div>
-      <div className={`mt-16 flex flex-wrap items-baseline justify-between gap-x-12 gap-y-3 border-t pt-7 ${RULE}`}>
-        <p className="m-0 max-w-[850px] text-sm leading-[1.7] text-[#b9b3a8]">
-          Your preset guardrails. Pre-execution simulation. Your review and Freighter signature.
-        </p>
-        <p className={`${SERIF} m-0 text-[26px] italic text-[#f1ece2]`}>Nest holds no keys.</p>
-      </div>
     </section>
+  );
+}
+
+function HarnessExample({ children }: { children: string }) {
+  return (
+    <blockquote className="mx-0 mt-8 mb-0 border-l border-[#ff7a45]/50 pl-5">
+      <p className={`${MONO} mt-0 mb-3 text-[10px] tracking-[.1em] text-[#ff7a45]`}>FOR EXAMPLE</p>
+      <p className="m-0 text-[17px] leading-[1.6] font-light text-[#f1ece2]">“{children}”</p>
+    </blockquote>
   );
 }
 
