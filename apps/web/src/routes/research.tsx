@@ -20,6 +20,7 @@ import { AssetIcon } from '../components/asset-icon.tsx';
 import { LiveLendingRates } from '../components/live-lending.tsx';
 import { ResearchDataTable } from '../components/research-data-table.tsx';
 import { ResearchHistoryChart } from '../components/research-history.tsx';
+import { SelectionCommand } from '../components/selection-command.tsx';
 import { DraftNotice, EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { formatPercentPoints, formatUsd, formatUtc, UNAVAILABLE } from '../lib/format.ts';
 import { findPool, findProtocol, ravenCatalog, research, rwaAssetRouteId } from '../lib/research.ts';
@@ -99,7 +100,7 @@ const VENUES = [
 
 export function ResearchPage() {
   return (
-    <div className="research-workspace min-w-0 space-y-5">
+    <SelectionCommand className="research-workspace min-w-0 space-y-5">
       <ResearchTabs />
       <ResearchHeader
         title="Stellar DeFi"
@@ -160,7 +161,7 @@ export function ResearchPage() {
         </Card>
       </section>
       <ResearchCaveats />
-    </div>
+    </SelectionCommand>
   );
 }
 
