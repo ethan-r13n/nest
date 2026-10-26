@@ -8,7 +8,7 @@ Nest combines sourced protocol research with an embedded Pi agent and a determin
 
 | Surface | Implemented behavior |
 | --- | --- |
-| Research | Dated DefiLlama/RWA.xyz observations, protocol details, filtering, charts, live Blend rates, and Aquarius liquidity discovery. Click or highlight an APY to open a typed lending command and reviewed Blend proposal; other questions carry the selection into Ask Nest. |
+| Research | Dated DefiLlama/RWA.xyz observations, protocol details, filtering, charts and Aquarius liquidity discovery. On Blend's protocol page, USDC yield numbers open a typed command and fresh reviewed lending proposal; other questions carry the selection into Ask Nest. Live lending tables remain in Credit. |
 | Chat | Streamed Pi conversations, bounded research tools, Raven MCP authorization, and typed proposals. |
 | Automations | Live XLM/USDC pool comparison, reviewed arbitrage monitors, one-minute checks, and deduplicated in-app alerts. Monitoring reads pool state and never executes trades. |
 | Swap | Soroswap on mainnet; the Stellar DEX on Testnet. Debounced quotes, policy checks, transaction inspection, Freighter signing, and confirmation. The approved candlestick chart retains its captured reference series and full research-asset window; connected wallets expose spendable balances and recorded activity. Live Stellar history endpoints remain available separately. |

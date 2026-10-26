@@ -11,12 +11,10 @@ import { ArrowDownUp, Download, ExternalLink, Search } from 'lucide-react';
 import { type ReactNode, useId, useState } from 'react';
 
 import { AssetIcon } from '../components/asset-icon.tsx';
-import { LiveLendingRates } from '../components/live-lending.tsx';
 import { ProtocolResearchDetail } from '../components/protocol-detail.tsx';
 import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { ResearchDataTable } from '../components/research-data-table.tsx';
 import { ResearchHistoryChart } from '../components/research-history.tsx';
-import { SelectionCommand } from '../components/selection-command.tsx';
 import { DraftNotice, EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { formatPercentPoints, formatUsd, formatUtc, UNAVAILABLE } from '../lib/format.ts';
 import { findPool, findProtocol, projectEvidence, ravenCatalog, research, rwaAssetRouteId } from '../lib/research.ts';
@@ -96,7 +94,7 @@ const VENUES = [
 
 export function ResearchPage() {
   return (
-    <SelectionCommand className="research-workspace min-w-0 space-y-5">
+    <div className="research-workspace min-w-0 space-y-5">
       <ResearchTabs />
       <ResearchHeader
         title="Stellar DeFi"
@@ -105,9 +103,8 @@ export function ResearchPage() {
       <NetworkSummary />
       <ResearchHistoryChart />
       <ProtocolDirectory />
-      <LiveLendingRates />
       <ResearchCaveats />
-    </SelectionCommand>
+    </div>
   );
 }
 

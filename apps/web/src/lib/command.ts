@@ -12,6 +12,47 @@ export interface SelectionContext {
   apyPct: number | null;
   canSupply: boolean;
   canBorrow: boolean;
+  source?: {
+    poolKind: 'fixed' | 'yieldblox';
+    network: 'mainnet';
+    observedAt: string;
+    executionNetwork?: 'mainnet' | 'testnet';
+    metric?: string;
+  };
+}
+
+export function parseSelectionBase(value: unknown): Omit<SelectionContext, 'rate' | 'apyPct'> | null {
+  if (!isRecord(value)) return null;
+  const { poolId, poolName, asset, canSupply, canBorrow, source } = value;
+  if (
+    typeof poolId !== 'string' ||
+    typeof poolName !== 'string' ||
+    (asset !== 'USDC' && asset !== 'XLM') ||
+    typeof canSupply !== 'boolean' ||
+    typeof canBorrow !== 'boolean'
+  )
+    return null;
+  const base: Omit<SelectionContext, 'rate' | 'apyPct'> = { poolId, poolName, asset, canSupply, canBorrow };
+  if (source !== undefined) {
+    if (
+      !isRecord(source) ||
+      (source.poolKind !== 'fixed' && source.poolKind !== 'yieldblox') ||
+      source.network !== 'mainnet' ||
+      typeof source.observedAt !== 'string' ||
+      !Number.isFinite(Date.parse(source.observedAt)) ||
+      (source.executionNetwork !== undefined &&
+        source.executionNetwork !== 'mainnet' &&
+        source.executionNetwork !== 'testnet')
+    )
+      return null;
+    base.source = { poolKind: source.poolKind, network: source.network, observedAt: source.observedAt };
+    if (source.executionNetwork !== undefined) base.source.executionNetwork = source.executionNetwork;
+  }
+  return base;
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 export interface LendingCommand {

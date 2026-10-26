@@ -9,9 +9,14 @@ import { Info } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 import detailsJson from '../../../../research/data/protocol-details.json' with { type: 'json' };
+import { blendYieldContext, resolveBlendResearchCommand } from '../lib/blend-research.ts';
+import type { LendingCommand, SelectionContext } from '../lib/command.ts';
+import { execution } from '../lib/execution.ts';
 import { formatUtc } from '../lib/format.ts';
+import { useHealth } from '../lib/health.ts';
 import { findProtocol, research } from '../lib/research.ts';
 import { ProtocolLogo } from './protocol-logo.tsx';
+import { SelectionCommand, useOpenSelectionCommand } from './selection-command.tsx';
 import { EmptyState } from './workspace.tsx';
 
 const details = parseProtocolDetails(detailsJson);
@@ -174,6 +179,26 @@ export function ProtocolResearchDetail({ protocolId }: { protocolId: string }) {
 }
 
 function YieldOpportunities({ protocol, pools }: { protocol: ProtocolRow; pools: YieldPoolRow[] }) {
+  const blend = protocol.slug === 'blend-pools-v2';
+  const table = <YieldOpportunitiesTable protocol={protocol} pools={pools} />;
+  return blend ? (
+    <SelectionCommand className="min-w-0" resolveLendingCommand={resolveResearchLending}>
+      {table}
+    </SelectionCommand>
+  ) : (
+    table
+  );
+}
+
+async function resolveResearchLending(
+  command: LendingCommand,
+  context: SelectionContext | null,
+): Promise<LendingCommand> {
+  return resolveBlendResearchCommand(command, context, await execution.lendingMarkets());
+}
+
+function YieldOpportunitiesTable({ protocol, pools }: { protocol: ProtocolRow; pools: YieldPoolRow[] }) {
+  const health = useHealth();
   return (
     <Card className="protocol-yields" id="protocol-yields">
       <CardHeader>
@@ -207,22 +232,48 @@ function YieldOpportunities({ protocol, pools }: { protocol: ProtocolRow; pools:
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pools.map((pool) => (
-            <TableRow key={pool.id}>
-              <TableCell>
-                <strong>
-                  <External url={`https://defillama.com/yields/pool/${encodeURIComponent(pool.id)}`}>
-                    {pool.symbol}
-                  </External>
-                </strong>
-                <small>{pool.meta || protocol.name}</small>
-              </TableCell>
-              <TableCell>{money(pool.tvlUsd)}</TableCell>
-              <TableCell>{rate(pool.totalApyPct)}</TableCell>
-              <TableCell>{rate(pool.baseApyPct)}</TableCell>
-              <TableCell>{rate(pool.mean30dApyPct)}</TableCell>
-            </TableRow>
-          ))}
+          {pools.map((pool) => {
+            const context = blendYieldContext(protocol.slug, pool, health.data?.network);
+            return (
+              <TableRow key={pool.id} data-nest-context={context ? JSON.stringify(context) : undefined}>
+                <TableCell>
+                  <strong>
+                    <External url={`https://defillama.com/yields/pool/${encodeURIComponent(pool.id)}`}>
+                      {pool.symbol}
+                    </External>
+                  </strong>
+                  <small>{pool.meta || protocol.name}</small>
+                </TableCell>
+                <TableCell>
+                  <YieldNumber context={context} label="Pool TVL" value={pool.tvlUsd} display={money(pool.tvlUsd)} />
+                </TableCell>
+                <TableCell>
+                  <YieldNumber
+                    context={context}
+                    label="APY"
+                    value={pool.totalApyPct}
+                    display={rate(pool.totalApyPct)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <YieldNumber
+                    context={context}
+                    label="Base APY"
+                    value={pool.baseApyPct}
+                    display={rate(pool.baseApyPct)}
+                  />
+                </TableCell>
+                <TableCell>
+                  <YieldNumber
+                    context={context}
+                    label="30d mean APY"
+                    value={pool.mean30dApyPct}
+                    display={rate(pool.mean30dApyPct)}
+                  />
+                </TableCell>
+              </TableRow>
+            );
+          })}
         </TableBody>
       </Table>
       <div className="protocol-panel-note">
@@ -233,6 +284,40 @@ function YieldOpportunities({ protocol, pools }: { protocol: ProtocolRow; pools:
         <p>These are source-reported yields. Pool TVL does not establish available deposit or withdrawal capacity.</p>
       </div>
     </Card>
+  );
+}
+
+function YieldNumber({
+  context,
+  label,
+  value,
+  display,
+}: {
+  context: SelectionContext | null;
+  label: string;
+  value: number | null | undefined;
+  display: string;
+}) {
+  const open = useOpenSelectionCommand();
+  if (!context || value == null) return display;
+  return (
+    // biome-ignore lint/a11y/useSemanticElements: selectable numeric text also supports click and keyboard activation.
+    <span
+      role="button"
+      tabIndex={0}
+      data-nest-rate="supply"
+      data-nest-metric={label}
+      data-nest-apy={label === 'Pool TVL' ? undefined : value}
+      aria-label={`${label} ${display} for USDC in ${context.poolName}; open lending command`}
+      className="inline-flex min-h-9 cursor-text items-center rounded px-1 underline decoration-dotted underline-offset-4 hover:bg-muted focus-visible:outline-2 focus-visible:outline-primary"
+      onKeyDown={(event) => {
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        open?.(event.currentTarget);
+      }}
+    >
+      {display}
+    </span>
   );
 }
 
