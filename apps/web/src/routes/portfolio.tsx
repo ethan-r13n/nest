@@ -5,6 +5,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowDownLeft, ArrowUpRight, Bell, CreditCard, Download } from 'lucide-react';
 import { useState } from 'react';
 
+import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { DraftNotice, EmptyState, PageHeader, UnavailableBadge } from '../components/workspace.tsx';
 import { useHealth } from '../lib/health.ts';
 import { PersonalEmptyTable, PersonalFact, PersonalField, PersonalNav, PersonalPanel } from './personal-shared.tsx';
@@ -454,6 +455,10 @@ export function ConnectionsPage() {
           title="X / social read access"
           description="Official account authorization · no financial authority"
         >
+          <div className="mb-5 flex items-center gap-3">
+            <ProtocolLogo name="X" />
+            <span className="text-sm font-medium">X</span>
+          </div>
           <dl>
             <PersonalFact label="Connection" value={<UnavailableBadge />} />
             <PersonalFact label="Granted scopes" value="Not loaded" />

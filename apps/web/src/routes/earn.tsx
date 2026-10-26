@@ -10,6 +10,7 @@ import { ArrowLeft, ArrowRight, SlidersHorizontal } from 'lucide-react';
 import { useState } from 'react';
 
 import snapshotJson from '../../../../research/data/stellar-research-ui.json' with { type: 'json' };
+import { AssetIcon } from '../components/asset-icon.tsx';
 import {
   DecimalField,
   ReviewRequirements,
@@ -279,6 +280,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
                       setPage(0);
                     }}
                   />
+                  <AssetIcon symbol={asset} className="size-4" />
                   <span>{asset}</span>
                 </label>
               ))}

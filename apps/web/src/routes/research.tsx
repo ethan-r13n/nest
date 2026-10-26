@@ -269,20 +269,32 @@ export function RwaPage() {
               id: 'identity',
               label: 'Asset / ticker',
               cell: (asset) => (
-                <>
-                  <a
-                    href={safeResearchUrl(asset.assetUrl ?? '') ?? 'https://app.rwa.xyz/networks/stellar'}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="font-medium hover:text-primary"
-                  >
-                    {asset.name}
-                  </a>
-                  <span className="block font-mono text-xs text-subtle">{asset.ticker}</span>
-                </>
+                <div className="flex items-center gap-2.5">
+                  <ProtocolLogo name={asset.name} />
+                  <div className="min-w-0">
+                    <a
+                      href={safeResearchUrl(asset.assetUrl ?? '') ?? 'https://app.rwa.xyz/networks/stellar'}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium hover:text-primary"
+                    >
+                      {asset.name}
+                    </a>
+                    <span className="block font-mono text-xs text-subtle">{asset.ticker}</span>
+                  </div>
+                </div>
               ),
             },
-            { id: 'platform', label: 'Platform', cell: (asset) => asset.platform },
+            {
+              id: 'platform',
+              label: 'Platform',
+              cell: (asset) => (
+                <div className="flex items-center gap-2.5">
+                  <ProtocolLogo name={asset.platform} />
+                  <span>{asset.platform}</span>
+                </div>
+              ),
+            },
             {
               id: 'class',
               label: 'Asset class',

@@ -1,33 +1,41 @@
 import { safeResearchUrl } from '@nest/data/research';
-import { Building2 } from 'lucide-react';
+import { useState } from 'react';
+
+import { logoAssetPath } from '../lib/logos.ts';
 
 const LOGOS = import.meta.glob<string>('../../../../design/nest/ui/assets/logos/*', {
   eager: true,
   import: 'default',
   query: '?url',
 });
-const LOGO_NAMES: Record<string, string> = {
-  aquarius: 'aquariusstellar',
-  sentora: 'sentorausdc',
-};
-
-export function ProtocolLogo({ name, fallback }: { name: string; fallback?: string | undefined }) {
-  const normalized = name.toLowerCase().replace(/[^a-z0-9]/g, '');
-  const key = LOGO_NAMES[normalized] ?? normalized;
-  const local = Object.entries(LOGOS).find(([path]) => path.split('/').at(-1)?.startsWith(`${key}-`));
-  const src = local?.[1] ?? safeResearchUrl(fallback ?? '');
+export function ProtocolLogo({
+  name,
+  fallback,
+  className = 'size-8',
+}: {
+  name: string;
+  fallback?: string | undefined;
+  className?: string;
+}) {
+  const [failedSrc, setFailedSrc] = useState<string | null>(null);
+  const path = logoAssetPath(name);
+  const src = (path ? LOGOS[`../../../../design/nest/ui/${path}`] : undefined) ?? safeResearchUrl(fallback ?? '');
+  const visible = Boolean(src && src !== failedSrc);
   return (
-    <span className="relative grid size-8 shrink-0 place-items-center overflow-hidden rounded-full border bg-secondary">
-      <Building2 className="size-4 text-subtle" aria-hidden="true" />
-      {src ? (
+    <span
+      aria-hidden="true"
+      data-logo-name={name}
+      data-logo-state={visible ? 'available' : 'missing'}
+      title={visible ? undefined : 'No captured logo available'}
+      className={`relative inline-grid shrink-0 place-items-center overflow-hidden rounded-full align-middle ${visible ? 'border border-border bg-foreground' : ''} ${className}`}
+    >
+      {src && visible ? (
         <img
           src={src}
           alt=""
-          className="absolute inset-0 size-full object-contain"
+          className={`absolute inset-0 size-full object-contain ${path?.endsWith('.svg') ? 'p-[3px]' : ''}`}
           loading="lazy"
-          onError={(event) => {
-            event.currentTarget.hidden = true;
-          }}
+          onError={() => setFailedSrc(src)}
         />
       ) : null}
     </span>
