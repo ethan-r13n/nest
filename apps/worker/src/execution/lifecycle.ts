@@ -4,6 +4,7 @@ import { AppError } from '@nest/domain/errors';
 import { StrKey, type Transaction, TransactionBuilder } from '@stellar/stellar-sdk';
 
 import { compareLending, lendingIntentView, lendingPlanPolicy, lendingPlanView, prepareLending } from './lending.ts';
+import { compareLimit, limitIntentView, limitPlanPolicy, limitPlanView, prepareLimit } from './limit.ts';
 import type { SwapRpc } from './rpc.ts';
 import {
   type ExecutionDeps,
@@ -33,7 +34,8 @@ const EXPIRY_GRACE_MS = 60_000;
 export async function readIntent(deps: ExecutionDeps, intentId: string) {
   const intent = await loadIntent(deps, intentId);
   if (intent.kind === 'vault_deposit') return vaultIntentView(intent);
-  return intent.kind === 'swap' ? swapIntentView(intent) : lendingIntentView(intent);
+  if (intent.kind === 'swap') return swapIntentView(intent);
+  return isLimit(intent.kind) ? limitIntentView(intent) : lendingIntentView(intent);
 }
 
 /**
@@ -43,7 +45,8 @@ export async function readIntent(deps: ExecutionDeps, intentId: string) {
 export async function compareIntent(deps: ExecutionDeps, intentId: string, accountId?: string) {
   const intent = await loadIntent(deps, intentId);
   if (intent.kind === 'vault_deposit') return compareVault(deps, intent);
-  return intent.kind === 'swap' ? compareSwap(deps, intent) : compareLending(deps, intent, accountId);
+  if (intent.kind === 'swap') return compareSwap(deps, intent);
+  return isLimit(intent.kind) ? compareLimit(deps, intent, accountId) : compareLending(deps, intent, accountId);
 }
 
 export async function createPlan(
@@ -68,6 +71,8 @@ export async function createPlan(
     withdraw: lendingPlanPolicy,
     withdraw_collateral: lendingPlanPolicy,
     vault_deposit: vaultPlanPolicy,
+    limit_order: limitPlanPolicy,
+    limit_close: limitPlanPolicy,
   }[intent.kind];
   const { decision, digest } = await policyOf(intent, quote, input.accountId, now);
   const row = newPlanRow({
@@ -120,6 +125,8 @@ export async function preparePlan(deps: ExecutionDeps, planId: string) {
     withdraw: prepareLending,
     withdraw_collateral: prepareLending,
     vault_deposit: prepareVault,
+    limit_order: prepareLimit,
+    limit_close: prepareLimit,
   }[intent.kind];
   return viewOf(await prepare(deps, plan, intent, quote), intent, quote);
 }
@@ -311,5 +318,10 @@ async function planView(deps: ExecutionDeps, row: PlanRow) {
 
 function viewOf(row: PlanRow, intent: IntentRow, quote: QuoteRow) {
   if (intent.kind === 'vault_deposit') return vaultPlanView(row, intent, quote);
-  return intent.kind === 'swap' ? swapPlanView(row, intent, quote) : lendingPlanView(row, intent, quote);
+  if (intent.kind === 'swap') return swapPlanView(row, intent, quote);
+  return isLimit(intent.kind) ? limitPlanView(row, intent, quote) : lendingPlanView(row, intent, quote);
+}
+
+function isLimit(kind: string): boolean {
+  return kind === 'limit_order' || kind === 'limit_close';
 }

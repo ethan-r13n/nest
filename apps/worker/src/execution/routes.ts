@@ -7,6 +7,7 @@ import { z } from 'zod';
 import type { AppEnv } from '../app.ts';
 import { createLendingIntent } from './lending.ts';
 import { approvePlan, compareIntent, createPlan, preparePlan, readIntent, readPlan, submitPlan } from './lifecycle.ts';
+import { createLimitCloseIntent, createLimitOrderIntent, limitPool, listLimitOrders } from './limit.ts';
 import { executionDeps } from './store.ts';
 import { createSwapIntent } from './swap.ts';
 import { prepareTrustline, submitTrustline } from './trustline.ts';
@@ -27,13 +28,33 @@ const LendingIntentSchema = z.strictObject({
   collateralAmount: z.string().min(1).max(40).optional(),
   poolId: z.string().length(56).optional(),
 });
+const DECIMAL = z.string().regex(/^(0|[1-9]\d{0,11})(\.\d{1,7})?$/);
+const LimitOrderSchema = z.strictObject({
+  kind: z.literal('limit_order'),
+  side: z.enum(['buy', 'sell']),
+  amountXlm: DECIMAL,
+  priceUsdc: DECIMAL,
+  poolId: z.string().length(56).optional(),
+});
+const LimitCloseSchema = z.strictObject({
+  kind: z.literal('limit_close'),
+  poolId: z.string().length(56),
+  tickLower: z.number().int(),
+  tickUpper: z.number().int(),
+});
 const CompareSchema = z.strictObject({ accountId: z.string().min(1).max(64).optional() });
 const VaultIntentSchema = z.strictObject({
   kind: z.literal('vault_deposit'),
   vaultId: z.string().regex(/^C[A-Z2-7]{55}$/),
   amount: z.string().min(1).max(40),
 });
-const IntentSchema = z.discriminatedUnion('kind', [SwapIntentSchema, LendingIntentSchema, VaultIntentSchema]);
+const IntentSchema = z.discriminatedUnion('kind', [
+  SwapIntentSchema,
+  LendingIntentSchema,
+  VaultIntentSchema,
+  LimitOrderSchema,
+  LimitCloseSchema,
+]);
 const PlanSchema = z.strictObject({ intentId: z.uuid(), quoteId: z.uuid(), accountId: z.string().min(1).max(64) });
 const ApproveSchema = z.strictObject({
   digest: z.string().regex(/^[0-9a-f]{64}$/),
@@ -41,7 +62,7 @@ const ApproveSchema = z.strictObject({
 });
 const TrustlineSchema = z.strictObject({
   accountId: z.string().min(1).max(64),
-  use: z.enum(['swap', 'lending']),
+  use: z.enum(['swap', 'lending', 'aquarius']),
 });
 const TrustlineSubmitSchema = TrustlineSchema.extend({ signedXdr: z.string().min(1).max(10_000) });
 const SubmitSchema = z.strictObject({ signedXdr: z.string().min(1).max(60_000) });
@@ -59,24 +80,34 @@ export function createExecutionRoutes() {
     const body = parse(
       IntentSchema,
       await c.req.json().catch(() => null),
-      'Send kind "swap" with sellAsset, buyAsset and sellAmount, kind "supply" or "borrow" with asset and amount, or kind "vault_deposit" with vaultId and amount.',
+      'Send kind "swap" with sellAsset, buyAsset and sellAmount, a lending kind with asset and amount, kind "vault_deposit" with vaultId and amount, or kind "limit_order" with side, amountXlm and priceUsdc.',
     );
     const deps = executionDeps(c.env);
-    let intent: unknown;
     if (body.kind === 'swap') {
-      intent = await createSwapIntent(deps, {
+      const intent = await createSwapIntent(deps, {
         sell: body.sellAsset,
         buy: body.buyAsset,
         amount: body.sellAmount,
         source: 'form',
       });
-    } else if (body.kind === 'vault_deposit') {
-      intent = await createVaultIntent(deps, { vaultId: body.vaultId, amount: body.amount, source: 'form' });
-    } else {
-      intent = await createLendingIntent(deps, { ...body, source: 'form' });
+      return c.json(intent, 201);
     }
-    return c.json(intent, 201);
+    if (body.kind === 'vault_deposit')
+      return c.json(await createVaultIntent(deps, { vaultId: body.vaultId, amount: body.amount, source: 'form' }), 201);
+    if (body.kind === 'limit_order')
+      return c.json(await createLimitOrderIntent(deps, { ...body, source: 'form' }), 201);
+    if (body.kind === 'limit_close')
+      return c.json(await createLimitCloseIntent(deps, { ...body, source: 'form' }), 201);
+    return c.json(await createLendingIntent(deps, { ...body, source: 'form' }), 201);
   });
+
+  /** The Aquarius concentrated pool limit orders use, live; or why they are unavailable here. */
+  routes.get('/limit-orders/pool', async (c) => c.json(await limitPool(executionDeps(c.env))));
+
+  /** The wallet's limit orders with what withdrawing each returns now. Read-only. */
+  routes.get('/limit-orders', async (c) =>
+    c.json(await listLimitOrders(executionDeps(c.env), c.req.query('account') ?? '')),
+  );
 
   /** DeFindex vaults on this network with their live APY, funds and fees. Read-only. */
   routes.get('/vaults', async (c) => {

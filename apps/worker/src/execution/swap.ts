@@ -65,6 +65,9 @@ export async function createSwapIntent(
     collateral_asset: null,
     collateral_amount_raw: null,
     whole_position: 0,
+    limit_price: null,
+    tick_lower: null,
+    tick_upper: null,
     created_at_ms: deps.now(),
   };
   await insertIntent(deps, row);

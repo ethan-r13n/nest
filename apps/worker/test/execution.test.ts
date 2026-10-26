@@ -94,6 +94,7 @@ function createFixture(overrides: Partial<ExecutionConfig> = {}): ExecutionFixtu
     },
     lending: null,
     vaults: null,
+    ranges: null,
     buildTrustline: async () => {
       throw new Error('not used');
     },

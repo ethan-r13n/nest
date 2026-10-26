@@ -118,6 +118,8 @@ export const INTENT_KINDS = [
   'withdraw',
   'withdraw_collateral',
   'vault_deposit',
+  'limit_order',
+  'limit_close',
 ] as const;
 export const INTENT_SOURCES = ['chat', 'form'] as const;
 export const PLAN_STATUSES = [
@@ -151,6 +153,11 @@ export const intents = sqliteTable(
     collateralAmountRaw: text('collateral_amount_raw'),
     // Repay and withdraw: 1 means the whole position, sized when compared; sell_amount_raw is then 0.
     wholePosition: integer('whole_position').notNull().default(0),
+    // Limit orders: the price in USDC per XLM as a decimal string, and the tick band chosen for it.
+    // A limit close names the band it withdraws; `market_id` holds the pool.
+    limitPrice: text('limit_price'),
+    tickLower: integer('tick_lower'),
+    tickUpper: integer('tick_upper'),
     createdAtMs: integer('created_at_ms').notNull(),
   },
   () => [check('intents_network_ck', NETWORK_CHECK)],

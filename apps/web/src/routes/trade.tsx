@@ -6,6 +6,7 @@ import { useState } from 'react';
 
 import { AssetIcon } from '../components/asset-icon.tsx';
 import { AssetSelect, DecimalField, ReviewRequirements, UnavailableFacts } from '../components/financial-draft.tsx';
+import { LimitOrderPanel } from '../components/limit-order.tsx';
 import { MarketChart } from '../components/market-chart.tsx';
 import { SwapProposalCard, useCountdown } from '../components/swap-proposal.tsx';
 import { EmptyState } from '../components/workspace.tsx';
@@ -253,6 +254,12 @@ export function TradePage() {
           </div>
         </section>
       </div>
+      <section className="workspace-panel p-5" aria-labelledby="limit-order-title">
+        <h2 id="limit-order-title" className="mb-4 font-serif text-xl font-semibold">
+          Limit order
+        </h2>
+        <LimitOrderPanel />
+      </section>
       <section className="workspace-panel" aria-labelledby="trade-positions-title">
         <h2 id="trade-positions-title" className="border-b px-6 py-5 font-serif text-xl font-semibold">
           My positions

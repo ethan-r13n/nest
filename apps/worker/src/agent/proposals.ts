@@ -1,5 +1,6 @@
 import { compareLending, createLendingIntent } from '../execution/lending.ts';
 import { compareIntent } from '../execution/lifecycle.ts';
+import { createLimitOrderIntent } from '../execution/limit.ts';
 import { executionDeps, loadIntent } from '../execution/store.ts';
 import { createSwapIntent } from '../execution/swap.ts';
 import type { LendingOffer, ProposalService } from './tools.ts';
@@ -69,6 +70,36 @@ export function createProposalService(env: Env): ProposalService {
           excluded: [],
           unavailable: error instanceof Error ? error.message : 'comparison failed',
         };
+      }
+    },
+
+    async proposeLimitOrder(input) {
+      const deps = executionDeps(env);
+      const intent = await createLimitOrderIntent(deps, { ...input, source: 'chat' });
+      const base = {
+        intentId: intent.id,
+        side: input.side,
+        amountXlm: input.amountXlm,
+        limitPrice: intent.limitPrice ?? 0,
+        deposit: { symbol: intent.deposit?.symbol ?? '', amount: intent.deposit?.amount ?? '' },
+      };
+      try {
+        const [quote] = (await compareIntent(deps, intent.id)).quotes;
+        if (!quote || !('order' in quote) || !quote.order) throw new Error('No limit order was priced.');
+        return {
+          ...base,
+          order: {
+            pool: quote.pool.name,
+            currentPrice: quote.currentPrice,
+            band: quote.band.prices,
+            onFill: { symbol: quote.order.onFill.symbol, amount: quote.order.onFill.amount },
+            feeBps: quote.pool.feeBps,
+          },
+        };
+      } catch (error) {
+        // A limit on the wrong side of the market is the user's to fix, so it fails the proposal.
+        if (error instanceof Error && error.message.includes('current price')) throw error;
+        return { ...base, order: { unavailable: error instanceof Error ? error.message : 'pricing failed' } };
       }
     },
 

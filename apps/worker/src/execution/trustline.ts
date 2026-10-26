@@ -1,3 +1,4 @@
+import { RANGE_POOLS, rangeAssets } from '@nest/adapters/aquarius/range';
 import { lendingAsset } from '@nest/adapters/blend/markets';
 import { swapAsset } from '@nest/adapters/stellar/assets';
 import { hex, InspectionError, verifySignedTransaction } from '@nest/adapters/stellar/inspect';
@@ -9,8 +10,8 @@ import { type Asset, StrKey } from '@stellar/stellar-sdk';
 
 import { type ExecutionDeps, logFailure } from './store.ts';
 
-/** Which feature the asset is for: on Testnet, swaps and Blend list different USDC issuers. */
-export type TrustlineUse = 'swap' | 'lending';
+/** Which feature the asset is for: on Testnet, swaps, Blend and Aquarius each list a different USDC. */
+export type TrustlineUse = 'swap' | 'lending' | 'aquarius';
 
 const CONFIRM_POLL_MS = 1_000;
 const CONFIRM_WAIT_MS = 20_000;
@@ -84,7 +85,9 @@ function assetFor(deps: ExecutionDeps, input: { accountId: string; use: Trustlin
   if (!StrKey.isValidEd25519PublicKey(input.accountId)) {
     throw new AppError('INVALID_REQUEST', 'Connect a Stellar account (G…) first.');
   }
-  return input.use === 'lending'
-    ? lendingAsset(deps.config.network, 'USDC').classic
-    : swapAsset(deps.config.network, 'USDC').classic;
+  if (input.use === 'lending') return lendingAsset(deps.config.network, 'USDC').classic;
+  if (input.use === 'swap') return swapAsset(deps.config.network, 'USDC').classic;
+  const pool = RANGE_POOLS[deps.config.network][0];
+  if (!pool) throw new AppError('UNAVAILABLE', 'Aquarius limit orders are not available on this network.');
+  return rangeAssets(deps.config.network, pool).usdc.classic;
 }

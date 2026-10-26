@@ -133,6 +133,9 @@ export async function createLendingIntent(
     collateral_asset: collateralAsset,
     collateral_amount_raw: collateralRaw === null ? null : rawToText(collateralRaw),
     whole_position: whole ? 1 : 0,
+    limit_price: null,
+    tick_lower: null,
+    tick_upper: null,
     created_at_ms: deps.now(),
   };
   await insertIntent(deps, row);

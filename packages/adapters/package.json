@@ -21,7 +21,8 @@
     "./stellar/accounts": "./src/stellar/accounts.ts",
     "./stellar/trustline": "./src/stellar/trustline.ts",
     "./amm/arbitrage": "./src/amm/arbitrage.ts",
-    "./amm/pools": "./src/amm/pools.ts"
+    "./amm/pools": "./src/amm/pools.ts",
+    "./aquarius/range": "./src/aquarius/range.ts"
   },
   "scripts": {
     "typecheck": "tsc && tsc -p tsconfig.node.json",

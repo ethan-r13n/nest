@@ -100,6 +100,7 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
     },
     venue: null,
     lending: null,
+    ranges: null,
     vaults: {
       vaults: async () => [state.vault],
       vault: async () => state.vault,
