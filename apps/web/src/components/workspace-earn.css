@@ -230,20 +230,30 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   width: 100%;
+  height: auto;
+  gap: 0;
+  padding: 0;
   border-radius: 0;
   border-bottom: 1px solid var(--nest-border);
   background: transparent;
 }
 .earn-detail aside [role="tab"] {
-  border-radius: 0;
+  height: auto;
   min-height: 44px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
   background: transparent;
   box-shadow: none;
   font-size: 12px;
 }
 .earn-detail aside [role="tab"][data-active] {
-  border-bottom: 2px solid var(--nest-accent);
+  border-bottom-color: var(--nest-accent);
+  background: transparent;
   color: var(--nest-accent);
+}
+.earn-detail aside [role="tab"]::after {
+  display: none;
 }
 @container workspace (max-width: 800px) {
   .earn-detail .workspace-page-header h1 {

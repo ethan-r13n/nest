@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { useQuery } from '@tanstack/react-query';
 import { ExternalLink, RefreshCw, Wallet } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 import {
   type ActivityItem,
@@ -15,9 +15,13 @@ import {
   type SwapSymbol,
   venueName,
 } from '../lib/execution.ts';
-import { formatPercentPoints } from '../lib/format.ts';
+import { formatPercentPoints, formatUsd } from '../lib/format.ts';
+import { useHealth } from '../lib/health.ts';
+import { useXlmUsd } from '../lib/portfolio.ts';
+import { spotRows } from '../lib/spot-positions.ts';
 import { swapDraftRequest } from '../lib/swap-draft.ts';
 import { useWallet } from '../lib/wallet.tsx';
+import { AssetIcon } from './asset-icon.tsx';
 import { Fact, useCountdown } from './swap-proposal.tsx';
 import { EmptyState } from './workspace.tsx';
 
@@ -27,6 +31,12 @@ const ACTIVITY_TIME = new Intl.DateTimeFormat('en-GB', {
   month: 'short',
   hour: '2-digit',
   minute: '2-digit',
+});
+const SIGNED_USD = new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 2,
+  signDisplay: 'exceptZero',
 });
 function formatPrice(price: number): string {
   return new Intl.NumberFormat('en-US', { maximumFractionDigits: 6 }).format(price);
@@ -184,6 +194,127 @@ export function WalletActivity() {
         />
       </TabsContent>
     </Tabs>
+  );
+}
+
+/** The connected wallet's spot XLM and USDC, valued at the XLM reference price Portfolio uses. */
+export function SpotPositions({ disabled, onSwap }: { disabled: boolean; onSwap: (symbol: SwapSymbol) => void }) {
+  const wallet = useWallet();
+  const health = useHealth();
+  const xlmUsd = useXlmUsd(health.data?.network);
+  const balances = useQuery({
+    queryKey: ['balances', wallet.address],
+    queryFn: () => execution.balances(wallet.address ?? ''),
+    enabled: Boolean(wallet.address),
+    refetchInterval: 30_000,
+  });
+  const activity = useQuery({
+    queryKey: ['activity', wallet.address],
+    queryFn: () => execution.activity(wallet.address ?? ''),
+    enabled: Boolean(wallet.address),
+    refetchInterval: 20_000,
+  });
+  const rows = spotRows(balances.data, activity.data?.items ?? [], xlmUsd);
+  let state: ReactNode = null;
+  if (!wallet.address) {
+    state = (
+      <EmptyState
+        title="Connect a wallet to see its positions"
+        description="Spot XLM and USDC in your wallet appear here."
+      >
+        <Button onClick={wallet.connect} disabled={wallet.connecting}>
+          <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect wallet'}
+        </Button>
+      </EmptyState>
+    );
+  } else if (balances.isPending) {
+    state = <Skeleton className="h-24 w-full" />;
+  } else if (balances.isError) {
+    state = (
+      <EmptyState title="Balances could not be loaded" description={balances.error.message}>
+        <Button variant="outline" size="sm" onClick={() => void balances.refetch()}>
+          <RefreshCw /> Try again
+        </Button>
+      </EmptyState>
+    );
+  } else if (!balances.data.funded) {
+    state = <EmptyState title="No spot positions" description="This account is not funded on this network yet." />;
+  } else if (rows.length === 0) {
+    state = <EmptyState title="No spot positions" description="This wallet holds no spendable XLM or USDC." />;
+  }
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          {['Asset / Market', 'Quantity', 'USD notional', 'Avg. entry', 'Mark', 'Unrealized P&L', 'Action'].map(
+            (label) => (
+              <TableHead key={label}>{label}</TableHead>
+            ),
+          )}
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {state ? (
+          <TableRow>
+            <TableCell colSpan={7} className="p-0">
+              {state}
+            </TableCell>
+          </TableRow>
+        ) : (
+          rows.map((row) => {
+            const xlm = row.symbol === 'XLM';
+            return (
+              <TableRow key={row.symbol}>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <AssetIcon symbol={row.symbol} className="size-6" />
+                    <div>
+                      <p className="font-medium">{row.symbol}</p>
+                      <p className="text-xs text-muted-foreground">{xlm ? 'XLM / USDC' : 'Cash'}</p>
+                    </div>
+                  </div>
+                </TableCell>
+                <TableCell className="font-mono tabular-nums">
+                  {row.quantity} {row.symbol}
+                  {xlm && <p className="font-sans text-xs text-muted-foreground">After the account reserve</p>}
+                </TableCell>
+                <TableCell className="font-mono tabular-nums">{formatUsd(row.usd)}</TableCell>
+                <TableCell className="font-mono tabular-nums">
+                  {row.entry === null ? '—' : `${formatPrice(row.entry)} USDC`}
+                  {xlm && (
+                    <p className="font-sans text-xs text-muted-foreground">
+                      {row.entry === null ? 'No XLM bought through Nest' : 'Confirmed Nest buys'}
+                    </p>
+                  )}
+                </TableCell>
+                <TableCell className="font-mono tabular-nums">
+                  {row.mark === null ? 'Unavailable' : `${formatPrice(row.mark)} USDC`}
+                </TableCell>
+                <TableCell className="font-mono tabular-nums">
+                  {row.pnl === null ? (
+                    '—'
+                  ) : (
+                    <>
+                      <span className={row.pnl < 0 ? 'text-destructive' : row.pnl > 0 ? 'text-success' : undefined}>
+                        {SIGNED_USD.format(row.pnl)}
+                      </span>
+                      <p className="font-sans text-xs text-muted-foreground">
+                        On {formatPrice(row.pnlQuantity)} XLM bought through Nest
+                      </p>
+                    </>
+                  )}
+                </TableCell>
+                <TableCell>
+                  <Button variant="outline" size="sm" disabled={disabled} onClick={() => onSwap(row.symbol)}>
+                    {xlm ? 'Sell XLM' : 'Buy XLM'}
+                  </Button>
+                </TableCell>
+              </TableRow>
+            );
+          })
+        )}
+      </TableBody>
+    </Table>
   );
 }
 
