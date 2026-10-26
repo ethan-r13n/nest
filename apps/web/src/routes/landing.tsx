@@ -99,11 +99,8 @@ function Header() {
           Features
         </a>
         <a href="#safety" className="flex min-h-11 items-center hover:text-[#ff7a45]">
-          The harness
+          Harness
         </a>
-        <Link to="/research" className="flex min-h-11 items-center hover:text-[#ff7a45]">
-          Research
-        </Link>
       </nav>
       <Link
         to="/research"
@@ -192,7 +189,7 @@ function Harness() {
       aria-labelledby="nest-harness"
     >
       <h2 id="nest-harness" className={`${SECTION_HEADING} mb-12 max-w-[1250px]`}>
-        A custom, self-improving harness.
+        A persistent, self-improving harness.
       </h2>
       <div className="grid gap-x-[clamp(28px,4vw,64px)] gap-y-16 md:grid-cols-2">
         <article className={`border-t pt-8 ${RULE}`}>
