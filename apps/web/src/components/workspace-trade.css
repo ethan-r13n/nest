@@ -72,14 +72,53 @@
 
 .trade-ticket-heading {
   margin: 20px 20px 0;
-  padding-bottom: 12px;
-  border-bottom: 1px solid var(--nest-accent);
   text-align: center;
   color: var(--nest-accent);
 }
 
-.trade-ticket-heading h2 {
+.trade-ticket-tabs {
+  width: 100%;
+  min-height: 44px;
+  height: auto;
+  gap: 0;
+  padding: 0;
+  border-bottom: 1px solid var(--nest-border);
+}
+
+.trade-ticket-tabs [data-slot="tabs-trigger"] {
+  min-height: 44px;
+  height: auto;
+  padding: 8px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--nest-text-secondary);
   font: 500 13px / 1.5 var(--nest-font-mono);
+}
+
+.trade-ticket-tabs [data-slot="tabs-trigger"][data-active] {
+  border-bottom-color: var(--nest-accent);
+  background: transparent;
+  color: var(--nest-accent);
+}
+
+.trade-ticket-tabs [data-slot="tabs-trigger"]::after {
+  display: none;
+}
+
+.trade-limit-ticket form > .grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.trade-limit-ticket form > button[type="submit"] {
+  width: 100%;
+  min-height: 44px;
+}
+
+.trade-limit-ticket :is(dd, code, a, p) {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .trade-asset-box {
