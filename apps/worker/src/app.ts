@@ -7,6 +7,7 @@ import { secureHeaders } from 'hono/secure-headers';
 import type { ContentfulStatusCode } from 'hono/utils/http-status';
 
 import { createAgentRoutes } from './agent/routes.ts';
+import { createAutomationRoutes } from './automations/routes.ts';
 import { ConfigError, decodeConfig } from './config.ts';
 import { createExecutionRoutes } from './execution/routes.ts';
 import { createMarketRoutes } from './markets/routes.ts';
@@ -63,6 +64,7 @@ export function createApp() {
   });
 
   app.route('/markets', createMarketRoutes());
+  app.route('/automations', createAutomationRoutes());
   app.route('/agent', createAgentRoutes());
   app.route('/raven', createRavenRoutes());
   app.route('/', createExecutionRoutes());

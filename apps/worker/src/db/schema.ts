@@ -236,3 +236,79 @@ export const planEvents = sqliteTable(
   },
   (table) => [index('plan_events_plan_idx').on(table.planId)],
 );
+
+export const AUTOMATION_KINDS = ['arbitrage'] as const;
+export const AUTOMATION_STATUSES = ['draft', 'active', 'paused', 'completed', 'deleted'] as const;
+export const EVALUATION_RESULTS = ['true', 'false', 'unknown'] as const;
+const AUTOMATION_STATUS_CHECK = sql.raw(`status IN (${AUTOMATION_STATUSES.map((status) => `'${status}'`).join(', ')})`);
+
+/**
+ * A monitoring rule. `config` is the accepted revision's typed condition; activation binds its
+ * hash. `armed` is the hysteresis: a trigger disarms the rule until the condition is false again.
+ */
+export const automationRules = sqliteTable(
+  'automation_rules',
+  {
+    id: text('id').primaryKey(),
+    network: text('network', { enum: NETWORKS }).notNull(),
+    kind: text('kind', { enum: AUTOMATION_KINDS }).notNull(),
+    name: text('name').notNull(),
+    ownerAccount: text('owner_account'),
+    status: text('status', { enum: AUTOMATION_STATUSES }).notNull(),
+    revision: integer('revision').notNull(),
+    config: text('config').notNull(),
+    configHash: text('config_hash').notNull(),
+    mode: text('mode', { enum: ['once', 'repeat'] }).notNull(),
+    intervalMs: integer('interval_ms').notNull(),
+    cooldownMs: integer('cooldown_ms').notNull(),
+    armed: integer('armed').notNull().default(1),
+    nextDueAtMs: integer('next_due_at_ms'),
+    lastEvaluatedAtMs: integer('last_evaluated_at_ms'),
+    lastResult: text('last_result', { enum: EVALUATION_RESULTS }),
+    lastTriggeredAtMs: integer('last_triggered_at_ms'),
+    createdAtMs: integer('created_at_ms').notNull(),
+    updatedAtMs: integer('updated_at_ms').notNull(),
+  },
+  (table) => [
+    index('automation_rules_due_idx').on(table.network, table.status, table.nextDueAtMs),
+    check('automation_rules_network_ck', NETWORK_CHECK),
+    check('automation_rules_status_ck', AUTOMATION_STATUS_CHECK),
+  ],
+);
+
+/** One evaluation of a rule revision, with the readings and derived values it used. */
+export const automationEvaluations = sqliteTable(
+  'automation_evaluations',
+  {
+    id: text('id').primaryKey(),
+    ruleId: text('rule_id')
+      .notNull()
+      .references(() => automationRules.id),
+    revision: integer('revision').notNull(),
+    scheduledForMs: integer('scheduled_for_ms').notNull(),
+    evaluatedAtMs: integer('evaluated_at_ms').notNull(),
+    result: text('result', { enum: EVALUATION_RESULTS }).notNull(),
+    reason: text('reason').notNull(),
+    evidence: text('evidence').notNull(),
+    triggered: integer('triggered').notNull().default(0),
+  },
+  (table) => [index('automation_evaluations_rule_idx').on(table.ruleId, table.evaluatedAtMs)],
+);
+
+/** A fired alert. The key makes a retried evaluation reuse its trigger instead of firing again. */
+export const automationTriggers = sqliteTable(
+  'automation_triggers',
+  {
+    id: text('id').primaryKey(),
+    ruleId: text('rule_id')
+      .notNull()
+      .references(() => automationRules.id),
+    revision: integer('revision').notNull(),
+    triggerKey: text('trigger_key').notNull().unique(),
+    evaluationId: text('evaluation_id').notNull(),
+    summary: text('summary').notNull(),
+    createdAtMs: integer('created_at_ms').notNull(),
+    acknowledgedAtMs: integer('acknowledged_at_ms'),
+  },
+  (table) => [index('automation_triggers_rule_idx').on(table.ruleId, table.createdAtMs)],
+);

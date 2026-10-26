@@ -219,7 +219,9 @@ const guardrailsRoute = createRoute({
 const walletRoute = createRoute({
   getParentRoute: () => workspaceRoute,
   path: '/wallet',
-  component: lazy(() => import('./routes/settings.tsx').then((module) => ({ default: module.WalletPage }))),
+  beforeLoad: () => {
+    throw redirect({ to: '/research', replace: true });
+  },
 });
 
 const earnAlias = createRoute({

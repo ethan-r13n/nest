@@ -21,7 +21,7 @@ type Phase = 'quoting' | 'quoted' | 'preparing' | 'review' | 'signing' | 'confir
 
 /**
  * A swap proposal from chat. Everything shown comes from Nest's own records: the live quote, then
- * the exact transaction the wallet will sign. Only the user's signature in Freighter executes it.
+ * the exact transaction the wallet will sign. Only the user's signature in their wallet executes it.
  */
 export function SwapProposalCard({ intentId }: { intentId: string }) {
   const wallet = useWallet();
@@ -227,7 +227,7 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
         ) : null}
         {phase === 'quoted' && !expired && !wallet.address ? (
           <Button size="sm" onClick={wallet.connect} disabled={wallet.connecting}>
-            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect Freighter to review'}
+            <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect wallet to review'}
           </Button>
         ) : null}
         {phase === 'quoted' && !expired && wallet.address ? (
@@ -242,12 +242,12 @@ export function SwapProposalCard({ intentId }: { intentId: string }) {
         ) : null}
         {phase === 'review' && !expired ? (
           <Button size="sm" onClick={sign}>
-            <Wallet /> Sign in Freighter
+            <Wallet /> Sign in wallet
           </Button>
         ) : null}
         {phase === 'signing' ? (
           <Button size="sm" disabled>
-            <LoaderCircle className="animate-spin" /> Waiting for Freighter…
+            <LoaderCircle className="animate-spin" /> Waiting for wallet…
           </Button>
         ) : null}
       </div>

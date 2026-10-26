@@ -49,7 +49,7 @@ export function TrustlineStep({ use, onAdded }: { use: TrustlineUse; onAdded(): 
         {state === 'building'
           ? 'Preparing…'
           : state === 'signing'
-            ? 'Waiting for Freighter…'
+            ? 'Waiting for wallet…'
             : state === 'confirming'
               ? 'Confirming…'
               : 'Add USDC trustline'}

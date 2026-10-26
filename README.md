@@ -10,12 +10,13 @@ Nest combines sourced protocol research with an embedded Pi agent and a determin
 | --- | --- |
 | Research | Dated DefiLlama/RWA.xyz observations, protocol and market details, filtering, charts, live Blend rates, and read-only Aquarius liquidity discovery. |
 | Chat | Streamed Pi conversations, bounded research tools, Raven MCP authorization, and typed proposals. |
+| Automations | Live XLM/USDC pool comparison, reviewed arbitrage monitors, one-minute checks, and deduplicated in-app alerts. Monitoring reads pool state and never executes trades. |
 | Swap | Soroswap on mainnet; the Stellar DEX on Testnet. Quotes, policy checks, transaction inspection, Freighter signing, and confirmation. |
 | Credit | Blend supply, collateralized borrowing, repay, withdrawal, and a separate USDC trustline step. Pool exclusions and withdrawal conditions remain visible. |
 | Vaults | Live DeFindex vault reads and wallet-approved XLM/USDC deposits. Withdrawal execution and chat deposit proposals are not implemented. |
 | Landing | Standalone introduction with dated metrics and a question form that fills an unsent chat draft. |
 
-Additional venue integrations, saved wallet-authenticated history, background automations, strategy backtesting, and card spending are product targets or interface previews. They are not claims of working financial execution. See the [implementation specification](docs/technical-spec.md) for the target contracts and [architecture decisions](docs/architecture-decisions.md) for the current runtime.
+Additional venue integrations, saved wallet-authenticated history, generic background automations, strategy backtesting, and card spending are product targets or interface previews. They are not claims of working financial execution. See the [implementation specification](docs/technical-spec.md) for the target contracts and [architecture decisions](docs/architecture-decisions.md) for the current runtime.
 
 ## Architecture
 
@@ -95,6 +96,18 @@ Restart the dev server after changing those settings. Confirm the header reports
 6. **Withdraw:** after debt is cleared, ask `withdraw all my XLM collateral`. To withdraw a supplied balance, ask `withdraw all my USDC`. Availability remains subject to pool liquidity and the resulting lending health.
 
 Testnet swaps and Blend use different USDC issuers. A balance for one does not fund the other. Asset identities are registered in [swap assets](packages/adapters/src/stellar/assets.ts) and [Blend markets](packages/adapters/src/blend/markets.ts). Check the asset and account in the review instead of relying on the ticker alone.
+
+## Local arbitrage monitors
+
+Start the Testnet app as above. In a second terminal, use the dev server URL:
+
+```sh
+pnpm --filter @nest/worker cron:local http://127.0.0.1:5173
+```
+
+Open Lab → Automations, choose Soroswap and Stellar AMM, and inspect the live preview at your USDC trade size. Save a draft, review its settings, then activate that revision. Checks run about once a minute. A matching gap alerts once and stays disarmed until the condition becomes false; unreadable inputs remain unknown. Displayed profit includes pool fees and price impact, excludes network fees, and is not an executed fill.
+
+Monitor records currently have no wallet-ownership isolation and are shared within the deployment. Keep the demo private. The local cron process only invokes the local scheduled handler; no remote migration or deployment is part of this setup.
 
 ## Safety model
 

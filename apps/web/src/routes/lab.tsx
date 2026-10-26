@@ -6,6 +6,7 @@ import { Link } from '@tanstack/react-router';
 import { BookOpen, FileText, FlaskConical, Network, Plus, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 
+import { ArbitrageBuilder, AutomationDetail, AutomationList } from '../components/arbitrage-monitor.tsx';
 import { DraftNotice, EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { PersonalEmptyTable, PersonalFact, PersonalField, PersonalNav, PersonalPanel } from './personal-shared.tsx';
 
@@ -284,6 +285,7 @@ export function BacktestDetailPage({ runId }: { runId: string }) {
 }
 
 export function AutomationsPage() {
+  const [selected, setSelected] = useState<string | null>(null);
   const [description, setDescription] = useState('');
   const [source, setSource] = useState('');
   const [action, setAction] = useState('notify');
@@ -312,12 +314,20 @@ export function AutomationsPage() {
       <PersonalNav area="lab" active="Automations" />
       <div className="grid items-start gap-6 xl:grid-cols-[240px_minmax(0,1fr)]">
         <PersonalPanel title="Your rules">
-          <EmptyState
-            title="No rules loaded"
-            description="Saved rules and their last evaluation appear after verified wallet access is available."
-          />
+          <AutomationList selectedId={selected} onSelect={setSelected} />
         </PersonalPanel>
         <div className="flex min-w-0 flex-col gap-6">
+          {selected ? (
+            <PersonalPanel title="Monitor">
+              <AutomationDetail id={selected} onDeleted={() => setSelected(null)} />
+            </PersonalPanel>
+          ) : null}
+          <PersonalPanel
+            title="Arbitrage monitor"
+            description="Watch the XLM/USDC price gap between two pools and get an alert in Nest when a round trip would clear your threshold. It reads pools only and never trades."
+          >
+            <ArbitrageBuilder onActivated={setSelected} />
+          </PersonalPanel>
           <PersonalPanel
             title="Describe your rule"
             description="Start with your own idea rather than a fixed strategy menu."
@@ -513,29 +523,9 @@ export function AutomationHistoryPage({ automationId }: { automationId: string }
           </Button>
         }
       />
-      <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
-        <PersonalPanel title="Rule identity">
-          <dl>
-            <PersonalFact label="Requested rule" value={automationId} />
-            <PersonalFact label="Revision" value="Not loaded" />
-            <PersonalFact label="State" value="Unavailable" />
-            <PersonalFact label="Next evaluation" value="Unavailable" />
-          </dl>
-          <div className="mt-4 flex gap-2">
-            <Button disabled>Pause</Button>
-            <Button variant="outline" disabled>
-              Resume
-            </Button>
-          </div>
-        </PersonalPanel>
-        <PersonalPanel title="Evaluation history">
-          <PersonalEmptyTable
-            headers={['Evaluated', 'Result', 'Evidence', 'Delivery']}
-            title="No evaluations loaded"
-            description="Rule history is not available in this build. No observation, match or trigger has been fabricated."
-          />
-        </PersonalPanel>
-      </div>
+      <PersonalPanel title="Monitor">
+        <AutomationDetail id={automationId} />
+      </PersonalPanel>
       <PersonalPanel title="Action proposals">
         <EmptyState
           title="No proposals loaded"
