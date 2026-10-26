@@ -1,5 +1,6 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
 import { ArrowDownUp, ArrowRight, Route } from 'lucide-react';
 import { useState } from 'react';
 
@@ -78,6 +79,30 @@ export function TradePage() {
             </h1>
             <p className="mt-1 text-xs text-subtle">Stellar spot · market orders</p>
           </div>
+          <Select
+            value={inputAsset}
+            disabled={Boolean(intentId) || creating}
+            onValueChange={(value) => {
+              if (!value) return;
+              setInputAsset(value);
+              if (value === outputAsset) setOutputAsset(value === 'USDC' ? 'XLM' : 'USDC');
+              invalidate();
+            }}
+          >
+            <SelectTrigger
+              aria-label="Choose market asset"
+              className="ml-3 min-h-11 w-11 shrink-0 justify-center rounded-xl border border-primary/60 p-0 hover:border-primary focus-visible:border-primary"
+            >
+              <SelectValue className="sr-only" />
+            </SelectTrigger>
+            <SelectContent>
+              {['XLM', 'USDC', 'USDT0'].map((asset) => (
+                <SelectItem key={asset} value={asset}>
+                  {asset}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
         <div className="flex flex-wrap gap-2">
           <Badge variant="outline">
