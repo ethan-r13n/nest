@@ -115,7 +115,7 @@ function Header() {
 function Hero() {
   return (
     <section
-      className={`flex min-h-[calc(100svh-160px)] flex-col justify-center gap-6 pb-[clamp(36px,8vh,100px)] sm:min-h-[calc(100svh-100px)] ${GUTTER}`}
+      className={`flex min-h-[calc(100svh-160px)] flex-col justify-center pt-[max(0px,calc(50svh-160px))] sm:min-h-[calc(100svh-100px)] sm:pt-[max(0px,calc(50svh-100px))] ${GUTTER}`}
     >
       <h1 className={`${SERIF} m-0 max-w-[1000px] text-[clamp(72px,11.5vw,176px)] leading-[.88] tracking-[-.025em]`}>
         Stellar DeFi.
