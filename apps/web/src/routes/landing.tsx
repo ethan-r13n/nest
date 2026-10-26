@@ -118,7 +118,7 @@ function Header() {
 function Hero() {
   return (
     <section
-      className={`flex min-h-[calc(100svh-160px)] flex-col justify-end gap-6 pb-[clamp(56px,9vh,100px)] sm:min-h-[calc(100svh-100px)] ${GUTTER}`}
+      className={`flex min-h-[calc(100svh-160px)] flex-col justify-center gap-6 pb-[clamp(36px,8vh,100px)] sm:min-h-[calc(100svh-100px)] ${GUTTER}`}
     >
       <p className={`${MONO} m-0 text-[11px] tracking-[.16em] text-[#b9b3a8]`}>NEST / AGENT HARNESS</p>
       <h1 className={`${SERIF} m-0 max-w-[1000px] text-[clamp(72px,11.5vw,176px)] leading-[.88] tracking-[-.025em]`}>
@@ -135,7 +135,7 @@ function Purpose() {
     <section className={`py-[clamp(80px,13vh,144px)] ${GUTTER}`} aria-labelledby="nest-purpose">
       <h2
         id="nest-purpose"
-        className={`${SERIF} m-0 max-w-[1080px] text-[clamp(36px,4.8vw,72px)] leading-[1.06] tracking-[-.015em] text-pretty`}
+        className={`${SERIF} m-0 text-[clamp(16px,4.8vw,72px)] leading-[1.06] tracking-[-.015em] whitespace-nowrap`}
       >
         Nest unifies Stellar DeFi <em className="text-[#ff7a45]">research and execution.</em>
       </h2>
