@@ -52,7 +52,7 @@ export function ChatPage({ ask }: { ask?: string | undefined }) {
 
   return (
     <div
-      className={`grid h-full min-h-0 min-w-0 gap-6 lg:gap-8 ${expanded ? 'lg:grid-cols-[224px_minmax(0,1fr)]' : 'lg:grid-cols-[52px_minmax(0,1fr)]'}`}
+      className={`chat-workspace grid h-full min-h-0 min-w-0 gap-6 lg:gap-8 ${expanded ? 'lg:grid-cols-[224px_minmax(0,1fr)]' : 'lg:grid-cols-[52px_minmax(0,1fr)]'}`}
     >
       <aside
         className={`hidden min-h-0 min-w-0 flex-col border-r lg:flex ${expanded ? 'pr-5' : 'pr-2'}`}

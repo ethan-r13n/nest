@@ -975,33 +975,49 @@ function ProtocolDirectory() {
           Export observations
         </Button>
       </div>
-      <div className="flex flex-wrap items-end gap-3">
-        <SearchField
-          label="Search protocols"
-          value={query}
-          onChange={(value) => {
-            setQuery(value);
-          }}
-        />
-        <Filter
-          label="Category"
-          value={category}
-          onChange={(value) => {
-            setCategory(value);
-          }}
-          options={[{ value: 'all', label: 'All categories' }, ...categories.map((value) => ({ value, label: value }))]}
-        />
-        <Filter
-          label="Order"
-          value={sort}
-          onChange={setSort}
-          options={[
-            { value: 'tvl', label: 'Stellar TVL' },
-            { value: 'name', label: 'Name' },
-          ]}
-        />
-      </div>
       <ResearchDataTable
+        controls={
+          <div className="research-filters flex min-w-0 flex-1 flex-wrap items-end gap-2 [&_label]:sr-only">
+            <SearchField
+              label="Search protocols"
+              value={query}
+              onChange={(value) => {
+                setQuery(value);
+              }}
+            />
+            <Filter
+              label="Category"
+              value={category}
+              onChange={(value) => {
+                setCategory(value);
+              }}
+              options={[
+                { value: 'all', label: 'All categories' },
+                ...categories.map((value) => ({ value, label: value })),
+              ]}
+            />
+            <Filter
+              label="Order"
+              value={sort}
+              onChange={setSort}
+              options={[
+                { value: 'tvl', label: 'Stellar TVL' },
+                { value: 'name', label: 'Name' },
+              ]}
+            />
+            <Button
+              variant="ghost"
+              className="workspace-action"
+              onClick={() => {
+                setQuery('');
+                setCategory('all');
+                setSort('tvl');
+              }}
+            >
+              Reset filters
+            </Button>
+          </div>
+        }
         tableKey="defi-protocols"
         label="Protocols"
         rows={rows}

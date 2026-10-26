@@ -332,3 +332,29 @@
   background: var(--nest-accent-tint);
   color: var(--nest-accent);
 }
+
+.nest-workspace [data-slot="input"],
+.nest-workspace [data-slot="input-group-input"] {
+  background: var(--nest-background);
+}
+
+.nest-workspace [data-slot="button"][data-variant="outline"] {
+  border-color: var(--nest-border-strong);
+  background: transparent;
+}
+
+.nest-workspace [data-slot="button"][data-variant="outline"]:hover {
+  background: var(--nest-surface-raised);
+}
+
+.nest-workspace .research-network-summary {
+  border-top: 2px solid var(--nest-accent);
+}
+
+.chat-workspace .workspace-page-header h1 {
+  font-size: 30px;
+}
+
+.research-filters > :first-child {
+  max-width: 420px;
+}

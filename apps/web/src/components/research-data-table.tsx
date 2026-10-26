@@ -26,6 +26,7 @@ export function ResearchDataTable<Row>({
   columns,
   getRowId,
   compact = false,
+  controls,
 }: {
   tableKey: string;
   label: string;
@@ -33,6 +34,7 @@ export function ResearchDataTable<Row>({
   columns: Column<Row>[];
   getRowId: (row: Row) => string;
   compact?: boolean;
+  controls?: ReactNode;
 }) {
   const [preferences, setPreferences] = useState(() => PREFERENCES.get(tableKey) ?? INITIAL_PREFERENCES);
   const [page, setPage] = useState(0);
@@ -50,50 +52,56 @@ export function ResearchDataTable<Row>({
   return (
     <div className="min-w-0 space-y-3">
       {!compact ? (
-        <fieldset className="flex flex-wrap items-center justify-end gap-2" aria-label={`${label} display controls`}>
-          <Select
-            value={preferences.density}
-            onValueChange={(value) => {
-              if (value === 'comfortable' || value === 'compact')
-                setPreferences((previous) => ({ ...previous, density: value }));
-            }}
+        <div className={controls ? 'workspace-panel flex flex-wrap items-end gap-3 p-3' : 'flex justify-end'}>
+          {controls}
+          <fieldset
+            className="ml-auto flex flex-wrap items-center justify-end gap-2"
+            aria-label={`${label} display controls`}
           >
-            <SelectTrigger aria-label={`${label} row density`} className="min-h-11">
-              <SelectValue>{preferences.density === 'compact' ? 'Compact rows' : 'Comfortable rows'}</SelectValue>
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="comfortable">Comfortable rows</SelectItem>
-              <SelectItem value="compact">Compact rows</SelectItem>
-            </SelectContent>
-          </Select>
-          <DropdownMenu>
-            <DropdownMenuTrigger render={<Button variant="outline" className="min-h-11" />}>
-              <Columns3 /> Columns
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuGroup>
-                <DropdownMenuLabel>{label} columns</DropdownMenuLabel>
-                {columns.map((column, index) => (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    checked={index === 0 || column.required || !preferences.hidden.includes(column.id)}
-                    disabled={index === 0 || column.required}
-                    onCheckedChange={(checked) =>
-                      setPreferences((previous) => ({
-                        ...previous,
-                        hidden: checked
-                          ? previous.hidden.filter((id) => id !== column.id)
-                          : [...previous.hidden, column.id],
-                      }))
-                    }
-                  >
-                    {column.label}
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </fieldset>
+            <Select
+              value={preferences.density}
+              onValueChange={(value) => {
+                if (value === 'comfortable' || value === 'compact')
+                  setPreferences((previous) => ({ ...previous, density: value }));
+              }}
+            >
+              <SelectTrigger aria-label={`${label} row density`} className="min-h-11">
+                <SelectValue>{preferences.density === 'compact' ? 'Compact rows' : 'Comfortable rows'}</SelectValue>
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="comfortable">Comfortable rows</SelectItem>
+                <SelectItem value="compact">Compact rows</SelectItem>
+              </SelectContent>
+            </Select>
+            <DropdownMenu>
+              <DropdownMenuTrigger render={<Button variant="outline" className="min-h-11" />}>
+                <Columns3 /> Columns
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuGroup>
+                  <DropdownMenuLabel>{label} columns</DropdownMenuLabel>
+                  {columns.map((column, index) => (
+                    <DropdownMenuCheckboxItem
+                      key={column.id}
+                      checked={index === 0 || column.required || !preferences.hidden.includes(column.id)}
+                      disabled={index === 0 || column.required}
+                      onCheckedChange={(checked) =>
+                        setPreferences((previous) => ({
+                          ...previous,
+                          hidden: checked
+                            ? previous.hidden.filter((id) => id !== column.id)
+                            : [...previous.hidden, column.id],
+                        }))
+                      }
+                    >
+                      {column.label}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </fieldset>
+        </div>
       ) : null}
       <div className="overflow-hidden rounded-xl border bg-card">
         <Table
