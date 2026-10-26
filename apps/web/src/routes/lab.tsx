@@ -41,7 +41,7 @@ export function MemoryPage() {
 }
 
 export function BacktestsPage() {
-  const { chat } = useWorkspaceSession();
+  const { chat, setDraft } = useWorkspaceSession();
   return (
     <div className="lab-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
@@ -58,7 +58,15 @@ export function BacktestsPage() {
             </span>{' '}
             Strategy chat <span className="ml-3 font-mono text-[10px] text-subtle">Backtest</span>
           </h2>
-          <Button variant="outline" className="workspace-action" disabled={chat.running} onClick={() => chat.reset()}>
+          <Button
+            variant="outline"
+            className="workspace-action"
+            disabled={chat.running}
+            onClick={() => {
+              chat.reset();
+              setDraft('');
+            }}
+          >
             New thesis
           </Button>
         </div>
@@ -124,7 +132,7 @@ export function BacktestDetailPage({ runId }: { runId: string }) {
 
 export function AutomationsPage() {
   const [selected, setSelected] = useState<string | null>(null);
-  const { chat } = useWorkspaceSession();
+  const { chat, setDraft } = useWorkspaceSession();
   return (
     <div className="lab-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
@@ -151,7 +159,15 @@ export function AutomationsPage() {
             </span>{' '}
             Strategy chat <span className="ml-3 font-mono text-[10px] text-subtle">Automation</span>
           </h2>
-          <Button variant="outline" className="workspace-action" disabled={chat.running} onClick={() => chat.reset()}>
+          <Button
+            variant="outline"
+            className="workspace-action"
+            disabled={chat.running}
+            onClick={() => {
+              chat.reset();
+              setDraft('');
+            }}
+          >
             New thesis
           </Button>
         </div>
