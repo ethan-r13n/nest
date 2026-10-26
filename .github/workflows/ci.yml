@@ -27,6 +27,10 @@ jobs:
           node-version-file: .nvmrc
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: Verify preview chat
+        run: |
+          node design/nest/ui/scripts/verify-live-chat.js
+          python3 design/nest/ui/scripts/test_live_chat.py
       - run: pnpm exec biome ci .
       - run: pnpm --filter @nest/worker types:check
       - run: pnpm turbo run typecheck test build
