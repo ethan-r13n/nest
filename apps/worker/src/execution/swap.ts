@@ -1,4 +1,5 @@
-import { type SwapSymbol, swapAsset } from '@nest/adapters/stellar/assets';
+import { loadClassicAccount, spendableRaw } from '@nest/adapters/stellar/accounts';
+import { SWAP_SYMBOLS, type SwapSymbol, swapAsset } from '@nest/adapters/stellar/assets';
 import { InspectionError, inspectSwapTransaction } from '@nest/adapters/stellar/inspect';
 import { NETWORK_PASSPHRASES } from '@nest/adapters/stellar/networks';
 import { type VenueQuote, VenueRefusal } from '@nest/adapters/venue';
@@ -13,7 +14,7 @@ import {
 import { AppError } from '@nest/domain/errors';
 import type { StellarNetwork } from '@nest/domain/network';
 import { type Decision, evaluate, type Rule } from '@nest/policy/engine';
-import { type Transaction, TransactionBuilder } from '@stellar/stellar-sdk';
+import { StrKey, type Transaction, TransactionBuilder } from '@stellar/stellar-sdk';
 
 import type { SwapRpc } from './rpc.ts';
 import {
@@ -65,10 +66,43 @@ export async function createSwapIntent(
     collateral_asset: null,
     collateral_amount_raw: null,
     whole_position: 0,
+    limit_price: null,
+    tick_lower: null,
+    tick_upper: null,
     created_at_ms: deps.now(),
   };
   await insertIntent(deps, row);
   return swapIntentView(row);
+}
+
+/**
+ * What the wallet can spend of each swap asset now: XLM after its reserve, and null for an asset
+ * it has no trustline for. Context for the swap form; the build checks funds again before signing.
+ */
+export async function swapBalances(network: StellarNetwork, account: string, send: typeof fetch = fetch) {
+  if (!StrKey.isValidEd25519PublicKey(account)) throw new AppError('INVALID_REQUEST', 'Send a Stellar account (G…).');
+  let loaded: Awaited<ReturnType<typeof loadClassicAccount>>;
+  try {
+    loaded = await loadClassicAccount(network, account, send);
+  } catch (error) {
+    if (error instanceof VenueRefusal && error.code === 'ACCOUNT_NOT_FOUND') {
+      return { network, funded: false, balances: [] };
+    }
+    logFailure('balances', error);
+    throw new AppError('UNAVAILABLE', 'Balances could not be read right now. Try again shortly.');
+  }
+  return {
+    network,
+    funded: true,
+    balances: SWAP_SYMBOLS.map((symbol) => {
+      const asset = swapAsset(network, symbol);
+      const spendable = spendableRaw(loaded, asset.classic);
+      return {
+        symbol,
+        spendable: spendable === null ? null : formatRawAmount(spendable > 0n ? spendable : 0n, asset.ref.decimals),
+      };
+    }),
+  };
 }
 
 /** Gets a fresh quote for an intent from this network's swap venue. */

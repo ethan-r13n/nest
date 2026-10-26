@@ -5,6 +5,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowDownLeft, ArrowUpRight, Bell, CreditCard, Download } from 'lucide-react';
 import { useState } from 'react';
 
+import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { DraftNotice, EmptyState, PageHeader, UnavailableBadge } from '../components/workspace.tsx';
 import { useHealth } from '../lib/health.ts';
 import { PersonalEmptyTable, PersonalFact, PersonalField, PersonalNav, PersonalPanel } from './personal-shared.tsx';
@@ -15,39 +16,11 @@ const ALERT_FILTERS = ['All', 'Risk', 'Market', 'Workflow', 'Source'] as const;
 export function PortfolioPage() {
   const [allocationView, setAllocationView] = useState('mix');
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="portfolio-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Your portfolio"
+        title="Your Portfolio"
         kicker="Wallet"
         description="Balances and positions, with direct access to each market."
-        actions={
-          <div className="flex flex-wrap gap-2">
-            <Button
-              nativeButton={false}
-              variant="outline"
-              className="workspace-action"
-              render={<Link to="/portfolio/receive" />}
-            >
-              <ArrowDownLeft /> Receive
-            </Button>
-            <Button
-              nativeButton={false}
-              variant="outline"
-              className="workspace-action"
-              render={<Link to="/portfolio/send" />}
-            >
-              <ArrowUpRight /> Send
-            </Button>
-            <Button
-              nativeButton={false}
-              variant="outline"
-              className="workspace-action"
-              render={<Link to="/portfolio/spend" />}
-            >
-              <CreditCard /> Spend preview
-            </Button>
-          </div>
-        }
       />
       <PersonalNav area="portfolio" active="Overview" />
       <section className="workspace-panel" aria-labelledby="portfolio-composition-title">
@@ -122,6 +95,44 @@ export function PortfolioPage() {
           </Link>
         </div>
       </PersonalPanel>
+      <PersonalPanel title="Activity">
+        <PersonalEmptyTable
+          headers={['Action', 'Amount', 'State']}
+          title="No verified activity loaded"
+          description="Action history requires confirmed account records. No sample receipts appear as personal activity."
+        />
+        <Button nativeButton={false} variant="ghost" className="mt-3" render={<Link to="/portfolio/activity" />}>
+          All activity ↗
+        </Button>
+      </PersonalPanel>
+      <nav aria-label="Wallet actions">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            nativeButton={false}
+            variant="outline"
+            className="workspace-action"
+            render={<Link to="/portfolio/receive" />}
+          >
+            <ArrowDownLeft /> Receive
+          </Button>
+          <Button
+            nativeButton={false}
+            variant="outline"
+            className="workspace-action"
+            render={<Link to="/portfolio/send" />}
+          >
+            <ArrowUpRight /> Send
+          </Button>
+          <Button
+            nativeButton={false}
+            variant="outline"
+            className="workspace-action"
+            render={<Link to="/portfolio/spend" />}
+          >
+            <CreditCard /> Spend preview
+          </Button>
+        </div>
+      </nav>
     </div>
   );
 }
@@ -279,7 +290,7 @@ export function ActivityPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Activity"
+        title="Action history"
         kicker="Portfolio"
         description="Inspect actions, their actual outcomes and the plan revision you approved."
         actions={
@@ -431,63 +442,52 @@ export function ConnectionsPage() {
     <div className="flex flex-col gap-6">
       <PageHeader
         title="Connections"
-        kicker="Workspace"
-        description="Inspect account access, granted scopes and the data available to your rules. Connecting an account never activates a rule."
+        kicker="Workspace / Sources"
+        description="See granted access, health, entitlement and dependent rules."
+        actions={
+          <Button nativeButton={false} variant="outline" render={<Link to="/lab/memory" />}>
+            Strategy history
+          </Button>
+        }
       />
       <div className="grid gap-6 md:grid-cols-2">
-        {[
-          {
-            title: 'Wallet',
-            description: 'Prove ownership before saving private research, preferences or rule revisions.',
-            action: 'Connect wallet',
-          },
-          {
-            title: 'X',
-            description: 'Connect authorized social data after account access and read coverage can be verified.',
-            action: 'Connect X',
-          },
-          {
-            title: 'Research assistant',
-            description: 'Assistant sign-in and research access are not available in this build.',
-            action: 'Connect assistant',
-          },
-          {
-            title: 'Live market data',
-            description:
-              'Fresh prices, rates and capacity must be verified before a rule or financial preview can use them.',
-            action: 'Inspect access',
-          },
-        ].map((connection) => (
-          <PersonalPanel key={connection.title} title={connection.title} description={connection.description}>
-            <div className="flex flex-col gap-4">
-              <UnavailableBadge />
-              <dl>
-                <PersonalFact label="Granted access" value="Not loaded" />
-                <PersonalFact label="Last verified" value="Unavailable" />
-              </dl>
-              <Button variant="outline" disabled>
-                {connection.action}
-              </Button>
-            </div>
-          </PersonalPanel>
-        ))}
-      </div>
-      <PersonalPanel title="Research snapshots">
-        <div className="flex flex-wrap items-center gap-3">
-          <Badge variant="outline">Dated observations · not live</Badge>
-          <p className="text-sm text-muted-foreground">
-            The Research workspace can display the collected DefiLlama and RWA.xyz data. Those observations do not imply
-            a live connection or an active monitor.
-          </p>
-          <Button nativeButton={false} variant="outline" render={<Link to="/research" />}>
-            Open research
+        <PersonalPanel
+          title="X / social read access"
+          description="Official account authorization · no financial authority"
+        >
+          <div className="mb-5 flex items-center gap-3">
+            <ProtocolLogo name="X" />
+            <span className="text-sm font-medium">X</span>
+          </div>
+          <dl>
+            <PersonalFact label="Connection" value={<UnavailableBadge />} />
+            <PersonalFact label="Granted scopes" value="Not loaded" />
+            <PersonalFact label="Entitled datasets" value="Unavailable until access is configured" />
+            <PersonalFact label="Cadence / quota" value="Provider and application dependent" />
+            <PersonalFact label="Dependent rules" value="Not loaded" />
+          </dl>
+          <Button className="mt-5" disabled>
+            Connect X
           </Button>
-        </div>
-      </PersonalPanel>
+        </PersonalPanel>
+        <PersonalPanel title="Market & protocol sources">
+          <dl>
+            <PersonalFact label="Stellar RPC" value="Network-specific chain reads" />
+            <PersonalFact label="Venue quotes" value="Verified for each requested action" />
+            <PersonalFact label="DefiLlama" value="Dated public snapshot" />
+            <PersonalFact label="RWA.xyz" value="Dated public snapshot" />
+            <PersonalFact label="Raven" value="Connection status unavailable" />
+            <PersonalFact label="Secrets" value="Never exposed in client UI" />
+          </dl>
+          <Button nativeButton={false} variant="outline" className="mt-5" render={<Link to="/research" />}>
+            Inspect research
+          </Button>
+        </PersonalPanel>
+      </div>
       <PersonalPanel title="Dependent automations">
         <EmptyState
           title="No dependency history loaded"
-          description="When connections are available, this view will identify affected rules before access is disconnected or revoked."
+          description="Connection access and activation remain separate. Verified dependent rules appear here when account authorization is connected."
         />
       </PersonalPanel>
     </div>

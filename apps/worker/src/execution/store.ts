@@ -1,3 +1,14 @@
+import {
+  type Band,
+  buildRangeCall,
+  estimateRangeDeposit,
+  listRangePositions,
+  type RangeCall,
+  type RangePoolState,
+  type RangePosition,
+  readRangePool,
+  readRangePosition,
+} from '@nest/adapters/aquarius/range';
 import { lendingAsset } from '@nest/adapters/blend/markets';
 import type { HealthEstimate, MarketView, PoolPositions } from '@nest/adapters/blend/reader';
 import { buildBlendSubmit, type LendingRequest } from '@nest/adapters/blend/submit';
@@ -45,6 +56,19 @@ interface VaultVenue {
   build(input: VaultDeposit): Promise<string>;
 }
 
+/** Aquarius concentrated-pool reads and builds, injected so tests run without a network. */
+interface RangeVenue {
+  pool(poolId: string): Promise<RangePoolState>;
+  estimate(
+    poolId: string,
+    band: Pick<Band, 'tickLower' | 'tickUpper'>,
+    amounts: readonly [bigint, bigint],
+  ): Promise<{ used: [bigint, bigint]; liquidity: bigint }>;
+  position(poolId: string, account: string, band: Pick<Band, 'tickLower' | 'tickUpper'>): Promise<RangePosition | null>;
+  positions(poolId: string, account: string): Promise<{ tickLower: number; tickUpper: number }[]>;
+  build(input: { poolId: string; account: string; call: RangeCall }): Promise<string>;
+}
+
 export interface ExecutionDeps {
   db: D1Database;
   config: ExecutionConfig;
@@ -52,6 +76,7 @@ export interface ExecutionDeps {
   venue: SwapVenue | null;
   lending: LendingVenue | null;
   vaults: VaultVenue | null;
+  ranges: RangeVenue | null;
   buildTrustline: typeof buildTrustline;
   rpc: SwapRpc | null;
   now(): number;
@@ -76,6 +101,17 @@ export function executionDeps(env: Env): ExecutionDeps {
         }
       : null,
     vaults: vaultVenue(config, rpcUrl),
+    ranges: rpcUrl
+      ? {
+          pool: (poolId) => readRangePool(poolId, { network: config.network, rpcUrl }),
+          estimate: (poolId, band, amounts) =>
+            estimateRangeDeposit(poolId, band, amounts, { network: config.network, rpcUrl }),
+          position: (poolId, account, band) =>
+            readRangePosition(poolId, account, band, { network: config.network, rpcUrl }),
+          positions: (poolId, account) => listRangePositions(poolId, account, { network: config.network, rpcUrl }),
+          build: (input) => buildRangeCall({ network: config.network, rpcUrl, nowMs: Date.now(), ...input }),
+        }
+      : null,
     buildTrustline,
     rpc: rpcUrl ? createSwapRpc(rpcUrl) : null,
     now: Date.now,
@@ -132,6 +168,10 @@ export interface IntentRow {
   collateral_amount_raw: string | null;
   /** Repay and withdraw: 1 for the whole position. */
   whole_position: number;
+  /** Limit orders: USDC per XLM, and the band chosen (or, for a close, withdrawn). */
+  limit_price: string | null;
+  tick_lower: number | null;
+  tick_upper: number | null;
   created_at_ms: number;
 }
 
@@ -192,8 +232,8 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
   await deps.db
     .prepare(
       `INSERT INTO intents (id, network, kind, sell_asset, buy_asset, sell_amount_raw, source, market_id,
-         collateral_asset, collateral_amount_raw, whole_position, created_at_ms)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         collateral_asset, collateral_amount_raw, whole_position, limit_price, tick_lower, tick_upper, created_at_ms)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       row.id,
@@ -207,6 +247,9 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
       row.collateral_asset,
       row.collateral_amount_raw,
       row.whole_position,
+      row.limit_price,
+      row.tick_lower,
+      row.tick_upper,
       row.created_at_ms,
     )
     .run();

@@ -1,10 +1,4 @@
-import {
-  type ProtocolRow,
-  type RavenCatalog,
-  type ResearchSource,
-  safeResearchUrl,
-  type YieldPoolRow,
-} from '@nest/data/research';
+import { type ProtocolRow, type RavenCatalog, type ResearchSource, safeResearchUrl } from '@nest/data/research';
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nest/ui/components/card';
@@ -13,18 +7,21 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@nest/ui/components/table';
 import { useClipboard } from '@nest/ui/hooks/use-clipboard';
 import { Link } from '@tanstack/react-router';
-import { ArrowDownUp, ArrowRight, Bookmark, Building2, Download, ExternalLink, Search } from 'lucide-react';
+import { ArrowDownUp, Download, ExternalLink, Search } from 'lucide-react';
 import { type ReactNode, useId, useState } from 'react';
 
 import { AssetIcon } from '../components/asset-icon.tsx';
 import { LiveLendingRates } from '../components/live-lending.tsx';
+import { ProtocolResearchDetail } from '../components/protocol-detail.tsx';
+import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { ResearchDataTable } from '../components/research-data-table.tsx';
 import { ResearchHistoryChart } from '../components/research-history.tsx';
+import { SelectionCommand } from '../components/selection-command.tsx';
 import { DraftNotice, EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { formatPercentPoints, formatUsd, formatUtc, UNAVAILABLE } from '../lib/format.ts';
-import { findPool, findProtocol, ravenCatalog, research, rwaAssetRouteId } from '../lib/research.ts';
+import { findPool, findProtocol, projectEvidence, ravenCatalog, research, rwaAssetRouteId } from '../lib/research.ts';
 
-const PAGE_SIZE = 12;
+const PAGE_SIZE = 10;
 const RESEARCH_LINKS = [
   { to: '/research', label: 'DeFi' },
   { to: '/research/rwas', label: 'RWAs' },
@@ -92,14 +89,14 @@ const VENUES = [
     name: 'Sentora',
     group: 'Vaults',
     role: 'Curator and products',
-    slug: null,
+    slug: 'stellar-defi-hub',
     description: 'Evergreen and campaign products have distinct exit models.',
   },
 ] as const;
 
 export function ResearchPage() {
   return (
-    <div className="research-workspace min-w-0 space-y-5">
+    <SelectionCommand className="research-workspace min-w-0 space-y-5">
       <ResearchTabs />
       <ResearchHeader
         title="Stellar DeFi"
@@ -109,58 +106,8 @@ export function ResearchPage() {
       <ResearchHistoryChart />
       <ProtocolDirectory />
       <LiveLendingRates />
-      <section className="grid gap-5 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Yield observations</CardTitle>
-            <CardDescription>Base return and incentives stay separate.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <PoolTable rows={research.yieldPools.slice(0, 5)} compact />
-            <Button nativeButton={false} variant="link" render={<Link to="/research/markets" />}>
-              Explore all observed markets <ArrowRight />
-            </Button>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Stablecoin composition</CardTitle>
-            <CardDescription>Quantities retain their own peg units; they are not a single USD total.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Asset</TableHead>
-                  <TableHead>Peg</TableHead>
-                  <TableHead className="text-right">Reported circulation</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {research.stablecoins.slice(0, 6).map((asset) => (
-                  <TableRow key={asset.id}>
-                    <TableCell>
-                      <strong>{asset.symbol}</strong>
-                      <span className="block text-xs text-muted-foreground">{asset.name}</span>
-                    </TableCell>
-                    <TableCell>{asset.peg.replace('pegged', '')}</TableCell>
-                    <TableCell className="text-right font-mono tabular-nums">
-                      {Object.entries(asset.circulatingByPeg)
-                        .map(
-                          ([peg, value]) =>
-                            `${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(value)} ${peg.replace('pegged', '')}`,
-                        )
-                        .join(' · ') || UNAVAILABLE}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </section>
       <ResearchCaveats />
-    </div>
+    </SelectionCommand>
   );
 }
 
@@ -168,7 +115,7 @@ function NetworkSummary() {
   const metrics = [
     { label: 'DeFi TVL', value: research.chain.defiTvlUsd },
     {
-      label: 'Stablecoin value · all pegs',
+      label: 'Stablecoins · all pegs',
       value: Object.values(research.chain.stablecoinUsdByPeg).reduce((sum, value) => sum + value, 0),
     },
     { label: 'DEX volume · 24h', value: research.chain.dexVolume24hUsd },
@@ -177,7 +124,7 @@ function NetworkSummary() {
   return (
     <section className="research-network-summary workspace-panel" aria-label="Stellar network summary">
       <div className="flex items-center gap-3 p-5">
-        <AssetIcon symbol="XLM" />
+        <AssetIcon symbol="XLM" className="size-[30px]" />
         <strong className="font-serif text-xl font-semibold">Stellar</strong>
       </div>
       {metrics.map((metric) => (
@@ -216,10 +163,10 @@ export function RwaPage() {
     <div className="research-workspace min-w-0 space-y-5">
       <ResearchTabs />
       <ResearchHeader
-        title="Real-world assets"
-        description="Explore Stellar's tokenized assets with their source classification, holders and issuer context."
+        title="Stellar Real-World Assets"
+        description="Explore tokenized assets, issuers, and capital on Stellar. Keep distributed and represented value distinct."
       />
-      <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="research-rwa-metrics">
         {research.rwaMetrics.map((metric) => (
           <StatCard
             key={metric.key}
@@ -233,29 +180,14 @@ export function RwaPage() {
           />
         ))}
       </div>
-      <section className="grid min-w-0 gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+      <section className="research-rwa-overview">
+        <RwaComposition />
         <RwaLeague />
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">A current composition, not a price chart</CardTitle>
-            <CardDescription>Historical series were not part of this collection.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <EmptyState
-              title="RWA history unavailable"
-              description="The collected network and asset figures are available below. No historical curve is inferred from a single observation."
-            />
-            <p className="text-xs leading-relaxed text-subtle">
-              The provider's RWA count and the asset-table count use different universes. Stablecoins and multiple token
-              representations appear in the table. RWA values can overlap with DeFi TVL.
-            </p>
-          </CardContent>
-        </Card>
       </section>
       <section className="space-y-4" aria-labelledby="rwa-assets">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 id="rwa-assets" className="text-2xl font-semibold">
-            Asset screener <span className="font-mono text-sm text-subtle">{research.rwaAssets.length} records</span>
+            Assets on Stellar <span className="font-mono text-sm text-subtle">{research.rwaAssets.length} records</span>
           </h2>
           <Button
             variant="outline"
@@ -292,40 +224,45 @@ export function RwaPage() {
             Export observations
           </Button>
         </div>
-        <div className="flex flex-wrap items-end gap-3">
-          <SearchField
-            label="Search assets"
-            value={query}
-            onChange={(value) => {
-              setQuery(value);
-            }}
-          />
-          <Filter
-            label="Asset class"
-            value={category}
-            options={[{ value: 'all', label: 'All classes' }, ...categories.map((value) => ({ value, label: value }))]}
-            onChange={(value) => {
-              setCategory(value);
-            }}
-          />
-          <Filter
-            label="Tokenization"
-            value={type}
-            options={[
-              { value: 'all', label: 'All types' },
-              { value: 'Distributed', label: 'Distributed' },
-              { value: 'Represented', label: 'Represented' },
-            ]}
-            onChange={(value) => {
-              setType(value);
-            }}
-          />
-          <Button variant="outline" onClick={() => setDescending(!descending)}>
-            <ArrowDownUp />
-            {descending ? 'Value order' : 'Name order'}
-          </Button>
-        </div>
         <ResearchDataTable
+          controls={
+            <div className="research-filters flex min-w-0 flex-1 flex-wrap items-end gap-2">
+              <SearchField
+                label="Search assets"
+                value={query}
+                onChange={(value) => {
+                  setQuery(value);
+                }}
+              />
+              <Filter
+                label="Asset class"
+                value={category}
+                options={[
+                  { value: 'all', label: 'All classes' },
+                  ...categories.map((value) => ({ value, label: value })),
+                ]}
+                onChange={(value) => {
+                  setCategory(value);
+                }}
+              />
+              <Filter
+                label="Tokenization"
+                value={type}
+                options={[
+                  { value: 'all', label: 'All types' },
+                  { value: 'Distributed', label: 'Distributed' },
+                  { value: 'Represented', label: 'Represented' },
+                ]}
+                onChange={(value) => {
+                  setType(value);
+                }}
+              />
+              <Button variant="outline" onClick={() => setDescending(!descending)}>
+                <ArrowDownUp />
+                {descending ? 'Value order' : 'Name order'}
+              </Button>
+            </div>
+          }
           tableKey="rwa-assets"
           label="RWA assets"
           rows={rows}
@@ -333,24 +270,37 @@ export function RwaPage() {
           columns={[
             {
               id: 'identity',
-              label: 'Asset',
+              label: 'Asset / ticker',
               cell: (asset) => (
-                <>
-                  <Link
-                    to="/assets/$assetId"
-                    params={{ assetId: rwaAssetRouteId(asset.id) }}
-                    className="font-medium hover:text-primary"
-                  >
-                    {asset.name}
-                  </Link>
-                  <span className="block font-mono text-xs text-subtle">{asset.ticker}</span>
-                </>
+                <div className="flex items-center gap-2.5">
+                  <ProtocolLogo name={asset.name} />
+                  <div className="min-w-0">
+                    <a
+                      href={safeResearchUrl(asset.assetUrl ?? '') ?? 'https://app.rwa.xyz/networks/stellar'}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-medium hover:text-primary"
+                    >
+                      {asset.name}
+                    </a>
+                    <span className="block font-mono text-xs text-subtle">{asset.ticker}</span>
+                  </div>
+                </div>
               ),
             },
-            { id: 'platform', label: 'Platform', cell: (asset) => asset.platform },
+            {
+              id: 'platform',
+              label: 'Platform',
+              cell: (asset) => (
+                <div className="flex items-center gap-2.5">
+                  <ProtocolLogo name={asset.platform} />
+                  <span>{asset.platform}</span>
+                </div>
+              ),
+            },
             {
               id: 'class',
-              label: 'Class / type',
+              label: 'Asset class',
               cell: (asset) => (
                 <>
                   {asset.assetClass}
@@ -365,7 +315,13 @@ export function RwaPage() {
               cell: (asset) => asset.totalValueDisplay ?? UNAVAILABLE,
             },
             { id: 'holders', label: 'Holders', numeric: true, cell: (asset) => asset.holdersDisplay ?? UNAVAILABLE },
-            { id: 'domicile', label: 'Domicile', cell: (asset) => asset.domicile ?? UNAVAILABLE },
+            { id: 'access', label: 'Access', cell: (asset) => asset.regulatoryFramework ?? UNAVAILABLE },
+            { id: 'type', label: 'Type', cell: (asset) => asset.tokenizationType },
+            {
+              id: 'source',
+              label: 'Identity',
+              cell: (asset) => <WebsiteLink url={asset.contractExplorerUrl ?? ''}>Source identity</WebsiteLink>,
+            },
           ]}
         />
       </section>
@@ -375,67 +331,14 @@ export function RwaPage() {
 }
 
 export function MarketsPage() {
-  const [query, setQuery] = useState('');
-  const [project, setProject] = useState('all');
-  const rows = research.yieldPools.filter(
-    (pool) =>
-      `${pool.project} ${pool.symbol} ${pool.meta ?? ''}`.toLowerCase().includes(query.toLowerCase()) &&
-      (project === 'all' || pool.project === project),
-  );
   return (
-    <div className="research-workspace min-w-0 space-y-5">
+    <div className="research-workspace mcp-workspace min-w-0">
       <ResearchTabs />
       <ResearchHeader
         title="MCP Contents"
-        description="Explore the venue map and inspect Raven’s published research operations and skills."
+        description="Explore the ecosystem, then inspect the tools and sources behind the research."
       />
       <VenueMap />
-      <div className="grid gap-3 sm:grid-cols-3">
-        <StatCard
-          label="Observed pools"
-          value={String(research.yieldPools.length)}
-          detail="DefiLlama · dated pool coverage"
-        />
-        <StatCard
-          label="Published operations"
-          value={String(ravenCatalog.counts.operation)}
-          detail="Catalog metadata; runtime not verified"
-        />
-        <StatCard
-          label="Published skills"
-          value={String(ravenCatalog.counts.skill)}
-          detail={`${ravenCatalog.counts['skill-section']} section identifiers in the manifest`}
-        />
-      </div>
-      <section className="space-y-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <h2 className="text-2xl font-semibold">Observed markets</h2>
-          <Badge variant="outline">Research only</Badge>
-        </div>
-        <div className="flex flex-wrap items-end gap-3">
-          <SearchField label="Search markets" value={query} onChange={setQuery} />
-          <Filter
-            label="Project"
-            value={project}
-            onChange={setProject}
-            options={[
-              { value: 'all', label: 'All projects' },
-              ...[...new Set(research.yieldPools.map((pool) => pool.project))].map((value) => ({
-                value,
-                label: value,
-              })),
-            ]}
-          />
-        </div>
-        <Card className="min-w-0 py-0">
-          <PoolTable rows={rows} />
-          {!rows.length ? <EmptyState title="No matching markets" description="Try another asset or project." /> : null}
-        </Card>
-        <p className="text-xs leading-relaxed text-subtle">
-          Pool names and token identifiers are source observations, not verified asset or deployment identities. Live
-          capacity, eligibility, fees, native risk and withdrawal terms remain unavailable.
-        </p>
-      </section>
       <CatalogDirectory />
     </div>
   );
@@ -447,154 +350,220 @@ export function VenuesPage() {
 
 function VenueMap() {
   const [query, setQuery] = useState('');
-  const [group, setGroup] = useState('all');
-  const venues = VENUES.filter(
-    (venue) =>
-      `${venue.name} ${venue.role} ${venue.description}`.toLowerCase().includes(query.toLowerCase()) &&
-      (group === 'all' || venue.group === group),
+  const [scope, setScope] = useState('all');
+  const [selectedId, setSelectedId] = useState('soroswap');
+  const [expanded, setExpanded] = useState<string[]>([]);
+  const groups = ['Spot', 'Lending', 'Vaults', 'Infrastructure'];
+  const targets = VENUES.map((venue) => ({ ...venue, target: venue.id !== 'templar' }));
+  const projectIds = new Set(
+    targets.flatMap((node) => {
+      const record = node.slug ? projectEvidence.records[node.slug] : undefined;
+      return record ? [record.projectSlug] : [];
+    }),
   );
+  const other = research.protocols
+    .filter((protocol) => {
+      const record = projectEvidence.records[protocol.slug];
+      if (protocol.category === 'CEX' || !record || projectIds.has(record.projectSlug)) return false;
+      projectIds.add(record.projectSlug);
+      return true;
+    })
+    .map((protocol) => ({
+      id: protocol.slug,
+      name: projectEvidence.records[protocol.slug]?.name ?? protocol.name,
+      role: protocol.category,
+      slug: protocol.slug,
+      description: projectEvidence.records[protocol.slug]?.description ?? '',
+      group: /Dexs/.test(protocol.category)
+        ? 'Spot'
+        : /Lending/.test(protocol.category)
+          ? 'Lending'
+          : /Farm|Yield|Allocator|Curator|Basis/.test(protocol.category)
+            ? 'Vaults'
+            : 'Infrastructure',
+      target: false,
+    }));
+  const nodes = [...targets, ...other];
+  const visible = nodes.filter(
+    (node) =>
+      `${node.name} ${node.role}`.toLowerCase().includes(query.toLowerCase()) &&
+      (scope === 'all' || (scope === 'targets' ? node.target : !node.target)),
+  );
+  const selected = visible.find((node) => node.id === selectedId) ?? visible[0];
+  const protocol = selected?.slug ? findProtocol(selected.slug) : undefined;
+  const record = selected?.slug ? projectEvidence.records[selected.slug] : undefined;
   return (
-    <div className="min-w-0 space-y-7">
-      <h2 className="font-serif text-2xl font-semibold">The venue map</h2>
-      <div className="flex flex-wrap items-end gap-3">
-        <SearchField label="Find a venue" value={query} onChange={setQuery} />
+    <section className="workspace-panel venue-map">
+      <div className="venue-map-heading">
+        <div>
+          <p className="font-mono text-[10px] text-primary">01 / ECOSYSTEM COVERAGE</p>
+          <h2>
+            Venue map{' '}
+            <span className="ml-3 font-mono text-[11px] font-normal text-subtle">
+              {visible.length} of {nodes.length} projects
+            </span>
+          </h2>
+        </div>
+        <span className="text-[10px] text-subtle">● Integration target · ○ Research only</span>
+      </div>
+      <div className="venue-map-toolbar">
+        <Input
+          aria-label="Search projects"
+          placeholder="Search project, asset or capability…"
+          value={query}
+          onChange={(event) => setQuery(event.currentTarget.value)}
+        />
         <Filter
-          label="Category"
-          value={group}
-          onChange={setGroup}
+          label="Project scope"
+          value={scope}
+          onChange={setScope}
           options={[
-            { value: 'all', label: 'All categories' },
-            ...['Spot', 'Lending', 'Vaults'].map((value) => ({ value, label: value })),
+            { value: 'all', label: 'All projects' },
+            { value: 'targets', label: 'Integration targets' },
+            { value: 'research', label: 'Research only' },
           ]}
         />
+        <Button
+          variant="ghost"
+          onClick={() => {
+            setQuery('');
+            setScope('all');
+          }}
+        >
+          Reset
+        </Button>
       </div>
-      <div className="grid items-start gap-5 lg:grid-cols-3">
-        {['Spot', 'Lending', 'Vaults']
-          .filter((item) => group === 'all' || group === item)
-          .map((category) => (
-            <section key={category} className="min-w-0 space-y-3">
-              <h2 className="text-xl font-semibold">{category}</h2>
-              {venues
-                .filter((venue) => venue.group === category)
-                .map((venue) => {
-                  const protocol = venue.slug ? findProtocol(venue.slug) : undefined;
-                  return (
-                    <Card key={venue.id}>
-                      <CardHeader>
-                        <div className="flex items-start justify-between gap-3">
-                          <ProtocolIdentity protocol={protocol} name={venue.name} />
-                          <Badge variant="outline">{venue.role}</Badge>
-                        </div>
-                      </CardHeader>
-                      <CardContent className="space-y-4">
-                        <p className="text-sm text-muted-foreground">{venue.description}</p>
-                        <dl className="flex justify-between gap-3 text-xs">
-                          <dt className="text-subtle">Observed Stellar TVL</dt>
-                          <dd className="font-mono tabular-nums">{formatUsd(protocol?.stellarTvlUsd ?? null)}</dd>
-                        </dl>
-                        <Button
-                          nativeButton={false}
-                          className="w-full"
-                          variant="outline"
-                          render={<Link to="/venues/$venueId" params={{ venueId: venue.id }} />}
-                        >
-                          Inspect venue <ArrowRight />
-                        </Button>
-                        <p className="text-xs text-subtle">Live availability has not been verified.</p>
-                      </CardContent>
-                    </Card>
-                  );
-                })}
-              {!venues.some((venue) => venue.group === category) ? (
-                <Card>
-                  <EmptyState title="No matching venues" description="Try another search or category." />
-                </Card>
+      <div className="venue-map-layout">
+        <div className="venue-network">
+          <div className="venue-map-trunk">
+            <span className="font-mono text-primary">Raven / Scout</span>
+            <span>→</span>
+            <span>Stellar ecosystem</span>
+            <span className="ml-auto text-subtle">Project relationships & evidence</span>
+          </div>
+          <div className="venue-map-groups">
+            {groups.map((group) => {
+              const matches = visible.filter((node) => node.group === group);
+              return (
+                <section key={group} className="venue-map-group">
+                  <h3>
+                    {group === 'Vaults' ? 'Vaults & Yield' : group}
+                    <span>{matches.length}</span>
+                  </h3>
+                  {matches.slice(0, expanded.includes(group) ? undefined : 4).map((node) => (
+                    <Button
+                      key={node.id}
+                      variant="outline"
+                      className="venue-map-node"
+                      aria-pressed={node.id === selected?.id}
+                      onClick={() => setSelectedId(node.id)}
+                    >
+                      <ProtocolLogo name={node.name} fallback={node.slug ? findProtocol(node.slug)?.logo : undefined} />
+                      <span>
+                        <strong>{node.name}</strong>
+                        <small>{node.role}</small>
+                      </span>
+                      <span
+                        className={node.target ? 'text-primary' : 'text-subtle'}
+                        title={node.target ? 'Integration target' : 'Research only'}
+                      >
+                        {node.target ? '●' : '○'}
+                      </span>
+                    </Button>
+                  ))}
+                  {matches.length > 4 ? (
+                    <Button
+                      variant="ghost"
+                      className="venue-map-more"
+                      onClick={() =>
+                        setExpanded(
+                          expanded.includes(group) ? expanded.filter((value) => value !== group) : [...expanded, group],
+                        )
+                      }
+                    >
+                      {expanded.includes(group) ? 'Show fewer' : `+ ${matches.length - 4} more projects ↓`}
+                    </Button>
+                  ) : null}
+                </section>
+              );
+            })}
+          </div>
+        </div>
+        <aside className="venue-map-inspector" aria-label="Selected project">
+          {selected ? (
+            <>
+              <ProtocolIdentity protocol={protocol} name={selected.name} />
+              <p className="mt-3 text-[10px] text-subtle">
+                {selected.target ? '● Integration target' : '○ Research coverage'} · {selected.role}
+              </p>
+              <p className="my-3 text-xs leading-7 text-muted-foreground">
+                {record?.description.split(/(?<=\.)\s/)[0] || selected.description}
+              </p>
+              {record ? (
+                <div className="venue-evidence-counts">
+                  <span>
+                    <strong>{record.auditReferences}</strong>audit refs
+                  </span>
+                  <span>
+                    <strong>{record.repositories}</strong>repos
+                  </span>
+                  <span>
+                    <strong>{record.contractReferences}</strong>contracts
+                  </span>
+                </div>
+              ) : (
+                <p className="text-xs text-subtle">Project evidence unavailable.</p>
+              )}
+              {record?.status ? (
+                <p className="text-xs text-muted-foreground">
+                  Status: {record.status}
+                  {record.statusAsOf ? ` · as of ${formatUtc(record.statusAsOf)}` : ''}
+                </p>
               ) : null}
-            </section>
-          ))}
+              {record?.statusCaveat ? <p className="mt-2 text-xs text-subtle">{record.statusCaveat}</p> : null}
+              {record?.scfAwarded ? (
+                <p className="my-3 text-xs">
+                  SCF funding ·{' '}
+                  {record.scfTotalAwardedUsd === null ? 'Amount undisclosed' : formatUsd(record.scfTotalAwardedUsd)}
+                  {record.scfAsOf ? (
+                    <small className="mt-1 block text-subtle">Project record · {evidenceDate(record.scfAsOf)}</small>
+                  ) : null}
+                </p>
+              ) : null}
+              <details className="my-4 border-y py-3 text-xs">
+                <summary className="cursor-pointer">Readable context</summary>
+                <p className="mt-3 leading-7 text-muted-foreground">
+                  Published protocol records, dated observations and Raven documentation. Live execution availability is
+                  checked separately for each action.
+                </p>
+              </details>
+              {protocol ? (
+                <Button
+                  nativeButton={false}
+                  className="w-full"
+                  render={<Link to="/protocols/$protocolId" params={{ protocolId: protocol.slug }} />}
+                >
+                  Open protocol research ↗
+                </Button>
+              ) : (
+                <p className="text-xs text-subtle">No matched protocol record.</p>
+              )}
+            </>
+          ) : (
+            <EmptyState title="No matching projects" description="Try another search or project filter." />
+          )}
+        </aside>
       </div>
-      <DraftNotice>
-        Platforms and curators can refer to the same underlying vault. Their TVL and positions are not additive. Raven
-        supplies research context; it does not grant execution authority.
-      </DraftNotice>
-    </div>
+      <p className="border-t px-5 py-3 text-[10px] leading-relaxed text-subtle">
+        Scout source snapshot · {formatUtc(projectEvidence.capturedAt)}. Versions are grouped by their captured project
+        identity. Research coverage and execution readiness are separate facts.
+      </p>
+    </section>
   );
 }
 
 export function ProtocolDetailPage({ protocolId }: { protocolId: string }) {
-  const protocol = findProtocol(protocolId);
-  if (!protocol) return <MissingRecord title="Protocol not found" />;
-  const pools = research.yieldPools.filter((pool) => pool.project === protocol.slug);
-  return (
-    <div className="space-y-7">
-      <Breadcrumb to="protocols" />
-      <PageHeader
-        title={protocol.name}
-        description="Inspect the reported protocol scope and market observations before considering an action."
-        kicker="Research / Protocol"
-        actions={<Badge variant="outline">Dated snapshot</Badge>}
-      />
-      <SnapshotNotice />
-      <div className="grid gap-3 sm:grid-cols-3">
-        <StatCard
-          label="Stellar TVL"
-          value={formatUsd(protocol.stellarTvlUsd)}
-          detail="Chain-specific reported value"
-        />
-        <StatCard
-          label="Protocol change · 1d"
-          value={formatPercentPoints(protocol.change.day)}
-          detail="All-chain protocol scope"
-        />
-        <StatCard
-          label="Protocol change · 7d"
-          value={formatPercentPoints(protocol.change.week)}
-          detail="All-chain protocol scope"
-        />
-      </div>
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Reported markets</CardTitle>
-            <CardDescription>Matched by the provider's project identifier.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {pools.length ? (
-              <PoolTable rows={pools} />
-            ) : (
-              <EmptyState
-                title="No pool observations in this dataset"
-                description="Missing coverage does not establish that a protocol has no active markets."
-              />
-            )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Protocol facts</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <FactList
-              facts={[
-                ['Category', protocol.category],
-                ['Provider identifier', protocol.slug],
-                ['Observed at', formatUtc(protocol.observedAt)],
-                ['Execution status', 'Not verified'],
-                ['Audit / admin / oracle coverage', 'Unavailable in this dataset'],
-              ]}
-            />
-            <WebsiteLink url={protocol.url}>Visit protocol website</WebsiteLink>
-          </CardContent>
-        </Card>
-      </div>
-      <Card>
-        <EmptyState
-          title="Protocol-specific history unavailable"
-          description="Chain-level history cannot stand in for this protocol's own historical series."
-        />
-      </Card>
-    </div>
-  );
+  return <ProtocolResearchDetail protocolId={protocolId} />;
 }
 
 export function RwaDetailPage({ assetId }: { assetId: string }) {
@@ -685,168 +654,13 @@ export function RwaDetailPage({ assetId }: { assetId: string }) {
 }
 
 export function VenueDetailPage({ venueId }: { venueId: string }) {
-  const venue = VENUES.find((row) => row.id === venueId);
-  if (!venue) return <MissingRecord title="Venue not found" />;
-  const protocol = venue.slug ? findProtocol(venue.slug) : undefined;
-  const pools = venue.slug ? research.yieldPools.filter((pool) => pool.project === venue.slug) : [];
-  return (
-    <div className="space-y-7">
-      <Breadcrumb to="venues" />
-      <PageHeader
-        title={venue.name}
-        description={venue.description}
-        kicker={`Venue map / ${venue.role}`}
-        actions={<Badge variant="outline">Live availability unverified</Badge>}
-      />
-      <SnapshotNotice />
-      <div className="grid gap-3 sm:grid-cols-3">
-        <StatCard label="Role" value={venue.role} detail="Design integration record" />
-        <StatCard
-          label="Observed Stellar TVL"
-          value={formatUsd(protocol?.stellarTvlUsd ?? null)}
-          detail={protocol ? 'DefiLlama snapshot' : 'No matched protocol observation'}
-        />
-        <StatCard
-          label="Current action availability"
-          value={UNAVAILABLE}
-          detail="Deployment and capability checks are pending"
-        />
-      </div>
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Market observations</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {pools.length ? (
-              <PoolTable rows={pools} />
-            ) : (
-              <EmptyState
-                title="No matched pool data"
-                description="Venue-native rates, assets and withdrawal terms are not available from the current connection."
-              />
-            )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Prepare with the full lifecycle in view</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <FactList
-              facts={[
-                ['Read coverage', 'Published research observations only'],
-                ['Quotes / native safety', 'Not connected'],
-                ['Build / simulate / approve', 'Unavailable'],
-                ['Withdrawal timing', 'Must be disclosed before a deposit'],
-                [
-                  'Settlement',
-                  venue.id === 'templar'
-                    ? 'Multi-step; funding confirmation is not borrow completion'
-                    : 'Verify the selected product lifecycle',
-                ],
-              ]}
-            />
-            <div className="flex flex-wrap gap-2">
-              <Button
-                nativeButton={false}
-                variant="outline"
-                render={
-                  <Link to={venue.group === 'Spot' ? '/trade' : venue.group === 'Lending' ? '/credit' : '/vaults'} />
-                }
-              >
-                Open manual form
-              </Button>
-              {protocol ? (
-                <Button
-                  nativeButton={false}
-                  variant="ghost"
-                  render={<Link to="/protocols/$protocolId" params={{ protocolId: protocol.slug }} />}
-                >
-                  Protocol observation
-                </Button>
-              ) : null}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <DraftNotice>
-        A curator, platform and access provider may describe one product. Verify canonical identity before joining
-        records, comparing execution or aggregating exposure.
-      </DraftNotice>
-    </div>
-  );
+  const venue = VENUES.find((item) => item.id === venueId);
+  return venue ? <ProtocolResearchDetail protocolId={venue.slug} /> : <MissingRecord title="Venue not found" />;
 }
 
 export function MarketDetailPage({ marketId }: { marketId: string }) {
   const pool = findPool(marketId);
-  if (!pool) return <MissingRecord title="Market not found" />;
-  return (
-    <div className="min-w-0 space-y-7">
-      <Breadcrumb to="markets" />
-      <PageHeader
-        title={pool.symbol}
-        description={pool.meta ?? 'A dated yield-market observation.'}
-        kicker={`Market / ${pool.project}`}
-        actions={<Badge variant="outline">Research only</Badge>}
-      />
-      <SnapshotNotice />
-      <div className="grid gap-3 sm:grid-cols-4">
-        <StatCard label="Observed TVL" value={formatUsd(pool.tvlUsd)} />
-        <StatCard label="Base APY" value={percent(pool.baseApyPct)} />
-        <StatCard label="Reward APY" value={percent(pool.rewardApyPct)} />
-        <StatCard label="Total APY" value={percent(pool.totalApyPct)} />
-      </div>
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Terms and identity</CardTitle>
-            <CardDescription>
-              Rates are dated observations, not an executable comparison or guaranteed net yield.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FactList
-              facts={[
-                ['Observed at', formatUtc(pool.observedAt)],
-                ['Source', 'DefiLlama yield pools'],
-                ['Base borrow APY', percent(pool.baseBorrowApyPct)],
-                ['Reward borrow APY', percent(pool.rewardBorrowApyPct)],
-                ['Reported available borrow', formatUsd(pool.availableBorrowUsd)],
-                ['Native risk interpretation', 'Unavailable; no common health factor inferred'],
-                ['Withdrawals / lockup / queue', 'Not collected'],
-              ]}
-            />
-            <details className="mt-5 rounded-lg border p-3">
-              <summary className="cursor-pointer text-sm">Source token identifiers · not execution identities</summary>
-              <ul className="mt-3 space-y-2 break-all font-mono text-xs text-muted-foreground">
-                {pool.underlyingTokens.map((token) => (
-                  <li key={token}>{token}</li>
-                ))}
-              </ul>
-            </details>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Compare at your size</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <DraftNotice>
-              Fresh rates, available liquidity, fees and withdrawal terms are not connected. This observation cannot
-              produce a transaction.
-            </DraftNotice>
-            <Button nativeButton={false} className="w-full" variant="outline" render={<Link to="/credit/supply" />}>
-              Open supply form
-            </Button>
-            <Button className="w-full" disabled>
-              Review action unavailable
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  return pool ? <ProtocolResearchDetail protocolId={pool.project} /> : <MissingRecord title="Market not found" />;
 }
 
 export function SavedResearchPage() {
@@ -857,6 +671,17 @@ export function SavedResearchPage() {
         description="Keep protocols, assets, filters and theses together once wallet-verified saving is available."
         kicker="Research / Saved"
       />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Input
+          disabled
+          className="min-h-11 w-full sm:max-w-sm"
+          aria-label="Search bookmarks"
+          placeholder="Search bookmarks…"
+        />
+        <Button disabled variant="outline">
+          Export bookmarks
+        </Button>
+      </div>
       <Card>
         <EmptyState
           title="Your research library is not connected"
@@ -875,21 +700,32 @@ function ResearchHeader({ title, description }: { title: string; description: st
   return (
     <header className="workspace-page-header flex flex-wrap items-center justify-between gap-4">
       <div className="space-y-2">
-        <p className="font-mono text-[10px] tracking-widest text-subtle uppercase">Research / Stellar network</p>
+        <p className="font-mono text-[10px] tracking-widest text-subtle uppercase">
+          {title === 'MCP Contents' ? 'Research / Sources & coverage' : 'Research / Stellar network'}
+        </p>
         <h1>{title}</h1>
         <p className="text-[13px] leading-6 text-muted-foreground">{description}</p>
       </div>
-      <div className="space-y-2 text-[10px] text-subtle">
-        <Badge variant="outline">Mainnet snapshot · not live</Badge>
-        <div>
-          <SourceStamp source={research.sources.defillama} />
-        </div>
-        {title === 'Real-world assets' ? (
-          <div>
-            <SourceStamp source={research.sources.rwa} />
-          </div>
-        ) : null}
-      </div>
+      {title === 'MCP Contents' ? (
+        <a href="#published-catalog" className="workspace-action inline-flex items-center border">
+          Browse {ravenCatalog.entries.length} catalog entries ↓
+        </a>
+      ) : (
+        <a
+          className="research-source-stamp"
+          href={title === 'Stellar Real-World Assets' ? research.sources.rwa.url : research.sources.defillama.url}
+          target="_blank"
+          rel="noreferrer"
+        >
+          ◷ {title === 'Stellar Real-World Assets' ? 'RWA.xyz' : 'DefiLlama'} ·{' '}
+          {formatUtc(
+            title === 'Stellar Real-World Assets'
+              ? research.sources.rwa.capturedAt
+              : research.sources.defillama.capturedAt,
+          )}{' '}
+          snapshot
+        </a>
+      )}
     </header>
   );
 }
@@ -931,7 +767,7 @@ function ResearchTabs() {
         className="workspace-action"
         render={<Link to="/research/saved" />}
       >
-        <Bookmark /> Saved ↗
+        Bookmarks ↗
       </Button>
     </nav>
   );
@@ -940,28 +776,35 @@ function ResearchTabs() {
 function ProtocolDirectory() {
   const [query, setQuery] = useState('');
   const [category, setCategory] = useState('all');
-  const [sort, setSort] = useState('tvl');
-  const categories = [...new Set(research.protocols.map((protocol) => protocol.category))].sort();
-  const rows = research.protocols
+  const [sort, setSort] = useState<'tvl' | 'day' | 'week'>('tvl');
+  const [descending, setDescending] = useState(true);
+  const protocols = research.protocols.filter(
+    (protocol) => protocol.category !== 'CEX' && protocol.stellarTvlUsd !== null,
+  );
+  const categories = [...new Set(protocols.map((protocol) => protocol.category))].sort();
+  const rows = protocols
     .filter(
       (protocol) =>
         `${protocol.name} ${protocol.category}`.toLowerCase().includes(query.toLowerCase()) &&
         (category === 'all' || category === protocol.category),
     )
-    .sort((a, b) => (sort === 'name' ? a.name.localeCompare(b.name) : byStellarTvl(a, b)));
+    .sort((a, b) => {
+      const left = sort === 'tvl' ? a.stellarTvlUsd : a.change[sort];
+      const right = sort === 'tvl' ? b.stellarTvlUsd : b.change[sort];
+      return descending ? (right ?? -Infinity) - (left ?? -Infinity) : (left ?? Infinity) - (right ?? Infinity);
+    });
+  function sortBy(value: 'tvl' | 'day' | 'week') {
+    setDescending(value === sort ? !descending : true);
+    setSort(value);
+  }
   return (
-    <section className="min-w-0 space-y-4" aria-labelledby="protocols">
+    <section className="research-protocols min-w-0" aria-labelledby="protocols">
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 id="protocols" className="text-2xl font-semibold">
-            Protocols <span className="ml-2 font-mono text-[11px] font-normal text-subtle">{rows.length} results</span>
-          </h2>
-          <p className="mt-1 text-xs text-subtle">
-            {research.protocols.length} Stellar-associated records, including exchanges and infrastructure.
-          </p>
-        </div>
+        <h2 id="protocols" className="text-[22px] font-semibold">
+          Protocols <span className="ml-2 font-mono text-[11px] font-normal text-subtle">{rows.length} Results</span>
+        </h2>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() =>
             exportCsv(
@@ -971,47 +814,29 @@ function ProtocolDirectory() {
             )
           }
         >
-          <Download />
-          Export observations
+          Export snapshot CSV ↗
         </Button>
       </div>
       <ResearchDataTable
         controls={
-          <div className="research-filters flex min-w-0 flex-1 flex-wrap items-end gap-2 [&_label]:sr-only">
-            <SearchField
-              label="Search protocols"
-              value={query}
-              onChange={(value) => {
-                setQuery(value);
-              }}
-            />
+          <div className="research-filters flex min-w-0 flex-1 flex-wrap items-end gap-2">
+            <SearchField label="Search protocols" value={query} onChange={setQuery} />
             <Filter
-              label="Category"
+              label="Protocol category"
               value={category}
-              onChange={(value) => {
-                setCategory(value);
-              }}
+              onChange={setCategory}
               options={[
-                { value: 'all', label: 'All categories' },
+                { value: 'all', label: 'All DeFi categories' },
                 ...categories.map((value) => ({ value, label: value })),
-              ]}
-            />
-            <Filter
-              label="Order"
-              value={sort}
-              onChange={setSort}
-              options={[
-                { value: 'tvl', label: 'Stellar TVL' },
-                { value: 'name', label: 'Name' },
               ]}
             />
             <Button
               variant="ghost"
-              className="workspace-action"
               onClick={() => {
                 setQuery('');
                 setCategory('all');
                 setSort('tvl');
+                setDescending(true);
               }}
             >
               Reset filters
@@ -1023,9 +848,11 @@ function ProtocolDirectory() {
         rows={rows}
         getRowId={(protocol) => protocol.id}
         columns={[
+          { id: 'rank', label: '#', required: true, cell: (protocol) => rows.indexOf(protocol) + 1 },
           {
             id: 'identity',
             label: 'Protocol',
+            required: true,
             cell: (protocol) => (
               <Link to="/protocols/$protocolId" params={{ protocolId: protocol.slug }} className="hover:text-primary">
                 <ProtocolIdentity protocol={protocol} name={protocol.name} />
@@ -1033,83 +860,135 @@ function ProtocolDirectory() {
             ),
           },
           { id: 'category', label: 'Category', cell: (protocol) => protocol.category },
-          { id: 'tvl', label: 'Stellar TVL', numeric: true, cell: (protocol) => formatUsd(protocol.stellarTvlUsd) },
+          {
+            id: 'tvl',
+            label: `Stellar TVL ${sort === 'tvl' ? (descending ? '↓' : '↑') : ''}`,
+            numeric: true,
+            onSort: () => sortBy('tvl'),
+            cell: (protocol) => formatUsd(protocol.stellarTvlUsd),
+          },
           {
             id: 'day',
-            label: 'Protocol 1d change',
+            label: '1d Δ*',
             numeric: true,
-            cell: (protocol) => formatPercentPoints(protocol.change.day),
+            onSort: () => sortBy('day'),
+            cell: (protocol) => (
+              <span
+                className={
+                  protocol.change.day === null ? '' : protocol.change.day < 0 ? 'text-destructive' : 'text-success'
+                }
+              >
+                {formatPercentPoints(protocol.change.day)}
+              </span>
+            ),
           },
           {
             id: 'week',
-            label: 'Protocol 7d change',
+            label: '7d Δ*',
             numeric: true,
-            cell: (protocol) => formatPercentPoints(protocol.change.week),
+            onSort: () => sortBy('week'),
+            cell: (protocol) => (
+              <span
+                className={
+                  protocol.change.week === null ? '' : protocol.change.week < 0 ? 'text-destructive' : 'text-success'
+                }
+              >
+                {formatPercentPoints(protocol.change.week)}
+              </span>
+            ),
           },
           {
-            id: 'inspect',
-            label: 'Inspect',
-            cell: (protocol) => (
-              <Button
-                nativeButton={false}
-                variant="ghost"
-                size="icon"
-                aria-label={`Inspect ${protocol.name}`}
-                render={<Link to="/protocols/$protocolId" params={{ protocolId: protocol.slug }} />}
-              >
-                <ArrowRight />
-              </Button>
-            ),
+            id: 'all-chains',
+            label: 'All-chain TVL',
+            numeric: true,
+            cell: (protocol) => formatUsd(protocol.allChainsTvlUsd ?? null),
           },
         ]}
       />
-      <p className="text-xs text-subtle">
-        TVL is Stellar-specific when reported. Changes are protocol-wide across all chains; they are not Stellar-only
-        performance.
+      <p className="mt-2 text-xs leading-relaxed text-subtle">
+        * Percentage changes are protocol-wide across all chains, as supplied by DefiLlama. Stellar TVL uses the Stellar
+        component. CEX rows are excluded from this DeFi ranking. Do not sum overlapping rows into a new chain total.
       </p>
     </section>
   );
 }
 
-function PoolTable({ rows, compact = false }: { rows: YieldPoolRow[]; compact?: boolean }) {
+function RwaComposition() {
+  const [view, setView] = useState('composition');
+  const [includeStablecoins, setIncludeStablecoins] = useState(true);
+  const table = research.rwaLeagueTables.find(
+    (item) => item.assetType === 'distributed' && item.groupBy === 'assetClass',
+  );
+  const rows = table?.rows.filter((row) => includeStablecoins || !/stablecoin/i.test(row.name ?? '')) ?? [];
   return (
-    <ResearchDataTable
-      tableKey="venue-markets"
-      label="Markets"
-      rows={rows}
-      getRowId={(pool) => pool.id}
-      compact={compact}
-      columns={[
-        {
-          id: 'identity',
-          label: 'Market',
-          cell: (pool) => (
-            <>
-              <Link to="/markets/$marketId" params={{ marketId: pool.id }} className="font-medium hover:text-primary">
-                {pool.symbol}
-              </Link>
-              <span className="block text-xs text-subtle">
-                {pool.project}
-                {pool.meta ? ` · ${pool.meta}` : ''}
-              </span>
-            </>
-          ),
-        },
-        { id: 'tvl', label: 'TVL', numeric: true, cell: (pool) => formatUsd(pool.tvlUsd) },
-        ...(!compact
-          ? [
-              { id: 'base', label: 'Base APY', numeric: true, cell: (pool: YieldPoolRow) => percent(pool.baseApyPct) },
-              {
-                id: 'reward',
-                label: 'Reward APY',
-                numeric: true,
-                cell: (pool: YieldPoolRow) => percent(pool.rewardApyPct),
-              },
-            ]
-          : []),
-        { id: 'total', label: 'Total APY', numeric: true, cell: (pool) => percent(pool.totalApyPct) },
-      ]}
-    />
+    <Card>
+      <CardHeader>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <CardTitle>Stellar Metrics</CardTitle>
+          <span className="text-[10px] text-subtle">As of {formatUtc(research.sources.rwa.capturedAt)}</span>
+        </div>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex gap-1">
+            {['composition', 'history'].map((value) => (
+              <Button
+                key={value}
+                variant={view === value ? 'secondary' : 'ghost'}
+                size="sm"
+                aria-pressed={view === value}
+                onClick={() => setView(value)}
+              >
+                {value === 'composition' ? 'Composition' : 'History'}
+              </Button>
+            ))}
+          </div>
+          <label className="flex items-center gap-2 text-xs text-muted-foreground">
+            <input
+              type="checkbox"
+              checked={includeStablecoins}
+              onChange={(event) => setIncludeStablecoins(event.currentTarget.checked)}
+            />
+            Include stablecoins
+          </label>
+        </div>
+      </CardHeader>
+      <CardContent>
+        {view === 'history' ? (
+          <EmptyState
+            title="Historical series unavailable"
+            description="No history was included in this collection. Composition uses the captured asset-class shares."
+          />
+        ) : (
+          <>
+            <div className="research-composition-bars">
+              {rows.map((row, index) => {
+                const value =
+                  row.shareDisplay && /[0-9]/.test(row.shareDisplay)
+                    ? Number(row.shareDisplay.replace(/[^0-9.]/g, ''))
+                    : NaN;
+                const share = Number.isFinite(value) && value >= 0 && value <= 100 ? value : null;
+                return (
+                  <div key={row.name ?? index}>
+                    <div className="mb-2 flex justify-between gap-3 text-xs">
+                      <span>{row.name ?? UNAVAILABLE}</span>
+                      <span className="font-mono text-subtle">{row.shareDisplay ?? UNAVAILABLE}</span>
+                    </div>
+                    <div className="h-1.5 overflow-hidden rounded-full bg-secondary">
+                      {share !== null ? (
+                        <div className={`rwa-share rwa-share-${index % 4}`} style={{ width: `${share}%` }} />
+                      ) : null}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+            <p className="mt-16 text-[10px] leading-6 text-subtle">
+              Distributed asset-class shares from collected source rows. Rounded provider precision is retained; this is
+              a snapshot, not historical performance.
+            </p>
+          </>
+        )}
+      </CardContent>
+    </Card>
   );
 }
 
@@ -1118,40 +997,44 @@ function RwaLeague() {
   const [group, setGroup] = useState('platform');
   const table = research.rwaLeagueTables.find((row) => row.assetType === type && row.groupBy === group);
   return (
-    <Card className="min-w-0">
+    <Card>
       <CardHeader>
-        <CardTitle className="text-2xl">RWA league table</CardTitle>
-        <CardDescription>Provider-selected universe and visible top rows; rounded display values.</CardDescription>
-        <div className="mt-3 flex flex-wrap gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <CardTitle>RWA League Table</CardTitle>
           <Filter
-            label="Asset type"
-            value={type}
-            onChange={setType}
-            options={[
-              { value: 'distributed', label: 'Distributed' },
-              { value: 'represented', label: 'Represented' },
-              { value: 'all', label: 'All types' },
-            ]}
-          />
-          <Filter
-            label="Group by"
+            label="League grouping"
             value={group}
             onChange={setGroup}
             options={[
-              { value: 'platform', label: 'Platform' },
-              { value: 'assetClass', label: 'Asset class' },
-              { value: 'manager', label: 'Manager' },
+              { value: 'platform', label: 'By platform' },
+              { value: 'assetClass', label: 'By asset class' },
+              { value: 'manager', label: 'By manager' },
             ]}
           />
         </div>
+        <fieldset className="mt-3 flex gap-1" aria-label="RWA league asset type">
+          {['distributed', 'represented', 'all'].map((value) => (
+            <Button
+              key={value}
+              size="sm"
+              variant={type === value ? 'secondary' : 'ghost'}
+              aria-pressed={type === value}
+              onClick={() => setType(value)}
+            >
+              {value === 'distributed' ? 'Distributed' : value === 'represented' ? 'Represented' : 'All'}
+            </Button>
+          ))}
+        </fieldset>
       </CardHeader>
       <CardContent>
         {table?.rows.length ? (
-          <Table>
+          <Table containerClassName="max-h-[280px] overflow-auto">
             <TableHeader>
               <TableRow>
-                <TableHead>Name</TableHead>
-                <TableHead className="text-right">Count</TableHead>
+                <TableHead>#</TableHead>
+                <TableHead>
+                  {group === 'platform' ? 'Platform' : group === 'assetClass' ? 'Asset class' : 'Manager'}
+                </TableHead>
                 <TableHead className="text-right">Value</TableHead>
                 <TableHead className="text-right">30d</TableHead>
                 <TableHead className="text-right">Share</TableHead>
@@ -1159,18 +1042,26 @@ function RwaLeague() {
             </TableHeader>
             <TableBody>
               {table.rows.map((row, index) => (
-                <TableRow key={row.name ?? String(index)}>
+                <TableRow key={row.name ?? index}>
+                  <TableCell className="text-xs text-subtle">{index + 1}</TableCell>
                   <TableCell>
-                    {row.url ? (
-                      <WebsiteLink url={row.url}>{row.name ?? UNAVAILABLE}</WebsiteLink>
-                    ) : (
-                      (row.name ?? UNAVAILABLE)
-                    )}
+                    <div className="flex items-center gap-3">
+                      <ProtocolLogo name={row.name ?? ''} />
+                      <div>
+                        {row.url ? (
+                          <WebsiteLink url={row.url}>{row.name ?? UNAVAILABLE}</WebsiteLink>
+                        ) : (
+                          (row.name ?? UNAVAILABLE)
+                        )}
+                        <small className="mt-1 block text-[10px] text-subtle">
+                          {row.countDisplay ?? 'Count unavailable'} {row.countDisplay ? 'RWAs' : ''}
+                        </small>
+                      </div>
+                    </div>
                   </TableCell>
-                  <TableCell className="text-right font-mono">{row.countDisplay ?? '—'}</TableCell>
-                  <TableCell className="text-right font-mono">{row.valueDisplay ?? '—'}</TableCell>
-                  <TableCell className="text-right font-mono">{row.changeDisplay ?? '—'}</TableCell>
-                  <TableCell className="text-right font-mono">{row.shareDisplay ?? '—'}</TableCell>
+                  <TableCell className="text-right font-mono text-xs">{row.valueDisplay ?? '—'}</TableCell>
+                  <TableCell className="text-right font-mono text-xs">{row.changeDisplay ?? '—'}</TableCell>
+                  <TableCell className="text-right font-mono text-xs">{row.shareDisplay ?? '—'}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -1181,6 +1072,9 @@ function RwaLeague() {
             description="The source displayed no represented-manager rows. This is missing coverage, not zero assets."
           />
         )}
+        <p className="mt-3 text-[10px] text-subtle">
+          {table?.rows.length ?? 0} captured rows · {type} view · scroll within the table · rounded source values.
+        </p>
       </CardContent>
     </Card>
   );
@@ -1191,6 +1085,7 @@ function CatalogDirectory() {
   const [kind, setKind] = useState('all');
   const [family, setFamily] = useState('all');
   const [page, setPage] = useState(0);
+  const families = [...new Set(ravenCatalog.entries.map((entry) => entry.family))];
   const rows = ravenCatalog.entries.filter(
     (entry) =>
       `${entry.id} ${entry.summary} ${entry.sections.join(' ')}`.toLowerCase().includes(query.toLowerCase()) &&
@@ -1199,17 +1094,17 @@ function CatalogDirectory() {
   );
   const safePage = Math.min(page, Math.max(0, Math.ceil(rows.length / PAGE_SIZE) - 1));
   return (
-    <section className="min-w-0 space-y-4">
-      <div className="flex flex-wrap items-start justify-between gap-3">
+    <section id="published-catalog" className="catalog-directory min-w-0 space-y-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-2xl font-semibold">Published read catalog</h2>
-          <p className="mt-1 max-w-3xl text-xs leading-relaxed text-subtle">
-            Raven manifest generated {formatUtc(ravenCatalog.generatedAt)}, captured {ravenCatalog.capturedAt}. Runtime
-            access, current coverage and permissions are not verified.
-          </p>
+          <p className="mb-2 font-mono text-[10px] text-primary">02 / PUBLISHED RAVEN CATALOG</p>
+          <h2 className="text-[23px] font-semibold">
+            Tools & Playbooks{' '}
+            <span className="ml-3 font-mono text-[11px] font-normal text-subtle">{rows.length} Entries</span>
+          </h2>
         </div>
         <Button
-          variant="outline"
+          variant="ghost"
           size="sm"
           onClick={() =>
             exportCsv(
@@ -1227,105 +1122,166 @@ function CatalogDirectory() {
             )
           }
         >
-          <Download />
-          Export catalog
+          Export snapshot CSV ↗
         </Button>
       </div>
-      <div className="flex flex-wrap items-end gap-3">
-        <SearchField
-          label="Search catalog"
-          value={query}
-          onChange={(value) => {
-            setQuery(value);
-            setPage(0);
-          }}
-        />
-        <Filter
-          label="Kind"
-          value={kind}
-          onChange={(value) => {
-            setKind(value);
-            setPage(0);
-          }}
-          options={[
-            { value: 'all', label: 'All entries' },
-            { value: 'operation', label: 'Operations' },
-            { value: 'skill', label: 'Skills' },
-          ]}
-        />
-        <Filter
-          label="Source family"
-          value={family}
-          onChange={(value) => {
-            setFamily(value);
-            setPage(0);
-          }}
-          options={[
-            { value: 'all', label: 'All families' },
-            ...[...new Set(ravenCatalog.entries.map((entry) => entry.family))].map((value) => ({
-              value,
-              label: value,
-            })),
-          ]}
-        />
+      <div className="catalog-family-filters">
+        {families.map((value) => (
+          <Button
+            key={value}
+            variant="outline"
+            aria-pressed={family === value}
+            onClick={() => {
+              setFamily(family === value ? 'all' : value);
+              setPage(0);
+            }}
+          >
+            <span className="text-xl text-primary">{value === 'skills' ? '◇' : value === 'scout' ? '⌘' : '▤'}</span>
+            <span>
+              <strong>{familyName(value)}</strong>
+              <small>
+                {value === 'skills'
+                  ? 'Build & security playbooks'
+                  : value === 'scout'
+                    ? 'Projects & evidence'
+                    : value === 'stellarDocs'
+                      ? 'Protocol documentation'
+                      : 'Research & content'}
+              </small>
+            </span>
+            <b>{ravenCatalog.entries.filter((entry) => entry.family === value).length}</b>
+          </Button>
+        ))}
       </div>
-      <div className="grid min-w-0 gap-3 md:grid-cols-2 xl:grid-cols-3">
+      <div className="research-table-toolbar">
+        <div className="research-filters flex min-w-0 flex-1 flex-wrap items-end gap-2">
+          <SearchField
+            label="Search tools and playbooks"
+            value={query}
+            onChange={(value) => {
+              setQuery(value);
+              setPage(0);
+            }}
+          />
+          <Filter
+            label="Entry kind"
+            value={kind}
+            onChange={(value) => {
+              setKind(value);
+              setPage(0);
+            }}
+            options={[
+              { value: 'all', label: 'All entries' },
+              { value: 'operation', label: 'Operations' },
+              { value: 'skill', label: 'Skills' },
+            ]}
+          />
+          <Button
+            variant="ghost"
+            onClick={() => {
+              setQuery('');
+              setFamily('all');
+              setKind('all');
+              setPage(0);
+            }}
+          >
+            Reset
+          </Button>
+        </div>
+      </div>
+      <div className="workspace-panel catalog-entries">
         {rows.slice(safePage * PAGE_SIZE, (safePage + 1) * PAGE_SIZE).map((entry) => (
           <CatalogEntry key={entry.id} entry={entry} />
         ))}
+        {!rows.length ? (
+          <EmptyState title="No matching entries" description="Try a broader search or clear the filters." />
+        ) : null}
       </div>
-      {!rows.length ? (
-        <Card>
-          <EmptyState title="No matching catalog entries" description="Try another source family, kind or term." />
-        </Card>
-      ) : null}
       <Pagination page={safePage} total={rows.length} onChange={setPage} />
+      <details className="border-t pt-3 text-xs text-muted-foreground">
+        <summary className="cursor-pointer">Source provenance · {formatUtc(ravenCatalog.generatedAt)}</summary>
+        <p className="mt-3 leading-7">
+          Raven manifest captured {ravenCatalog.capturedAt}. Published metadata does not establish current runtime
+          availability or grant execution permissions.
+        </p>
+      </details>
     </section>
   );
 }
 
 function CatalogEntry({ entry }: { entry: RavenCatalog['entries'][number] }) {
   return (
-    <Card size="sm" className="min-w-0">
-      <CardHeader>
-        <div className="flex gap-2">
-          <Badge variant="outline">{entry.kind}</Badge>
-          <span className="text-xs text-subtle">{entry.family}</span>
-        </div>
-        <CardTitle className="break-all font-mono text-sm">{entry.id}</CardTitle>
-        <CardDescription className="text-xs leading-relaxed">{entry.summary}</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-3 text-xs">
-        <p className="text-subtle">Source fetched {formatUtc(entry.sourceFetchedAt)}</p>
-        {entry.parameters.length ? (
-          <p className="break-words">
-            <span className="text-subtle">Parameters: </span>
-            {entry.parameters.join(', ')}
-          </p>
-        ) : null}
-        {entry.sections.length ? (
-          <details>
-            <summary className="cursor-pointer text-muted-foreground">
-              {entry.sections.length} section identifiers
-            </summary>
-            <ul className="mt-2 max-h-40 space-y-1 overflow-auto break-all font-mono text-subtle">
-              {entry.sections.map((section) => (
-                <li key={section}>{section}</li>
-              ))}
-            </ul>
-          </details>
-        ) : null}
-        <WebsiteLink url={entry.source}>Published source</WebsiteLink>
-      </CardContent>
-    </Card>
+    <details className="catalog-entry">
+      <summary>
+        <span className="text-xl text-subtle" aria-hidden="true">
+          ◇
+        </span>
+        <span className="min-w-0 flex-1">
+          <strong className="block break-words font-mono text-xs font-medium">{entry.id}</strong>
+          <span className="mt-1 block text-[11px] leading-6 text-muted-foreground">{entry.summary}</span>
+        </span>
+        <Badge variant="outline">{entry.kind}</Badge>
+        <span className="text-lg text-primary" aria-hidden="true">
+          +
+        </span>
+      </summary>
+      <div className="catalog-entry-contract">
+        <dl className="grid gap-4 sm:grid-cols-2">
+          <div>
+            <dt>Source family</dt>
+            <dd>{familyName(entry.family)}</dd>
+          </div>
+          <div>
+            <dt>Parameters</dt>
+            <dd>{entry.parameters.join(' · ') || 'See published schema'}</dd>
+          </div>
+          <div>
+            <dt>Source captured</dt>
+            <dd>{formatUtc(entry.sourceFetchedAt)}</dd>
+          </div>
+          {entry.sections.length ? (
+            <div>
+              <dt>Sections · {entry.sections.length}</dt>
+              <dd>{entry.sections.join(' · ')}</dd>
+            </div>
+          ) : null}
+        </dl>
+        <WebsiteLink url={entry.source}>Upstream source</WebsiteLink>
+        <p className="mt-3 text-[10px] text-subtle">
+          Published metadata. Runtime availability and response content have not been verified.
+        </p>
+      </div>
+    </details>
   );
+}
+
+function evidenceDate(value: string) {
+  return value.length === 10
+    ? new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' }).format(
+        new Date(`${value}T00:00:00Z`),
+      )
+    : formatUtc(value);
+}
+
+function familyName(value: string) {
+  return value === 'stellarDocs'
+    ? 'Stellar Docs'
+    : value === 'lumenloop'
+      ? 'Lumenloop'
+      : value === 'scout'
+        ? 'Scout'
+        : value === 'skills'
+          ? 'Skills'
+          : value;
 }
 
 function SearchField({ label, value, onChange }: { label: string; value: string; onChange: (value: string) => void }) {
   const id = useId();
   return (
-    <label htmlFor={id} className="min-w-48 flex-1 space-y-2">
-      <span className="text-xs text-muted-foreground">{label}</span>
+    <div className="research-search-field min-w-48 flex-1 space-y-2">
+      <label htmlFor={id} className="text-xs text-muted-foreground">
+        {label}
+      </label>
       <span className="relative block">
         <Search className="absolute top-1/2 left-3 size-4 -translate-y-1/2 text-subtle" aria-hidden="true" />
         <Input
@@ -1336,7 +1292,7 @@ function SearchField({ label, value, onChange }: { label: string; value: string;
           className="pl-9"
         />
       </span>
-    </label>
+    </div>
   );
 }
 
@@ -1400,24 +1356,21 @@ function Pagination({ page, total, onChange }: { page: number; total: number; on
 }
 
 function ProtocolIdentity({ protocol, name }: { protocol?: ProtocolRow | undefined; name: string }) {
-  const logo = protocol ? safeResearchUrl(protocol.logo) : null;
   return (
-    <div className="flex min-w-0 items-center gap-3">
-      <span className="relative flex size-8 shrink-0 items-center justify-center overflow-hidden rounded-lg border bg-secondary">
-        <Building2 className="size-4 text-subtle" aria-hidden="true" />
-        {logo ? (
-          <img
-            src={logo}
-            alt=""
-            className="absolute inset-0 size-full object-contain"
-            loading="lazy"
-            onError={(event) => {
-              event.currentTarget.hidden = true;
-            }}
-          />
+    <div className="protocol-identity flex min-w-0 items-center gap-2.5">
+      <ProtocolLogo name={name} fallback={protocol?.logo} />
+      <span className="min-w-0">
+        <strong className="font-medium">{name}</strong>
+        {protocol ? (
+          <small>
+            {protocol.chains?.length
+              ? `${protocol.chains.length} ${protocol.chains.length === 1 ? 'chain' : 'chains'}`
+              : 'Source observation'}
+            {protocol.symbol && protocol.symbol !== '-' ? ` · ${protocol.symbol}` : ''}{' '}
+            <span className="ml-2 text-primary">↗</span>
+          </small>
         ) : null}
       </span>
-      <span className="min-w-0 font-medium">{name}</span>
     </div>
   );
 }
@@ -1499,14 +1452,6 @@ function ResearchCaveats() {
       </ul>
     </details>
   );
-}
-
-function byStellarTvl(left: ProtocolRow, right: ProtocolRow) {
-  return (right.stellarTvlUsd ?? -1) - (left.stellarTvlUsd ?? -1);
-}
-
-function percent(value: number | null) {
-  return value === null ? UNAVAILABLE : `${value.toFixed(2)}%`;
 }
 
 function displayNumber(value: string | null) {

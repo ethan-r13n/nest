@@ -19,13 +19,14 @@ import {
   approvePlan,
   compareIntent,
   createPlan as createSwapPlan,
+  listActivity,
   preparePlan,
   readPlan,
   submitPlan,
 } from '../src/execution/lifecycle.ts';
 import type { SwapRpc } from '../src/execution/rpc.ts';
 import type { ExecutionDeps } from '../src/execution/store.ts';
-import { createSwapIntent } from '../src/execution/swap.ts';
+import { createSwapIntent, swapBalances } from '../src/execution/swap.ts';
 
 const ORIGIN = 'https://nest.test';
 const START_MS = 1_800_000_000_000;
@@ -94,6 +95,7 @@ function createFixture(overrides: Partial<ExecutionConfig> = {}): ExecutionFixtu
     },
     lending: null,
     vaults: null,
+    ranges: null,
     buildTrustline: async () => {
       throw new Error('not used');
     },
@@ -248,6 +250,29 @@ describe('swap lifecycle', () => {
     ]);
   });
 
+  it('lists a submitted swap as wallet activity, and nothing the wallet never signed', async () => {
+    const h = createFixture();
+    await preparedPlan(h);
+    expect((await listActivity(h.deps, h.user.publicKey())).items).toEqual([]);
+
+    const { plan, signedXdr } = await signedPlan(h);
+    await submitPlan(h.deps, plan.id, signedXdr);
+    expect((await listActivity(h.deps, h.user.publicKey())).items).toEqual([
+      expect.objectContaining({
+        id: plan.id,
+        kind: 'swap',
+        status: 'confirmed',
+        title: 'Swap USDC → XLM',
+        venue: 'Soroswap',
+        sent: [{ symbol: 'USDC', amount: '100' }],
+        received: [{ symbol: 'XLM', amount: '260' }],
+        txHash: plan.prepared?.hash,
+      }),
+    ]);
+    expect((await listActivity(h.deps, Keypair.random().publicKey())).items).toEqual([]);
+    await expect(listActivity(h.deps, 'G')).rejects.toThrow('Send a Stellar account');
+  });
+
   it('blocks a built transaction that accepts less than the reviewed minimum', async () => {
     const h = createFixture();
     h.build.minOut = MIN_OUT - 1n;
@@ -376,6 +401,53 @@ describe('swap lifecycle', () => {
   });
 });
 
+describe('swap balances', () => {
+  const usdc = swapAsset('mainnet', 'USDC').classic;
+  const horizon =
+    (status: number, body: unknown): typeof fetch =>
+    async () =>
+      Response.json(body, { status });
+
+  it('reports what the wallet can spend of each swap asset after its XLM reserve', async () => {
+    const account = Keypair.random().publicKey();
+    const native = { asset_type: 'native', balance: '10.0000000' };
+    const dollars = {
+      asset_type: 'credit_alphanum4',
+      asset_code: 'USDC',
+      asset_issuer: usdc.getIssuer(),
+      balance: '5.5000000',
+    };
+    expect(
+      await swapBalances(
+        'mainnet',
+        account,
+        horizon(200, { sequence: '1', subentry_count: 1, balances: [native, dollars] }),
+      ),
+    ).toEqual({
+      network: 'mainnet',
+      funded: true,
+      balances: [
+        { symbol: 'XLM', spendable: '8.5' },
+        { symbol: 'USDC', spendable: '5.5' },
+      ],
+    });
+    // No USDC trustline, and XLM already below the reserve its 20 entries need.
+    expect(
+      (await swapBalances('mainnet', account, horizon(200, { sequence: '1', subentry_count: 20, balances: [native] })))
+        .balances,
+    ).toEqual([
+      { symbol: 'XLM', spendable: '0' },
+      { symbol: 'USDC', spendable: null },
+    ]);
+    expect(await swapBalances('mainnet', account, horizon(404, {}))).toEqual({
+      network: 'mainnet',
+      funded: false,
+      balances: [],
+    });
+    await expect(swapBalances('mainnet', account, horizon(500, {}))).rejects.toThrow('Balances could not be read');
+  });
+});
+
 describe('execution routes', () => {
   it('validates requests and reports a missing Soroswap key as unavailable', async () => {
     const created = await exports.default.fetch(`${ORIGIN}/api/intents`, {
@@ -402,5 +474,9 @@ describe('execution routes', () => {
       body: JSON.stringify({ kind: 'swap', sellAsset: 'BTC', buyAsset: 'XLM', sellAmount: '1' }),
     });
     expect(badAsset.status).toBe(400);
+
+    for (const path of ['/api/plans?account=G', '/api/balances', '/api/markets/price-history?interval=2h']) {
+      expect((await exports.default.fetch(`${ORIGIN}${path}`)).status).toBe(400);
+    }
   });
 });

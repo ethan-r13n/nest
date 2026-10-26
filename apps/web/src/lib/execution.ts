@@ -209,8 +209,110 @@ export interface VaultPlan extends PlanBase {
   } | null;
 }
 
-/** On Testnet, swaps and Blend list different USDC issuers, so the trustline depends on the feature. */
-export type TrustlineUse = 'swap' | 'lending';
+/** On Testnet, swaps, Blend and Aquarius each list a different USDC, so the trustline depends on the feature. */
+export type TrustlineUse = 'swap' | 'lending' | 'aquarius';
+
+type LimitKind = 'limit_order' | 'limit_close';
+
+export interface LimitIntent {
+  id: string;
+  network: 'mainnet' | 'testnet';
+  kind: LimitKind;
+  side: 'buy' | 'sell' | null;
+  deposit: AssetAmount | null;
+  limitPrice: number | null;
+  poolId: string | null;
+  band: { tickLower: number; tickUpper: number } | null;
+}
+
+export interface LimitOffer {
+  id: string;
+  kind: LimitKind;
+  pool: { id: string; name: string; feeBps: number };
+  /** USDC per XLM in the pool now. */
+  currentPrice: number;
+  band: { tickLower: number; tickUpper: number; prices: [number, number] };
+  order: {
+    side: 'buy' | 'sell';
+    limitPrice: number;
+    deposit: AssetAmount;
+    /** Held once the price has crossed the whole band; earned swap fees come on top. */
+    onFill: AssetAmount;
+    fillStartsAt: number;
+    fillCompletesAt: number;
+  } | null;
+  /** A close: what withdrawing returns now, earned fees included, and the fees within it. */
+  position: { returns: [AssetAmount, AssetAmount]; fees: [AssetAmount, AssetAmount] } | null;
+  nestFeeBps: number;
+  expiresAt: string;
+}
+
+export interface LimitPlan extends PlanBase {
+  kind: LimitKind;
+  offer: LimitOffer;
+  prepared: {
+    xdr: string;
+    hash: string;
+    networkPassphrase: string;
+    fee: AssetAmount;
+    method: string;
+    validUntil: string | null;
+  } | null;
+}
+
+export type LimitPool =
+  | {
+      available: true;
+      poolId: string;
+      name: string;
+      usdcPerXlm: number;
+      feeBps: number;
+      tickSpacing: number;
+      depositsEnabled: boolean;
+      usdcIssuer: string;
+      observedAt: string;
+    }
+  | { available: false; reason: string };
+
+export interface LimitOrderRow {
+  poolId: string;
+  tickLower: number;
+  tickUpper: number;
+  prices: [number, number];
+  side: 'buy' | 'sell' | null;
+  limitPrice: number | null;
+  status: 'waiting' | 'filling' | 'filled' | 'in_range' | 'out_of_range';
+  returns: [AssetAmount, AssetAmount];
+  fees: [AssetAmount, AssetAmount];
+}
+
+export type LimitOrders =
+  | { available: true; currentPrice: number; orders: LimitOrderRow[] }
+  | { available: false; reason: string; orders: LimitOrderRow[] };
+
+export type SwapSymbol = 'XLM' | 'USDC';
+
+/** What the wallet can spend now: XLM after its reserve; null without a trustline. */
+export interface SwapBalances {
+  network: 'mainnet' | 'testnet';
+  funded: boolean;
+  balances: { symbol: SwapSymbol; spendable: string | null }[];
+}
+
+/** A plan of the wallet's that reached the network: what left it and what came back. */
+export interface ActivityItem {
+  id: string;
+  kind: string;
+  status: PlanStatus;
+  createdAt: string;
+  txHash: string | null;
+  explorerUrl: string | null;
+  errorCode: string | null;
+  title: string;
+  venue: string;
+  sent: AssetAmount[];
+  received: AssetAmount[];
+}
 
 interface PreparedTrustline {
   asset: { code: string; issuer: string };
@@ -247,9 +349,14 @@ export async function call<T>(
 }
 
 export const execution = {
-  createSwap: (input: { sellAsset: 'XLM' | 'USDC'; buyAsset: 'XLM' | 'USDC'; sellAmount: string }) =>
-    call<Intent>('/api/intents', { method: 'POST', body: { kind: 'swap', ...input } }),
   intent: (id: string) => call<Intent>(`/api/intents/${id}`),
+  createSwap: (input: { sellAsset: SwapSymbol; buyAsset: SwapSymbol; sellAmount: string }) =>
+    call<Intent>('/api/intents', { method: 'POST', body: { kind: 'swap', ...input } }),
+  balances: (account: string) => call<SwapBalances>(`/api/balances?account=${encodeURIComponent(account)}`),
+  activity: (account: string) =>
+    call<{ network: 'mainnet' | 'testnet'; items: ActivityItem[] }>(
+      `/api/plans?account=${encodeURIComponent(account)}`,
+    ),
   lendingIntent: (id: string) => call<LendingIntent>(`/api/intents/${id}`),
   createLending: (input: { kind: LendingKind; asset: 'USDC' | 'XLM'; amount: string; poolId?: string }) =>
     call<LendingIntent>('/api/intents', { method: 'POST', body: input }),
@@ -268,6 +375,18 @@ export const execution = {
       `/api/intents/${intentId}/compare`,
       { method: 'POST' },
     ),
+  limitIntent: (id: string) => call<LimitIntent>(`/api/intents/${id}`),
+  createLimitOrder: (input: { side: 'buy' | 'sell'; amountXlm: string; priceUsdc: string }) =>
+    call<LimitIntent>('/api/intents', { method: 'POST', body: { kind: 'limit_order', ...input } }),
+  createLimitClose: (input: { poolId: string; tickLower: number; tickUpper: number }) =>
+    call<LimitIntent>('/api/intents', { method: 'POST', body: { kind: 'limit_close', ...input } }),
+  compareLimit: (intentId: string, accountId?: string) =>
+    call<{ quotes: LimitOffer[]; selectedQuoteId: string }>(`/api/intents/${intentId}/compare`, {
+      method: 'POST',
+      ...(accountId ? { body: { accountId } } : {}),
+    }),
+  limitPool: () => call<LimitPool>('/api/limit-orders/pool'),
+  limitOrders: (account: string) => call<LimitOrders>(`/api/limit-orders?account=${encodeURIComponent(account)}`),
   trustline: (input: { accountId: string; use: TrustlineUse }) =>
     call<PreparedTrustline>('/api/trustlines', { method: 'POST', body: input }),
   submitTrustline: (input: { accountId: string; use: TrustlineUse; signedXdr: string }) =>
@@ -363,6 +482,9 @@ export function planProblem(plan: PlanBase): string | null {
       return 'Your account needs a trustline for this asset first.';
     case 'INSUFFICIENT_BALANCE':
       return 'Your balance does not cover this, including the network reserve and fee.';
+    case 'PRICE_MOVED':
+      return 'The price moved into your band before signing, so it would no longer be a one-sided order. Review it again.';
+    case 'ARGUMENTS_MISMATCH':
     case 'REQUESTS_MISMATCH':
     case 'AUTH_UNEXPECTED':
       return 'The built transaction did not match what you reviewed, so Nest stopped it.';

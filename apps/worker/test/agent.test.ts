@@ -13,7 +13,12 @@ const offlineRaven: RavenClient = { callTool: async () => ({ status: 'not_connec
 const notUsed = async (): Promise<never> => {
   throw new Error('not used');
 };
-const noProposals: ProposalService = { proposeSwap: notUsed, proposeLending: notUsed, lendingRates: notUsed };
+const noProposals: ProposalService = {
+  proposeSwap: notUsed,
+  proposeLending: notUsed,
+  proposeLimitOrder: notUsed,
+  lendingRates: notUsed,
+};
 
 async function createConversation(): Promise<string> {
   const response = await exports.default.fetch(`${ORIGIN}/api/agent/conversations`, { method: 'POST' });
@@ -425,6 +430,41 @@ describe('propose_intent', () => {
     expect(text).toContain('health factor of 1.60');
     expect(text).toContain('Blend Fixed: The pool is on ice');
     expect(result?.details).toEqual({ intentId: 'intent-2', kind: 'borrow' });
+  });
+
+  it('proposes a limit order and explains the band, the fill and the need to withdraw', async () => {
+    const calls: unknown[] = [];
+    const tool = proposeTool({
+      ...noProposals,
+      proposeLimitOrder: async (input) => {
+        calls.push(input);
+        return {
+          intentId: 'intent-3',
+          side: 'buy',
+          amountXlm: '100',
+          limitPrice: 0.15,
+          deposit: { symbol: 'USDC', amount: '15' },
+          order: {
+            pool: 'Aquarius XLM/USDC concentrated',
+            currentPrice: 0.1628,
+            band: [0.1468, 0.1496],
+            onFill: { symbol: 'XLM', amount: '101.2' },
+            feeBps: 100,
+          },
+        };
+      },
+    });
+    const result = await tool?.execute(
+      'call-4',
+      { kind: 'limit_order', side: 'buy', amount: '100', price: '0.15' },
+      undefined,
+    );
+    const text = result?.content[0]?.type === 'text' ? result.content[0].text : '';
+    expect(calls).toEqual([{ side: 'buy', amountXlm: '100', priceUsdc: '0.15' }]);
+    expect(text).toContain('deposits 15 USDC');
+    expect(text).toContain('between 0.1468 and 0.1496');
+    expect(text).toContain('needs to be withdrawn');
+    expect(result?.details).toEqual({ intentId: 'intent-3', kind: 'limit_order' });
   });
 
   it('turns only a successful propose_intent result into a proposal event', () => {

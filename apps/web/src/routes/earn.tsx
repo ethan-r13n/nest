@@ -1,28 +1,31 @@
 import { parseResearchSnapshot, type YieldPoolRow } from '@nest/data/research';
-import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nest/ui/components/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@nest/ui/components/card';
 import { Checkbox } from '@nest/ui/components/checkbox';
 import { Input } from '@nest/ui/components/input';
 import { Label } from '@nest/ui/components/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { Link } from '@tanstack/react-router';
-import { ArrowLeft, ArrowRight, ExternalLink, Search, SlidersHorizontal } from 'lucide-react';
+import { ArrowLeft, ArrowRight, SlidersHorizontal } from 'lucide-react';
 import { useState } from 'react';
 
 import snapshotJson from '../../../../research/data/stellar-research-ui.json' with { type: 'json' };
+import { AssetIcon } from '../components/asset-icon.tsx';
 import {
   DecimalField,
   ReviewRequirements,
   UnavailableFacts,
   WithdrawalTiming,
 } from '../components/financial-draft.tsx';
-import { LiveVaults } from '../components/live-vaults.tsx';
+import { ProtocolLogo } from '../components/protocol-logo.tsx';
+import { VaultDepositButton } from '../components/vault-deposit-button.tsx';
 import { strategyFor, VaultStrategyAside, VaultStrategyMain } from '../components/vault-strategy.tsx';
 import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { useWorkspaceSession } from '../components/workspace-session.tsx';
+import type { VaultSummary } from '../lib/execution.ts';
 import { formatUsd, formatUtc } from '../lib/format.ts';
 import { useLiquidityPools } from '../lib/liquidity.ts';
+import { useVaults } from '../lib/vaults.ts';
 
 const research = parseResearchSnapshot(snapshotJson);
 const CATEGORIES = ['All opportunities', 'Direct supply', 'Vaults', 'Campaigns', 'Liquidity'];
@@ -31,21 +34,32 @@ const PROJECT_NAMES: Record<string, string> = {
   'xoxno-lending': 'XOXNO',
   'gami-labs': 'Gami Labs',
   aquarius: 'Aquarius',
+  defindex: 'DeFindex',
+  sentora: 'Sentora',
   'ondo-yield-assets': 'Ondo',
 };
-const PROVIDER_REFERENCES = [
-  { name: 'DeFindex', description: 'Vaults and strategy allocations', url: 'https://defindex.io/' },
-  { name: 'Upshift / Gami', description: 'Curated Stellar vaults', url: 'https://app.upshift.finance/' },
-  {
-    name: 'Sentora',
-    description: 'Evergreen vaults and separate campaigns',
-    url: 'https://app.upshift.finance/vaults/stellar/sentora-usdc',
-  },
-];
+const SENTORA_XLM_CAMPAIGN: EarnOpportunity = {
+  id: 'sentora-xlm-campaign',
+  kind: 'campaign',
+  symbol: 'XLM',
+  project: 'sentora',
+  category: 'Campaigns',
+  meta: 'Sentora XLM Campaign',
+  rateKind: 'APY',
+  totalRatePct: null,
+  baseRatePct: null,
+  rewardRatePct: null,
+  tvlUsd: null,
+  searchText: 'Sentora XLM Campaign Stellar DeFi Hub',
+  poolType: null,
+  feeBps: null,
+};
 
 type EarnOpportunity = {
   id: string;
-  kind: 'yield' | 'liquidity';
+  kind: 'yield' | 'liquidity' | 'vault' | 'campaign';
+  vault?: VaultSummary;
+  network?: 'mainnet' | 'testnet' | undefined;
   symbol: string;
   project: string;
   category: string;
@@ -63,6 +77,9 @@ type EarnOpportunity = {
 export function EarnPage({ initialCategory = 'All opportunities' }: { initialCategory?: string }) {
   const { setDraft, setAssistantOpen } = useWorkspaceSession();
   const liquidity = useLiquidityPools();
+  const vaults = useVaults();
+  const [selectedAssets, setSelectedAssets] = useState<string[]>([]);
+  const [exitFilter, setExitFilter] = useState('all');
   const [category, setCategory] = useState(initialCategory);
   const [query, setQuery] = useState('');
   const [assetQuery, setAssetQuery] = useState('');
@@ -73,6 +90,27 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
   const [fee, setFee] = useState('all');
   const [page, setPage] = useState(0);
   const opportunities: EarnOpportunity[] = [
+    SENTORA_XLM_CAMPAIGN,
+    ...(vaults.data?.vaults ?? []).map(
+      (vault): EarnOpportunity => ({
+        id: vault.address,
+        kind: 'vault',
+        vault,
+        network: vaults.data?.network,
+        symbol: vault.symbol ?? 'Other',
+        project: 'defindex',
+        category: 'Vaults',
+        meta: vault.name,
+        rateKind: 'APY',
+        totalRatePct: vault.apyPct,
+        baseRatePct: null,
+        rewardRatePct: null,
+        tvlUsd: null,
+        searchText: `${vault.name} ${vault.symbol ?? ''} DeFindex ${vault.address}`,
+        poolType: null,
+        feeBps: null,
+      }),
+    ),
     ...research.yieldPools.map(
       (pool): EarnOpportunity => ({
         id: pool.id,
@@ -95,6 +133,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
       (pool): EarnOpportunity => ({
         id: pool.id,
         kind: 'liquidity',
+        network: pool.network,
         symbol: pool.tokens.map((token) => token.symbol).join(' / '),
         project: 'aquarius',
         category: 'Liquidity',
@@ -119,6 +158,9 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
     .filter(
       (row) =>
         (category === 'All opportunities' || row.category === category) &&
+        (selectedAssets.length === 0 ||
+          selectedAssets.some((asset) => row.searchText.toLowerCase().includes(asset.toLowerCase()))) &&
+        (exitFilter === 'all' || (exitFilter === 'supported' ? row.kind === 'vault' : row.kind !== 'vault')) &&
         (project === 'all' || row.project === project) &&
         row.searchText.toLowerCase().includes(query.toLowerCase()) &&
         row.searchText.toLowerCase().includes(assetQuery.toLowerCase()) &&
@@ -144,6 +186,8 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
   }
   function resetFilters() {
     setCategory('All opportunities');
+    setSelectedAssets([]);
+    setExitFilter('all');
     setQuery('');
     setAssetQuery('');
     setProject('all');
@@ -155,9 +199,9 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
   }
 
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="earn-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Put your capital in context."
+        title="Put Your Capital In Context."
         kicker="Earn / Stellar opportunities"
         description="Compare lending, vaults, campaigns and liquidity on Stellar."
         actions={
@@ -174,7 +218,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
         }
       />
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
-        <Badge variant="outline">Research · transactions unavailable</Badge>
+        <span>Research snapshots and live vaults retain their source and network.</span>
         <a href={research.sources.defillama.url} target="_blank" rel="noreferrer" className="hover:underline">
           DefiLlama · {formatUtc(research.sources.defillama.capturedAt)}
         </a>
@@ -184,7 +228,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
           </a>
         )}
       </div>
-      <fieldset className="flex flex-wrap gap-1 border-b pb-3">
+      <fieldset className="earn-categories flex flex-wrap gap-2">
         <legend className="sr-only">Opportunity category</legend>
         {CATEGORIES.map((item) => (
           <Button
@@ -198,10 +242,9 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
           </Button>
         ))}
       </fieldset>
-      {category === 'All opportunities' || category === 'Vaults' ? <LiveVaults /> : null}
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[15rem_minmax(0,1fr)]">
+      <div className="earn-list-layout">
         <Card className="min-w-0 self-start">
-          <CardHeader className="flex-row items-center justify-between">
+          <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="flex items-center gap-2 text-lg">
               <SlidersHorizontal className="size-4" />
               Filters
@@ -210,22 +253,40 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
               Reset
             </Button>
           </CardHeader>
-          <CardContent className="space-y-5">
+          <CardContent className="earn-filter-content space-y-5">
             <div className="space-y-2">
-              <Label htmlFor="earn-asset-filter">Asset</Label>
+              <Label htmlFor="earn-search">Search opportunities</Label>
               <Input
-                id="earn-asset-filter"
-                className="min-h-11"
-                value={assetQuery}
+                id="earn-search"
+                value={query}
                 onChange={(event) => {
-                  setAssetQuery(event.currentTarget.value);
+                  setQuery(event.currentTarget.value);
                   setPage(0);
                 }}
-                placeholder="Symbol, issuer or contract"
+                placeholder="Name or curator…"
               />
             </div>
+            <fieldset className="earn-asset-filters">
+              <legend>Underlying asset</legend>
+              {['USDC', 'XLM', 'AQUA', 'EURC', 'USDT0', 'PYUSD', 'SolvBTC', 'EUTBL'].map((asset) => (
+                <label key={asset} htmlFor={`earn-filter-${asset}`}>
+                  <Checkbox
+                    id={`earn-filter-${asset}`}
+                    checked={selectedAssets.includes(asset)}
+                    onCheckedChange={(checked) => {
+                      setSelectedAssets(
+                        checked ? [...selectedAssets, asset] : selectedAssets.filter((value) => value !== asset),
+                      );
+                      setPage(0);
+                    }}
+                  />
+                  <AssetIcon symbol={asset} className="size-4" />
+                  <span>{asset}</span>
+                </label>
+              ))}
+            </fieldset>
             <label className="flex flex-col gap-2 text-sm">
-              Project
+              Protocol
               <select
                 className="min-h-11 rounded-lg border bg-background px-3"
                 value={project}
@@ -234,7 +295,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
                   setPage(0);
                 }}
               >
-                <option value="all">All projects</option>
+                <option value="all">All protocols</option>
                 {projects.map((item) => (
                   <option key={item} value={item}>
                     {projectName(item)}
@@ -242,19 +303,47 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
                 ))}
               </select>
             </label>
-            <div className="flex items-start gap-3">
-              <Checkbox
-                id="earn-no-rewards"
-                checked={withoutRewards}
-                onCheckedChange={(checked) => {
-                  setWithoutRewards(checked);
+            <label className="flex flex-col gap-2 text-sm">
+              Exit availability
+              <select
+                className="min-h-11 rounded-lg border bg-background px-3"
+                value={exitFilter}
+                onChange={(event) => {
+                  setExitFilter(event.currentTarget.value);
                   setPage(0);
                 }}
-              />
-              <Label htmlFor="earn-no-rewards" className="min-h-11 leading-relaxed">
-                Only observations reporting zero incentives
-              </Label>
-            </div>
+              >
+                <option value="all">Any exit condition</option>
+                <option value="supported">Connected vaults</option>
+                <option value="unknown">Research only</option>
+              </select>
+            </label>
+            <details className="border-t pt-4">
+              <summary className="cursor-pointer text-xs text-muted-foreground">More filters</summary>
+              <div className="mt-3 space-y-3">
+                <Input
+                  id="earn-asset-filter"
+                  aria-label="Asset identity filter"
+                  value={assetQuery}
+                  onChange={(event) => {
+                    setAssetQuery(event.currentTarget.value);
+                    setPage(0);
+                  }}
+                  placeholder="Symbol, issuer or contract"
+                />
+                <label htmlFor="earn-without-rewards" className="flex items-start gap-2 text-xs">
+                  <Checkbox
+                    id="earn-without-rewards"
+                    checked={withoutRewards}
+                    onCheckedChange={(checked) => {
+                      setWithoutRewards(checked);
+                      setPage(0);
+                    }}
+                  />
+                  Only observations reporting zero incentives
+                </label>
+              </div>
+            </details>
             {category === 'Liquidity' && (
               <>
                 <label className="flex flex-col gap-2 text-sm">
@@ -295,7 +384,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
           </CardContent>
         </Card>
         <div className="min-w-0 space-y-4">
-          <div className="flex flex-wrap items-center justify-between gap-4">
+          <div className="earn-list-toolbar">
             <p className="text-sm text-muted-foreground" aria-live="polite">
               {rows.length} opportunities
             </p>
@@ -315,22 +404,19 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
               </select>
             </label>
           </div>
-          <div className="relative">
-            <Search
-              className="pointer-events-none absolute top-3.5 left-3 size-4 text-muted-foreground"
-              aria-hidden="true"
-            />
-            <Input
-              value={query}
-              onChange={(event) => {
-                setQuery(event.currentTarget.value);
-                setPage(0);
-              }}
-              placeholder="Search assets or projects"
-              aria-label="Search opportunities"
-              className="min-h-11 pl-10"
-            />
-          </div>
+          {vaults.isPending ? (
+            <p role="status" className="text-xs text-muted-foreground">
+              Reading DeFindex vaults…
+            </p>
+          ) : null}
+          {vaults.isError ? (
+            <p role="status" className="text-xs text-destructive">
+              Live vaults are unavailable.{' '}
+              <Button variant="ghost" onClick={() => void vaults.refetch()}>
+                Retry vaults
+              </Button>
+            </p>
+          ) : null}
           {liquidity.isPending && (
             <p role="status" className="text-xs text-muted-foreground">
               Loading Aquarius liquidity opportunities…
@@ -394,44 +480,23 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
           </p>
         </div>
       </div>
-      <section className="grid gap-4 md:grid-cols-3" aria-label="More provider references">
-        {PROVIDER_REFERENCES.map((provider) => (
-          <Card key={provider.name} size="sm">
-            <CardHeader>
-              <CardTitle className="text-lg">{provider.name}</CardTitle>
-              <CardDescription>{provider.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <a
-                href={provider.url}
-                target="_blank"
-                rel="noreferrer"
-                className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
-              >
-                Provider site
-                <ExternalLink className="size-3" />
-              </a>
-            </CardContent>
-          </Card>
-        ))}
-      </section>
     </div>
   );
 }
 
 export function VaultDetailPage({ vaultId }: { vaultId: string }) {
-  const [amount, setAmount] = useState('');
-  const pool = research.yieldPools.find((item) => item.id === vaultId);
-  if (!pool) return <MissingOpportunity />;
-  const strategy = strategyFor(pool.project, pool.symbol);
-  const depositAsset = strategy?.facts.find((fact) => fact.label === 'Deposit asset')?.value ?? pool.symbol;
-  const metrics = [
-    { label: 'Reported TVL', value: pool.tvlUsd, display: formatUsd(pool.tvlUsd) },
-    { label: 'Base APY', value: pool.baseApyPct, display: formatApy(pool.baseApyPct) },
-    { label: 'Reward APY', value: pool.rewardApyPct, display: formatApy(pool.rewardApyPct) },
-  ].filter((metric) => metric.value !== null);
+  if (vaultId === SENTORA_XLM_CAMPAIGN.id) return <CampaignDetailPage />;
+  return /^C[A-Z2-7]{55}$/.test(vaultId) ? (
+    <LiveVaultDetailPage vaultId={vaultId} />
+  ) : (
+    <ResearchVaultDetailPage vaultId={vaultId} />
+  );
+}
+
+function CampaignDetailPage() {
+  const strategy = strategyFor('sentora-campaign', 'XLM');
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="earn-detail flex min-w-0 flex-col gap-6">
       <Link
         to="/earn"
         className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
@@ -439,17 +504,83 @@ export function VaultDetailPage({ vaultId }: { vaultId: string }) {
         <ArrowLeft className="size-4" />
         Earn
       </Link>
-      <PageHeader title={pool.symbol} kicker={projectName(pool.project)} description={strategy?.description ?? ''} />
-      <p className="text-xs text-muted-foreground">Mainnet observation · {formatUtc(pool.observedAt)}</p>
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="earn-detail-layout grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0 space-y-5">
+          <PageHeader
+            title="Sentora XLM Campaign"
+            kicker="Sentora / Campaign"
+            description={strategy?.description ?? ''}
+            icon={<ProtocolLogo name="Sentora" />}
+          />
+          <VaultStrategyMain strategy={strategy} />
+        </div>
+        <aside className="min-w-0 space-y-5">
+          <Card>
+            <CardHeader>
+              <CardTitle>Campaign access</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-5">
+              <div className="rounded-lg border border-warning/40 bg-warning/5 p-4 text-xs leading-relaxed">
+                <p className="mb-2 font-medium">Withdrawal timing</p>
+                <p className="text-muted-foreground">{strategy?.withdrawal}</p>
+              </div>
+              <Button
+                nativeButton={false}
+                className="min-h-11 w-full"
+                render={<a href="https://stellardefihub.com/vaults" target="_blank" rel="noreferrer" />}
+              >
+                View on Stellar DeFi Hub ↗
+              </Button>
+              <p className="text-xs text-muted-foreground">Campaign transactions are not connected in Nest.</p>
+            </CardContent>
+          </Card>
+          <VaultStrategyAside strategy={strategy} />
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+function ResearchVaultDetailPage({ vaultId }: { vaultId: string }) {
+  const [amount, setAmount] = useState('');
+  const pool = research.yieldPools.find((item) => item.id === vaultId);
+  if (!pool) return <MissingOpportunity />;
+  const strategy = strategyFor(pool.project, pool.symbol);
+  const depositAsset = strategy?.facts.find((fact) => fact.label === 'Deposit asset')?.value ?? pool.symbol;
+  const metrics = [
+    { label: 'Reported TVL', value: pool.tvlUsd, display: formatUsd(pool.tvlUsd) },
+    { label: 'Reported APY', value: pool.totalApyPct, display: formatApy(pool.totalApyPct) },
+    { label: 'Base APY', value: pool.baseApyPct, display: formatApy(pool.baseApyPct) },
+  ].filter((metric) => metric.value !== null);
+  return (
+    <div className="earn-detail flex min-w-0 flex-col gap-6">
+      <Link
+        to="/earn"
+        className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
+      >
+        <ArrowLeft className="size-4" />
+        Earn
+      </Link>
+      <div className="earn-detail-layout grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+        <div className="min-w-0 space-y-5">
+          <PageHeader
+            title={
+              pool.project === 'gami-labs'
+                ? `Gami ${pool.symbol.replace('EARN', '')} Vault`
+                : `${projectName(pool.project)} ${depositAsset}`
+            }
+            kicker="Vault strategy / Stellar"
+            description={strategy?.description ?? ''}
+            icon={<ProtocolLogo name={projectName(pool.project)} />}
+          />
           {metrics.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="earn-detail-metrics grid gap-4 sm:grid-cols-3">
               {metrics.map((metric) => (
                 <StatCard key={metric.label} label={metric.label} value={metric.display} />
               ))}
             </div>
           )}
+          <p className="text-xs text-muted-foreground">DefiLlama · captured {formatUtc(pool.observedAt)}</p>
           <VaultStrategyMain strategy={strategy} />
         </div>
         <aside className="min-w-0 space-y-5">
@@ -592,67 +723,118 @@ export function VaultManagePage({ vaultId }: { vaultId: string }) {
 }
 
 function OpportunityRow({ row }: { row: EarnOpportunity }) {
-  const linkClass = 'inline-flex min-h-11 items-center font-medium hover:text-primary';
-  const label = <>{row.symbol}</>;
-  const inspect = (
-    <>
-      Inspect
-      <ArrowRight className="size-4" />
-    </>
-  );
+  const displayName =
+    row.kind === 'vault'
+      ? row.vault?.name
+      : row.kind === 'campaign'
+        ? row.meta
+        : row.project === 'gami-labs'
+          ? `Gami ${row.symbol.replace('EARN', '')} Vault`
+          : row.project === 'blend-pools-v2'
+            ? `Blend ${row.symbol} Supply`
+            : row.symbol;
   return (
-    <Card className="py-0">
-      <CardContent className="grid gap-5 py-5 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.5fr)_repeat(3,minmax(0,1fr))_auto]">
-        <div className="min-w-0 space-y-1">
-          {row.kind === 'liquidity' ? (
-            <Link to="/earn/liquidity/$poolId" params={{ poolId: row.id }} className={linkClass}>
-              {label}
-            </Link>
-          ) : (
-            <Link to="/earn/$vaultId" params={{ vaultId: row.id }} className={linkClass}>
-              {label}
-            </Link>
-          )}
-          <p className="text-xs text-muted-foreground">
-            {projectName(row.project)} · {row.category}
-          </p>
-          {row.meta && <p className="text-xs text-subtle">{row.meta}</p>}
+    <Card className="earn-opportunity">
+      <CardContent>
+        <div className="earn-opportunity-identity">
+          <ProtocolLogo name={projectName(row.project)} />
+          <div>
+            {row.kind === 'liquidity' ? (
+              <Link to="/earn/liquidity/$poolId" params={{ poolId: row.id }}>
+                {displayName}
+              </Link>
+            ) : (
+              <Link to="/earn/$vaultId" params={{ vaultId: row.id }}>
+                {displayName}
+              </Link>
+            )}
+            <small>
+              {projectName(row.project)}
+              {row.kind === 'campaign'
+                ? ' · Mainnet reference'
+                : row.network
+                  ? ` · ${row.network === 'testnet' ? 'Testnet' : 'Mainnet'} · ${row.kind === 'vault' ? 'live' : 'indexed observation'}`
+                  : ' · Mainnet snapshot'}
+            </small>
+            <small>
+              {row.category}
+              {row.kind === 'liquidity' && row.meta ? ` · ${row.meta}` : ''}
+            </small>
+          </div>
         </div>
         <OpportunityMetric
-          label={`Reported ${row.rateKind}`}
-          value={row.totalRatePct === null ? '' : formatApy(row.totalRatePct)}
-          detail={[
-            row.baseRatePct === null
-              ? ''
-              : `${row.kind === 'liquidity' ? 'Fees' : 'Base'} ${formatApy(row.baseRatePct)}`,
-            row.rewardRatePct === null ? '' : `Rewards ${formatApy(row.rewardRatePct)}`,
-          ]
-            .filter(Boolean)
-            .join(' · ')}
+          label={`${row.kind === 'vault' ? 'Live' : 'Reported'} ${row.rateKind}`}
+          value={row.kind === 'campaign' ? '' : formatApy(row.totalRatePct)}
+          detail={
+            row.kind === 'vault'
+              ? '30-day APY · net of vault fee'
+              : [
+                  row.baseRatePct === null
+                    ? ''
+                    : `${row.kind === 'liquidity' ? 'Fees' : 'Base'} ${formatApy(row.baseRatePct)}`,
+                  row.rewardRatePct === null ? '' : `Rewards ${formatApy(row.rewardRatePct)}`,
+                ]
+                  .filter(Boolean)
+                  .join(' · ')
+          }
         />
         <OpportunityMetric
-          label="Reported TVL"
-          value={row.tvlUsd === null ? '' : formatUsd(row.tvlUsd)}
-          detail={row.kind === 'liquidity' ? 'Aquarius indexed observation' : 'Mainnet observation'}
+          label={row.kind === 'vault' ? 'Vault assets' : 'Reported TVL'}
+          value={
+            row.kind === 'campaign'
+              ? ''
+              : row.vault
+                ? `${new Intl.NumberFormat('en-US', { notation: 'compact', maximumFractionDigits: 2 }).format(Number(row.vault.totalRaw) / 1e7)} ${row.symbol}`
+                : formatUsd(row.tvlUsd)
+          }
+          detail={
+            row.kind === 'vault'
+              ? 'DeFindex · live'
+              : row.kind === 'liquidity'
+                ? 'Aquarius indexed observation'
+                : 'DefiLlama snapshot'
+          }
         />
-        <OpportunityMetric label="Withdrawal" value="Unverified" detail="Refresh current pool or product state" />
-        <div className="flex items-center">
-          {row.kind === 'liquidity' ? (
-            <Link
-              to="/earn/liquidity/$poolId"
-              params={{ poolId: row.id }}
-              className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
+        <OpportunityMetric
+          label="Withdrawal"
+          value={
+            row.kind === 'liquidity'
+              ? 'Instantly liquid (IL risk)'
+              : row.kind === 'campaign'
+                ? 'Principal withdrawable'
+                : row.kind === 'vault'
+                  ? 'Review required'
+                  : 'Unverified'
+          }
+          detail={
+            row.kind === 'liquidity'
+              ? ''
+              : row.kind === 'campaign'
+                ? 'Early withdrawal forfeits rewards'
+                : row.kind === 'vault'
+                  ? 'Liquidity and strategy unwind apply'
+                  : 'Current exit terms need verification'
+          }
+        />
+        <div className="earn-opportunity-actions">
+          {row.kind === 'vault' && row.vault && row.network ? (
+            <VaultDepositButton vault={row.vault} network={row.network} />
+          ) : row.kind === 'liquidity' ? (
+            <Button
+              nativeButton={false}
+              variant="outline"
+              render={<Link to="/earn/liquidity/$poolId" params={{ poolId: row.id }} />}
             >
-              {inspect}
-            </Link>
+              Inspect →
+            </Button>
           ) : (
-            <Link
-              to="/earn/$vaultId"
-              params={{ vaultId: row.id }}
-              className="inline-flex min-h-11 items-center gap-2 text-sm text-primary hover:underline"
+            <Button
+              nativeButton={false}
+              variant="outline"
+              render={<Link to="/earn/$vaultId" params={{ vaultId: row.id }} />}
             >
-              {inspect}
-            </Link>
+              Inspect →
+            </Button>
           )}
         </div>
       </CardContent>
@@ -660,12 +842,99 @@ function OpportunityRow({ row }: { row: EarnOpportunity }) {
   );
 }
 
+function LiveVaultDetailPage({ vaultId }: { vaultId: string }) {
+  const vaults = useVaults();
+  const [amount, setAmount] = useState('');
+  const vault = vaults.data?.vaults.find((item) => item.address === vaultId);
+  if (vaults.isPending) return <p role="status">Reading vault…</p>;
+  if (!vault || !vaults.data) return <MissingOpportunity />;
+  return (
+    <div className="earn-detail flex min-w-0 flex-col gap-6">
+      <Link to="/earn" className="text-sm text-muted-foreground">
+        ← Earn
+      </Link>
+      <div className="earn-detail-layout grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="space-y-5">
+          <PageHeader
+            title={vault.name}
+            kicker={`DeFindex / ${vaults.data.network}`}
+            description="Deposit into the selected vault with a fresh code check, transaction review and your wallet signature."
+            icon={<ProtocolLogo name="DeFindex" />}
+          />
+          <div className="earn-detail-metrics grid gap-4 sm:grid-cols-3">
+            <StatCard label="30-day APY" value={formatApy(vault.apyPct)} detail="Net of the vault’s fee" />
+            <StatCard
+              label="Vault assets"
+              value={`${new Intl.NumberFormat('en-US', { notation: 'compact' }).format(Number(vault.totalRaw) / 1e7)} ${vault.symbol ?? ''}`}
+            />
+            <StatCard label="Fee on gains" value={`${vault.vaultFeeBps / 100}%`} />
+          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="mb-4 text-sm text-muted-foreground">
+                {vault.name} holds {vault.symbol ?? 'its supported asset'} and allocates through the listed strategies.
+              </p>
+              <dl className="space-y-3 text-sm">
+                <div>
+                  <dt className="text-subtle">Strategies</dt>
+                  <dd>{vault.strategies.map((strategy) => strategy.name).join(', ') || 'No strategies listed'}</dd>
+                </div>
+                <div>
+                  <dt className="text-subtle">Vault contract</dt>
+                  <dd className="break-all font-mono text-xs">{vault.address}</dd>
+                </div>
+                <div>
+                  <dt className="text-subtle">Current allocation</dt>
+                  <dd>
+                    {BigInt(vault.investedRaw) > 0n
+                      ? 'Invested and idle assets'
+                      : 'Held idle until the manager rebalances'}
+                  </dd>
+                </div>
+              </dl>
+            </CardContent>
+          </Card>
+          <Card>
+            <CardHeader>
+              <CardTitle>Withdrawal conditions</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-sm leading-7 text-muted-foreground">
+                No scheduled lockup is reported for this vault. Redemption depends on available liquidity and strategy
+                unwind; exact completion timing is not verified by this observation. Review the current terms before
+                depositing.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Manage position</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-5">
+            <p className="text-sm">Deposit {vault.symbol}</p>
+            <DecimalField label="Amount" unit={vault.symbol ?? ''} value={amount} onChange={setAmount} />
+            <WithdrawalTiming />
+            <VaultDepositButton vault={vault} network={vaults.data.network} initialAmount={amount} />
+            <p className="text-xs text-subtle">Review → sign in your wallet → on-chain confirmation.</p>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+}
+
 function OpportunityMetric({ label, value, detail }: { label: string; value: string; detail: string }) {
   if (!value) return <div aria-hidden="true" />;
   return (
-    <div className="flex flex-col justify-center gap-1">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      <span className="font-mono text-lg tabular-nums">{value}</span>
+    <div
+      className={`earn-metric ${label === 'Withdrawal' ? 'earn-withdrawal' : ''} flex flex-col justify-center gap-1`}
+    >
+      <span className="earn-metric-label text-xs text-muted-foreground">{label}</span>
+      <span className="earn-metric-value font-mono text-lg tabular-nums">{value}</span>
       <span className="text-xs leading-relaxed text-subtle">{detail}</span>
     </div>
   );

@@ -22,6 +22,13 @@ import { Bell, Check, ChevronDown, LoaderCircle, Menu, Wallet } from 'lucide-rea
 import { type ReactNode, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import './workspace-design.css';
+import './workspace-credit.css';
+import './workspace-research.css';
+import './workspace-protocol.css';
+import './workspace-trade.css';
+import './workspace-earn.css';
+import './workspace-conversation.css';
+import './workspace-portfolio.css';
 
 import symbolUrl from '../../../../design/nest/assets/nest-symbol.svg';
 import { useHealth } from '../lib/health.ts';
@@ -77,12 +84,12 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
       >
         Skip to workspace
       </a>
-      <header className="sticky top-0 z-40 flex h-16 min-w-0 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur sm:gap-3 sm:px-5 xl:gap-5">
+      <header className="sticky top-0 z-40 flex h-16 min-w-0 shrink-0 items-center gap-2 border-b bg-background px-3 sm:gap-3 sm:px-5 xl:gap-[30px] xl:px-7">
         <Link to="/research" className="flex shrink-0 items-center gap-2.5" aria-label="Nest home">
           <img src={symbolUrl} alt="" className="w-8 sm:w-9" />
           <span className="font-serif text-[30px] font-semibold leading-none tracking-tight">Nest</span>
         </Link>
-        <nav aria-label="Primary" className="hidden h-full items-center gap-6 xl:flex">
+        <nav aria-label="Primary" className="hidden h-full items-center gap-6 md:flex">
           {ROUTES.map((route) => (
             <Link
               key={route.to}
@@ -109,7 +116,7 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
           <WalletButton />
           <Sheet>
             <SheetTrigger
-              render={<Button variant="ghost" size="icon" aria-label="Open navigation" className="xl:hidden" />}
+              render={<Button variant="ghost" size="icon" aria-label="Open navigation" className="md:hidden" />}
             >
               <Menu />
             </SheetTrigger>
@@ -147,10 +154,17 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
           </Sheet>
         </div>
       </header>
+      <div className="workspace-runtime-bar">
+        <span>
+          <strong>● Stellar workspace</strong>
+          <span className="ml-3">Dated research · wallet-approved execution</span>
+        </span>
+        <span>Research observations and execution quotes retain their own network and timestamps.</span>
+      </div>
       <ResizablePanelGroup
         orientation="horizontal"
         className="min-h-0 flex-1"
-        style={{ height: 'calc(100svh - 4rem)' }}
+        style={{ height: 'calc(100svh - 6.5rem)' }}
       >
         <ResizablePanel id="workspace-panel" minSize={desktop && assistantOpen ? 600 : 0}>
           <div id="workspace-scroll" ref={workspaceScrollRef} className="relative h-full overflow-y-auto">
@@ -181,7 +195,7 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
       </ResizablePanelGroup>
       <nav
         aria-label="Mobile navigation"
-        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-7 border-t bg-background/95 backdrop-blur xl:hidden"
+        className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-7 border-t bg-background/95 backdrop-blur md:hidden"
       >
         {ROUTES.map((route) => (
           <Link
@@ -195,7 +209,7 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
         ))}
       </nav>
       {pathname !== '/chat' && !assistantOpen ? (
-        <div className="fixed right-4 bottom-20 z-40 xl:right-7 xl:bottom-6">
+        <div className="fixed right-4 bottom-20 z-40 xl:right-7 md:bottom-6">
           <AgentPanel desktop={desktop} />
         </div>
       ) : null}
@@ -209,7 +223,7 @@ function WorkspaceContent({ children }: { children: ReactNode }) {
   return (
     <main
       id="workspace"
-      className={`mx-auto w-full min-w-0 max-w-[1920px] px-4 pt-5 sm:px-6 sm:pt-6 lg:px-7 lg:pt-7 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 xl:pb-6' : 'flex-1 pb-24 xl:pb-8'}`}
+      className={`mx-auto w-full min-w-0 max-w-[1920px] px-4 pt-5 sm:px-6 sm:pt-6 lg:px-7 lg:pt-7 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 md:pb-6' : 'flex-1 pb-24 md:pb-8'}`}
     >
       <Suspense
         fallback={

@@ -101,6 +101,14 @@ RWA views expose asset name, ticker, issuer/platform, asset class, Stellar ident
 
 Protocol detail combines description, metrics, chart, markets, dependencies, audit/admin/oracle references, and available actions. Selecting an executable row pre-fills the relevant action form. Unsupported opportunities explain the missing capability and provide a verified protocol link.
 
+Live Blend rates on Research support click, text selection and keyboard activation. The selection command retains the exact pool, asset and rate context. Supported lending commands create the existing typed Blend intent and open its reviewed proposal in place; other questions go to Ask Nest with the selected source text. This does not bypass eligibility, trustlines, policy checks or wallet signatures. Credit and Supply rate tables retain the same command behavior.
+
+### Live Trade integration
+
+Keep the approved candlestick chart, captured reference series, and full searchable market window: XLM, AQUA, EURC, USDT0, PYUSD, SolvBTC and EUTBL, all quoted in USDC. Preserve source capture times and labels; choosing a research asset must not substitute a live Testnet candle series. Swap controls additionally allow USDC as a payment asset. Only the integrated XLM/USDC pair creates executable swap intents; other markets remain inspectable with an explicit execution-unavailable state. The separate `/api/markets/price-history?interval=15m|1h|4h|1d` endpoint supplies network-specific Stellar observations for future live contexts. Neither a captured chart nor a live history observation is an execution quote.
+
+Debounce edited swap amounts for 600ms before creating a fresh typed intent. Quote and review state must match the current assets and amount; changing them discards the old display. Preserve signing/submission locks. Read spendable balances from the account endpoint, calculate Use max with bigint amounts and an explicit XLM fee buffer, and refresh balances and recorded activity after settlement. Missing cost basis remains unavailable rather than becoming invented positions or P&L.
+
 ## Credit
 
 Route: `/credit`, with Borrow and Supply modes and a My positions panel. Use the IRIS form pattern with these fields: collateral asset and amount, debt asset and desired amount, horizon, maximum borrow APR, and venue preference defaulting to Best available. Horizon is a comparison assumption; display actual fixed/floating rate type and maturity only when the venue supports it.
@@ -997,6 +1005,8 @@ Keep concentrated-range management, single-asset zaps, automatic rebalancing, po
 ## LP range orders
 
 Support selected concentrated-liquidity markets only after a dedicated position adapter exists. These are P1 positions and must not reuse the P0 volatile/stable LP-share model or appear as enabled P0 pools. Input buy/sell objective, asset, amount, price range, and exit rule. Preview inventory at boundaries, fees, minimum amounts, and position risks. An LP range is a position with changing asset composition; crossing the range does not automatically mean a resting order is fully and permanently executed.
+
+The reviewed Aquarius XLM/USDC extension uses its own range adapter and the additive `0005_limit_orders.sql` migration. Trade exposes a simple buy/sell amount and limit-price ticket capped at 768px, without replacing the main candlestick chart or adding a second range chart. Show the actual pool price, resulting band, token budget, position status and withdrawal quote. Keep `aquarius_range` gated independently; application tests and read-only previews do not establish a completed wallet-signed mainnet lifecycle. Committed execution flags remain disabled.
 
 Add position/tick accounting, liquidity insertion/removal, fee collection, and optional monitoring/removal. Acceptance includes exact venue-specific range math, withdrawal/claim, out-of-range states, and accurate inventory tracking. Soroswap swap aggregation alone does not provide this capability.
 

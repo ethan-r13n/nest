@@ -36,6 +36,13 @@
       "when": 1792968746611,
       "tag": "0004_automations",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1792972847017,
+      "tag": "0005_limit_orders",
+      "breakpoints": true
     }
   ]
 }

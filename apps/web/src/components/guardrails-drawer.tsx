@@ -26,11 +26,11 @@ const CAPS = ['Funding', 'Spending', 'Daily turnover', 'Borrowing'];
 export function GuardrailsDrawer() {
   return (
     <Sheet>
-      <SheetTrigger render={<Button variant="outline" aria-label="Guardrails" />}>
+      <SheetTrigger render={<Button variant="outline" aria-label="Guardrails" className="bg-transparent!" />}>
         <ShieldCheck />
         <span className="hidden sm:inline">Guardrails</span>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-[440px]">
+      <SheetContent className="nest-workspace w-full sm:max-w-[440px]">
         <SheetHeader>
           <SheetTitle>Guardrails</SheetTitle>
           <SheetDescription>

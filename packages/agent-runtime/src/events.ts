@@ -1,7 +1,16 @@
 import type { AgentEvent } from '@earendil-works/pi-agent-core';
 
 /** Actions an agent proposal can carry; the browser picks the card by kind. */
-export const PROPOSAL_KINDS = ['swap', 'supply', 'borrow', 'repay', 'withdraw', 'withdraw_collateral'] as const;
+export const PROPOSAL_KINDS = [
+  'swap',
+  'supply',
+  'borrow',
+  'repay',
+  'withdraw',
+  'withdraw_collateral',
+  'limit_order',
+  'limit_close',
+] as const;
 export type ProposalKind = (typeof PROPOSAL_KINDS)[number];
 
 /** The only agent events that reach the browser. Hidden reasoning, prompts and raw arguments never do. */

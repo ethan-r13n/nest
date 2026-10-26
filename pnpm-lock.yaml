@@ -355,6 +355,9 @@ importers:
       '@fontsource/instrument-serif':
         specifier: 'catalog:'
         version: 5.3.0
+      '@nest/adapters':
+        specifier: workspace:*
+        version: link:../../packages/adapters
       '@nest/agent-runtime':
         specifier: workspace:*
         version: link:../../packages/agent-runtime

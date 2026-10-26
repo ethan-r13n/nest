@@ -57,6 +57,23 @@ interface LendingProposal {
 }
 
 /** Creates application records only; it can never approve, sign or submit. */
+interface LimitOrderProposal {
+  intentId: string;
+  side: 'buy' | 'sell';
+  amountXlm: string;
+  limitPrice: number;
+  deposit: { symbol: string; amount: string };
+  order:
+    | {
+        pool: string;
+        currentPrice: number;
+        band: [number, number];
+        onFill: { symbol: string; amount: string };
+        feeBps: number;
+      }
+    | { unavailable: string };
+}
+
 export interface ProposalService {
   proposeSwap(input: { sell: 'USDC' | 'XLM'; buy: 'USDC' | 'XLM'; amount: string }): Promise<SwapProposal>;
   proposeLending(input: {
@@ -65,6 +82,7 @@ export interface ProposalService {
     amount: string;
     collateralAsset?: 'USDC' | 'XLM' | undefined;
   }): Promise<LendingProposal>;
+  proposeLimitOrder(input: { side: 'buy' | 'sell'; amountXlm: string; priceUsdc: string }): Promise<LimitOrderProposal>;
   /** Live lending rates on this network, read-only. */
   lendingRates(): Promise<LendingRates>;
 }
@@ -210,7 +228,9 @@ export function createTools(deps: { raven: RavenClient; proposals: ProposalServi
         'and picks the best rate, sizing borrow collateral for a safe health factor. kind "repay": pay back a Blend',
         'loan of asset; kind "withdraw": take back asset the user lent; kind "withdraw_collateral": take back',
         'collateral. For these three, amount may be "all" for the whole position; the card reads the position once',
-        'the wallet is connected. The user sees a proposal card,',
+        'the wallet is connected. kind "limit_order": buy or sell XLM at a limit price in USDC (side, amount in XLM,',
+        'price); Nest places a one-sided Aquarius concentrated-liquidity position in the band that fills at or better',
+        'than the price. The user sees a proposal card,',
         'connects their wallet, reviews the exact transaction and signs it there. You cannot approve, sign or submit.',
         'Explain the result from the tool output; do not compute amounts or rates yourself.',
       ].join(' '),
@@ -222,6 +242,7 @@ export function createTools(deps: { raven: RavenClient; proposals: ProposalServi
           Type.Literal('repay'),
           Type.Literal('withdraw'),
           Type.Literal('withdraw_collateral'),
+          Type.Literal('limit_order'),
         ]),
         amount: Type.String({
           pattern: '^((0|[1-9][0-9]*)([.][0-9]{1,7})?|all)$',
@@ -237,6 +258,18 @@ export function createTools(deps: { raven: RavenClient; proposals: ProposalServi
         collateral: Type.Optional(
           Type.Union([Type.Literal('USDC'), Type.Literal('XLM')], { description: 'Borrow only: the collateral.' }),
         ),
+        side: Type.Optional(
+          Type.Union([Type.Literal('buy'), Type.Literal('sell')], {
+            description: 'Limit order only: buy or sell XLM.',
+          }),
+        ),
+        price: Type.Optional(
+          Type.String({
+            pattern: '^(0|[1-9][0-9]*)([.][0-9]{1,7})?$',
+            maxLength: 30,
+            description: 'Limit order only: the limit price in USDC per XLM, such as "0.15".',
+          }),
+        ),
       }),
       // It creates a record, so a crash never repeats it.
       replay: 'never',
@@ -247,6 +280,18 @@ export function createTools(deps: { raven: RavenClient; proposals: ProposalServi
             if (!args.sell || !args.buy) return { text: 'A swap needs sell and buy.', isError: true };
             return swapOutput(
               await deps.proposals.proposeSwap({ sell: args.sell, buy: args.buy, amount: args.amount }),
+            );
+          }
+          if (args.kind === 'limit_order') {
+            if (!args.side || !args.price || args.amount === 'all') {
+              return { text: 'A limit order needs side, an XLM amount and a price.', isError: true };
+            }
+            return limitOutput(
+              await deps.proposals.proposeLimitOrder({
+                side: args.side,
+                amountXlm: args.amount,
+                priceUsdc: args.price,
+              }),
             );
           }
           if (!args.asset) return { text: `A ${args.kind} needs asset.`, isError: true };
@@ -264,6 +309,25 @@ export function createTools(deps: { raven: RavenClient; proposals: ProposalServi
       },
     }),
   ];
+}
+
+function limitOutput(proposal: LimitOrderProposal): ToolOutput {
+  const verb = proposal.side === 'buy' ? 'Buy' : 'Sell';
+  const order = proposal.order;
+  const summary =
+    'unavailable' in order
+      ? `The pool could not be read right now (${order.unavailable}); the card will retry.`
+      : [
+          `Nest deposits ${proposal.deposit.amount} ${proposal.deposit.symbol} into ${order.pool} between`,
+          `${order.band[0].toFixed(4)} and ${order.band[1].toFixed(4)} USDC per XLM (now ${order.currentPrice.toFixed(4)}).`,
+          `Once the price crosses that band it holds about ${order.onFill.amount} ${order.onFill.symbol}, plus the`,
+          `${order.feeBps / 100}% pool fee on the volume that fills it. It then needs to be withdrawn, or a move back`,
+          'through the band converts it back.',
+        ].join(' ');
+  return {
+    text: `Limit order ready: ${verb.toLowerCase()} ${proposal.amountXlm} XLM at ${proposal.limitPrice} USDC. ${summary} Nest fee: 0. The user reviews and signs in their wallet; nothing executes until they do.`,
+    details: { intentId: proposal.intentId, kind: 'limit_order' },
+  };
 }
 
 function swapOutput(proposal: SwapProposal): ToolOutput {

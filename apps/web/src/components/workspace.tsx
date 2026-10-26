@@ -8,17 +8,22 @@ export function PageHeader({
   description,
   kicker,
   actions,
+  icon,
 }: {
   title: string;
   description: string;
   kicker?: string;
   actions?: ReactNode;
+  icon?: ReactNode;
 }) {
   return (
     <header className="workspace-page-header flex flex-wrap items-start justify-between gap-4">
       <div className="min-w-0 space-y-2">
         {kicker ? <p className="font-mono text-xs uppercase tracking-wider text-subtle">{kicker}</p> : null}
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h1>
+        <h1 className={`text-3xl font-semibold tracking-tight sm:text-4xl ${icon ? 'flex items-center gap-3' : ''}`}>
+          {icon}
+          {title}
+        </h1>
         <p className="max-w-3xl text-sm leading-relaxed text-muted-foreground">{description}</p>
       </div>
       {actions}

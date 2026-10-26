@@ -1,5 +1,6 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@nest/ui/components/dialog';
 import { Input } from '@nest/ui/components/input';
 import { Label } from '@nest/ui/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
@@ -8,7 +9,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import { ArrowRight, BellRing, CheckCircle2, LoaderCircle, Pause, Play, Trash2 } from 'lucide-react';
 import { useId, useState } from 'react';
-
+import { checkArbitrageDemo, emptyArbitrageDemo } from '../lib/arbitrage-demo.ts';
 import {
   ARB_VENUES,
   type ArbitrageConfig,
@@ -31,6 +32,84 @@ const CLOCK = new Intl.DateTimeFormat('en-GB', {
   timeZone: 'UTC',
 });
 const SIZE_PATTERN = /^(0|[1-9]\d{0,6})(\.\d{1,7})?$/;
+
+export function ArbitrageDemoButton() {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <Button variant="outline" className="workspace-action" onClick={() => setOpen(true)}>
+        Demo arbitrage
+      </Button>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogContent className="nest-workspace max-h-[90dvh] gap-5 overflow-y-auto p-6 sm:max-w-2xl">
+          <header className="space-y-2 pr-8">
+            <DialogTitle>Arbitrage demo</DialogTitle>
+            <DialogDescription>Simulated prices and alerts. No wallet or live monitor is modified.</DialogDescription>
+          </header>
+          <ArbitrageDemo />
+        </DialogContent>
+      </Dialog>
+    </>
+  );
+}
+
+function ArbitrageDemo() {
+  const [demo, setDemo] = useState(emptyArbitrageDemo);
+  return (
+    <section className="space-y-4" aria-label="Arbitrage demo">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Badge variant="outline">Simulation · no trades</Badge>
+        <span className="text-xs text-muted-foreground">Soroswap vs Stellar AMM · XLM / USDC</span>
+      </div>
+      <p className="text-sm leading-7 text-muted-foreground">
+        Open an artificial price gap, see one demo alert, check it again, then close the gap to re-arm. This uses the
+        same round-trip calculation as the live monitor, with synthetic reserves. Saved rules and real pool prices stay
+        unchanged.
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <Button onClick={() => setDemo((previous) => checkArbitrageDemo(previous, 'gap', new Date().toISOString()))}>
+          {demo.phase === 'gap' ? 'Check gap again' : 'Simulate price gap'}
+        </Button>
+        <Button
+          variant="outline"
+          disabled={demo.checks === 0 || demo.phase === 'balanced'}
+          onClick={() => setDemo((previous) => checkArbitrageDemo(previous, 'balanced', new Date().toISOString()))}
+        >
+          Close gap
+        </Button>
+        <Button variant="ghost" disabled={demo.checks === 0} onClick={() => setDemo(emptyArbitrageDemo())}>
+          Reset demo
+        </Button>
+      </div>
+      <div role="status" aria-live="polite" className="flex flex-wrap gap-5 rounded-lg border px-4 py-3 text-sm">
+        <span>
+          Demo checks <b>{demo.checks}</b>
+        </span>
+        <span>
+          Demo alerts <b>{demo.alerts}</b>
+        </span>
+        <span>{demo.armed ? 'Armed' : 'Gap open · duplicate alerts suppressed'}</span>
+      </div>
+      {demo.preview ? (
+        <>
+          <PreviewCard {...demo.preview} simulated />
+          {demo.alerts > 0 ? (
+            <p
+              className="flex items-center gap-2 rounded-lg border border-primary/40 bg-primary/5 p-3 text-sm"
+              role="status"
+            >
+              <BellRing className="size-4 text-primary" />
+              Simulated alert: the round-trip profit crossed 0.50% after pool fees and price impact. This is demo
+              evidence only.
+            </p>
+          ) : null}
+        </>
+      ) : (
+        <p className="text-xs text-subtle">No demo checks yet. Click “Simulate price gap” to start.</p>
+      )}
+    </section>
+  );
+}
 
 /**
  * Builds an arbitrage monitor over two XLM/USDC pools. The preview reads both pools live; saving
@@ -180,16 +259,26 @@ export function ArbitrageBuilder({ onActivated }: { onActivated(id: string): voi
 }
 
 /** Rules for this network, with their state and unread alerts. */
-export function AutomationList({ selectedId, onSelect }: { selectedId: string | null; onSelect(id: string): void }) {
+export function AutomationList({
+  selectedId,
+  onSelect,
+  query = '',
+}: {
+  selectedId: string | null;
+  onSelect(id: string): void;
+  query?: string;
+}) {
   const list = useQuery({ queryKey: ['automations'], queryFn: automations.list, refetchInterval: RULES_REFRESH_MS });
   if (list.isPending) return <p className="text-sm text-muted-foreground">Loading monitors…</p>;
   if (list.isError) return <p className="text-sm text-destructive">{messageOf(list.error)}</p>;
   if (!list.data.length) {
     return <p className="text-sm text-muted-foreground">No monitors yet. Build one to start watching a price gap.</p>;
   }
+  const matches = list.data.filter((rule) => rule.name.toLowerCase().includes(query.trim().toLowerCase()));
+  if (!matches.length) return <p className="text-sm text-muted-foreground">No monitors match this search.</p>;
   return (
     <ul className="space-y-2">
-      {list.data.map((rule) => (
+      {matches.map((rule) => (
         <li key={rule.id}>
           <button
             type="button"
@@ -378,16 +467,20 @@ function PreviewCard({
   reason,
   evidence,
   evaluatedAt,
+  simulated = false,
 }: {
   result: EvaluationResult;
   reason: string;
   evidence: Evidence;
   evaluatedAt: string;
+  simulated?: boolean;
 }) {
   return (
     <div className="space-y-3 rounded-lg border p-4">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <span className="text-xs uppercase tracking-wider text-subtle">Live now · {clock(evaluatedAt)}</span>
+        <span className="text-xs uppercase tracking-wider text-subtle">
+          {simulated ? 'Simulated reserves' : 'Live now'} · {clock(evaluatedAt)}
+        </span>
         <ResultBadge result={result} preview />
       </div>
       <div className="grid gap-3 sm:grid-cols-2">

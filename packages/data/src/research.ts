@@ -69,9 +69,12 @@ const SnapshotSchema = z.object({
         slug: z.string(),
         name: z.string(),
         category: z.string(),
+        symbol: z.string().nullable().optional(),
+        protocol_chains: z.array(z.string()).optional(),
         url: z.string(),
         logo: z.string(),
         stellar_tvl_usd: NUMBER_OR_NULL,
+        protocol_tvl_all_chains_usd: NUMBER_OR_NULL.optional(),
         protocol_change_pct: z.object({
           scope: z.literal('protocol_all_chains'),
           '1d': NUMBER_OR_NULL.optional(),
@@ -90,6 +93,7 @@ const SnapshotSchema = z.object({
         pool_meta: z.string().nullable(),
         tvl_usd: NUMBER_OR_NULL,
         total_apy_pct: NUMBER_OR_NULL,
+        apy_mean_30d_pct: NUMBER_OR_NULL.optional(),
         base_apy_pct: NUMBER_OR_NULL,
         reward_apy_pct: NUMBER_OR_NULL,
         base_borrow_apy_pct: NUMBER_OR_NULL,
@@ -187,9 +191,12 @@ export interface ProtocolRow {
   slug: string;
   name: string;
   category: string;
+  symbol?: string | null;
+  chains?: string[];
   url: string;
   logo: string;
   stellarTvlUsd: number | null;
+  allChainsTvlUsd?: number | null;
   change: { scope: string; day: number | null; week: number | null };
   observedAt: string;
 }
@@ -201,6 +208,7 @@ export interface YieldPoolRow {
   meta: string | null;
   tvlUsd: number | null;
   totalApyPct: number | null;
+  mean30dApyPct?: number | null;
   baseApyPct: number | null;
   rewardApyPct: number | null;
   baseBorrowApyPct: number | null;
@@ -328,9 +336,12 @@ export function parseResearchSnapshot(input: unknown): ResearchSnapshot {
       slug: row.slug,
       name: row.name,
       category: row.category,
+      symbol: row.symbol ?? null,
+      chains: row.protocol_chains ?? [],
       url: row.url,
       logo: row.logo,
       stellarTvlUsd: row.stellar_tvl_usd,
+      allChainsTvlUsd: row.protocol_tvl_all_chains_usd ?? null,
       change: {
         scope: row.protocol_change_pct.scope,
         day: row.protocol_change_pct['1d'] ?? null,
@@ -345,6 +356,7 @@ export function parseResearchSnapshot(input: unknown): ResearchSnapshot {
       meta: row.pool_meta,
       tvlUsd: row.tvl_usd,
       totalApyPct: row.total_apy_pct,
+      mean30dApyPct: row.apy_mean_30d_pct ?? null,
       baseApyPct: row.base_apy_pct,
       rewardApyPct: row.reward_apy_pct,
       baseBorrowApyPct: row.base_borrow_apy_pct,

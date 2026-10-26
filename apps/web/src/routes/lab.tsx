@@ -5,7 +5,12 @@ import { Textarea } from '@nest/ui/components/textarea';
 import { Link } from '@tanstack/react-router';
 import { FileText, FlaskConical } from 'lucide-react';
 import { useState } from 'react';
-import { ArbitrageBuilder, AutomationDetail, AutomationList } from '../components/arbitrage-monitor.tsx';
+import {
+  ArbitrageBuilder,
+  ArbitrageDemoButton,
+  AutomationDetail,
+  AutomationList,
+} from '../components/arbitrage-monitor.tsx';
 import { ConversationDraft } from '../components/conversation-draft.tsx';
 import { DraftNotice, EmptyState, PageHeader } from '../components/workspace.tsx';
 import { useWorkspaceSession } from '../components/workspace-session.tsx';
@@ -13,29 +18,71 @@ import { PersonalEmptyTable, PersonalFact, PersonalField, PersonalNav, PersonalP
 
 export function MemoryPage() {
   const [selected, setSelected] = useState<string | null>(null);
+  const [filter, setFilter] = useState('All');
+  const [query, setQuery] = useState('');
   return (
     <div className="lab-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Your strategies, in view."
+        title="From Thesis To Strategy."
         kicker="Nest / Lab"
-        description="Revisit the idea, inspect its evidence, and follow each evaluation."
+        description="Describe an idea. Test it against the past, or watch for it in the future."
       />
       <PersonalNav area="lab" active="History" />
-      <PersonalPanel title="Automation history" description="Saved monitor rules and their actual evaluation records.">
-        <AutomationList selectedId={selected} onSelect={setSelected} />
-      </PersonalPanel>
+      <section className="lab-history-list space-y-5" aria-labelledby="strategy-history-title">
+        <div>
+          <h2 id="strategy-history-title" className="workspace-section-title">
+            Strategy history
+          </h2>
+          <p className="mt-2 text-xs text-subtle">
+            Backtests and automation setups, with the exact thesis behind each.
+          </p>
+        </div>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <fieldset className="flex gap-2" aria-label="Strategy type">
+            {['All', 'Backtests', 'Automations'].map((value) => (
+              <Button
+                key={value}
+                className="workspace-action"
+                variant={filter === value ? 'default' : 'outline'}
+                aria-pressed={filter === value}
+                onClick={() => setFilter(value)}
+              >
+                {value}
+              </Button>
+            ))}
+          </fieldset>
+          <Input
+            className="min-h-11 w-full sm:max-w-72"
+            aria-label="Search strategy history"
+            placeholder="Search thesis, pair or venue…"
+            value={query}
+            onChange={(event) => setQuery(event.currentTarget.value)}
+          />
+        </div>
+        {filter !== 'Backtests' && <AutomationList selectedId={selected} onSelect={setSelected} query={query} />}
+        {filter !== 'Automations' && (
+          <div className="lab-history-empty rounded-xl border border-dashed py-12">
+            <EmptyState
+              title="Your strategies, kept together."
+              description="No completed backtests are available. Historical replay must run against a supported dataset before results can be saved."
+            >
+              <div className="flex flex-wrap gap-3">
+                <Button nativeButton={false} variant="outline" render={<Link to="/lab/backtests" />}>
+                  Build a backtest ↗
+                </Button>
+                <Button nativeButton={false} variant="outline" render={<Link to="/lab/automations" />}>
+                  Build an automation ↗
+                </Button>
+              </div>
+            </EmptyState>
+          </div>
+        )}
+      </section>
       {selected ? (
         <PersonalPanel title="Monitor evidence">
           <AutomationDetail id={selected} onDeleted={() => setSelected(null)} />
         </PersonalPanel>
       ) : null}
-      <PersonalPanel title="Backtest history">
-        <PersonalEmptyTable
-          headers={['Thesis', 'Asset / pair', 'Window', 'State', 'Evidence']}
-          title="No completed backtests"
-          description="Historical replay is not connected. A saved idea is not a completed backtest or a measured return."
-        />
-      </PersonalPanel>
     </div>
   );
 }
@@ -45,7 +92,7 @@ export function BacktestsPage() {
   return (
     <div className="lab-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="From thesis to strategy."
+        title="From Thesis To Strategy."
         kicker="Nest / Lab"
         description="Describe an idea. Test it against the past, or watch for it in the future."
       />
@@ -59,7 +106,7 @@ export function BacktestsPage() {
             Strategy chat <span className="ml-3 font-mono text-[10px] text-subtle">Backtest</span>
           </h2>
           <Button
-            variant="outline"
+            variant="ghost"
             className="workspace-action"
             disabled={chat.running}
             onClick={() => {
@@ -70,7 +117,7 @@ export function BacktestsPage() {
             New thesis
           </Button>
         </div>
-        <div className="flex h-[min(680px,75vh)] min-h-[480px] flex-col p-5 sm:p-6">
+        <div className="lab-thesis-body">
           <ConversationDraft purpose="strategy" />
         </div>
       </section>
@@ -136,18 +183,21 @@ export function AutomationsPage() {
   return (
     <div className="lab-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="From thesis to strategy."
+        title="From Thesis To Strategy."
         kicker="Nest / Lab"
         description="Describe an idea. Test it against the past, or watch for it in the future."
         actions={
-          <Button
-            nativeButton={false}
-            variant="outline"
-            className="workspace-action"
-            render={<Link to="/settings/connections" />}
-          >
-            Connections
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <ArbitrageDemoButton />
+            <Button
+              nativeButton={false}
+              variant="outline"
+              className="workspace-action"
+              render={<Link to="/settings/connections" />}
+            >
+              Connections
+            </Button>
+          </div>
         }
       />
       <PersonalNav area="lab" active="Set automation" />
@@ -160,7 +210,7 @@ export function AutomationsPage() {
             Strategy chat <span className="ml-3 font-mono text-[10px] text-subtle">Automation</span>
           </h2>
           <Button
-            variant="outline"
+            variant="ghost"
             className="workspace-action"
             disabled={chat.running}
             onClick={() => {
@@ -171,7 +221,7 @@ export function AutomationsPage() {
             New thesis
           </Button>
         </div>
-        <div className="flex h-[min(600px,70vh)] min-h-[460px] flex-col p-5 sm:p-6">
+        <div className="lab-thesis-body">
           <ConversationDraft purpose="strategy" />
         </div>
       </section>

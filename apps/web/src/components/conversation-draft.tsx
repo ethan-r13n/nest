@@ -31,20 +31,39 @@ import { ProposalCard } from './proposal-card.tsx';
 import { useWorkspaceSession } from './workspace-session.tsx';
 
 const PROMPTS = [
-  { label: 'Swap 1,000 XLM for USDC', text: 'Compare a swap of 1000 XLM for USDC.', icon: Coins },
-  { label: 'Supply 1,000 USDC on Blend', text: 'Compare supplying 1000 USDC on Blend.', icon: ChartNoAxesCombined },
+  { label: 'Swap 1,000 XLM for USDC', text: 'Compare a swap of 1000 XLM for USDC.', icon: Coins, description: '' },
+  {
+    label: 'Supply 1,000 USDC on Blend',
+    text: 'Compare supplying 1000 USDC on Blend.',
+    icon: ChartNoAxesCombined,
+    description: '',
+  },
 ];
 
 const STRATEGY_PROMPTS = [
   {
     label: 'Watch a pool divergence',
+    description: 'Compare XLM prices across two Stellar pools',
     text: 'Help me define a rule comparing XLM/USDC prices across two Stellar pools. Explain fees, sizing and trigger evidence.',
     icon: ChartNoAxesCombined,
   },
   {
-    label: 'Find the size that fits',
-    text: 'Help me assess available trade size when a pool price gap opens. Include depth, fees, price impact and unavailable data.',
+    label: 'Follow BTC momentum',
+    description: 'Explore an EMA signal and its data requirements',
+    text: 'Help me research a thesis about BTC closing above its 20-day EMA and an XLM entry. Identify data requirements and unsupported execution before proposing anything.',
+    icon: ChartNoAxesCombined,
+  },
+  {
+    label: 'Catch a volume breakout',
+    description: 'Research a breakout against a dated volume baseline',
+    text: 'Help me research an XLM volume-breakout thesis. Define the baseline, entry, exit and invalidation, and explain which data is available.',
     icon: Coins,
+  },
+  {
+    label: 'Watch a better supply rate',
+    description: 'Compare the current venue against a target rate',
+    text: 'Help me define a supply-rate alert for USDC across supported venues. Keep incentives and withdrawal timing separate, and disclose unsupported monitoring.',
+    icon: ArrowUpRight,
   },
 ];
 
@@ -95,8 +114,10 @@ export function ConversationDraft({
   }
 
   return (
-    <div className="mx-auto flex min-h-0 w-full max-w-3xl flex-1 flex-col gap-4">
-      <div className="flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-1 text-xs text-muted-foreground">
+    <div
+      className={`conversation-draft ${purpose === 'strategy' ? 'conversation-strategy' : 'conversation-research'} mx-auto flex min-h-0 w-full flex-1 flex-col gap-4`}
+    >
+      <div className="conversation-status flex shrink-0 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-1 text-xs text-muted-foreground">
         <span className="inline-flex items-center gap-1.5">
           <LockKeyhole className="size-3.5" aria-hidden="true" />
           Guest session
@@ -107,7 +128,7 @@ export function ConversationDraft({
           ) : (
             <BookOpen className="size-3.5" aria-hidden="true" />
           )}
-          {running ? 'Answering…' : 'Dated research · no execution'}
+          {running ? 'Answering…' : 'Research sources · reviewed proposals'}
         </span>
       </div>
 
@@ -206,12 +227,12 @@ export function ConversationDraft({
               ))}
             </div>
           ) : (
-            <div className="flex min-h-full flex-col gap-5 py-6 sm:py-8">
+            <div className="conversation-welcome flex min-h-full flex-col gap-5 py-6">
               <div className={compact ? 'space-y-3' : 'mx-auto max-w-lg space-y-3 text-center'}>
-                <div className="mb-3 flex items-center justify-center gap-3">
+                <div className="conversation-welcome-title mb-3 flex items-center justify-center gap-3">
                   <img src={accentSymbolUrl} alt="" className="w-9" />
                   <h2 className="font-serif text-3xl font-semibold">
-                    {purpose === 'strategy' ? 'What’s your thesis?' : 'What would you like to do?'}
+                    {purpose === 'strategy' ? 'What’s Your Thesis?' : 'What Would You Like To Do?'}
                   </h2>
                 </div>
                 <p className="text-[13px] leading-6 text-muted-foreground">
@@ -220,7 +241,7 @@ export function ConversationDraft({
                     : 'Ask about a market, compare venues, or bring a specific action to review.'}
                 </p>
               </div>
-              <div className={compact ? 'grid gap-2' : 'mx-auto grid w-full max-w-2xl gap-3 sm:grid-cols-2'}>
+              <div className={compact ? 'grid gap-2' : 'conversation-prompts mx-auto grid w-full gap-3 sm:grid-cols-2'}>
                 {(purpose === 'strategy' ? STRATEGY_PROMPTS : PROMPTS).map((prompt) => (
                   <Button
                     key={prompt.label}
@@ -234,6 +255,9 @@ export function ConversationDraft({
                     <prompt.icon className="mt-0.5 size-4 shrink-0 text-subtle" aria-hidden="true" />
                     <span className="min-w-0 flex-1 space-y-1.5">
                       <span className="block text-xs font-medium text-foreground">{prompt.label}</span>
+                      {prompt.description ? (
+                        <span className="block text-[11px] leading-5 text-muted-foreground">{prompt.description}</span>
+                      ) : null}
                     </span>
                     <ArrowUpRight
                       className="mt-0.5 size-3.5 text-subtle transition-colors group-hover:text-primary"
@@ -267,7 +291,7 @@ export function ConversationDraft({
 
       <div className="shrink-0 space-y-2.5">
         <form
-          className="overflow-hidden rounded-2xl border border-foreground/20 bg-card shadow-[0_8px_30px_rgba(0,0,0,0.12)] transition-[border-color,box-shadow] focus-within:border-primary/50 focus-within:ring-3 focus-within:ring-primary/10"
+          className="conversation-composer overflow-hidden rounded-xl border border-foreground/20 bg-card transition-colors focus-within:border-primary/50"
           onSubmit={(event) => {
             event.preventDefault();
             send();
@@ -283,7 +307,11 @@ export function ConversationDraft({
             onChange={(event) => setDraft(event.currentTarget.value)}
             onKeyDown={onKeyDown}
             maxLength={4000}
-            placeholder="Ask a question or explore an idea…"
+            placeholder={
+              purpose === 'strategy'
+                ? 'Here’s my thesis: compare two XLM pools and alert me when the gap opens…'
+                : 'Ask Nest anything…'
+            }
             aria-describedby={`${id}-hint${sendError ? ` ${id}-error` : ''}`}
             className="block max-h-48 min-h-24 resize-none rounded-none border-0 bg-transparent px-4 pt-4 pb-3 text-base leading-7 shadow-none placeholder:text-subtle focus-visible:ring-0 sm:min-h-28 sm:px-5 sm:pt-5 md:text-[15px] dark:bg-transparent"
           />
@@ -295,7 +323,7 @@ export function ConversationDraft({
           <div className="flex items-center justify-between gap-2 border-t border-border/60 px-3 py-2.5 sm:px-4">
             <p className="flex min-w-0 items-center gap-1.5 text-[11px] text-muted-foreground sm:gap-2 sm:text-xs">
               <ShieldCheck className="size-3.5 shrink-0" aria-hidden="true" />
-              Research only
+              Review exact effects before signing
             </p>
             <div className="flex shrink-0 items-center gap-1.5">
               {draft.length >= 3500 ? (
@@ -349,7 +377,7 @@ function AllocationDraft({ onDraft }: { onDraft: (text: string) => void }) {
   const issue = amountDraftIssue(capital, false);
   return (
     <form
-      className="workspace-panel mx-auto w-full max-w-2xl p-4"
+      className="workspace-panel allocation-draft mx-auto w-full p-4"
       onSubmit={(event) => {
         event.preventDefault();
         if (amountDraftIssue(capital, true)) return;

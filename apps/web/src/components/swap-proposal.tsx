@@ -20,17 +20,20 @@ import { TrustlineStep } from './trustline-step.tsx';
 type Phase = 'quoting' | 'quoted' | 'preparing' | 'review' | 'signing' | 'confirming' | 'done' | 'stopped';
 
 /**
- * A swap proposal from chat. Everything shown comes from Nest's own records: the live quote, then
- * the exact transaction the wallet will sign. Only the user's signature in their wallet executes it.
+ * A swap proposal from chat or the Trade form. Everything shown comes from Nest's own records: the
+ * live quote, then the exact transaction the wallet will sign. Only the user's signature in their
+ * wallet executes it. `onQuote` hears each quote (pass a stable function); `onSettled` hears the end.
  */
 export function SwapProposalCard({
   intentId,
   onQuote,
   onInteractionLock,
+  onSettled,
 }: {
   intentId: string;
   onQuote?: (quote: Quote | null) => void;
   onInteractionLock?: (locked: boolean) => void;
+  onSettled?: (plan: Plan) => void;
 }) {
   const wallet = useWallet();
   const [phase, setPhase] = useState<Phase>('quoting');
@@ -73,6 +76,7 @@ export function SwapProposalCard({
       return fresh?.id ?? null;
     } catch (caught) {
       fail(caught);
+      onQuote?.(null);
       setPhase('stopped');
       return null;
     }
@@ -115,6 +119,7 @@ export function SwapProposalCard({
       });
       setPlan(settled);
       setPhase(settled.status === 'confirmed' ? 'done' : isPending(settled) ? 'confirming' : 'stopped');
+      onSettled?.(settled);
     } catch (caught) {
       fail(caught);
       // The plan is still waiting for a signature unless the submit itself reported otherwise.

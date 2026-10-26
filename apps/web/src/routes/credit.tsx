@@ -17,6 +17,7 @@ import {
 } from '../components/financial-draft.tsx';
 import { LendingProposalCard } from '../components/lending-proposal.tsx';
 import { LiveLendingRates } from '../components/live-lending.tsx';
+import { SelectionCommand } from '../components/selection-command.tsx';
 import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { useWorkspaceSession } from '../components/workspace-session.tsx';
 import { amountDraftIssue } from '../lib/draft-validation.ts';
@@ -29,7 +30,7 @@ const INTENT_FIELDS = [
   { id: 'rate', label: 'Maximum APR', shortLabel: 'Max APR', number: '04' },
   { id: 'venue', label: 'Venue', shortLabel: 'Venue', number: '05' },
 ];
-const VENUES = ['Best available', 'Blend', 'Templar', 'XOXNO'];
+const VENUES = ['Best available', 'Blend', 'XOXNO'];
 
 export function CreditPage() {
   const { setDraft, setAssistantOpen } = useWorkspaceSession();
@@ -56,10 +57,10 @@ export function CreditPage() {
   };
   const selected = INTENT_FIELDS.find((field) => field.id === activeField);
   const headings: Record<string, string> = {
-    collateral: 'What will you put up?',
+    collateral: 'Start with your assets.',
     debt: 'What would you like to borrow?',
-    horizon: 'How long is your horizon?',
-    rate: 'Set your maximum rate.',
+    horizon: 'Compare over your timeframe.',
+    rate: 'Set your rate ceiling.',
     venue: 'Keep your options visible.',
   };
   const labels: Record<string, string> = {
@@ -127,7 +128,7 @@ export function CreditPage() {
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Borrow on your terms."
+        title="Borrow On Your Terms."
         kicker="Credit / Amount-aware borrowing"
         description="Set the collateral, debt and constraints. Compare the same intent across integrated venues."
         actions={
@@ -313,13 +314,15 @@ export function CreditPage() {
         </section>
       </div>
       <section className="credit-comparison space-y-5" aria-label="Borrow comparison">
-        <LiveLendingRates />
+        <SelectionCommand>
+          <LiveLendingRates />
+        </SelectionCommand>
         <div className="workspace-panel p-6">
           <h2 className="mb-3 font-serif text-2xl font-semibold">One review, wherever you start.</h2>
           <p className="mb-4 text-xs leading-6 text-muted-foreground">
             The table shows current reference rates. Ask Nest carries your exact collateral, debt, horizon and rate
-            constraints into a draft; the transaction card must obtain its own amount-specific quote. Templar and XOXNO
-            execution are not connected yet.
+            constraints into a draft; the transaction card must obtain its own amount-specific quote. XOXNO execution is
+            not connected yet; Templar remains research-only.
           </p>
           <WithdrawalTiming />
           <div className="mt-4">
@@ -335,6 +338,7 @@ export function SupplyPage() {
   const [asset, setAsset] = useState('USDC');
   const [amount, setAmount] = useState('');
   const [horizon, setHorizon] = useState('');
+  const [venue, setVenue] = useState('Best available');
   const [intentId, setIntentId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [interactionLocked, setInteractionLocked] = useState(false);
@@ -364,20 +368,17 @@ export function SupplyPage() {
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Put your assets to work."
+        title="Put liquidity to work"
         kicker="Credit / Direct supply"
         description="Compare direct lending at the same amount. Keep base yield, incentives and withdrawal conditions in view."
       />
       <CreditNavigation current="supply" />
       <div className="supply-workspace space-y-6">
-        <section className="workspace-panel p-6" aria-labelledby="supply-intent-title">
-          <p className="mb-3 font-mono text-[11px] tracking-widest text-subtle uppercase">Build an intent</p>
-          <h2 id="supply-intent-title" className="mb-6 font-serif text-[28px] font-semibold">
-            Supply intent
-          </h2>
-          <div className="grid items-start gap-6 sm:grid-cols-2">
+        <section className="workspace-panel supply-intent" aria-labelledby="supply-intent-title">
+          <h2 id="supply-intent-title">Supply Intent</h2>
+          <div className="supply-intent-fields">
             <AssetSelect
-              label="Supply asset"
+              label="Asset"
               disabled={Boolean(intentId) || creating}
               value={asset}
               onChange={(value) => {
@@ -386,8 +387,7 @@ export function SupplyPage() {
               }}
             />
             <DecimalField
-              unit={asset}
-              label="Supply amount"
+              label="Amount"
               disabled={Boolean(intentId) || creating}
               value={amount}
               onChange={(value) => {
@@ -405,17 +405,39 @@ export function SupplyPage() {
                 placeholder="Optional"
                 onChange={(event) => setHorizon(event.currentTarget.value)}
               />
-              <p className="text-xs text-subtle">Research context only. The connected pool offers a variable rate.</p>
+              <p className="text-xs text-subtle">An assumption, not a maturity date.</p>
             </div>
-            <WithdrawalTiming />
+            <div className="space-y-2">
+              <Label htmlFor="supply-venue">Venue</Label>
+              <Select
+                value={venue}
+                disabled={Boolean(intentId) || creating}
+                onValueChange={(value) => value !== null && setVenue(value)}
+              >
+                <SelectTrigger id="supply-venue" className="min-h-11 w-full">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Best available">Best available</SelectItem>
+                  <SelectItem value="Blend">Blend</SelectItem>
+                  <SelectItem value="Templar" disabled>
+                    Templar · research only
+                  </SelectItem>
+                  <SelectItem value="XOXNO" disabled>
+                    XOXNO · not connected
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
+          <WithdrawalTiming heading="When can I withdraw?" className="supply-withdrawal" />
           <div className="mt-6 flex flex-wrap items-center gap-4">
             <Button
               className="workspace-action min-w-52"
               disabled={Boolean(intentId) || creating || !amount.trim()}
               onClick={() => void compare()}
             >
-              {creating ? 'Comparing…' : 'Compare supply venues'} <ArrowRight />
+              {creating ? 'Comparing…' : 'Compare supply'} <ArrowRight />
             </Button>
             <p className="text-xs text-subtle">Comparison uses live Blend pools. Your wallet signs every deposit.</p>
           </div>
@@ -442,7 +464,9 @@ export function SupplyPage() {
           {intentId ? (
             <LendingProposalCard key={intentId} intentId={intentId} onInteractionLock={setInteractionLocked} />
           ) : (
-            <LiveLendingRates />
+            <SelectionCommand>
+              <LiveLendingRates />
+            </SelectionCommand>
           )}
           <p className="mt-4 text-xs leading-6 text-subtle">
             Templar and XOXNO are research coverage; their execution adapters are not connected. No rates or

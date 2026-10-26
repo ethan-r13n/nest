@@ -14,10 +14,17 @@ import { type ReactNode, useEffect, useState } from 'react';
 
 const PREFERENCES = new Map<string, TablePreferences>();
 const PAGE_SIZES = [10, 25, 50] as const;
-const INITIAL_PREFERENCES: TablePreferences = { density: 'comfortable', hidden: [], pageSize: 10 };
+const INITIAL_PREFERENCES: TablePreferences = { density: 'compact', hidden: [], pageSize: 10 };
 
 type TablePreferences = { density: 'comfortable' | 'compact'; hidden: string[]; pageSize: 10 | 25 | 50 };
-type Column<Row> = { id: string; label: string; required?: boolean; numeric?: boolean; cell: (row: Row) => ReactNode };
+type Column<Row> = {
+  id: string;
+  label: string;
+  required?: boolean;
+  numeric?: boolean;
+  onSort?: () => void;
+  cell: (row: Row) => ReactNode;
+};
 
 export function ResearchDataTable<Row>({
   tableKey,
@@ -50,9 +57,9 @@ export function ResearchDataTable<Row>({
     ? rows
     : rows.slice(safePage * preferences.pageSize, (safePage + 1) * preferences.pageSize);
   return (
-    <div className="min-w-0 space-y-3">
+    <div className="research-data-table min-w-0">
       {!compact ? (
-        <div className={controls ? 'workspace-panel flex flex-wrap items-end gap-3 p-3' : 'flex justify-end'}>
+        <div className={'research-table-toolbar'}>
           {controls}
           <fieldset
             className="ml-auto flex flex-wrap items-center justify-end gap-2"
@@ -66,7 +73,7 @@ export function ResearchDataTable<Row>({
               }}
             >
               <SelectTrigger aria-label={`${label} row density`} className="min-h-11">
-                <SelectValue>{preferences.density === 'compact' ? 'Compact rows' : 'Comfortable rows'}</SelectValue>
+                <SelectValue>{preferences.density === 'compact' ? 'Compact' : 'Comfortable'}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="comfortable">Comfortable rows</SelectItem>
@@ -105,9 +112,10 @@ export function ResearchDataTable<Row>({
       ) : null}
       <div className="overflow-hidden rounded-xl border bg-card">
         <Table
-          containerClassName="max-h-[32rem] overflow-auto"
+          containerClassName="overflow-auto"
           containerLabel={`${label} observations`}
-          className="w-full [&_a]:inline-flex [&_a]:min-h-11 [&_a]:items-center [&_button]:min-h-11 [&_button]:min-w-11"
+          data-density={preferences.density}
+          className="w-full [&_a]:inline-flex [&_a]:min-h-11 [&_a]:items-center"
         >
           <TableHeader>
             <TableRow>
@@ -116,7 +124,13 @@ export function ResearchDataTable<Row>({
                   key={column.id}
                   className={`sticky top-0 z-20 bg-card ${index === 0 ? 'left-0 z-30' : ''} ${column.numeric ? 'text-right' : ''}`}
                 >
-                  {column.label}
+                  {column.onSort ? (
+                    <button type="button" onClick={column.onSort} className="min-h-8 hover:text-primary">
+                      {column.label}
+                    </button>
+                  ) : (
+                    column.label
+                  )}
                 </TableHead>
               ))}
             </TableRow>
@@ -145,10 +159,10 @@ export function ResearchDataTable<Row>({
         </Table>
       </div>
       {!compact ? (
-        <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-subtle">
+        <div className="research-pagination">
           <span aria-live="polite">
             {rows.length
-              ? `${safePage * preferences.pageSize + 1}–${Math.min((safePage + 1) * preferences.pageSize, rows.length)} of ${rows.length}`
+              ? `${safePage * preferences.pageSize + 1}–${Math.min((safePage + 1) * preferences.pageSize, rows.length)} of ${rows.length} ${label.toLowerCase()} · Page ${safePage + 1} of ${pages}`
               : 'No matching records'}
           </span>
           <div className="flex flex-wrap items-center gap-2">
@@ -163,7 +177,7 @@ export function ResearchDataTable<Row>({
               }}
             >
               <SelectTrigger aria-label={`${label} rows per page`} className="min-h-11">
-                <SelectValue>{preferences.pageSize} per page</SelectValue>
+                <SelectValue>{preferences.pageSize}</SelectValue>
               </SelectTrigger>
               <SelectContent>
                 {PAGE_SIZES.map((size) => (
@@ -175,22 +189,34 @@ export function ResearchDataTable<Row>({
             </Select>
             <Button
               variant="outline"
-              className="min-h-11"
+              aria-label="Previous page"
               disabled={safePage === 0}
               onClick={() => setPage(safePage - 1)}
             >
-              Previous
+              ←
             </Button>
-            <span>
-              {safePage + 1} / {pages}
-            </span>
+            <nav aria-label={`${label} pages`} className="flex flex-wrap gap-1">
+              {Array.from({ length: pages }, (_, index) => index)
+                .filter((index) => index === 0 || index === pages - 1 || Math.abs(index - safePage) <= 1)
+                .map((index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    aria-label={`Page ${index + 1}`}
+                    aria-current={index === safePage ? 'page' : undefined}
+                    onClick={() => setPage(index)}
+                  >
+                    {index + 1}
+                  </Button>
+                ))}
+            </nav>
             <Button
               variant="outline"
-              className="min-h-11"
+              aria-label="Next page"
               disabled={safePage + 1 >= pages}
               onClick={() => setPage(safePage + 1)}
             >
-              Next
+              →
             </Button>
           </div>
         </div>

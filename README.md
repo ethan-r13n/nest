@@ -8,10 +8,11 @@ Nest combines sourced protocol research with an embedded Pi agent and a determin
 
 | Surface | Implemented behavior |
 | --- | --- |
-| Research | Dated DefiLlama/RWA.xyz observations, protocol and market details, filtering, charts, live Blend rates, and read-only Aquarius liquidity discovery. |
+| Research | Dated DefiLlama/RWA.xyz observations, protocol details, filtering, charts, live Blend rates, and Aquarius liquidity discovery. Click or highlight an APY to open a typed lending command and reviewed Blend proposal; other questions carry the selection into Ask Nest. |
 | Chat | Streamed Pi conversations, bounded research tools, Raven MCP authorization, and typed proposals. |
 | Automations | Live XLM/USDC pool comparison, reviewed arbitrage monitors, one-minute checks, and deduplicated in-app alerts. Monitoring reads pool state and never executes trades. |
-| Swap | Soroswap on mainnet; the Stellar DEX on Testnet. Quotes, policy checks, transaction inspection, Freighter signing, and confirmation. |
+| Swap | Soroswap on mainnet; the Stellar DEX on Testnet. Debounced quotes, policy checks, transaction inspection, Freighter signing, and confirmation. The approved candlestick chart retains its captured reference series and full research-asset window; connected wallets expose spendable balances and recorded activity. Live Stellar history endpoints remain available separately. |
+| Limit orders | A compact Aquarius XLM/USDC range-position ticket with reviewed placement and withdrawal. Wallet signatures and the adapter's execution gate remain required; automated price crossing does not submit another transaction. |
 | Credit | Blend supply, collateralized borrowing, repay, withdrawal, and a separate USDC trustline step. Pool exclusions and withdrawal conditions remain visible. |
 | Vaults | Live DeFindex vault reads and wallet-approved XLM/USDC deposits. Withdrawal execution and chat deposit proposals are not implemented. |
 | Landing | Standalone introduction with dated metrics and a question form that fills an unsent chat draft. |

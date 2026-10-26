@@ -1,0 +1,189 @@
+.credit-builder h2 {
+  text-transform: capitalize;
+}
+.credit-builder {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  gap: 24px;
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.credit-terms,
+.credit-editor {
+  min-width: 0;
+  padding: 24px;
+}
+
+.credit-terms h2,
+.credit-editor h2 {
+  margin-bottom: 22px;
+  font-family: var(--nest-font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.credit-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 68px;
+  height: auto;
+  margin-bottom: 10px;
+  padding: 13px 16px;
+  border: 1px solid var(--nest-border);
+  border-radius: 12px;
+  background: var(--nest-background);
+  text-align: left;
+  white-space: normal;
+}
+
+.credit-step[aria-pressed="true"] {
+  border-color: var(--nest-accent);
+  box-shadow: 0 0 0 1px var(--nest-accent);
+}
+
+.credit-step-value {
+  min-width: 0;
+  font-family: var(--nest-font-mono);
+  font-size: 12px;
+  color: var(--nest-text-secondary);
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.credit-step[aria-pressed="true"] .credit-step-value {
+  color: var(--nest-accent);
+}
+
+.credit-editor {
+  display: flex;
+  flex-direction: column;
+  min-height: 540px;
+}
+
+.credit-asset-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding: 16px;
+  border: 1px solid var(--nest-border);
+  border-radius: 12px;
+}
+
+.credit-amount-editor [data-slot="input-group"] {
+  min-height: 104px;
+  padding: 20px;
+  border-radius: 12px;
+  background: var(--nest-background);
+}
+
+.credit-amount-editor input {
+  min-height: 44px;
+  padding: 0;
+  font-family: var(--nest-font-mono);
+  font-size: 26px;
+  line-height: 1.4;
+  letter-spacing: -0.05em;
+}
+
+.credit-amount-editor input::placeholder {
+  font-size: 14px;
+  letter-spacing: normal;
+}
+
+.credit-amount-editor [data-slot="field-label"] {
+  margin-bottom: 10px;
+  font-family: var(--nest-font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.credit-comparison,
+.supply-workspace {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.credit-explainer {
+  margin-top: 16px;
+  color: var(--nest-text-secondary);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+@container workspace (max-width: 800px) {
+  .credit-builder {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 640px;
+  }
+  .credit-comparison,
+  .supply-workspace {
+    max-width: 640px;
+  }
+}
+
+.supply-intent {
+  padding: 24px 20px;
+}
+
+.supply-intent h2 {
+  margin-bottom: 32px;
+  font-family: var(--nest-font-display);
+  font-size: 28px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-transform: capitalize;
+}
+
+.supply-intent-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 16px;
+  margin-bottom: 24px;
+}
+
+.supply-intent-fields label {
+  font-family: var(--nest-font-mono);
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
+  color: var(--nest-text-secondary);
+  text-transform: uppercase;
+}
+
+.supply-intent-fields input,
+.supply-intent-fields [data-slot="select-trigger"] {
+  font-size: 12px;
+}
+
+.supply-withdrawal {
+  margin-bottom: 24px;
+  border-color: var(--nest-border);
+  background: var(--nest-surface-raised);
+}
+
+@media (max-width: 600px) {
+  .credit-terms,
+  .credit-editor {
+    padding: 20px;
+  }
+  .credit-step {
+    gap: 10px;
+    padding-inline: 12px;
+  }
+  .credit-step-value {
+    max-width: 50%;
+  }
+  .supply-intent-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
