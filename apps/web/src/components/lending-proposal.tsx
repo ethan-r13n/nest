@@ -53,7 +53,13 @@ const HELD_LABELS = { debt: 'You owe', supplied: 'You supplied', collateral: 'Yo
  * connected wallet's position in each. Excluded pools show their reason, then the card shows the
  * exact pool transaction the wallet will sign.
  */
-export function LendingProposalCard({ intentId }: { intentId: string }) {
+export function LendingProposalCard({
+  intentId,
+  onInteractionLock,
+}: {
+  intentId: string;
+  onInteractionLock?: (locked: boolean) => void;
+}) {
   const wallet = useWallet();
   const [phase, setPhase] = useState<Phase>('comparing');
   const [intent, setIntent] = useState<LendingIntent | null>(null);
@@ -65,6 +71,9 @@ export function LendingProposalCard({ intentId }: { intentId: string }) {
   const secondsLeft = useCountdown(
     phase === 'compared' ? offer?.expiresAt : phase === 'review' ? plan?.prepared?.validUntil : undefined,
   );
+  useEffect(() => {
+    onInteractionLock?.(phase === 'preparing' || phase === 'signing' || phase === 'confirming');
+  }, [phase, onInteractionLock]);
   const mounted = useRef(true);
   useEffect(
     () => () => {

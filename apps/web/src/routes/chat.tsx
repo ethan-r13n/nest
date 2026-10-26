@@ -35,7 +35,8 @@ const HISTORY_LINKS = [
 /** `ask` is a question carried from the landing page; it fills the composer once and is not sent. */
 export function ChatPage({ ask }: { ask?: string | undefined }) {
   const { setDraft, chat } = useWorkspaceSession();
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
+  const [pinned, setPinned] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -56,6 +57,14 @@ export function ChatPage({ ask }: { ask?: string | undefined }) {
       <aside
         className={`hidden min-h-0 min-w-0 flex-col border-r lg:flex ${expanded ? 'pr-5' : 'pr-2'}`}
         aria-label="Conversation history"
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => {
+          if (!pinned) setExpanded(false);
+        }}
+        onFocusCapture={() => setExpanded(true)}
+        onBlurCapture={(event) => {
+          if (!pinned && !event.currentTarget.contains(event.relatedTarget)) setExpanded(false);
+        }}
       >
         <div className={`mb-4 flex items-center gap-2 ${expanded ? 'justify-between' : 'flex-col'}`}>
           {expanded ? (
@@ -70,7 +79,10 @@ export function ChatPage({ ask }: { ask?: string | undefined }) {
             aria-label={expanded ? 'Collapse conversation history' : 'Expand conversation history'}
             aria-expanded={expanded}
             aria-controls="conversation-history"
-            onClick={() => setExpanded(!expanded)}
+            onClick={() => {
+              setPinned(!pinned);
+              setExpanded(!pinned);
+            }}
           >
             {expanded ? <PanelLeftClose /> : <PanelLeftOpen />}
           </Button>
@@ -91,7 +103,7 @@ export function ChatPage({ ask }: { ask?: string | undefined }) {
       </aside>
 
       <section className="flex min-h-0 min-w-0 flex-col gap-4 sm:gap-5">
-        <div className="relative mx-auto w-full max-w-3xl shrink-0 border-b pb-4 sm:pb-5 [&_h1]:pr-24 lg:[&_h1]:pr-0">
+        <div className="relative w-full shrink-0 border-b pb-4 sm:pb-5 [&_h1]:pr-24 lg:[&_h1]:pr-0">
           <PageHeader
             title="Ask Nest"
             description="Research Stellar DeFi, compare opportunities, and plan your next move."

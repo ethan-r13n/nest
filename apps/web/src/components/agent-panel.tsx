@@ -8,8 +8,9 @@ import {
   SheetTrigger,
 } from '@nest/ui/components/sheet';
 import { Link } from '@tanstack/react-router';
-import { Bot, X } from 'lucide-react';
+import { ArrowUpRight, X } from 'lucide-react';
 
+import symbolUrl from '../../../../design/nest/assets/nest-symbol.svg';
 import { ConversationDraft } from './conversation-draft.tsx';
 import { useWorkspaceSession } from './workspace-session.tsx';
 
@@ -20,19 +21,28 @@ export function AgentPanel({ desktop }: { desktop: boolean }) {
       <Button
         id="ask-nest-trigger"
         variant="ghost"
-        size="icon"
+        className="workspace-action border bg-card shadow-lg"
         aria-label={assistantOpen ? 'Close Ask Nest' : 'Open Ask Nest'}
         aria-expanded={assistantOpen}
         aria-controls="context-assistant"
         onClick={() => setAssistantOpen(!assistantOpen)}
       >
-        <Bot />
+        <img src={symbolUrl} alt="" className="mr-2 w-6" /> Ask Nest <ArrowUpRight className="ml-3 text-primary" />
       </Button>
     );
   return (
     <Sheet open={assistantOpen} onOpenChange={setAssistantOpen}>
-      <SheetTrigger render={<Button id="ask-nest-trigger" variant="ghost" size="icon" aria-label="Open Ask Nest" />}>
-        <Bot />
+      <SheetTrigger
+        render={
+          <Button
+            id="ask-nest-trigger"
+            variant="outline"
+            className="workspace-action border bg-card shadow-lg"
+            aria-label="Open Ask Nest"
+          />
+        }
+      >
+        <img src={symbolUrl} alt="" className="mr-2 w-6" /> Ask Nest <ArrowUpRight className="ml-3 text-primary" />
       </SheetTrigger>
       <SheetContent className="w-full sm:max-w-[440px]">
         <SheetHeader>

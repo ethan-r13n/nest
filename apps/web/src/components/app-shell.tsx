@@ -21,7 +21,9 @@ import { Link, Outlet, useLocation } from '@tanstack/react-router';
 import { Bell, Check, ChevronDown, LoaderCircle, Menu, Wallet } from 'lucide-react';
 import { type ReactNode, Suspense, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
+import './workspace-design.css';
+
+import symbolUrl from '../../../../design/nest/assets/nest-symbol.svg';
 import { useHealth } from '../lib/health.ts';
 import { shortAddress, useWallet, WalletProvider } from '../lib/wallet.tsx';
 import { AdjacentAssistant, AgentPanel } from './agent-panel.tsx';
@@ -34,7 +36,7 @@ const ROUTES = [
   { to: '/earn', label: 'Earn' },
   { to: '/credit', label: 'Credit' },
   { to: '/trade', label: 'Trade' },
-  { to: '/lab/memory', label: 'Lab' },
+  { to: '/lab/backtests', label: 'Lab' },
   { to: '/portfolio', label: 'Portfolio' },
 ] as const;
 
@@ -68,7 +70,7 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
     workspaceScrollRef.current?.scrollTo(0, 0);
   }, [pathname]);
   return (
-    <div className="flex h-svh min-w-0 flex-col overflow-hidden">
+    <div className="nest-workspace flex h-svh min-w-0 flex-col overflow-hidden">
       <a
         href="#workspace"
         className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-background focus:p-3"
@@ -76,22 +78,23 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
         Skip to workspace
       </a>
       <header className="sticky top-0 z-40 flex h-16 min-w-0 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur sm:gap-3 sm:px-5 xl:gap-5">
-        <Link to="/research" className="shrink-0" aria-label="Nest home">
-          <img src={lockupUrl} alt="Nest" className="h-6 w-auto sm:h-7" />
+        <Link to="/research" className="flex shrink-0 items-center gap-2.5" aria-label="Nest home">
+          <img src={symbolUrl} alt="" className="w-8 sm:w-9" />
+          <span className="font-serif text-[30px] font-semibold leading-none tracking-tight">Nest</span>
         </Link>
-        <nav aria-label="Primary" className="hidden items-center gap-1 xl:flex">
+        <nav aria-label="Primary" className="hidden h-full items-center gap-6 xl:flex">
           {ROUTES.map((route) => (
             <Link
               key={route.to}
               to={route.to}
-              className={`rounded-lg px-3 py-2 text-sm transition-colors ${isActiveGroup(pathname, route.to) ? 'bg-accent text-primary' : 'text-muted-foreground hover:text-foreground'}`}
+              className="workspace-primary-link transition-colors hover:text-foreground"
               aria-current={isActiveGroup(pathname, route.to) ? 'page' : undefined}
             >
               {route.label}
             </Link>
           ))}
         </nav>
-        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2 [&_button]:h-11! [&_button]:min-w-11! sm:[&_button]:h-8! sm:[&_button]:min-w-8!">
+        <div className="ml-auto flex shrink-0 items-center gap-1 sm:gap-2 [&_button]:h-11! [&_button]:min-w-11!">
           <div className="hidden lg:block">
             <NetworkStatus />
           </div>
@@ -104,7 +107,6 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
           </Link>
           <GuardrailsDrawer />
           <WalletButton />
-          <AgentPanel desktop={desktop} />
           <Sheet>
             <SheetTrigger
               render={<Button variant="ghost" size="icon" aria-label="Open navigation" className="xl:hidden" />}
@@ -192,6 +194,12 @@ function WorkspaceShell({ children }: { children: ReactNode }) {
           </Link>
         ))}
       </nav>
+      {pathname !== '/chat' && !assistantOpen ? (
+        <div className="fixed right-4 bottom-20 z-40 xl:right-7 xl:bottom-6">
+          <AgentPanel desktop={desktop} />
+        </div>
+      ) : null}
+      {!desktop && assistantOpen ? <AgentPanel desktop={false} /> : null}
     </div>
   );
 }
@@ -201,7 +209,7 @@ function WorkspaceContent({ children }: { children: ReactNode }) {
   return (
     <main
       id="workspace"
-      className={`mx-auto w-full min-w-0 max-w-[1440px] px-4 pt-5 sm:px-6 sm:pt-6 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 xl:pb-6' : 'flex-1 pb-24 xl:pb-8'}`}
+      className={`mx-auto w-full min-w-0 max-w-[1920px] px-4 pt-5 sm:px-6 sm:pt-6 lg:px-7 lg:pt-7 ${chatPage ? 'flex h-full flex-col overflow-hidden pb-20 xl:pb-6' : 'flex-1 pb-24 xl:pb-8'}`}
     >
       <Suspense
         fallback={

@@ -247,6 +247,8 @@ export async function call<T>(
 }
 
 export const execution = {
+  createSwap: (input: { sellAsset: 'XLM' | 'USDC'; buyAsset: 'XLM' | 'USDC'; sellAmount: string }) =>
+    call<Intent>('/api/intents', { method: 'POST', body: { kind: 'swap', ...input } }),
   intent: (id: string) => call<Intent>(`/api/intents/${id}`),
   lendingIntent: (id: string) => call<LendingIntent>(`/api/intents/${id}`),
   createLending: (input: { kind: LendingKind; asset: 'USDC' | 'XLM'; amount: string; poolId?: string }) =>

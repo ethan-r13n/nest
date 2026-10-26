@@ -1,5 +1,6 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
+import { Input } from '@nest/ui/components/input';
 import { Label } from '@nest/ui/components/label';
 import { Textarea } from '@nest/ui/components/textarea';
 import {
@@ -7,7 +8,6 @@ import {
   ArrowDown,
   ArrowUp,
   ArrowUpRight,
-  Bell,
   BookOpen,
   ChartNoAxesCombined,
   Check,
@@ -21,20 +21,40 @@ import {
 } from 'lucide-react';
 import { type KeyboardEvent, useId, useLayoutEffect, useRef, useState } from 'react';
 
+import accentSymbolUrl from '../../../../design/nest/assets/nest-symbol.svg';
 import symbolUrl from '../../../../design/nest/assets/nest-symbol-cream.svg';
 import { ChatRequestError } from '../lib/agent-chat.ts';
+import { amountDraftIssue } from '../lib/draft-validation.ts';
+import { AssetSelect } from './financial-draft.tsx';
 import { MessageContent } from './message-content.tsx';
 import { ProposalCard } from './proposal-card.tsx';
 import { useWorkspaceSession } from './workspace-session.tsx';
 
 const PROMPTS = [
-  { label: 'Explore lending', text: 'Which Stellar lending protocols hold the most TVL?', icon: ChartNoAxesCombined },
-  { label: 'Compare yields', text: 'Compare USDC yield pools and what drives their APY', icon: Coins },
-  { label: 'Understand risk', text: 'Explain a vault’s risks before I deposit', icon: ShieldCheck },
-  { label: 'Follow an idea', text: 'Help me turn a research idea into a monitoring rule', icon: Bell },
+  { label: 'Swap 1,000 XLM for USDC', text: 'Compare a swap of 1000 XLM for USDC.', icon: Coins },
+  { label: 'Supply 1,000 USDC on Blend', text: 'Compare supplying 1000 USDC on Blend.', icon: ChartNoAxesCombined },
 ];
 
-export function ConversationDraft({ compact = false }: { compact?: boolean }) {
+const STRATEGY_PROMPTS = [
+  {
+    label: 'Watch a pool divergence',
+    text: 'Help me define a rule comparing XLM/USDC prices across two Stellar pools. Explain fees, sizing and trigger evidence.',
+    icon: ChartNoAxesCombined,
+  },
+  {
+    label: 'Find the size that fits',
+    text: 'Help me assess available trade size when a pool price gap opens. Include depth, fees, price impact and unavailable data.',
+    icon: Coins,
+  },
+];
+
+export function ConversationDraft({
+  compact = false,
+  purpose = 'research',
+}: {
+  compact?: boolean;
+  purpose?: 'research' | 'strategy';
+}) {
   const id = useId();
   const { draft, setDraft, chat } = useWorkspaceSession();
   const { messages, running } = chat;
@@ -186,26 +206,26 @@ export function ConversationDraft({ compact = false }: { compact?: boolean }) {
               ))}
             </div>
           ) : (
-            <div className="flex min-h-full flex-col justify-center gap-7 py-6 sm:py-10">
+            <div className="flex min-h-full flex-col gap-5 py-6 sm:py-8">
               <div className={compact ? 'space-y-3' : 'mx-auto max-w-lg space-y-3 text-center'}>
-                <div
-                  className={`mb-5 flex size-12 items-center justify-center rounded-2xl border bg-card ${compact ? '' : 'mx-auto'}`}
-                >
-                  <img src={symbolUrl} alt="" className="size-6" />
+                <div className="mb-3 flex items-center justify-center gap-3">
+                  <img src={accentSymbolUrl} alt="" className="w-9" />
+                  <h2 className="font-serif text-3xl font-semibold">
+                    {purpose === 'strategy' ? 'What’s your thesis?' : 'What would you like to do?'}
+                  </h2>
                 </div>
-                <h2 className={compact ? 'text-2xl font-semibold' : 'text-2xl font-semibold sm:text-3xl'}>
-                  What would you like to explore?
-                </h2>
-                <p className="text-sm leading-6 text-muted-foreground">
-                  Find your way through Stellar DeFi. Start with a question, or explore an idea below.
+                <p className="text-[13px] leading-6 text-muted-foreground">
+                  {purpose === 'strategy'
+                    ? 'Tell Nest what you want to test, over what period, and what would make the strategy worth pursuing.'
+                    : 'Ask about a market, compare venues, or bring a specific action to review.'}
                 </p>
               </div>
               <div className={compact ? 'grid gap-2' : 'mx-auto grid w-full max-w-2xl gap-3 sm:grid-cols-2'}>
-                {PROMPTS.map((prompt) => (
+                {(purpose === 'strategy' ? STRATEGY_PROMPTS : PROMPTS).map((prompt) => (
                   <Button
                     key={prompt.label}
                     variant="outline"
-                    className="group h-auto min-h-28 items-start justify-start gap-3 whitespace-normal border-border bg-card/50 p-4 text-left transition-colors hover:border-primary/35 hover:bg-secondary dark:border-border dark:bg-card/50 dark:hover:bg-secondary"
+                    className="group h-auto min-h-14 items-center justify-start gap-3 whitespace-normal border-border bg-background p-4 text-left transition-colors hover:border-primary/35 hover:bg-secondary"
                     onClick={() => {
                       setDraft(prompt.text);
                       textareaRef.current?.focus();
@@ -214,7 +234,6 @@ export function ConversationDraft({ compact = false }: { compact?: boolean }) {
                     <prompt.icon className="mt-0.5 size-4 shrink-0 text-subtle" aria-hidden="true" />
                     <span className="min-w-0 flex-1 space-y-1.5">
                       <span className="block text-xs font-medium text-foreground">{prompt.label}</span>
-                      <span className="block text-xs leading-5 font-normal text-muted-foreground">{prompt.text}</span>
                     </span>
                     <ArrowUpRight
                       className="mt-0.5 size-3.5 text-subtle transition-colors group-hover:text-primary"
@@ -223,6 +242,14 @@ export function ConversationDraft({ compact = false }: { compact?: boolean }) {
                   </Button>
                 ))}
               </div>
+              {!compact && purpose === 'research' ? (
+                <AllocationDraft
+                  onDraft={(text) => {
+                    setDraft(text);
+                    textareaRef.current?.focus();
+                  }}
+                />
+              ) : null}
             </div>
           )}
         </div>
@@ -311,5 +338,75 @@ export function ConversationDraft({ compact = false }: { compact?: boolean }) {
         </div>
       </div>
     </div>
+  );
+}
+
+function AllocationDraft({ onDraft }: { onDraft: (text: string) => void }) {
+  const id = useId();
+  const [capital, setCapital] = useState('');
+  const [asset, setAsset] = useState('USDC');
+  const [horizon, setHorizon] = useState('30');
+  const issue = amountDraftIssue(capital, false);
+  return (
+    <form
+      className="workspace-panel mx-auto w-full max-w-2xl p-4"
+      onSubmit={(event) => {
+        event.preventDefault();
+        if (amountDraftIssue(capital, true)) return;
+        onDraft(
+          'Compare allocating ' +
+            capital.trim() +
+            ' ' +
+            asset +
+            ' for ' +
+            horizon +
+            ' days across Stellar opportunities. Include fees, risks and exit conditions.',
+        );
+      }}
+    >
+      <p className="mb-5 text-sm">I want to allocate</p>
+      <div className="grid items-end gap-3 sm:grid-cols-[1fr_0.8fr_0.9fr_auto]">
+        <div className="space-y-2">
+          <Label htmlFor={id} className="font-mono text-[10px] uppercase">
+            Capital
+          </Label>
+          <Input
+            id={id}
+            value={capital}
+            onChange={(event) => setCapital(event.currentTarget.value)}
+            inputMode="decimal"
+            placeholder="Enter amount"
+            className="min-h-11 bg-background"
+            aria-invalid={Boolean(issue)}
+            aria-describedby={issue ? `${id}-error` : undefined}
+          />
+        </div>
+        <AssetSelect label="Asset" value={asset} onChange={setAsset} />
+        <div className="space-y-2">
+          <Label htmlFor={`${id}-horizon`} className="font-mono text-[10px] uppercase">
+            Horizon
+          </Label>
+          <select
+            id={`${id}-horizon`}
+            value={horizon}
+            onChange={(event) => setHorizon(event.currentTarget.value)}
+            className="min-h-11 w-full rounded-lg border bg-background px-3 text-xs"
+          >
+            <option value="7">7 days</option>
+            <option value="30">30 days</option>
+            <option value="90">90 days</option>
+          </select>
+        </div>
+        <Button className="workspace-action" type="submit" disabled={!capital.trim() || Boolean(issue)}>
+          Compare with Nest <ArrowUpRight />
+        </Button>
+      </div>
+      {issue ? (
+        <p id={`${id}-error`} role="alert" className="mt-2 text-xs text-destructive">
+          {issue}
+        </p>
+      ) : null}
+      <p className="mt-3 text-[10px] text-subtle">Creates a draft for your review. Nothing is sent automatically.</p>
+    </form>
   );
 }
