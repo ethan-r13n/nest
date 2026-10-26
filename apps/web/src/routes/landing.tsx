@@ -117,7 +117,6 @@ function Hero() {
     <section
       className={`flex min-h-[calc(100svh-160px)] flex-col justify-center gap-6 pb-[clamp(36px,8vh,100px)] sm:min-h-[calc(100svh-100px)] ${GUTTER}`}
     >
-      <p className={`${MONO} m-0 text-[11px] tracking-[.16em] text-[#b9b3a8]`}>NEST / AGENT HARNESS</p>
       <h1 className={`${SERIF} m-0 max-w-[1000px] text-[clamp(72px,11.5vw,176px)] leading-[.88] tracking-[-.025em]`}>
         Stellar DeFi.
         <br />
