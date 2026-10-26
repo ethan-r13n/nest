@@ -56,10 +56,10 @@ export function CreditPage() {
   };
   const selected = INTENT_FIELDS.find((field) => field.id === activeField);
   const headings: Record<string, string> = {
-    collateral: 'What will you put up?',
+    collateral: 'Start with your assets.',
     debt: 'What would you like to borrow?',
-    horizon: 'How long is your horizon?',
-    rate: 'Set your maximum rate.',
+    horizon: 'Compare over your timeframe.',
+    rate: 'Set your rate ceiling.',
     venue: 'Keep your options visible.',
   };
   const labels: Record<string, string> = {
@@ -364,7 +364,7 @@ export function SupplyPage() {
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Put your assets to work."
+        title="Put liquidity to work"
         kicker="Credit / Direct supply"
         description="Compare direct lending at the same amount. Keep base yield, incentives and withdrawal conditions in view."
       />

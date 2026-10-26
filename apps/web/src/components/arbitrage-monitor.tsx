@@ -259,16 +259,26 @@ export function ArbitrageBuilder({ onActivated }: { onActivated(id: string): voi
 }
 
 /** Rules for this network, with their state and unread alerts. */
-export function AutomationList({ selectedId, onSelect }: { selectedId: string | null; onSelect(id: string): void }) {
+export function AutomationList({
+  selectedId,
+  onSelect,
+  query = '',
+}: {
+  selectedId: string | null;
+  onSelect(id: string): void;
+  query?: string;
+}) {
   const list = useQuery({ queryKey: ['automations'], queryFn: automations.list, refetchInterval: RULES_REFRESH_MS });
   if (list.isPending) return <p className="text-sm text-muted-foreground">Loading monitors…</p>;
   if (list.isError) return <p className="text-sm text-destructive">{messageOf(list.error)}</p>;
   if (!list.data.length) {
     return <p className="text-sm text-muted-foreground">No monitors yet. Build one to start watching a price gap.</p>;
   }
+  const matches = list.data.filter((rule) => rule.name.toLowerCase().includes(query.trim().toLowerCase()));
+  if (!matches.length) return <p className="text-sm text-muted-foreground">No monitors match this search.</p>;
   return (
     <ul className="space-y-2">
-      {list.data.map((rule) => (
+      {matches.map((rule) => (
         <li key={rule.id}>
           <button
             type="button"

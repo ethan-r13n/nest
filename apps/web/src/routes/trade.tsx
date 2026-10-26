@@ -1,12 +1,12 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@nest/ui/components/table';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { ArrowDownUp, ArrowRight, Route } from 'lucide-react';
 import { useState } from 'react';
 
 import { AssetIcon } from '../components/asset-icon.tsx';
+import { AssetPicker } from '../components/asset-picker.tsx';
 import { ReviewRequirements, UnavailableFacts } from '../components/financial-draft.tsx';
 import { type ChartContext, MarketChart } from '../components/market-chart.tsx';
 import { SwapProposalCard, useCountdown } from '../components/swap-proposal.tsx';
@@ -82,30 +82,17 @@ export function TradePage() {
             </h1>
             <p className="mt-1 text-xs text-subtle">Stellar spot · market orders</p>
           </div>
-          <Select
+          <AssetPicker
+            compact
+            label="Choose market asset"
             value={inputAsset}
             disabled={Boolean(intentId) || creating}
-            onValueChange={(value) => {
-              if (!value) return;
+            onChange={(value) => {
               setInputAsset(value);
               if (value === outputAsset) setOutputAsset(value === 'USDC' ? 'XLM' : 'USDC');
               invalidate();
             }}
-          >
-            <SelectTrigger
-              aria-label="Choose market asset"
-              className="ml-3 min-h-11 w-11 shrink-0 justify-center rounded-xl border border-primary/60 p-0 hover:border-primary focus-visible:border-primary"
-            >
-              <SelectValue className="sr-only" />
-            </SelectTrigger>
-            <SelectContent>
-              {['XLM', 'USDC', 'USDT0'].map((asset) => (
-                <SelectItem key={asset} value={asset}>
-                  {asset}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          />
         </div>
         <div className="trade-market-context">
           <div>
@@ -208,28 +195,15 @@ export function TradePage() {
                   }}
                   className="trade-amount-input"
                 />
-                <Select
+                <AssetPicker
+                  label="You pay"
                   value={inputAsset}
                   disabled={Boolean(intentId) || creating}
-                  onValueChange={(value) => {
-                    if (value) {
-                      setInputAsset(value);
-                      invalidate();
-                    }
+                  onChange={(value) => {
+                    setInputAsset(value);
+                    invalidate();
                   }}
-                >
-                  <SelectTrigger aria-label="You pay" className="trade-token-select">
-                    <AssetIcon symbol={inputAsset} className="size-6" />
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {['XLM', 'USDC', 'USDT0'].map((asset) => (
-                      <SelectItem key={asset} value={asset}>
-                        {asset}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                />
               </div>
               <p className="mt-3 text-[10px] leading-5 text-subtle">
                 Spendable balance and reserves are checked before review.
@@ -259,28 +233,15 @@ export function TradePage() {
                 >
                   {quote && secondsLeft !== 0 ? quote.expectedOut.amount : '—'}
                 </output>
-                <Select
+                <AssetPicker
+                  label="You receive"
                   value={outputAsset}
                   disabled={Boolean(intentId) || creating}
-                  onValueChange={(value) => {
-                    if (value) {
-                      setOutputAsset(value);
-                      invalidate();
-                    }
+                  onChange={(value) => {
+                    setOutputAsset(value);
+                    invalidate();
                   }}
-                >
-                  <SelectTrigger aria-label="You receive" className="trade-token-select">
-                    <AssetIcon symbol={outputAsset} className="size-6" />
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {['XLM', 'USDC', 'USDT0'].map((asset) => (
-                      <SelectItem key={asset} value={asset}>
-                        {asset}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                />
               </div>
               <p className="mt-3 text-[10px] leading-5 text-subtle">
                 Final asset changes come from your reviewed transaction.
@@ -388,16 +349,22 @@ export function TradePage() {
               <Table>
                 <TableHeader>
                   <TableRow>
-                    {['Asset / Market', 'Quantity', 'USD notional', 'Avg. entry', 'Mark', 'Unrealized P&L'].map(
-                      (label) => (
-                        <TableHead key={label}>{label}</TableHead>
-                      ),
-                    )}
+                    {[
+                      'Asset / Market',
+                      'Quantity',
+                      'USD notional',
+                      'Avg. entry',
+                      'Mark',
+                      'Unrealized P&L',
+                      'Action',
+                    ].map((label) => (
+                      <TableHead key={label}>{label}</TableHead>
+                    ))}
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   <TableRow>
-                    <TableCell colSpan={6} className="p-0">
+                    <TableCell colSpan={7} className="p-0">
                       <EmptyState
                         title="No verified spot positions loaded"
                         description="Confirmed balances and cost basis are needed before position size, value or P&L can be shown. Missing data is not a zero balance."

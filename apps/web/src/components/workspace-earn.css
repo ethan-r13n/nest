@@ -1,3 +1,10 @@
+.earn-detail h2,
+.earn-detail [data-slot="card-title"] {
+  text-transform: capitalize;
+}
+.earn-detail-metrics [data-slot="card-header"] {
+  border: 0;
+}
 .earn-list-layout {
   display: grid;
   grid-template-columns: 250px minmax(0, 1fr);
@@ -175,4 +182,85 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.earn-detail .workspace-page-header {
+  margin-bottom: 36px;
+}
+.earn-detail .workspace-page-header h1 {
+  font-size: 46px;
+}
+.earn-detail .workspace-page-header p:last-child {
+  max-width: 740px;
+  font-size: 13px;
+  line-height: 1.9;
+  margin-top: 24px;
+}
+.earn-detail-metrics {
+  margin-block: 40px 30px;
+}
+.nest-workspace .earn-detail-metrics [data-slot="card"] {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.earn-detail-metrics [data-slot="card-description"] {
+  font: 400 10px var(--nest-font-mono);
+}
+
+.earn-detail-layout > div > [data-slot="card"]:has(.vault-source-facts) .vault-source-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+}
+.earn-detail-layout > div > [data-slot="card"]:has(.vault-source-facts) .vault-source-facts > div {
+  display: block;
+  margin: 0;
+}
+.earn-detail .vault-source-facts dt {
+  font-size: 11px;
+}
+.earn-detail .vault-source-facts dd {
+  margin-top: 10px;
+  font-size: 12px;
+}
+.earn-detail aside [role="tablist"] {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: 100%;
+  border-radius: 0;
+  border-bottom: 1px solid var(--nest-border);
+  background: transparent;
+}
+.earn-detail aside [role="tab"] {
+  border-radius: 0;
+  min-height: 44px;
+  background: transparent;
+  box-shadow: none;
+  font-size: 12px;
+}
+.earn-detail aside [role="tab"][data-active] {
+  border-bottom: 2px solid var(--nest-accent);
+  color: var(--nest-accent);
+}
+@container workspace (max-width: 800px) {
+  .earn-detail .workspace-page-header h1 {
+    font-size: 32px;
+  }
+  .earn-detail-metrics {
+    margin-block: 24px;
+  }
+}
+
+.earn-detail aside [data-slot="input-group"] {
+  min-height: 96px;
+  padding: 16px;
+}
+.earn-detail aside [data-slot="input-group-input"] {
+  font-size: 26px;
+}
+.earn-detail aside [data-slot="input-group-input"]::placeholder {
+  font-size: 14px;
 }

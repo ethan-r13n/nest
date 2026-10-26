@@ -128,7 +128,7 @@ export function PersonalEmptyTable({
   );
 }
 
-export function PersonalFact({ label, value }: { label: string; value: string }) {
+export function PersonalFact({ label, value }: { label: string; value: ReactNode }) {
   return (
     <div className="flex min-w-0 items-start justify-between gap-4 border-b py-3 last:border-0">
       <dt className="text-sm text-muted-foreground">{label}</dt>

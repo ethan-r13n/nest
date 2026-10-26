@@ -494,7 +494,7 @@ export function VaultDetailPage({ vaultId }: { vaultId: string }) {
 function CampaignDetailPage() {
   const strategy = strategyFor('sentora-campaign', 'XLM');
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="earn-detail flex min-w-0 flex-col gap-6">
       <Link
         to="/earn"
         className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
@@ -502,9 +502,14 @@ function CampaignDetailPage() {
         <ArrowLeft className="size-4" />
         Earn
       </Link>
-      <PageHeader title="Sentora XLM Campaign" kicker="Sentora / Campaign" description={strategy?.description ?? ''} />
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="earn-detail-layout grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0 space-y-5">
+          <PageHeader
+            title="Sentora XLM Campaign"
+            kicker="Sentora / Campaign"
+            description={strategy?.description ?? ''}
+            icon={<ProtocolLogo name="Sentora" />}
+          />
           <VaultStrategyMain strategy={strategy} />
         </div>
         <aside className="min-w-0 space-y-5">
@@ -542,11 +547,11 @@ function ResearchVaultDetailPage({ vaultId }: { vaultId: string }) {
   const depositAsset = strategy?.facts.find((fact) => fact.label === 'Deposit asset')?.value ?? pool.symbol;
   const metrics = [
     { label: 'Reported TVL', value: pool.tvlUsd, display: formatUsd(pool.tvlUsd) },
+    { label: 'Reported APY', value: pool.totalApyPct, display: formatApy(pool.totalApyPct) },
     { label: 'Base APY', value: pool.baseApyPct, display: formatApy(pool.baseApyPct) },
-    { label: 'Reward APY', value: pool.rewardApyPct, display: formatApy(pool.rewardApyPct) },
   ].filter((metric) => metric.value !== null);
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="earn-detail flex min-w-0 flex-col gap-6">
       <Link
         to="/earn"
         className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted-foreground hover:text-foreground"
@@ -554,17 +559,26 @@ function ResearchVaultDetailPage({ vaultId }: { vaultId: string }) {
         <ArrowLeft className="size-4" />
         Earn
       </Link>
-      <PageHeader title={pool.symbol} kicker={projectName(pool.project)} description={strategy?.description ?? ''} />
-      <p className="text-xs text-muted-foreground">Mainnet observation · {formatUtc(pool.observedAt)}</p>
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="earn-detail-layout grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0 space-y-5">
+          <PageHeader
+            title={
+              pool.project === 'gami-labs'
+                ? `Gami ${pool.symbol.replace('EARN', '')} Vault`
+                : `${projectName(pool.project)} ${depositAsset}`
+            }
+            kicker="Vault strategy / Stellar"
+            description={strategy?.description ?? ''}
+            icon={<ProtocolLogo name={projectName(pool.project)} />}
+          />
           {metrics.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-3">
+            <div className="earn-detail-metrics grid gap-4 sm:grid-cols-3">
               {metrics.map((metric) => (
                 <StatCard key={metric.label} label={metric.label} value={metric.display} />
               ))}
             </div>
           )}
+          <p className="text-xs text-muted-foreground">DefiLlama · captured {formatUtc(pool.observedAt)}</p>
           <VaultStrategyMain strategy={strategy} />
         </div>
         <aside className="min-w-0 space-y-5">
@@ -833,18 +847,19 @@ function LiveVaultDetailPage({ vaultId }: { vaultId: string }) {
   if (vaults.isPending) return <p role="status">Reading vault…</p>;
   if (!vault || !vaults.data) return <MissingOpportunity />;
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="earn-detail flex min-w-0 flex-col gap-6">
       <Link to="/earn" className="text-sm text-muted-foreground">
         ← Earn
       </Link>
-      <PageHeader
-        title={vault.name}
-        kicker={`DeFindex / ${vaults.data.network}`}
-        description="Deposit into the selected vault with a fresh code check, transaction review and your wallet signature."
-      />
-      <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
+      <div className="earn-detail-layout grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="space-y-5">
-          <div className="grid gap-4 sm:grid-cols-3">
+          <PageHeader
+            title={vault.name}
+            kicker={`DeFindex / ${vaults.data.network}`}
+            description="Deposit into the selected vault with a fresh code check, transaction review and your wallet signature."
+            icon={<ProtocolLogo name="DeFindex" />}
+          />
+          <div className="earn-detail-metrics grid gap-4 sm:grid-cols-3">
             <StatCard label="30-day APY" value={formatApy(vault.apyPct)} detail="Net of the vault’s fee" />
             <StatCard
               label="Vault assets"

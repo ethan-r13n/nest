@@ -7,6 +7,7 @@ import { Link } from '@tanstack/react-router';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import { useState } from 'react';
 import { DecimalField } from '../components/financial-draft.tsx';
+import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { VaultStrategyAside, VaultStrategyMain } from '../components/vault-strategy.tsx';
 import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { formatUsd, formatUtc } from '../lib/format.ts';
@@ -45,24 +46,29 @@ export function LiquidityDetailPage({ poolId }: { poolId: string }) {
     },
   };
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="earn-detail flex min-w-0 flex-col gap-6">
       <Link to="/earn" className="inline-flex min-h-11 w-fit items-center gap-2 text-sm text-muted-foreground">
         <ArrowLeft className="size-4" />
         Earn
       </Link>
-      <PageHeader title={pair(pool)} kicker="Aquarius / Liquidity" description={strategy.description} />
-      <p className="text-xs text-muted-foreground">
-        {pool.network} indexed observation · retrieved {formatUtc(pool.retrievedAt)} · pool verification pending
-      </p>
-      <div className="grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
+      <div className="earn-detail-layout grid min-w-0 gap-6 lg:grid-cols-[minmax(0,1fr)_21rem]">
         <div className="min-w-0 space-y-5">
+          <PageHeader
+            title={pair(pool)}
+            kicker="Aquarius / Liquidity"
+            description={strategy.description}
+            icon={<ProtocolLogo name="Aquarius" />}
+          />
           {metrics.length > 0 && (
-            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="earn-detail-metrics grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
               {metrics.map((metric) => (
                 <StatCard key={metric.label} label={metric.label} value={metric.value ?? ''} />
               ))}
             </div>
           )}
+          <p className="text-xs text-muted-foreground">
+            {pool.network} indexed observation · retrieved {formatUtc(pool.retrievedAt)} · pool verification pending
+          </p>
           <VaultStrategyMain
             strategy={strategy}
             sources={sources}
@@ -83,7 +89,6 @@ function liquidityStrategy(pool: AquariusPool): VaultStrategy {
   const facts = [
     { label: 'Deposit assets', value: pair(pool), sourceId: 'aquarius' },
     { label: 'Pool type', value: pool.type === 'stable' ? 'Stable-swap' : 'Constant product', sourceId: 'aquarius' },
-    { label: 'Pool index', value: pool.poolHash, sourceId: 'aquarius' },
   ];
   if (pool.volume24hUsd !== null)
     facts.push({ label: '24h volume', value: formatUsd(pool.volume24hUsd), sourceId: 'aquarius' });
@@ -126,7 +131,7 @@ function LiquidityTicket({ pool }: { pool: AquariusPool }) {
   return (
     <Card className="min-w-0 self-start lg:sticky lg:top-24">
       <CardHeader>
-        <CardTitle>Manage liquidity</CardTitle>
+        <CardTitle>Manage position</CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">
         <Tabs defaultValue="add">
@@ -139,9 +144,14 @@ function LiquidityTicket({ pool }: { pool: AquariusPool }) {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="add" className="space-y-4 pt-3">
-            <DecimalField label="Maximum contribution" unit={pool.tokens[0].symbol} value={first} onChange={setFirst} />
             <DecimalField
-              label="Maximum contribution"
+              label={`Maximum ${pool.tokens[0].symbol} contribution`}
+              unit={pool.tokens[0].symbol}
+              value={first}
+              onChange={setFirst}
+            />
+            <DecimalField
+              label={`Maximum ${pool.tokens[1].symbol} contribution`}
               unit={pool.tokens[1].symbol}
               value={second}
               onChange={setSecond}

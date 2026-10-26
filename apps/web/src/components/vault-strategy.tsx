@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@nest/ui/components/ca
 
 import contextJson from '../../../../research/data/vault-strategies.json' with { type: 'json' };
 import { formatUtc } from '../lib/format.ts';
+import { ProtocolLogo } from './protocol-logo.tsx';
 
 const context = parseVaultStrategies(contextJson);
 const CATEGORIES = ['Market', 'System', 'Execution'];
@@ -113,9 +114,12 @@ export function VaultStrategyAside({ strategy }: { strategy: VaultStrategy | und
           </CardHeader>
           <CardContent className="space-y-4">
             {strategy.counterparties.map((party) => (
-              <div key={party.name}>
-                <p className="text-sm font-medium">{party.name}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{party.role}</p>
+              <div key={party.name} className="flex items-center gap-3">
+                <ProtocolLogo name={party.name} />
+                <div>
+                  <p className="text-sm font-medium">{party.name}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{party.role}</p>
+                </div>
               </div>
             ))}
           </CardContent>
@@ -137,7 +141,7 @@ export function VaultStrategyAside({ strategy }: { strategy: VaultStrategy | und
 
 function Facts({ rows }: { rows: { label: string; value: string }[] }) {
   return (
-    <dl className="space-y-4">
+    <dl className="vault-source-facts space-y-4">
       {rows.map((fact) => (
         <div key={fact.label} className="flex flex-wrap items-baseline justify-between gap-2 text-sm">
           <dt className="text-muted-foreground">{fact.label}</dt>

@@ -1,3 +1,6 @@
+.credit-builder h2 {
+  text-transform: capitalize;
+}
 .credit-builder {
   display: grid;
   grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);

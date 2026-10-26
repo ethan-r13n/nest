@@ -16,4 +16,6 @@ The application runs with `pnpm dev`. `design/nest/ui` is the visual reference; 
 
 Financial state persists in application records independently of chat history. The agent never signs. Every financial action still requires the existing exact-plan review and wallet signature. Committed execution switches remain off.
 
+Protocol research details use validated captured descriptions, scope, yields, project references and source links in the shared reference layout. RWA asset links open RWA.xyz directly. Trade's searchable asset window is shared by the market, pay and receive controls. See [the UI coverage audit](ui-parity-audit.md) for inspected surfaces and remaining account-state differences.
+
 Unsaved inputs and display preferences are local drafts. Guardrail settings require explicit user action. Missing source data is never replaced with sample prices, balances, health factors or successful receipts.

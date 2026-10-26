@@ -1,0 +1,51 @@
+# Workspace UI coverage audit
+
+Checked against the design in `design/nest/ui` on 26 October 2026. This is a coverage record, not a claim that every account state is pixel-identical to a populated design specimen.
+
+## Protocol research
+
+The five highest Stellar TVL entries in the DeFi ranking are Blend Pools V2, Stellar DeFi Hub, Aquarius Stellar, Gami Labs and Upshift. Each uses the same restored protocol template:
+
+- Research navigation, protocol identity, source description and actions.
+- Stellar TVL, protocol-wide scope or exact Stellar yield-pool count, and category.
+- Yield opportunities only where the captured feed contains an exact protocol match, including base and 30-day mean APY. Zero and tiny nonzero yields remain distinct.
+- Markets and capabilities where an integration design exists, with links to the application forms.
+- Protocol overview, borrowed value, token and listing date where supplied.
+- Dated Scout project context, funding, links and expandable audit, repository and contract references.
+- Explore, source boundaries and dependencies/controls in the reference sidebar.
+
+The main column and 360px sidebar were measured against the reference at the same workspace width. The schema validates external links and contract identifiers. Venue and market detail routes share this template instead of retaining a second generic protocol design.
+
+## Surfaces inspected
+
+The browser audit covered 37 distinct desktop route instances, nine mobile views at 375 CSS pixels, the unknown-route state, all five Credit editors, and the windows listed below. Source snapshots, section headings, table columns, reference expansions, overflow and screenshots were inspected. Representative parameterized routes were used for secondary detail types; the protocol top five were checked individually.
+
+| Area | Coverage and corrections |
+| --- | --- |
+| Research | DeFi ranking, filtering, column controls, RWAs, composition/history, league table, MCP map/catalog and bookmarks. Restored the all-chain TVL column and RWA table fields. Asset names open the captured RWA.xyz URLs in a new tab. |
+| Protocols | All five leading entries, sidebar, yield tables, read groups, audit/repository/contract disclosures, source links and mobile layout. |
+| Earn | Main list and categories; live DeFindex deposits; sourced Gami and Sentora campaign details; vault management state; Aquarius list and pool-detail route. Restored vault titles, metric hierarchy, sidebar placement, counterparty icons and deposit/withdraw tabs. |
+| Credit | Borrow, collateral/debt/horizon/rate/venue editors, Supply and Positions. Reference headings and amount sizing are retained. Amount-aware execution still uses the existing lending proposals. |
+| Trade | Chart, intervals, routes, ticket, positions/history and market/pay/receive selectors. Replaced the small asset dropdowns with the searchable asset window, retaining existing asset identifiers and handlers. |
+| Lab | Backtest, automation, history, learning, unavailable backtest run and a saved monitor’s history. Restored the common header, history filters/search and empty-state composition while retaining actual monitor records and controls. |
+| Portfolio | Overview, activity, receive, send, spend concept and requested-plan status. Restored the overview Activity area and reference headings. |
+| Settings | Connections, full-page Guardrails, drawer and wallet access route. Connections retains the two main source panels. Guardrails preserves explicit draft state and separate source tolerances. |
+| Windows | Guardrails, context assistant, wallet-provider chooser, all three Trade asset selectors, vault amount/review entry, arbitrage simulation and protocol information popovers. No wallet connection, signature or financial submission was performed for this audit. |
+
+## Differences retained or still requiring functional work
+
+These are not reported as visually matched populated states:
+
+| Surface | Difference |
+| --- | --- |
+| Account-dependent lists | The reference contains sample balances, debts, positions, receipts, bookmarks and alerts. Unverified or unavailable application records remain empty/unavailable. Missing rows are not replaced with the specimens. Portfolio composition and personal activity still need complete account-ledger wiring. |
+| Plan status page | The execution API retains confirmed plans, but this standalone route still has its pre-existing unavailable-state UI. The connected proposal/deposit confirmation flows and API records remain intact. |
+| Credit comparison | The reference has fixture venue terms, capacity and LTV. The application retains actual Blend reads and typed proposal flows; missing amount-specific terms and risk metrics remain explicit. No fixture comparison is represented as a quote. |
+| Wallet access | `/wallet` retains its existing redirect to Research; the header opens Stellar Wallets Kit. Its provider flow replaces the design’s sample connected-state dialog and access-state specimen page. |
+| Trade asset catalog | The searchable window currently offers the app’s existing XLM, USDC and USDT0 identifiers. It does not enable the additional fixture markets. Unsupported pairs remain blocked by the existing quote flow. |
+| Vault products | Live DeFindex entry points use their actual four-stage deposit flow and network. Sentora campaign access links to its provider until a verified execution adapter exists. The reference’s disabled/simulated transaction controls are not copied as functioning deposits. |
+| Guardrails | Draft controls are real local inputs; saved revision, account ownership and persistence are not fabricated. Per-source freshness inputs remain more detailed than the specimen’s single tolerance field. |
+| Lab and connections | Actual saved monitors, checks and alerts remain visible. Historical replay, learning experiments and X authorization do not acquire fake successful states from the design. |
+| Landing | Preserved independently; the workspace reference does not replace the current landing page. |
+
+The UI changes do not modify the Worker, adapters, transaction policies, runtime permissions, migrations, execution switches or landing implementation. The preview still reaches live vault/lending reads, the previously confirmed vault deposit and the existing active monitor through the same backend.
