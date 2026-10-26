@@ -65,11 +65,11 @@ export function LandingPage() {
   }, []);
 
   return (
-    <div className="relative min-h-screen bg-[#08090a] font-['Geist',sans-serif] text-[#f1ece2] antialiased selection:bg-[#ff5b1f] selection:text-[#08090a] [&_a]:transition-colors">
+    <div className="relative min-h-screen bg-[#050c07] font-['Geist',sans-serif] text-[#f1ece2] antialiased selection:bg-[#ff5b1f] selection:text-[#08090a] [&_a]:transition-colors">
       <Murmuration />
       <div
         aria-hidden="true"
-        className="pointer-events-none fixed inset-0 z-0 bg-[linear-gradient(90deg,rgba(8,9,10,.75)_0%,rgba(8,9,10,0)_55%)]"
+        className="pointer-events-none fixed inset-0 z-0 bg-[linear-gradient(90deg,rgba(4,10,6,.82)_0%,rgba(4,10,6,.12)_55%,rgba(4,10,6,0)_100%)]"
       />
       <div className="relative z-[1]">
         <Header />
@@ -169,7 +169,7 @@ function Hero() {
 
 function HowItWorks() {
   return (
-    <section id="how" className={`bg-[rgba(8,9,10,.82)] py-[120px] backdrop-blur-[2px] ${GUTTER}`}>
+    <section id="how" className={`bg-[rgba(4,10,6,.86)] py-[120px] backdrop-blur-[2px] ${GUTTER}`}>
       <div className="mb-14 flex flex-wrap items-baseline justify-between gap-5">
         <h2 className={`${SERIF} m-0 text-[clamp(44px,6vw,96px)] leading-[.95]`}>How Nest works</h2>
         <span className={`${MONO} text-xs text-[#8f897e]`}>Research → Compare → Act</span>
@@ -271,7 +271,7 @@ function Safety() {
   return (
     <section
       id="safety"
-      className={`grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-14 bg-[rgba(8,9,10,.82)] pt-10 pb-[140px] ${GUTTER}`}
+      className={`grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-14 bg-[rgba(4,10,6,.86)] pt-10 pb-[140px] ${GUTTER}`}
     >
       <h2 className={`${SERIF} m-0 text-[clamp(52px,7vw,112px)] leading-[.92] tracking-[-.02em]`}>
         The agent holds <em className="text-[#ff7a45]">no keys.</em>
