@@ -12,6 +12,7 @@ Nest combines sourced protocol research with an embedded Pi agent and a determin
 | Chat | Streamed Pi conversations, bounded research tools, Raven MCP authorization, and typed proposals. |
 | Swap | Soroswap on mainnet; the Stellar DEX on Testnet. Quotes, policy checks, transaction inspection, Freighter signing, and confirmation. |
 | Credit | Blend supply, collateralized borrowing, repay, withdrawal, and a separate USDC trustline step. Pool exclusions and withdrawal conditions remain visible. |
+| Vaults | Live DeFindex vault reads and wallet-approved XLM/USDC deposits. Withdrawal execution and chat deposit proposals are not implemented. |
 | Landing | Standalone introduction with dated metrics and a question form that fills an unsent chat draft. |
 
 Additional venue integrations, saved wallet-authenticated history, background automations, strategy backtesting, and card spending are product targets or interface previews. They are not claims of working financial execution. See the [implementation specification](docs/technical-spec.md) for the target contracts and [architecture decisions](docs/architecture-decisions.md) for the current runtime.

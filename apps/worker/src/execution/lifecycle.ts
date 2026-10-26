@@ -22,6 +22,7 @@ import {
   transitionOrReload,
 } from './store.ts';
 import { compareSwap, prepareSwap, swapIntentView, swapPlanPolicy, swapPlanView, swapReceived } from './swap.ts';
+import { compareVault, prepareVault, vaultIntentView, vaultPlanPolicy, vaultPlanView } from './vaults.ts';
 
 const CONFIRM_POLL_MS = 1_000;
 const CONFIRM_WAIT_MS = 20_000;
@@ -31,15 +32,17 @@ const EXPIRY_GRACE_MS = 60_000;
 
 export async function readIntent(deps: ExecutionDeps, intentId: string) {
   const intent = await loadIntent(deps, intentId);
+  if (intent.kind === 'vault_deposit') return vaultIntentView(intent);
   return intent.kind === 'swap' ? swapIntentView(intent) : lendingIntentView(intent);
 }
 
 /**
- * Fresh quotes for a swap, or offers from each eligible pool for lending. Repay and withdraw read
+ * Fresh quotes for a swap, vault deposit, or lending. Repay and withdraw read
  * the position of `accountId`, so they need it.
  */
 export async function compareIntent(deps: ExecutionDeps, intentId: string, accountId?: string) {
   const intent = await loadIntent(deps, intentId);
+  if (intent.kind === 'vault_deposit') return compareVault(deps, intent);
   return intent.kind === 'swap' ? compareSwap(deps, intent) : compareLending(deps, intent, accountId);
 }
 
@@ -57,7 +60,15 @@ export async function createPlan(
   const quote = await loadQuote(deps, input.quoteId);
   if (quote.intent_id !== intent.id) throw new AppError('INVALID_REQUEST', 'That quote belongs to another request.');
   const now = deps.now();
-  const policyOf = intent.kind === 'swap' ? swapPlanPolicy : lendingPlanPolicy;
+  const policyOf = {
+    swap: swapPlanPolicy,
+    supply: lendingPlanPolicy,
+    borrow: lendingPlanPolicy,
+    repay: lendingPlanPolicy,
+    withdraw: lendingPlanPolicy,
+    withdraw_collateral: lendingPlanPolicy,
+    vault_deposit: vaultPlanPolicy,
+  }[intent.kind];
   const { decision, digest } = await policyOf(intent, quote, input.accountId, now);
   const row = newPlanRow({
     intent,
@@ -101,7 +112,15 @@ export async function preparePlan(deps: ExecutionDeps, planId: string) {
       ),
     );
   }
-  const prepare = intent.kind === 'swap' ? prepareSwap : prepareLending;
+  const prepare = {
+    swap: prepareSwap,
+    supply: prepareLending,
+    borrow: prepareLending,
+    repay: prepareLending,
+    withdraw: prepareLending,
+    withdraw_collateral: prepareLending,
+    vault_deposit: prepareVault,
+  }[intent.kind];
   return viewOf(await prepare(deps, plan, intent, quote), intent, quote);
 }
 
@@ -291,5 +310,6 @@ async function planView(deps: ExecutionDeps, row: PlanRow) {
 }
 
 function viewOf(row: PlanRow, intent: IntentRow, quote: QuoteRow) {
+  if (intent.kind === 'vault_deposit') return vaultPlanView(row, intent, quote);
   return intent.kind === 'swap' ? swapPlanView(row, intent, quote) : lendingPlanView(row, intent, quote);
 }

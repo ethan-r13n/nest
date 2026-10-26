@@ -75,6 +75,7 @@ function createFixture(overrides: Partial<ExecutionConfig> = {}): ExecutionFixtu
       executionEnabled: true,
       writeAdapters: new Set(['soroswap']),
       soroswapApiKey: 'test',
+      defindexApiKey: null,
       rpcUrl: 'https://rpc.test',
       ...overrides,
     },
@@ -92,6 +93,7 @@ function createFixture(overrides: Partial<ExecutionConfig> = {}): ExecutionFixtu
       build: async (request) => aggregatorSwap(request.from, clock.now, build.minOut).toXDR(),
     },
     lending: null,
+    vaults: null,
     buildTrustline: async () => {
       throw new Error('not used');
     },

@@ -3,6 +3,7 @@
 APP_ENCRYPTION_KEY=
 OPENROUTER_API_KEY=
 SOROSWAP_API_KEY=
+DEFINDEX_API_KEY=
 STELLAR_MAINNET_RPC_URL=
 # The public Testnet RPC is already configured; override only when needed.
 STELLAR_TESTNET_RPC_URL=

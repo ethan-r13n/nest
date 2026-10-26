@@ -17,6 +17,7 @@ import {
   UnavailableFacts,
   WithdrawalTiming,
 } from '../components/financial-draft.tsx';
+import { LiveVaults } from '../components/live-vaults.tsx';
 import { strategyFor, VaultStrategyAside, VaultStrategyMain } from '../components/vault-strategy.tsx';
 import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { formatUsd, formatUtc } from '../lib/format.ts';
@@ -158,6 +159,7 @@ export function EarnPage({ initialCategory = 'All opportunities' }: { initialCat
         kicker="Earn"
         description="Compare lending, vaults, campaigns and liquidity on Stellar."
       />
+      <LiveVaults />
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-muted-foreground">
         <Badge variant="outline">Research · transactions unavailable</Badge>
         <a href={research.sources.defillama.url} target="_blank" rel="noreferrer" className="hover:underline">

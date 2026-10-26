@@ -1,5 +1,8 @@
+import { lendingAsset } from '@nest/adapters/blend/markets';
 import type { HealthEstimate, MarketView, PoolPositions } from '@nest/adapters/blend/reader';
 import { buildBlendSubmit, type LendingRequest } from '@nest/adapters/blend/submit';
+import { buildVaultDeposit, type VaultDeposit } from '@nest/adapters/defindex/deposit';
+import { createDefindexClient, isDefindexVault, type VaultView } from '@nest/adapters/defindex/vaults';
 import { createSoroswapVenue, SoroswapError } from '@nest/adapters/soroswap/client';
 import { createSdexVenue } from '@nest/adapters/stellar/sdex';
 import { buildTrustline } from '@nest/adapters/stellar/trustline';
@@ -33,12 +36,22 @@ interface LendingVenue {
   build(input: { poolId: string; account: string; requests: readonly LendingRequest[] }): Promise<string>;
 }
 
+/** DeFindex reads, code verification and deposit builds, injected so tests can run without a network. */
+interface VaultVenue {
+  vaults(): Promise<VaultView[]>;
+  vault(address: string): Promise<VaultView>;
+  /** Whether the contract runs DeFindex's published vault code. */
+  verify(address: string): Promise<boolean>;
+  build(input: VaultDeposit): Promise<string>;
+}
+
 export interface ExecutionDeps {
   db: D1Database;
   config: ExecutionConfig;
   /** Where swaps are quoted and built on this network, or null when it is not configured. */
   venue: SwapVenue | null;
   lending: LendingVenue | null;
+  vaults: VaultVenue | null;
   buildTrustline: typeof buildTrustline;
   rpc: SwapRpc | null;
   now(): number;
@@ -62,10 +75,32 @@ export function executionDeps(env: Env): ExecutionDeps {
           build: (input) => buildBlendSubmit({ network: config.network, rpcUrl, nowMs: Date.now(), ...input }),
         }
       : null,
+    vaults: vaultVenue(config, rpcUrl),
     buildTrustline,
     rpc: rpcUrl ? createSwapRpc(rpcUrl) : null,
     now: Date.now,
     sleep: (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
+  };
+}
+
+function vaultVenue(config: ExecutionConfig, rpcUrl: string | null): VaultVenue | null {
+  if (!config.defindexApiKey || !rpcUrl) return null;
+  const client = createDefindexClient({ apiKey: config.defindexApiKey, network: config.network });
+  const network = config.network;
+  return {
+    vaults: client.vaults,
+    vault: client.vault,
+    verify: (address) => isDefindexVault(network, rpcUrl, address),
+    build: async (input) => {
+      const symbol = input.assetContract === lendingAsset(network, 'XLM').contractId ? 'XLM' : 'USDC';
+      return buildVaultDeposit({
+        ...input,
+        network,
+        rpcUrl,
+        asset: lendingAsset(network, symbol).classic,
+        nowMs: Date.now(),
+      });
+    },
   };
 }
 

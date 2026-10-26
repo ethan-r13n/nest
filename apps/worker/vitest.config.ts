@@ -29,6 +29,7 @@ export default defineConfig({
           AGENT_MAX_ACTIVE_RUNS: '100',
           // Tests never reach Soroswap or a mainnet RPC, whatever a developer's .dev.vars holds.
           SOROSWAP_API_KEY: '',
+          DEFINDEX_API_KEY: '',
           STELLAR_MAINNET_RPC_URL: '',
         },
       },

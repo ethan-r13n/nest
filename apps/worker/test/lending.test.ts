@@ -7,9 +7,9 @@ import { VenueRefusal } from '@nest/adapters/venue';
 import { Account, Address, Keypair, nativeToScVal, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { describe, expect, it } from 'vitest';
 
-import { createLendingIntent } from '../src/execution/lending.ts';
+import { compareLending, createLendingIntent } from '../src/execution/lending.ts';
 import { approvePlan, compareIntent, createPlan, preparePlan, submitPlan } from '../src/execution/lifecycle.ts';
-import type { ExecutionDeps } from '../src/execution/store.ts';
+import { type ExecutionDeps, loadIntent } from '../src/execution/store.ts';
 import { prepareTrustline, submitTrustline } from '../src/execution/trustline.ts';
 
 const START_MS = 1_800_000_000_000;
@@ -124,9 +124,11 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
       executionEnabled: true,
       writeAdapters: new Set(options.writeAdapters ?? ['blend']),
       soroswapApiKey: null,
+      defindexApiKey: null,
       rpcUrl: 'https://rpc.test',
     },
     venue: null,
+    vaults: null,
     buildTrustline: async () => {
       throw new Error('not used');
     },
@@ -158,7 +160,7 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
 
 async function preparedLending(h: ReturnType<typeof createFixture>, input: Parameters<typeof createLendingIntent>[1]) {
   const intent = await createLendingIntent(h.deps, input);
-  const compared = await compareIntent(h.deps, intent.id);
+  const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
   if (!('excluded' in compared) || !compared.selectedQuoteId) throw new Error('no offer');
   const plan = await createPlan(h.deps, {
     intentId: intent.id,
@@ -173,7 +175,7 @@ describe('lending offers', () => {
   it('ranks supply by APY across pools that accept deposits, with withdrawal timing', async () => {
     const h = createFixture();
     const intent = await createLendingIntent(h.deps, { kind: 'supply', asset: 'USDC', amount: '100', source: 'chat' });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared)) throw new Error('expected lending offers');
     expect(compared.quotes.map((quote) => [quote.pool.name, quote.supplyApyPct])).toEqual([
       ['Blend YieldBlox', 6.39],
@@ -188,7 +190,7 @@ describe('lending offers', () => {
     const h = createFixture();
     const intent = await createLendingIntent(h.deps, { kind: 'borrow', asset: 'USDC', amount: '1000', source: 'chat' });
     expect(intent.collateral).toEqual({ symbol: 'XLM' });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared)) throw new Error('expected lending offers');
     expect(compared.quotes).toHaveLength(1);
     const [offer] = compared.quotes;
@@ -209,7 +211,7 @@ describe('lending offers', () => {
       amount: '50000',
       source: 'form',
     });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared)) throw new Error('expected lending offers');
     expect(compared.selectedQuoteId).toBeNull();
     expect(compared.excluded.map((entry) => entry.reason)).toContain('The pool has 40,000 USDC available to borrow.');
@@ -224,7 +226,7 @@ describe('lending offers', () => {
       collateralAmount: '3000',
       source: 'form',
     });
-    const compared = await compareIntent(h.deps, intent.id);
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     if (!('excluded' in compared) || !compared.selectedQuoteId) throw new Error('no offer');
     const plan = await createPlan(h.deps, {
       intentId: intent.id,
@@ -407,7 +409,7 @@ describe('repay and withdraw', () => {
     expect(compared.excluded).toEqual([
       { poolId: YIELDBLOX, name: 'Blend YieldBlox', reason: 'You have no USDC debt here.' },
     ]);
-    expect(compared.quotes[0]?.position).toMatchObject({ kind: 'debt', held: { amount: '100' } });
+    expect(compared.quotes[0]).toMatchObject({ position: { kind: 'debt', held: { amount: '100' } } });
     if (!plan.prepared || !('requests' in plan.prepared)) throw new Error(`not prepared: ${plan.errorCode}`);
     expect(h.state.built).toEqual([[{ type: 'repay', contractId: usdc.contractId, amount: 1_001_000_001n }]]);
     await approvePlan(h.deps, plan.id, { digest: plan.digest, preparedHash: plan.prepared.hash });

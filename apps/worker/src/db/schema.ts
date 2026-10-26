@@ -110,7 +110,15 @@ export const assetRegistry = sqliteTable(
   ],
 );
 
-export const INTENT_KINDS = ['swap', 'supply', 'borrow', 'repay', 'withdraw', 'withdraw_collateral'] as const;
+export const INTENT_KINDS = [
+  'swap',
+  'supply',
+  'borrow',
+  'repay',
+  'withdraw',
+  'withdraw_collateral',
+  'vault_deposit',
+] as const;
 export const INTENT_SOURCES = ['chat', 'form'] as const;
 export const PLAN_STATUSES = [
   'policy_checked',
