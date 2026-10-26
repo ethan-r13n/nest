@@ -57,6 +57,8 @@ export class ConversationAgent extends DurableObject<Env> {
   #events: StoredEvent[] = [];
   #lastEventId = 0;
   #active: Run | undefined;
+  /** The run whose events `#events` holds, finished or not. */
+  #latest: Run | undefined;
   #admitting = false;
 
   async admit(input: {
@@ -105,6 +107,7 @@ export class ConversationAgent extends DurableObject<Env> {
     this.#remember(run);
     this.#events = [];
     this.#active = run;
+    this.#latest = run;
     // #execute never rejects. Pending I/O and timers keep this object alive until the turn ends.
     this.ctx.waitUntil(this.#execute(run, input.text, input.researchOnly === true));
     return { status: 'started', runId, afterEventId: run.afterEventId };
@@ -137,8 +140,13 @@ export class ConversationAgent extends DurableObject<Env> {
         };
         // Unknown here means the process that ran it went away with its memory.
         if (!run) return send({ id: after + 1, event: { type: 'interrupted', reason: 'lost' } });
-        if (run !== this.#active && run.terminal)
-          return send({ id: Math.max(after + 1, run.afterEventId + 1), event: run.terminal });
+        if (run !== this.#active && run.terminal) {
+          // A fast turn can finish before the client connects: the latest run still holds its events,
+          // so replay what the client has not seen; an older run answers with its final event only.
+          if (run === this.#latest) for (const row of this.#events) if (row.id > after) send(row);
+          if (!closed) send({ id: Math.max(after + 1, run.afterEventId + 1), event: run.terminal });
+          return;
+        }
         for (const row of this.#events) if (row.id > after) send(row);
         if (closed) return;
         this.#listeners.add(send);
