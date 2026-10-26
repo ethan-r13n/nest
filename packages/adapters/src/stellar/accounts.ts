@@ -56,27 +56,15 @@ export function requireFunds(
   account: ClassicAccount,
   needs: { spend: readonly { asset: Asset; amount: bigint }[]; receive: readonly Asset[]; feeStroops: bigint },
 ): void {
-  const balanceOf = (asset: Asset) =>
-    account.balances.find((balance) =>
-      asset.isNative()
-        ? balance.asset_type === 'native'
-        : balance.asset_code === asset.getCode() && balance.asset_issuer === asset.getIssuer(),
-    );
   for (const asset of needs.receive) {
-    if (!asset.isNative() && !balanceOf(asset)) {
+    if (!asset.isNative() && !balanceOf(account, asset)) {
       throw new VenueRefusal('TRUSTLINE_MISSING', `Add ${asset.getCode()} to your wallet first.`);
     }
   }
   for (const { asset, amount } of needs.spend) {
-    const held = balanceOf(asset);
+    const available = spendableRaw(account, asset, needs.feeStroops);
     const label = asset.isNative() ? 'XLM' : asset.getCode();
-    if (!held) throw new VenueRefusal('INSUFFICIENT_BALANCE', `This account holds no ${label}.`);
-    let available = parseDecimalAmount(held.balance, DECIMALS, MAX_CLASSIC_RAW);
-    if (asset.isNative()) {
-      const entries =
-        2n + BigInt(account.subentry_count) + BigInt(account.num_sponsoring ?? 0) - BigInt(account.num_sponsored ?? 0);
-      available -= entries * BASE_RESERVE_RAW + needs.feeStroops;
-    }
+    if (available === null) throw new VenueRefusal('INSUFFICIENT_BALANCE', `This account holds no ${label}.`);
     if (amount > available) {
       throw new VenueRefusal(
         'INSUFFICIENT_BALANCE',
@@ -84,4 +72,26 @@ export function requireFunds(
       );
     }
   }
+}
+
+/**
+ * What the account can spend of an asset: its balance, less the XLM reserve and the fee for XLM.
+ * Null when the account has no trustline for it. Below zero when XLM is already short of the reserve.
+ */
+export function spendableRaw(account: ClassicAccount, asset: Asset, feeStroops = 0n): bigint | null {
+  const held = balanceOf(account, asset);
+  if (!held) return null;
+  const balance = parseDecimalAmount(held.balance, DECIMALS, MAX_CLASSIC_RAW);
+  if (!asset.isNative()) return balance;
+  const entries =
+    2n + BigInt(account.subentry_count) + BigInt(account.num_sponsoring ?? 0) - BigInt(account.num_sponsored ?? 0);
+  return balance - entries * BASE_RESERVE_RAW - feeStroops;
+}
+
+function balanceOf(account: ClassicAccount, asset: Asset) {
+  return account.balances.find((balance) =>
+    asset.isNative()
+      ? balance.asset_type === 'native'
+      : balance.asset_code === asset.getCode() && balance.asset_issuer === asset.getIssuer(),
+  );
 }

@@ -11,6 +11,7 @@
     "./stellar/inspect": "./src/stellar/inspect.ts",
     "./stellar/networks": "./src/stellar/networks.ts",
     "./stellar/sdex": "./src/stellar/sdex.ts",
+    "./stellar/trades": "./src/stellar/trades.ts",
     "./venue": "./src/venue.ts",
     "./aquarius/client": "./src/aquarius/client.ts",
     "./blend/markets": "./src/blend/markets.ts",

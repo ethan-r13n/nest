@@ -7,7 +7,14 @@ import { VenueRefusal } from '@nest/adapters/venue';
 import { Account, Address, Keypair, nativeToScVal, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { describe, expect, it } from 'vitest';
 
-import { approvePlan, compareIntent, createPlan, preparePlan, submitPlan } from '../src/execution/lifecycle.ts';
+import {
+  approvePlan,
+  compareIntent,
+  createPlan,
+  listActivity,
+  preparePlan,
+  submitPlan,
+} from '../src/execution/lifecycle.ts';
 import { type ExecutionDeps, loadIntent } from '../src/execution/store.ts';
 import { compareVault, createVaultIntent } from '../src/execution/vaults.ts';
 
@@ -184,6 +191,15 @@ describe('vault deposits', () => {
     const tx = TransactionBuilder.fromXDR(plan.prepared.xdr, NETWORK_PASSPHRASES.mainnet);
     tx.sign(h.user);
     expect(await submitPlan(h.deps, plan.id, tx.toXDR())).toMatchObject({ status: 'confirmed', ledger: 777 });
+    expect((await listActivity(h.deps, h.user.publicKey())).items).toEqual([
+      expect.objectContaining({
+        kind: 'vault_deposit',
+        title: 'Deposit USDC',
+        venue: 'DeFindex · BeansUsdcVault',
+        sent: [{ symbol: 'USDC', amount: '100' }],
+        received: [],
+      }),
+    ]);
   });
 
   it('excludes a contract that does not run DeFindex’s vault code', async () => {

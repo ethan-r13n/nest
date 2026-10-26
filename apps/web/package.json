@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "typecheck": "tsc && tsc -p tsconfig.node.json",
-    "deploy:check": "vite build && wrangler deploy --dry-run"
+    "deploy:check": "vite build && wrangler deploy --dry-run",
+    "test": "node --experimental-strip-types --test test/*.test.ts"
   },
   "dependencies": {
     "@creit.tech/stellar-wallets-kit": "catalog:",

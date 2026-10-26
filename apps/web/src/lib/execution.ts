@@ -290,6 +290,30 @@ export type LimitOrders =
   | { available: true; currentPrice: number; orders: LimitOrderRow[] }
   | { available: false; reason: string; orders: LimitOrderRow[] };
 
+export type SwapSymbol = 'XLM' | 'USDC';
+
+/** What the wallet can spend now: XLM after its reserve; null without a trustline. */
+export interface SwapBalances {
+  network: 'mainnet' | 'testnet';
+  funded: boolean;
+  balances: { symbol: SwapSymbol; spendable: string | null }[];
+}
+
+/** A plan of the wallet's that reached the network: what left it and what came back. */
+export interface ActivityItem {
+  id: string;
+  kind: string;
+  status: PlanStatus;
+  createdAt: string;
+  txHash: string | null;
+  explorerUrl: string | null;
+  errorCode: string | null;
+  title: string;
+  venue: string;
+  sent: AssetAmount[];
+  received: AssetAmount[];
+}
+
 interface PreparedTrustline {
   asset: { code: string; issuer: string };
   xdr: string;
@@ -325,9 +349,14 @@ export async function call<T>(
 }
 
 export const execution = {
-  createSwap: (input: { sellAsset: 'XLM' | 'USDC'; buyAsset: 'XLM' | 'USDC'; sellAmount: string }) =>
-    call<Intent>('/api/intents', { method: 'POST', body: { kind: 'swap', ...input } }),
   intent: (id: string) => call<Intent>(`/api/intents/${id}`),
+  createSwap: (input: { sellAsset: SwapSymbol; buyAsset: SwapSymbol; sellAmount: string }) =>
+    call<Intent>('/api/intents', { method: 'POST', body: { kind: 'swap', ...input } }),
+  balances: (account: string) => call<SwapBalances>(`/api/balances?account=${encodeURIComponent(account)}`),
+  activity: (account: string) =>
+    call<{ network: 'mainnet' | 'testnet'; items: ActivityItem[] }>(
+      `/api/plans?account=${encodeURIComponent(account)}`,
+    ),
   lendingIntent: (id: string) => call<LendingIntent>(`/api/intents/${id}`),
   createLending: (input: { kind: LendingKind; asset: 'USDC' | 'XLM'; amount: string; poolId?: string }) =>
     call<LendingIntent>('/api/intents', { method: 'POST', body: input }),

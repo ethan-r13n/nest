@@ -6,10 +6,19 @@ import { z } from 'zod';
 
 import type { AppEnv } from '../app.ts';
 import { createLendingIntent } from './lending.ts';
-import { approvePlan, compareIntent, createPlan, preparePlan, readIntent, readPlan, submitPlan } from './lifecycle.ts';
+import {
+  approvePlan,
+  compareIntent,
+  createPlan,
+  listActivity,
+  preparePlan,
+  readIntent,
+  readPlan,
+  submitPlan,
+} from './lifecycle.ts';
 import { createLimitCloseIntent, createLimitOrderIntent, limitPool, listLimitOrders } from './limit.ts';
 import { executionDeps } from './store.ts';
-import { createSwapIntent } from './swap.ts';
+import { createSwapIntent, swapBalances } from './swap.ts';
 import { prepareTrustline, submitTrustline } from './trustline.ts';
 import { createVaultIntent } from './vaults.ts';
 
@@ -132,6 +141,10 @@ export function createExecutionRoutes() {
       })),
     });
   });
+  /** What the wallet can spend of each swap asset, for the swap form. Read-only. */
+  routes.get('/balances', async (c) =>
+    c.json(await swapBalances(executionDeps(c.env).config.network, c.req.query('account') ?? '')),
+  );
 
   /** Live Blend pool rates for the Research page. Read-only. */
   routes.get('/markets/lending', async (c) => {
@@ -162,6 +175,9 @@ export function createExecutionRoutes() {
     const plan = await createPlan(executionDeps(c.env), { ...body, idempotencyKey: key.data });
     return c.json(plan, 201);
   });
+
+  /** The wallet's plans that reached the network, newest first. Read-only. */
+  routes.get('/plans', async (c) => c.json(await listActivity(executionDeps(c.env), c.req.query('account') ?? '')));
 
   routes.get('/plans/:id', async (c) => c.json(await readPlan(executionDeps(c.env), uuid(c.req.param('id')))));
 
