@@ -48,7 +48,7 @@ These are not reported as visually matched populated states:
 | Lab and connections | Actual saved monitors, checks and alerts remain visible. Historical replay, learning experiments and X authorization do not acquire fake successful states from the design. |
 | Landing | Preserved independently; the workspace reference does not replace the current landing page. |
 
-The UI changes do not modify the Worker, adapters, transaction policies, runtime permissions, migrations, execution switches or landing implementation. The preview still reaches live vault/lending reads, the previously confirmed vault deposit and the existing active monitor through the same backend.
+The layout restoration preserves transaction policies, explicit signing, disabled committed execution switches and the independently updated landing page. The subsequent functional integration below updates the Worker and adapters while retaining those boundaries.
 
 ## Brand artwork coverage
 
@@ -57,3 +57,11 @@ The shared identity resolver uses the captured logo manifest's 275 normalized al
 Automated coverage verifies all 44 protocol identities, all documented aliases and the hashes of all 180 captured artwork files. Of 109 RWA assets, 93 have dedicated artwork; the remaining 16 match the manifest's explicit missing-artwork list. Of 28 RWA platforms, 27 have captured artwork; Stablecorp Digital Currencies Inc. has none. Names remain visible where artwork is unavailable, without fabricated initials or generic brand substitutes.
 
 The browser checks include all three RWA pages at 50 rows per page, all 26 expanded MCP nodes, the five leading protocol pages, Earn categories and eight asset filters, the three Trade selection windows, Credit and Connections. No broken image was observed. Offscreen lazy images are tracked separately from failed images. Nest's shell, assistant and landing marks remain in place. The supplied financial layout specimens are not copied as account balances, quotes or LTV values.
+
+## Combined functional integration
+
+The restored Trade layout and candlestick renderer now use live network-specific history with 15m/1h/4h/1d intervals and correct reversed OHLC. The existing asset window retains its layout and restricts the executable pair to XLM/USDC. Typed amounts obtain debounced quotes, balances expose exact bigint Use max, and the history tab reads actual recorded wallet activity. Missing cost basis still does not produce synthetic positions or P&L.
+
+Aquarius range orders use a separate adapter, typed placement/withdrawal plans and additive migration 0005. Their simple Trade panel is capped at 768px. A second price-range visualization is deliberately absent; the main candlestick renderer is retained. Research, Credit and Supply APY selections open the command interface with the original pool/asset context, supported commands use the existing reviewed Blend proposal, and other questions carry the quoted source to Ask Nest.
+
+Combined validation includes frozen installation, `pnpm check`, an uncached Worker run with 12 files/110 tests, browser interval switching and reversal, an actual SDEX quote, live limit-order comparison and a real inline Blend proposal. No wallet signature or new financial submission was performed. The updated local Worker uses a backed-up copy of the previous preview's state and the same provider credentials; migration 0005 is applied locally only. The previously confirmed vault deposit remains readable both by plan ID and in wallet activity, and the existing arbitrage monitor retains its state with one-minute local checks. Committed execution gates and free-model restrictions are unchanged.
