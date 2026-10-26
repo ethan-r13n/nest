@@ -29,7 +29,7 @@ const INTENT_FIELDS = [
   { id: 'rate', label: 'Maximum APR', shortLabel: 'Max APR', number: '04' },
   { id: 'venue', label: 'Venue', shortLabel: 'Venue', number: '05' },
 ];
-const VENUES = ['Best available', 'Blend', 'Templar', 'XOXNO'];
+const VENUES = ['Best available', 'Blend', 'XOXNO'];
 
 export function CreditPage() {
   const { setDraft, setAssistantOpen } = useWorkspaceSession();
@@ -127,7 +127,7 @@ export function CreditPage() {
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Borrow on your terms."
+        title="Borrow On Your Terms."
         kicker="Credit / Amount-aware borrowing"
         description="Set the collateral, debt and constraints. Compare the same intent across integrated venues."
         actions={
@@ -318,8 +318,8 @@ export function CreditPage() {
           <h2 className="mb-3 font-serif text-2xl font-semibold">One review, wherever you start.</h2>
           <p className="mb-4 text-xs leading-6 text-muted-foreground">
             The table shows current reference rates. Ask Nest carries your exact collateral, debt, horizon and rate
-            constraints into a draft; the transaction card must obtain its own amount-specific quote. Templar and XOXNO
-            execution are not connected yet.
+            constraints into a draft; the transaction card must obtain its own amount-specific quote. XOXNO execution is
+            not connected yet; Templar remains research-only.
           </p>
           <WithdrawalTiming />
           <div className="mt-4">

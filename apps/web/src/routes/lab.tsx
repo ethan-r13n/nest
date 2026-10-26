@@ -5,7 +5,12 @@ import { Textarea } from '@nest/ui/components/textarea';
 import { Link } from '@tanstack/react-router';
 import { FileText, FlaskConical } from 'lucide-react';
 import { useState } from 'react';
-import { ArbitrageBuilder, AutomationDetail, AutomationList } from '../components/arbitrage-monitor.tsx';
+import {
+  ArbitrageBuilder,
+  ArbitrageDemoButton,
+  AutomationDetail,
+  AutomationList,
+} from '../components/arbitrage-monitor.tsx';
 import { ConversationDraft } from '../components/conversation-draft.tsx';
 import { DraftNotice, EmptyState, PageHeader } from '../components/workspace.tsx';
 import { useWorkspaceSession } from '../components/workspace-session.tsx';
@@ -45,7 +50,7 @@ export function BacktestsPage() {
   return (
     <div className="lab-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="From thesis to strategy."
+        title="From Thesis To Strategy."
         kicker="Nest / Lab"
         description="Describe an idea. Test it against the past, or watch for it in the future."
       />
@@ -59,7 +64,7 @@ export function BacktestsPage() {
             Strategy chat <span className="ml-3 font-mono text-[10px] text-subtle">Backtest</span>
           </h2>
           <Button
-            variant="outline"
+            variant="ghost"
             className="workspace-action"
             disabled={chat.running}
             onClick={() => {
@@ -70,7 +75,7 @@ export function BacktestsPage() {
             New thesis
           </Button>
         </div>
-        <div className="flex h-[min(680px,75vh)] min-h-[480px] flex-col p-5 sm:p-6">
+        <div className="lab-thesis-body">
           <ConversationDraft purpose="strategy" />
         </div>
       </section>
@@ -136,18 +141,21 @@ export function AutomationsPage() {
   return (
     <div className="lab-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="From thesis to strategy."
+        title="From Thesis To Strategy."
         kicker="Nest / Lab"
         description="Describe an idea. Test it against the past, or watch for it in the future."
         actions={
-          <Button
-            nativeButton={false}
-            variant="outline"
-            className="workspace-action"
-            render={<Link to="/settings/connections" />}
-          >
-            Connections
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <ArbitrageDemoButton />
+            <Button
+              nativeButton={false}
+              variant="outline"
+              className="workspace-action"
+              render={<Link to="/settings/connections" />}
+            >
+              Connections
+            </Button>
+          </div>
         }
       />
       <PersonalNav area="lab" active="Set automation" />
@@ -160,7 +168,7 @@ export function AutomationsPage() {
             Strategy chat <span className="ml-3 font-mono text-[10px] text-subtle">Automation</span>
           </h2>
           <Button
-            variant="outline"
+            variant="ghost"
             className="workspace-action"
             disabled={chat.running}
             onClick={() => {
@@ -171,7 +179,7 @@ export function AutomationsPage() {
             New thesis
           </Button>
         </div>
-        <div className="flex h-[min(600px,70vh)] min-h-[460px] flex-col p-5 sm:p-6">
+        <div className="lab-thesis-body">
           <ConversationDraft purpose="strategy" />
         </div>
       </section>

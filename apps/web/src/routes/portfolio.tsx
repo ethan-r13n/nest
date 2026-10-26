@@ -15,39 +15,11 @@ const ALERT_FILTERS = ['All', 'Risk', 'Market', 'Workflow', 'Source'] as const;
 export function PortfolioPage() {
   const [allocationView, setAllocationView] = useState('mix');
   return (
-    <div className="flex min-w-0 flex-col gap-6">
+    <div className="portfolio-workspace flex min-w-0 flex-col gap-6">
       <PageHeader
-        title="Your portfolio"
+        title="Your Portfolio"
         kicker="Wallet"
         description="Balances and positions, with direct access to each market."
-        actions={
-          <div className="flex flex-wrap gap-2">
-            <Button
-              nativeButton={false}
-              variant="outline"
-              className="workspace-action"
-              render={<Link to="/portfolio/receive" />}
-            >
-              <ArrowDownLeft /> Receive
-            </Button>
-            <Button
-              nativeButton={false}
-              variant="outline"
-              className="workspace-action"
-              render={<Link to="/portfolio/send" />}
-            >
-              <ArrowUpRight /> Send
-            </Button>
-            <Button
-              nativeButton={false}
-              variant="outline"
-              className="workspace-action"
-              render={<Link to="/portfolio/spend" />}
-            >
-              <CreditCard /> Spend preview
-            </Button>
-          </div>
-        }
       />
       <PersonalNav area="portfolio" active="Overview" />
       <section className="workspace-panel" aria-labelledby="portfolio-composition-title">
@@ -122,6 +94,34 @@ export function PortfolioPage() {
           </Link>
         </div>
       </PersonalPanel>
+      <nav aria-label="Wallet actions">
+        <div className="flex flex-wrap gap-2">
+          <Button
+            nativeButton={false}
+            variant="outline"
+            className="workspace-action"
+            render={<Link to="/portfolio/receive" />}
+          >
+            <ArrowDownLeft /> Receive
+          </Button>
+          <Button
+            nativeButton={false}
+            variant="outline"
+            className="workspace-action"
+            render={<Link to="/portfolio/send" />}
+          >
+            <ArrowUpRight /> Send
+          </Button>
+          <Button
+            nativeButton={false}
+            variant="outline"
+            className="workspace-action"
+            render={<Link to="/portfolio/spend" />}
+          >
+            <CreditCard /> Spend preview
+          </Button>
+        </div>
+      </nav>
     </div>
   );
 }

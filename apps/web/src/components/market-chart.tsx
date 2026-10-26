@@ -12,7 +12,19 @@ const INTERVALS = [
   { label: '1D', seconds: 86400 },
 ];
 
-export function MarketChart({ asset }: { asset: string }) {
+export interface ChartContext {
+  close: number;
+  changePct: number | null;
+  count: number;
+}
+
+export function MarketChart({
+  asset,
+  onContext,
+}: {
+  asset: string;
+  onContext?: (context: ChartContext | null) => void;
+}) {
   const [history, setHistory] = useState<MarketHistory | null>(null);
   const [failed, setFailed] = useState(false);
   const [interval, setInterval] = useState(3600);
@@ -75,6 +87,20 @@ export function MarketChart({ asset }: { asset: string }) {
     };
   }, [rows]);
 
+  useEffect(() => {
+    const last = rows.at(-1);
+    const previous = last ? rows.findLast((row) => row.time <= last.time - 86_400) : undefined;
+    onContext?.(
+      last
+        ? {
+            close: last.close,
+            count: rows.length,
+            changePct: previous && previous.close > 0 ? (last.close / previous.close - 1) * 100 : null,
+          }
+        : null,
+    );
+  }, [rows, onContext]);
+
   function zoom(factor: number) {
     const scale = chart.current?.timeScale();
     const range = scale?.getVisibleLogicalRange();
@@ -87,8 +113,8 @@ export function MarketChart({ asset }: { asset: string }) {
   return (
     <div className="min-w-0">
       <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3">
-        <h2 className="text-sm font-semibold">
-          {asset} / USDC <span className="ml-2 font-mono text-[10px] text-subtle">Reference history</span>
+        <h2 className="text-lg font-semibold">
+          {asset} / USDC {INTERVALS.find((item) => item.seconds === interval)?.label} Candles
         </h2>
         <fieldset aria-label="Chart interval" className="flex gap-1">
           {INTERVALS.map((item) => (

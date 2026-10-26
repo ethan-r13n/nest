@@ -34,11 +34,13 @@ export function VaultDepositDialog({
   network,
   open,
   onOpenChange,
+  initialAmount = '',
 }: {
   vault: VaultSummary;
   network: 'mainnet' | 'testnet';
   open: boolean;
   onOpenChange(open: boolean): void;
+  initialAmount?: string | undefined;
 }) {
   const wallet = useWallet();
   const amountId = useId();
@@ -54,12 +56,13 @@ export function VaultDepositDialog({
 
   useEffect(() => {
     watching.current = open;
+    if (open) setAmount(initialAmount);
     if (!open) {
       setStep('amount');
       setPlan(null);
       setProblem(null);
     }
-  }, [open]);
+  }, [open, initialAmount]);
 
   const value = AMOUNT_PATTERN.test(amount) ? Number(amount) : 0;
   const yearly = vault.apyPct === null ? null : (value * vault.apyPct) / 100;
@@ -128,12 +131,13 @@ export function VaultDepositDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent className="nest-workspace">
         <header className="space-y-4 border-b px-6 pt-6 pb-5">
           <div className="pr-8">
             <DialogTitle>{vault.name}</DialogTitle>
             <DialogDescription>
-              Deposit {symbol} on {network === 'mainnet' ? 'Mainnet' : 'Testnet'} through DeFindex. Withdraw any time.
+              Deposit {symbol} on {network === 'mainnet' ? 'Mainnet' : 'Testnet'} through DeFindex. Exit timing depends
+              on vault liquidity and strategy unwind.
             </DialogDescription>
           </div>
           <Stepper current={STEP_INDEX[step]} />
@@ -208,7 +212,7 @@ export function VaultDepositDialog({
                   value={vault.strategies.map((strategy) => strategy.name).join(', ') || 'No strategy listed'}
                 />
                 <Term label="Fee on gains" value={`${PERCENT.format(vault.vaultFeeBps / 100)}%`} />
-                <Term label="Withdrawals" value="Any time, no lockup" />
+                <Term label="Withdrawal timing" value="No scheduled lockup reported; completion time unverified" />
                 <Term label="Nest fee" value="None" />
               </dl>
 

@@ -1,0 +1,7 @@
+.portfolio-workspace > section[aria-labelledby="portfolio-composition-title"] > :first-child {
+  padding: 18px 20px;
+}
+
+.portfolio-workspace #portfolio-composition-title {
+  font-size: 22px;
+}

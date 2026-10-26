@@ -1,7 +1,11 @@
+import { parseProjectEvidence } from '@nest/data/project-evidence';
 import { parseRavenCatalog, parseResearchSnapshot } from '@nest/data/research';
 
+import projectJson from '../../../../research/data/project-evidence.json' with { type: 'json' };
 import catalogJson from '../../../../research/data/raven-catalog.json' with { type: 'json' };
 import snapshotJson from '../../../../research/data/stellar-research-ui.json' with { type: 'json' };
+
+export const projectEvidence = parseProjectEvidence(projectJson);
 
 export const research = parseResearchSnapshot(snapshotJson);
 export const ravenCatalog = parseRavenCatalog(catalogJson);

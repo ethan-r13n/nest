@@ -1,0 +1,152 @@
+.trade-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  gap: 18px;
+  align-items: start;
+}
+
+.trade-chart {
+  grid-column: 1;
+}
+
+.trade-routes {
+  grid-column: 1;
+}
+
+.trade-ticket {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+}
+
+@container workspace (min-width: 1280px) {
+  .trade-grid {
+    grid-template-columns: minmax(0, 1fr) 230px 340px;
+  }
+  .trade-routes {
+    grid-column: 2;
+  }
+  .trade-ticket {
+    grid-column: 3;
+    grid-row: 1;
+  }
+}
+
+@container workspace (max-width: 800px) {
+  .trade-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .trade-ticket,
+  .trade-routes {
+    grid-column: 1;
+    grid-row: auto;
+  }
+}
+
+.trade-market-context {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+}
+
+.trade-market-context > div {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.trade-market-context span {
+  font: 400 10px / 1.5 var(--nest-font-mono);
+  color: var(--nest-text-subtle);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.trade-market-context strong {
+  font: 400 13px / 1.5 var(--nest-font-mono);
+  color: var(--nest-text-secondary);
+}
+
+.trade-ticket-heading {
+  margin: 20px 20px 0;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--nest-accent);
+  text-align: center;
+  color: var(--nest-accent);
+}
+
+.trade-ticket-heading h2 {
+  font: 500 13px / 1.5 var(--nest-font-mono);
+}
+
+.trade-asset-box {
+  padding: 14px;
+  border: 1px solid var(--nest-input-border);
+  border-radius: 12px;
+  background: var(--nest-background);
+}
+
+.trade-amount-input {
+  width: 100%;
+  min-width: 0;
+  min-height: 52px;
+  background: transparent;
+  font: 400 30px / 1.4 var(--nest-font-mono);
+  outline: 0;
+}
+
+.trade-amount-input:focus-visible {
+  outline: 2px solid var(--nest-accent);
+  outline-offset: 3px;
+}
+
+.nest-workspace .trade-token-select {
+  width: auto;
+  min-width: 90px;
+  gap: 6px;
+  padding: 7px;
+  background: var(--nest-surface);
+}
+
+.trade-token-select [data-slot="select-value"] {
+  font-size: 11px;
+}
+
+.trade-order-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding-top: 20px;
+  border-top: 1px solid var(--nest-border);
+  font-size: 11px;
+}
+
+.trade-order-facts > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+}
+
+.trade-order-facts dt {
+  color: var(--nest-text-secondary);
+}
+
+.trade-order-facts dd {
+  text-align: right;
+  font-family: var(--nest-font-mono);
+  overflow-wrap: anywhere;
+}
+
+.trade-positions {
+  grid-column: 1 / -1;
+}
+
+@container workspace (min-width: 1280px) {
+  .trade-positions {
+    grid-column: 1 / span 2;
+    grid-row: 2;
+  }
+  .trade-ticket {
+    grid-row: 1 / span 2;
+  }
+}

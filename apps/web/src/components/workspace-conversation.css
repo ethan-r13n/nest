@@ -1,0 +1,120 @@
+.lab-workspace {
+  width: 100%;
+  max-width: 1180px;
+  margin-inline: auto;
+}
+
+.chat-workspace .workspace-page-header h1 {
+  font-size: 30px;
+}
+
+.lab-workspace {
+  max-width: 1120px;
+}
+
+.lab-thesis-body {
+  display: flex;
+  flex-direction: column;
+  height: 620px;
+  min-height: 560px;
+  padding: 22px;
+}
+
+.conversation-draft {
+  max-width: 860px;
+}
+
+.conversation-strategy {
+  max-width: none;
+}
+
+.conversation-prompts,
+.allocation-draft {
+  max-width: 740px;
+}
+
+.chat-workspace > section {
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: auto;
+}
+
+.chat-title-row .workspace-page-header {
+  padding-left: 56px;
+  min-height: 44px;
+}
+
+.chat-title-row .workspace-page-header p {
+  display: none;
+}
+
+.chat-workspace .conversation-status,
+.lab-workspace .conversation-status {
+  display: none;
+}
+
+.conversation-welcome {
+  padding-top: 30px;
+}
+
+.conversation-strategy .conversation-welcome-title {
+  flex-direction: column;
+  gap: 14px;
+}
+
+.conversation-strategy .conversation-welcome-title img {
+  width: 48px;
+  padding: 5px;
+  border: 1px solid var(--nest-border);
+  border-radius: 12px;
+  background: var(--nest-accent-tint);
+}
+
+.conversation-strategy .conversation-welcome-title h2 {
+  font-size: 28px;
+}
+
+.conversation-strategy .conversation-prompts {
+  max-width: 800px;
+}
+
+.conversation-prompts [data-slot="button"] {
+  border-radius: 12px;
+}
+
+.conversation-strategy .conversation-prompts [data-slot="button"] {
+  min-height: 86px;
+}
+
+.conversation-strategy .conversation-composer {
+  background: var(--nest-background);
+}
+
+.conversation-strategy .conversation-composer textarea {
+  min-height: 84px;
+}
+
+@media (max-width: 1023px) {
+  .chat-title-row .workspace-page-header {
+    padding-left: 0;
+  }
+}
+
+.conversation-strategy .conversation-welcome {
+  padding-block: 12px;
+  gap: 18px;
+}
+.conversation-strategy .conversation-welcome > :first-child {
+  max-width: 700px;
+}
+.conversation-strategy .conversation-welcome-title {
+  gap: 8px;
+  margin-bottom: 8px;
+}
+.conversation-research .conversation-composer textarea {
+  background: transparent;
+}
+.allocation-draft [data-slot="label"] {
+  font: 500 10px / 1.5 var(--nest-font-mono);
+  text-transform: uppercase;
+}

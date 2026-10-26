@@ -1,6 +1,5 @@
 import { parseResearchHistory, type ResearchHistory } from '@nest/data/research';
 import { Button } from '@nest/ui/components/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@nest/ui/components/card';
 import { Skeleton } from '@nest/ui/components/skeleton';
 import { useEffect, useId, useState } from 'react';
 
@@ -38,17 +37,20 @@ export function ResearchHistoryChart() {
   const values = points.map((point) => point.valueUsd);
   const minimum = Math.min(...values);
   const maximum = Math.max(...values);
-  const range = maximum - minimum || 1;
+  const padding = (maximum - minimum || 1) * 0.12;
+  const lower = minimum - padding;
+  const upper = maximum + padding;
+  const range = upper - lower;
   const coordinates = points.map(
     (point, index) =>
-      `${(index / Math.max(1, points.length - 1)) * 1000},${155 - ((point.valueUsd - minimum) / range) * 130}`,
+      `${(index / Math.max(1, points.length - 1)) * 1000},${155 - ((point.valueUsd - lower) / range) * 130}`,
   );
   return (
-    <Card className="research-history-panel min-w-0">
-      <CardHeader className="gap-3">
+    <section className="workspace-panel research-history-panel min-w-0">
+      <div className="research-chart-header">
         <div className="flex flex-wrap items-baseline justify-between gap-3">
           <div className="flex flex-wrap items-baseline gap-3">
-            <CardTitle>{metric === 'tvl' ? 'Total value locked' : (series?.label ?? 'Stellar history')}</CardTitle>
+            <h2>{metric === 'tvl' ? 'Total Value Locked' : (series?.label ?? 'Stellar history')}</h2>
             <strong className="font-mono text-xl font-normal tabular-nums">
               {formatUsd(selected?.valueUsd ?? null)}
             </strong>
@@ -87,22 +89,22 @@ export function ResearchHistoryChart() {
             </Button>
           ))}
         </fieldset>
-      </CardHeader>
-      <CardContent>
+      </div>
+      <div className="research-chart-body">
         {!history && !failed ? (
           <Skeleton className="h-44 w-full" />
         ) : failed || points.length < 2 ? (
           <p className="flex h-44 items-center justify-center text-muted-foreground">History is unavailable.</p>
         ) : (
           <>
-            <div className="flex gap-3">
+            <div className="relative flex gap-3">
               <div className="flex w-16 shrink-0 flex-col justify-between py-4 font-mono text-[10px] text-subtle">
-                <span>{formatUsd(maximum)}</span>
+                <span>{formatUsd(upper)}</span>
                 <span>{formatUsd((minimum + maximum) / 2)}</span>
-                <span>{formatUsd(minimum)}</span>
+                <span>{formatUsd(lower)}</span>
               </div>
               <svg
-                className="h-44 min-w-0 flex-1 overflow-visible"
+                className="h-[170px] min-w-0 flex-1 overflow-visible"
                 viewBox="0 0 1000 170"
                 preserveAspectRatio="none"
                 role="img"
@@ -146,13 +148,20 @@ export function ResearchHistoryChart() {
                   vectorEffect="non-scaling-stroke"
                 />
               </svg>
+              <div className="absolute right-0 bottom-0 left-19 flex justify-between gap-4 font-mono text-[10px] text-subtle">
+                <span>{dateLabel(points[0]?.timestamp)}</span>
+                <span>{dateLabel(finalPoint?.timestamp)}</span>
+              </div>
             </div>
-            <div className="mt-1 flex justify-between gap-4 pl-19 font-mono text-[10px] text-subtle">
-              <span>{dateLabel(points[0]?.timestamp)}</span>
-              <span>{dateLabel(finalPoint?.timestamp)}</span>
-            </div>
-            <p className="mt-3 font-mono text-[10px] text-subtle">
-              {dateLabel(selected?.timestamp)} · {formatUsd(selected?.valueUsd ?? null)}
+            <p className="research-chart-inspector font-mono text-[10px] text-subtle">
+              {dateLabel(selected?.timestamp)} ·{' '}
+              {selected
+                ? new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    maximumFractionDigits: 0,
+                  }).format(selected.valueUsd)
+                : 'Unavailable'}
             </p>
             <p className="mt-2 border-t pt-2 text-[10px] leading-5 text-subtle">
               Captured {history ? formatUtc(history.capturedAt) : 'unavailable'}. Chart and headline totals may differ
@@ -160,8 +169,8 @@ export function ResearchHistoryChart() {
             </p>
           </>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </section>
   );
 }
 

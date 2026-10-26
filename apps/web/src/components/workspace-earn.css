@@ -1,0 +1,178 @@
+.earn-list-layout {
+  display: grid;
+  grid-template-columns: 250px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+}
+
+.earn-workspace > .earn-categories {
+  margin-bottom: 18px;
+}
+
+.earn-workspace > .earn-categories button {
+  padding: 9px 16px;
+}
+
+.earn-workspace > div:nth-child(2) {
+  order: 5;
+  font-size: 10px;
+}
+
+.earn-list-layout > [data-slot="card"] {
+  border-radius: 12px;
+}
+
+.earn-list-layout > [data-slot="card"] [data-slot="card-header"] {
+  padding: 18px 20px 12px;
+  border-bottom: 0;
+}
+
+.earn-list-layout > [data-slot="card"] [data-slot="card-title"] {
+  font-size: 18px;
+}
+
+.earn-list-layout .earn-filter-content {
+  padding: 12px 20px 20px;
+}
+
+.earn-filter-content > :not(:first-child) {
+  border-top: 1px solid var(--nest-border);
+  padding-top: 20px;
+}
+
+.earn-filter-content :is(label, legend) {
+  color: var(--nest-text-secondary);
+  font-size: 11px;
+}
+
+.earn-filter-content [data-slot="input"] {
+  width: 100%;
+  font-size: 12px;
+}
+
+.earn-asset-filters {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 8px;
+}
+
+.earn-asset-filters legend {
+  margin-bottom: 16px;
+  font: 500 10px / 1.5 var(--nest-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.earn-asset-filters label {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 32px;
+}
+
+.earn-list-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--nest-border);
+  border-radius: 12px;
+  background: var(--nest-surface);
+}
+
+.nest-workspace .earn-opportunity {
+  border-radius: 16px;
+}
+
+.nest-workspace .earn-opportunity [data-slot="card-content"] {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 0.8fr) minmax(0, 0.8fr) minmax(0, 0.8fr) auto;
+  align-items: center;
+  gap: 24px;
+  min-height: 108px;
+  padding: 20px 22px;
+}
+
+.earn-opportunity-identity {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.earn-opportunity-identity a {
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.earn-opportunity-identity small {
+  display: block;
+  margin-top: 4px;
+  font-size: 11px;
+  line-height: 1.5;
+  color: var(--nest-text-secondary);
+}
+
+.earn-metric-label {
+  font: 400 9px / 1.5 var(--nest-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.earn-metric-value {
+  font-size: 20px;
+}
+
+.earn-opportunity-actions [data-slot="button"] {
+  min-width: 112px;
+  min-height: 44px;
+  font-size: 11px;
+}
+
+@container workspace (max-width: 1200px) {
+  .nest-workspace .earn-opportunity [data-slot="card-content"] {
+    grid-template-columns: minmax(0, 1.3fr) 1fr 1fr;
+    gap: 18px;
+  }
+  .earn-opportunity-actions {
+    grid-column: 3;
+  }
+}
+
+@container workspace (max-width: 800px) {
+  .earn-list-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .earn-list-layout > [data-slot="card"] .earn-filter-content {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+@container workspace (max-width: 500px) {
+  .nest-workspace .earn-opportunity [data-slot="card-content"] {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    padding: 18px;
+  }
+  .earn-opportunity-identity {
+    grid-column: 1 / -1;
+  }
+  .earn-opportunity-actions {
+    grid-column: auto;
+  }
+  .earn-list-layout > [data-slot="card"] .earn-filter-content {
+    display: block;
+  }
+}
+
+.earn-metric.earn-withdrawal .earn-metric-value {
+  font: 400 12px / 1.65 var(--nest-font-sans);
+}
+.earn-list-layout > [data-slot="card"] [data-slot="card-header"] {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -1,12 +1,14 @@
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@nest/ui/components/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
 import { ArrowDownUp, ArrowRight, Route } from 'lucide-react';
 import { useState } from 'react';
 
 import { AssetIcon } from '../components/asset-icon.tsx';
-import { AssetSelect, DecimalField, ReviewRequirements, UnavailableFacts } from '../components/financial-draft.tsx';
-import { MarketChart } from '../components/market-chart.tsx';
+import { ReviewRequirements, UnavailableFacts } from '../components/financial-draft.tsx';
+import { type ChartContext, MarketChart } from '../components/market-chart.tsx';
 import { SwapProposalCard, useCountdown } from '../components/swap-proposal.tsx';
 import { EmptyState } from '../components/workspace.tsx';
 import { amountDraftIssue } from '../lib/draft-validation.ts';
@@ -20,6 +22,7 @@ export function TradePage() {
   const [amount, setAmount] = useState('');
   const [intentId, setIntentId] = useState<string | null>(null);
   const [quote, setQuote] = useState<Quote | null>(null);
+  const [chartContext, setChartContext] = useState<ChartContext | null>(null);
   const [creating, setCreating] = useState(false);
   const [interactionLocked, setInteractionLocked] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -104,18 +107,32 @@ export function TradePage() {
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-wrap gap-2">
-          <Badge variant="outline">
-            {health.data?.network === 'testnet'
-              ? 'Testnet execution network'
-              : `Execution network: ${health.data?.network ?? 'loading'}`}
-          </Badge>
-          <Badge variant="outline">Historical chart · not a live quote</Badge>
+        <div className="trade-market-context">
+          <div>
+            <span>Spot / reference</span>
+            <strong>{chartContext ? `${chartContext.close.toFixed(6)} USDC` : 'Unavailable'}</strong>
+          </div>
+          <div>
+            <span>Captured change · 24h</span>
+            <strong>
+              {chartContext?.changePct === null || chartContext?.changePct === undefined
+                ? 'Unavailable'
+                : `${chartContext.changePct.toFixed(2)}%`}
+            </strong>
+          </div>
+          <div>
+            <span>History coverage</span>
+            <strong>{chartContext ? `${chartContext.count} candles` : 'Unavailable'}</strong>
+          </div>
+          <div>
+            <span>Data</span>
+            <strong>Captured · {health.data?.network ?? 'Loading'} execution</strong>
+          </div>
         </div>
       </header>
       <div className="trade-grid">
         <section className="workspace-panel trade-chart min-w-0" aria-label="Price context">
-          <MarketChart asset={chartAsset} />
+          <MarketChart asset={chartAsset} onContext={setChartContext} />
         </section>
         <section className="workspace-panel trade-routes min-w-0" aria-labelledby="trade-routes-title">
           <div className="border-b px-5 py-4">
@@ -168,32 +185,56 @@ export function TradePage() {
           </div>
         </section>
         <section className="workspace-panel trade-ticket min-w-0" aria-labelledby="trade-ticket-title">
-          <div className="border-b p-5">
-            <p className="mb-2 font-mono text-[10px] tracking-widest text-subtle uppercase">Market order</p>
-            <h2 id="trade-ticket-title" className="font-serif text-2xl font-semibold">
-              Swap
-            </h2>
+          <div className="trade-ticket-heading">
+            <h2 id="trade-ticket-title">Market swap</h2>
           </div>
           <div className="space-y-5 p-5">
-            <AssetSelect
-              label="You pay"
-              disabled={Boolean(intentId) || creating}
-              value={inputAsset}
-              onChange={(value) => {
-                setInputAsset(value);
-                invalidate();
-              }}
-            />
-            <DecimalField
-              label="Amount"
-              disabled={Boolean(intentId) || creating}
-              unit={inputAsset}
-              value={amount}
-              onChange={(value) => {
-                setAmount(value);
-                invalidate();
-              }}
-            />
+            <div className="trade-asset-box">
+              <p className="mb-3 text-[11px] text-subtle">You pay</p>
+              <div className="flex items-center gap-3">
+                <label className="sr-only" htmlFor="trade-amount">
+                  Amount
+                </label>
+                <input
+                  id="trade-amount"
+                  inputMode="decimal"
+                  autoComplete="off"
+                  placeholder="0"
+                  disabled={Boolean(intentId) || creating}
+                  value={amount}
+                  onChange={(event) => {
+                    setAmount(event.currentTarget.value);
+                    invalidate();
+                  }}
+                  className="trade-amount-input"
+                />
+                <Select
+                  value={inputAsset}
+                  disabled={Boolean(intentId) || creating}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setInputAsset(value);
+                      invalidate();
+                    }
+                  }}
+                >
+                  <SelectTrigger aria-label="You pay" className="trade-token-select">
+                    <AssetIcon symbol={inputAsset} className="size-6" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['XLM', 'USDC', 'USDT0'].map((asset) => (
+                      <SelectItem key={asset} value={asset}>
+                        {asset}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <p className="mt-3 text-[10px] leading-5 text-subtle">
+                Spendable balance and reserves are checked before review.
+              </p>
+            </div>
             <div className="flex justify-center">
               <Button
                 variant="outline"
@@ -206,15 +247,93 @@ export function TradePage() {
                 <ArrowDownUp />
               </Button>
             </div>
-            <AssetSelect
-              label="You receive"
-              disabled={Boolean(intentId) || creating}
-              value={outputAsset}
-              onChange={(value) => {
-                setOutputAsset(value);
-                invalidate();
-              }}
-            />
+            <div className="trade-asset-box">
+              <p className="mb-3 flex justify-between gap-3 text-[11px] text-subtle">
+                <span>Estimated receive</span>
+                <span>{quote ? (secondsLeft === 0 ? 'Expired quote' : 'Current quote') : 'Quote required'}</span>
+              </p>
+              <div className="flex items-center gap-3">
+                <output
+                  className="min-w-0 flex-1 overflow-wrap-anywhere font-mono text-[28px]"
+                  aria-label="Estimated receive"
+                >
+                  {quote && secondsLeft !== 0 ? quote.expectedOut.amount : '—'}
+                </output>
+                <Select
+                  value={outputAsset}
+                  disabled={Boolean(intentId) || creating}
+                  onValueChange={(value) => {
+                    if (value) {
+                      setOutputAsset(value);
+                      invalidate();
+                    }
+                  }}
+                >
+                  <SelectTrigger aria-label="You receive" className="trade-token-select">
+                    <AssetIcon symbol={outputAsset} className="size-6" />
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {['XLM', 'USDC', 'USDT0'].map((asset) => (
+                      <SelectItem key={asset} value={asset}>
+                        {asset}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <p className="mt-3 text-[10px] leading-5 text-subtle">
+                Final asset changes come from your reviewed transaction.
+              </p>
+            </div>
+            <fieldset className="grid grid-cols-4 gap-1" aria-label="Amount shortcuts">
+              {['100', '500', '1000', '5000'].map((value) => (
+                <Button
+                  key={value}
+                  variant="outline"
+                  size="sm"
+                  disabled={Boolean(intentId) || creating}
+                  onClick={() => {
+                    setAmount(value);
+                    invalidate();
+                  }}
+                >
+                  {Number(value).toLocaleString('en-US')}
+                </Button>
+              ))}
+            </fieldset>
+            <dl className="trade-order-facts">
+              <div>
+                <dt>Minimum received</dt>
+                <dd>{quote ? `${quote.minimumOut.amount} ${quote.minimumOut.symbol}` : '—'}</dd>
+              </div>
+              <div>
+                <dt>Max slippage</dt>
+                <dd>{quote ? `${quote.slippageBps / 100}%` : 'From fresh quote'}</dd>
+              </div>
+              <div>
+                <dt>Price impact</dt>
+                <dd>
+                  {quote?.priceImpactBps === null || quote?.priceImpactBps === undefined
+                    ? 'Unavailable'
+                    : `${quote.priceImpactBps / 100}%`}
+                </dd>
+              </div>
+              <div>
+                <dt>Maximum fees</dt>
+                <dd>Shown before signing</dd>
+              </div>
+              <div>
+                <dt>Quote validity</dt>
+                <dd>
+                  {quote
+                    ? secondsLeft === 0
+                      ? 'Refresh required'
+                      : `${secondsLeft ?? '—'}s remaining`
+                    : 'Quote required'}
+                </dd>
+              </div>
+            </dl>
             <p className="text-xs text-subtle">
               Balances and maximum fees are verified during transaction preparation. A chart price is context only.
             </p>
@@ -252,16 +371,51 @@ export function TradePage() {
             )}
           </div>
         </section>
+        <section className="workspace-panel trade-positions" aria-labelledby="trade-positions-title">
+          <h2 id="trade-positions-title" className="border-b px-6 py-5 font-serif text-xl font-semibold">
+            My positions
+          </h2>
+          <Tabs defaultValue="positions" className="px-5 pb-5">
+            <TabsList className="my-3 h-auto bg-transparent">
+              <TabsTrigger value="positions" className="min-h-11">
+                Positions
+              </TabsTrigger>
+              <TabsTrigger value="history" className="min-h-11">
+                Swap history
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="positions">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    {['Asset / Market', 'Quantity', 'USD notional', 'Avg. entry', 'Mark', 'Unrealized P&L'].map(
+                      (label) => (
+                        <TableHead key={label}>{label}</TableHead>
+                      ),
+                    )}
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  <TableRow>
+                    <TableCell colSpan={6} className="p-0">
+                      <EmptyState
+                        title="No verified spot positions loaded"
+                        description="Confirmed balances and cost basis are needed before position size, value or P&L can be shown. Missing data is not a zero balance."
+                      />
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TabsContent>
+            <TabsContent value="history">
+              <EmptyState
+                title="No verified swap history loaded"
+                description="Completed actions remain in their transaction review cards. Historical fills are unavailable until their receipts are loaded."
+              />
+            </TabsContent>
+          </Tabs>
+        </section>
       </div>
-      <section className="workspace-panel" aria-labelledby="trade-positions-title">
-        <h2 id="trade-positions-title" className="border-b px-6 py-5 font-serif text-xl font-semibold">
-          My positions
-        </h2>
-        <EmptyState
-          title="No verified spot positions loaded"
-          description="Confirmed balances and cost basis are needed before position size, value or P&L can be shown. Trade confirmations remain in their review cards."
-        />
-      </section>
     </div>
   );
 }

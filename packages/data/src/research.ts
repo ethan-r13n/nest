@@ -69,6 +69,8 @@ const SnapshotSchema = z.object({
         slug: z.string(),
         name: z.string(),
         category: z.string(),
+        symbol: z.string().nullable().optional(),
+        protocol_chains: z.array(z.string()).optional(),
         url: z.string(),
         logo: z.string(),
         stellar_tvl_usd: NUMBER_OR_NULL,
@@ -187,6 +189,8 @@ export interface ProtocolRow {
   slug: string;
   name: string;
   category: string;
+  symbol?: string | null;
+  chains?: string[];
   url: string;
   logo: string;
   stellarTvlUsd: number | null;
@@ -328,6 +332,8 @@ export function parseResearchSnapshot(input: unknown): ResearchSnapshot {
       slug: row.slug,
       name: row.name,
       category: row.category,
+      symbol: row.symbol ?? null,
+      chains: row.protocol_chains ?? [],
       url: row.url,
       logo: row.logo,
       stellarTvlUsd: row.stellar_tvl_usd,
