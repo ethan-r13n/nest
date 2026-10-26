@@ -18,6 +18,14 @@ import { createSoroswapVenue, SoroswapError } from '@nest/adapters/soroswap/clie
 import { createSdexVenue } from '@nest/adapters/stellar/sdex';
 import { buildTrustline } from '@nest/adapters/stellar/trustline';
 import type { SwapVenue } from '@nest/adapters/venue';
+import {
+  buildXoxnoCall,
+  readXoxnoAccounts,
+  readXoxnoMarket,
+  type XoxnoAccount,
+  type XoxnoCall,
+  type XoxnoMarket,
+} from '@nest/adapters/xoxno/lending';
 import { formatRawAmount, rawFromText } from '@nest/domain/amount';
 import { AppError } from '@nest/domain/errors';
 import type { StellarNetwork } from '@nest/domain/network';
@@ -69,6 +77,13 @@ interface RangeVenue {
   build(input: { poolId: string; account: string; call: RangeCall }): Promise<string>;
 }
 
+/** XOXNO lending reads and builds, injected so tests run without a network. */
+interface XoxnoVenue {
+  market(): Promise<XoxnoMarket>;
+  accounts(owner: string): Promise<XoxnoAccount[]>;
+  build(input: { account: string; call: XoxnoCall }): Promise<string>;
+}
+
 export interface ExecutionDeps {
   db: D1Database;
   config: ExecutionConfig;
@@ -77,6 +92,7 @@ export interface ExecutionDeps {
   lending: LendingVenue | null;
   vaults: VaultVenue | null;
   ranges: RangeVenue | null;
+  xoxno: XoxnoVenue | null;
   buildTrustline: typeof buildTrustline;
   rpc: SwapRpc | null;
   now(): number;
@@ -110,6 +126,13 @@ export function executionDeps(env: Env): ExecutionDeps {
             readRangePosition(poolId, account, band, { network: config.network, rpcUrl }),
           positions: (poolId, account) => listRangePositions(poolId, account, { network: config.network, rpcUrl }),
           build: (input) => buildRangeCall({ network: config.network, rpcUrl, nowMs: Date.now(), ...input }),
+        }
+      : null,
+    xoxno: rpcUrl
+      ? {
+          market: () => readXoxnoMarket({ network: config.network, rpcUrl }),
+          accounts: (owner) => readXoxnoAccounts(owner, { network: config.network, rpcUrl }),
+          build: (input) => buildXoxnoCall({ network: config.network, rpcUrl, nowMs: Date.now(), ...input }),
         }
       : null,
     buildTrustline,

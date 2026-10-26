@@ -415,7 +415,7 @@ function activityItem(plan: PlanRow, intent: IntentRow, quote: QuoteRow) {
   return {
     ...base,
     title: `${LENDING_TITLES[intent.kind] ?? 'Lend'} ${view.offer.asset.symbol}`,
-    venue: `Blend · ${view.offer.pool.name}`,
+    venue: view.offer.venue === 'blend' ? `Blend · ${view.offer.pool.name}` : view.offer.pool.name,
     sent: requests.filter((request) => OUTGOING_REQUESTS.has(request.type)).map(amountOf),
     received: requests.filter((request) => !OUTGOING_REQUESTS.has(request.type)).map(amountOf),
   };

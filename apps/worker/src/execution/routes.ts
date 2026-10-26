@@ -5,7 +5,7 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import type { AppEnv } from '../app.ts';
-import { createLendingIntent } from './lending.ts';
+import { createLendingIntent, listLendingPositions } from './lending.ts';
 import {
   approvePlan,
   compareIntent,
@@ -71,7 +71,7 @@ const ApproveSchema = z.strictObject({
 });
 const TrustlineSchema = z.strictObject({
   accountId: z.string().min(1).max(64),
-  use: z.enum(['swap', 'lending', 'aquarius']),
+  use: z.enum(['swap', 'lending', 'aquarius', 'xoxno']),
 });
 const TrustlineSubmitSchema = TrustlineSchema.extend({ signedXdr: z.string().min(1).max(10_000) });
 const SubmitSchema = z.strictObject({ signedXdr: z.string().min(1).max(60_000) });
@@ -144,6 +144,11 @@ export function createExecutionRoutes() {
   /** What the wallet can spend of each swap asset, for the swap form. Read-only. */
   routes.get('/balances', async (c) =>
     c.json(await swapBalances(executionDeps(c.env).config.network, c.req.query('account') ?? '')),
+  );
+
+  /** The wallet's Blend and XOXNO lending positions, for Portfolio. Read-only. */
+  routes.get('/positions', async (c) =>
+    c.json(await listLendingPositions(executionDeps(c.env), c.req.query('account') ?? '')),
   );
 
   /** Live Blend pool rates for the Research page. Read-only. */

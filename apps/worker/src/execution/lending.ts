@@ -4,6 +4,7 @@ import { inspectBlendSubmit, type LendingRequest } from '@nest/adapters/blend/su
 import { InspectionError } from '@nest/adapters/stellar/inspect';
 import { NETWORK_PASSPHRASES } from '@nest/adapters/stellar/networks';
 import { VenueRefusal } from '@nest/adapters/venue';
+import { XOXNO, type XoxnoSymbol, xoxnoAsset } from '@nest/adapters/xoxno/lending';
 import { AmountError, MAX_CLASSIC_RAW, parseDecimalAmount, rawFromText, rawToText } from '@nest/domain/amount';
 import { AppError } from '@nest/domain/errors';
 import { type Decision, evaluate, type Rule } from '@nest/policy/engine';
@@ -26,6 +27,14 @@ import {
   transitionOrReload,
   XLM_DECIMALS,
 } from './store.ts';
+import {
+  compareXoxnoBorrow,
+  listXoxnoAccounts,
+  prepareXoxnoBorrow,
+  XOXNO_VENUE,
+  type XoxnoBorrowOffer,
+  type XoxnoStep,
+} from './xoxno.ts';
 
 export type LendingKind = 'supply' | 'borrow' | 'repay' | 'withdraw' | 'withdraw_collateral';
 /** Actions that close or shrink a position the account already holds in one pool. */
@@ -70,6 +79,8 @@ const WITHDRAWAL_TIMING = {
 } as const;
 
 interface Offer {
+  /** Absent for Blend, which every offer was before XOXNO borrowing. */
+  venue?: typeof XOXNO_VENUE;
   poolId: string;
   poolName: string;
   status: number;
@@ -87,6 +98,8 @@ interface Offer {
   estimatedHealth: number | null;
   /** Repay and withdraw: the account whose position this is, what it holds now and its health. */
   position?: { account: string; heldRaw: string; health: number | null };
+  /** XOXNO: the spoke (risk profile) a new account joins. */
+  spokeId?: number;
 }
 
 export async function createLendingIntent(
@@ -102,8 +115,12 @@ export async function createLendingIntent(
   },
 ) {
   const network = deps.config.network;
-  if (input.poolId && !blendPool(network, input.poolId)) {
-    throw new AppError('INVALID_REQUEST', 'That pool is not a registered Blend pool on this network.');
+  const xoxno = input.poolId === XOXNO[network].controller;
+  if (input.poolId && !xoxno && !blendPool(network, input.poolId)) {
+    throw new AppError('INVALID_REQUEST', 'That pool is not a registered Blend pool or XOXNO market on this network.');
+  }
+  if (xoxno && input.kind !== 'borrow') {
+    throw new AppError('INVALID_REQUEST', 'Nest borrows on XOXNO; lending and its exits go through Blend.');
   }
   const whole = input.amount.trim().toLowerCase() === 'all';
   if (whole && !isExit(input.kind)) {
@@ -215,6 +232,13 @@ export async function compareLending(deps: ExecutionDeps, intent: IntentRow, acc
     });
   }
 
+  const xoxnoMarket = XOXNO[intent.network].controller;
+  if (kind === 'borrow' && deps.xoxno && (!intent.market_id || intent.market_id === xoxnoMarket)) {
+    const xoxno = await compareXoxnoBorrow(deps, intent, TARGET_HEALTH);
+    if ('reason' in xoxno) excluded.push({ poolId: xoxnoMarket, name: 'XOXNO', reason: xoxno.reason });
+    else candidates.push(xoxno);
+  }
+
   candidates.sort((left, right) =>
     kind === 'supply'
       ? right.offer.supplyApyPct - left.offer.supplyApyPct
@@ -223,7 +247,7 @@ export async function compareLending(deps: ExecutionDeps, intent: IntentRow, acc
   const rows: QuoteRow[] = candidates.map(({ offer, collateralRaw }) => ({
     id: crypto.randomUUID(),
     intent_id: intent.id,
-    venue: VENUE,
+    venue: offer.venue ?? VENUE,
     slippage_bps: 0,
     // Supply: what goes in and stays the user's. Borrow: the collateral in, the loan out.
     amount_in_raw: rawToText(collateralRaw ?? amount),
@@ -330,6 +354,42 @@ async function readPositions(deps: ExecutionDeps, account: string): Promise<Pool
     logFailure('lending_positions', error);
     throw new AppError('UNAVAILABLE', 'Your Blend positions could not be read right now. Try again shortly.');
   }
+}
+
+/**
+ * The wallet's lending positions: Blend supply, collateral and debt per pool, and its XOXNO
+ * accounts. Read-only; each side reports itself unavailable rather than as empty.
+ */
+export async function listLendingPositions(deps: ExecutionDeps, account: string) {
+  if (!StrKey.isValidEd25519PublicKey(account)) throw new AppError('INVALID_REQUEST', 'Send a Stellar account (G…).');
+  const [blend, xoxno] = await Promise.all([
+    deps.lending
+      ? deps.lending.positions(account).then(
+          (pools) => ({
+            available: true as const,
+            pools: pools.map((pool) => ({
+              poolId: pool.poolId,
+              name: pool.name,
+              health: pool.health,
+              positions: pool.positions.map((position) => ({
+                symbol: position.symbol,
+                supplied: rawAmount(position.symbol, rawToText(position.suppliedRaw)),
+                collateral: rawAmount(position.symbol, rawToText(position.collateralRaw)),
+                debt: rawAmount(position.symbol, rawToText(position.debtRaw)),
+                supplyApyPct: position.supplyApyPct,
+                borrowApyPct: position.borrowApyPct,
+              })),
+            })),
+          }),
+          (error: unknown) => {
+            logFailure('lending_positions', error);
+            return { available: false as const, reason: 'Blend positions could not be read right now.', pools: [] };
+          },
+        )
+      : { available: false as const, reason: 'Lending needs a Stellar RPC on this server.', pools: [] },
+    listXoxnoAccounts(deps, account),
+  ]);
+  return { network: deps.config.network, blend, xoxno };
 }
 
 interface LendingPlanFacts {
@@ -451,8 +511,11 @@ export async function prepareLending(
   intent: IntentRow,
   quote: QuoteRow,
 ): Promise<PlanRow> {
-  if (!deps.lending) throw new AppError('UNAVAILABLE', 'Lending needs a Stellar RPC on this server.');
   const offer = JSON.parse(quote.provider_quote) as Offer;
+  if (offer.venue === XOXNO_VENUE) {
+    return prepareXoxnoBorrow(deps, plan, intent, quote, offer as XoxnoBorrowOffer, HEALTH_WARNING);
+  }
+  if (!deps.lending) throw new AppError('UNAVAILABLE', 'Lending needs a Stellar RPC on this server.');
   const requests = requestsOf(intent, quote);
   let health: { before: number | null; after: number | null } = { before: null, after: null };
   const change = healthChange(intent, requests);
@@ -556,6 +619,17 @@ function healthChange(intent: IntentRow, requests: readonly LendingRequest[]) {
  * withdraw: one request for the amount compared against the account's position.
  */
 function requestsOf(intent: IntentRow, quote: QuoteRow): LendingRequest[] {
+  if ((JSON.parse(quote.provider_quote) as Offer).venue === XOXNO_VENUE) {
+    const contractOf = (symbol: string | null) => xoxnoAsset(intent.network, symbol as XoxnoSymbol).contractId;
+    return [
+      {
+        type: 'supplyCollateral',
+        contractId: contractOf(intent.collateral_asset),
+        amount: rawFromText(quote.amount_in_raw),
+      },
+      { type: 'borrow', contractId: contractOf(intent.sell_asset), amount: rawFromText(intent.sell_amount_raw) },
+    ];
+  }
   const asset = lendingAsset(intent.network, intent.sell_asset as LendingSymbol);
   if (isExit(intent.kind)) {
     return [
@@ -679,6 +753,8 @@ export function lendingPlanView(row: PlanRow, intent: IntentRow, quote: QuoteRow
         requests: { type: string; symbol: string; amountRaw: string }[];
         healthBefore: number | null;
         healthAfter: number | null;
+        /** XOXNO: which of the loan's two transactions this plan built. */
+        step?: XoxnoStep;
       })
     : null;
   return {
@@ -701,6 +777,7 @@ export function lendingPlanView(row: PlanRow, intent: IntentRow, quote: QuoteRow
               after: facts.healthAfter,
               warning: facts.healthAfter !== null && facts.healthAfter < HEALTH_WARNING,
             },
+            step: facts.step ?? null,
             validUntil: row.valid_until_ms ? new Date(row.valid_until_ms).toISOString() : null,
           }
         : null,

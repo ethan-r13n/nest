@@ -103,6 +103,7 @@ function harness(network: 'testnet' | 'mainnet' = 'testnet') {
     venue: null,
     lending: null,
     vaults: null,
+    xoxno: null,
     ranges: {
       pool: async () => pool(),
       estimate: async (_poolId, _band, amounts) => ({ used: [amounts[0], amounts[1]], liquidity: LIQUIDITY }),

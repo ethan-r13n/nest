@@ -129,6 +129,7 @@ function createFixture(options: { writeAdapters?: string[] } = {}) {
     },
     venue: null,
     vaults: null,
+    xoxno: null,
     ranges: null,
     buildTrustline: async () => {
       throw new Error('not used');
