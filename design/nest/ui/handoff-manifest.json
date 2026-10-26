@@ -234,8 +234,8 @@
     },
     {
       "path": "ui/README.txt",
-      "bytes": 1832,
-      "sha256": "20c30a398f6f4ff09370a0b4567dbdc681b84fa9a9efc00c68eacb370823ce47"
+      "bytes": 3000,
+      "sha256": "f96ffbcce0c13eed637877ae489fc98ed9a002191013023ee51d3effac59e0fa"
     },
     {
       "path": "ui/app.js",
@@ -1179,8 +1179,8 @@
     },
     {
       "path": "ui/index.html",
-      "bytes": 5959,
-      "sha256": "893299f2b509b856c2acc220c71c8dc4aadabf618d64bbbac4410960ab402edf"
+      "bytes": 6066,
+      "sha256": "05a6b53e2ef1dc996386d09cd8e4e2f6733ec19ef0dba26bc84a2b00ec45bd3e"
     },
     {
       "path": "ui/lab-model.js",
@@ -1196,6 +1196,16 @@
       "path": "ui/liquidity.css",
       "bytes": 2954,
       "sha256": "c1442a8215b331da114d91cc007532328d36a6609c5f6efc37ff03876c3fd46e"
+    },
+    {
+      "path": "ui/live-chat.css",
+      "bytes": 1253,
+      "sha256": "9f36e50e37312345afa9d545c4e532b55d8829bfc7c1b915e01aab3645f05442"
+    },
+    {
+      "path": "ui/live-chat.js",
+      "bytes": 5185,
+      "sha256": "00e7eebb7669e8f4b92f976b22d309eadb6ed6aa89539f732c699e076095b324"
     },
     {
       "path": "ui/logos.js",
@@ -1629,8 +1639,8 @@
     },
     {
       "path": "ui/screens/discovery.js",
-      "bytes": 27995,
-      "sha256": "396cf4f065cc04945a7aaf5d53dc4c33f6c766ebfb70ad88e2e0da5c88f41935"
+      "bytes": 27144,
+      "sha256": "4241ed503cd6bfe595779d1b01c5a3b72d85047370c0a37a7f43a197e01cb63e"
     },
     {
       "path": "ui/screens/lab.js",
@@ -1678,6 +1688,16 @@
       "sha256": "50526f03cf46ef72607ba8d1bc964527f0e9ce291f419af3816bf7aac534a25d"
     },
     {
+      "path": "ui/scripts/serve-preview.py",
+      "bytes": 6577,
+      "sha256": "669e4ccba4e230a9a65836f86502bcc841f6719a05f8b2d120a0d8ec735460c3"
+    },
+    {
+      "path": "ui/scripts/test_live_chat.py",
+      "bytes": 4552,
+      "sha256": "2516d7b20415fa8d1d7a452632ed2e5d7e558932409add0c98fc2417bbd42274"
+    },
+    {
       "path": "ui/scripts/test_market_data.py",
       "bytes": 4626,
       "sha256": "7a6890f453739ec804a3fb9b39c2b233f7ecf955d6b96ed141c5bcf1b6ec2fbd"
@@ -1691,6 +1711,11 @@
       "path": "ui/scripts/verify-lab-model.js",
       "bytes": 6927,
       "sha256": "504791763f0b59de152101930c47e86c96d2707fb67f0fee94e2c618ebbdc78f"
+    },
+    {
+      "path": "ui/scripts/verify-live-chat.js",
+      "bytes": 4024,
+      "sha256": "8122d0bf7f026d8568f8b8b839b884cf867dbe3ee23e2c260d8a24ba39105196"
     },
     {
       "path": "ui/scripts/verify-map-logos.js",
