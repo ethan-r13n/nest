@@ -10,8 +10,6 @@ import { type FormEvent, useEffect, useId, useState } from 'react';
 
 import lockupUrl from '../../../../design/nest/assets/nest-lockup.svg';
 import { Murmuration } from '../components/murmuration.tsx';
-import { formatPercentPoints, formatUsd } from '../lib/format.ts';
-import { research } from '../lib/research.ts';
 
 const SERIF = "font-['Instrument_Serif',serif] font-normal";
 const MONO = "font-['Geist_Mono',monospace] font-normal";
@@ -19,47 +17,54 @@ const RULE = 'border-[rgba(241,236,226,.16)]';
 const GUTTER = 'px-[clamp(20px,4vw,56px)]';
 const PILL = 'rounded-full px-5 text-sm leading-none';
 const SOLID_PILL = `${PILL} bg-[#ff5b1f] py-3.5 font-medium text-[#08090a] hover:bg-[#ff7a45] hover:text-[#08090a]`;
-const SUGGESTED_QUESTION = 'Compare USDC yield on Stellar at $10,000 over 90 days…';
+const SUGGESTED_QUESTION = 'Where can I deploy 5,000 USDC for 30 days at over 5% APR with accessible withdrawals?';
 
-const DAY = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
-const DATE = new Intl.DateTimeFormat('en-GB', { day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' });
-const CLOCK = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'UTC' });
-
-/** Examples for "Compare", read from the snapshot so the figures stay dated and real. */
-const COMPARE_EXAMPLES = [
-  { project: 'gami-labs', symbol: 'EARNUSDC', label: 'EARNUSDC · Gami', note: 'exit unverified', caution: true },
-  { project: 'blend-pools-v2', symbol: 'USDC', meta: 'Fixed Pool', label: 'USDC · Blend Fixed' },
-  { project: 'ondo-yield-assets', symbol: 'USDY', label: 'USDY · Ondo' },
+const FEATURES = [
+  {
+    title: 'Research',
+    to: '/research',
+    description: 'Explore protocols, markets, yields, stablecoins and tokenized real-world assets.',
+    detail: 'DefiLlama · RWA.xyz · Raven MCP · venue data',
+  },
+  {
+    title: 'Trade',
+    to: '/trade',
+    description: 'Chart major pairs and compare aggregated swap routes before you sign.',
+    detail: 'Soroswap',
+  },
+  {
+    title: 'Credit',
+    to: '/credit',
+    description: 'Compare rates, capacity and liquidation terms. Manage collateral and repayments.',
+    detail: 'Blend · Templar · XOXNO',
+  },
+  {
+    title: 'Yield',
+    to: '/earn',
+    description: 'Compare lending, vaults and LPs by fees, incentives, exposure and withdrawal terms.',
+    detail: 'DeFindex · Upshift/Gami · Sentora · Aquarius',
+  },
+  {
+    title: 'Portfolio',
+    to: '/portfolio',
+    description: 'Track balances, positions, debt and history, with paths to manage or exit.',
+    detail: 'Your capital, in context',
+  },
+  {
+    title: 'Backtesting & automations',
+    to: '/lab/backtests',
+    description: 'Test ideas against evidence. Turn verifiable conditions into alerts or transaction proposals.',
+    detail: 'Rates · liquidity · market signals',
+  },
+  {
+    title: 'Chat',
+    to: '/chat',
+    description: 'Express your intent or turn any screen’s data into a plan through the side-chat.',
+    detail: 'Available throughout the workspace',
+  },
 ] as const;
 
-const SAFETY = [
-  ['Restricted runtime', 'The agent can research and draft. It cannot sign or move funds.'],
-  ['Application-owned execution', 'Every write passes a policy engine before it reaches your wallet.'],
-  ['Suggestions stay suggestions', 'Guardrails the agent proposes apply only after you accept them.'],
-  ['Mainnet first, Testnet isolated', 'Validation runs on a separate path and database.'],
-] as const;
-
-const capturedAt = new Date(research.sources.defillama.capturedAt);
-const tvl = formatUsd(research.chain.defiTvlUsd);
-const venues = research.protocols.length;
-const topLending = research.protocols
-  .filter((protocol) => protocol.category === 'Lending' && protocol.stellarTvlUsd !== null)
-  .sort((left, right) => (right.stellarTvlUsd ?? 0) - (left.stellarTvlUsd ?? 0))[0];
-const compareRows = COMPARE_EXAMPLES.flatMap((example) => {
-  const pool = research.yieldPools.find(
-    (candidate) =>
-      candidate.project === example.project &&
-      candidate.symbol === example.symbol &&
-      (!('meta' in example) || candidate.meta === example.meta),
-  );
-  if (!pool || pool.totalApyPct === null) return [];
-  const note = 'note' in example ? example.note : pool.rewardApyPct ? 'incl. incentives' : 'base only';
-  return [{ label: example.label, apy: `${pool.totalApyPct.toFixed(2)}%`, note, caution: 'caution' in example }];
-});
-
-/** The public front door: what Nest is, how it works and why it never holds keys. */
 export function LandingPage() {
-  // The page loads lazily, after the browser has looked for a `#how` or `#safety` target.
   useEffect(() => {
     if (window.location.hash) document.getElementById(window.location.hash.slice(1))?.scrollIntoView();
   }, []);
@@ -75,18 +80,9 @@ export function LandingPage() {
         <Header />
         <main>
           <Hero />
-          <section className={`${GUTTER} py-[22vh]`} aria-label="Why Nest">
-            <p
-              className={`${SERIF} m-0 max-w-[1180px] text-[clamp(34px,4.6vw,70px)] leading-[1.08] tracking-[-.01em] text-pretty`}
-            >
-              Stellar DeFi holds <span className="text-[#ff7a45]">{tvl}</span> across{' '}
-              <span className="text-[#ff7a45]">{venues} venues</span>.{' '}
-              <span className="text-[#8f897e]">Rates, incentives and exit terms are scattered across all of them.</span>{' '}
-              Nest reads them together, dates every figure, <em>and tells you what it doesn&rsquo;t know.</em>
-            </p>
-          </section>
-          <HowItWorks />
-          <Safety />
+          <Purpose />
+          <Features />
+          <Harness />
           <AskNest />
         </main>
       </div>
@@ -96,24 +92,27 @@ export function LandingPage() {
 
 function Header() {
   return (
-    <header className={`flex flex-wrap items-center justify-between gap-5 py-7 ${GUTTER}`}>
-      <Link to="/" aria-label="Nest home" className="flex items-center">
+    <header className={`flex flex-wrap items-center justify-between gap-4 py-7 ${GUTTER}`}>
+      <Link to="/" aria-label="Nest home" className="order-1 flex min-h-11 items-center">
         <img src={lockupUrl} alt="Nest" className="h-9 w-auto" />
       </Link>
-      <nav aria-label="Landing" className="flex flex-wrap gap-8 text-sm text-[#b9b3a8]">
-        <a href="#how" className="hover:text-[#ff5b1f]">
-          How it works
+      <nav
+        aria-label="Landing"
+        className="order-3 flex w-full flex-wrap justify-between gap-x-7 text-sm text-[#b9b3a8] sm:order-2 sm:w-auto sm:justify-start"
+      >
+        <a href="#how" className="flex min-h-11 items-center hover:text-[#ff7a45]">
+          Features
         </a>
-        <a href="#safety" className="hover:text-[#ff5b1f]">
-          Safety
+        <a href="#safety" className="flex min-h-11 items-center hover:text-[#ff7a45]">
+          The harness
         </a>
-        <Link to="/research" className="hover:text-[#ff5b1f]">
+        <Link to="/research" className="flex min-h-11 items-center hover:text-[#ff7a45]">
           Research
         </Link>
       </nav>
       <Link
         to="/research"
-        className={`${PILL} bg-[#f1ece2] py-[13px] font-medium text-[#08090a] hover:bg-white hover:text-[#08090a]`}
+        className={`${PILL} order-2 flex min-h-11 items-center bg-[#f1ece2] py-[13px] font-medium text-[#08090a] hover:bg-white hover:text-[#08090a] sm:order-3`}
       >
         Launch App →
       </Link>
@@ -122,168 +121,147 @@ function Header() {
 }
 
 function Hero() {
-  const stats = [
-    { label: 'Stellar DeFi TVL', value: tvl },
-    { label: 'USD stablecoins', value: formatUsd(research.chain.stablecoinUsdByPeg.peggedUSD ?? null) },
-    { label: 'Venues tracked', value: String(venues) },
-  ];
-  return (
-    <section className={`flex min-h-[calc(100vh-92px)] flex-col justify-end pb-9 ${GUTTER}`}>
-      <div className="flex flex-wrap items-end justify-between gap-10">
-        <h1 className={`${SERIF} m-0 max-w-[1100px] text-[clamp(64px,10.5vw,176px)] leading-[.88] tracking-[-.025em]`}>
-          Every move on Stellar, <em className="text-[#ff7a45]">researched first.</em>
-        </h1>
-        <div className="max-w-[340px] pb-3.5">
-          <p className="m-0 text-[17px] leading-[1.55] font-light text-pretty text-[#cfc9bd]">
-            Nest is an agent that finds, compares and drafts DeFi moves across Stellar. It never signs for you.
-          </p>
-          <div className="mt-6 flex flex-wrap gap-2.5">
-            <Link to="/research" className={SOLID_PILL}>
-              Open the workspace
-            </Link>
-            <a href="#how" className={`${PILL} border border-[rgba(241,236,226,.3)] py-[13px] hover:text-[#ff5b1f]`}>
-              See how it works
-            </a>
-          </div>
-        </div>
-      </div>
-      <dl className={`mt-14 grid grid-cols-[repeat(auto-fit,minmax(170px,1fr))] gap-5 border-t pt-5 ${RULE}`}>
-        {stats.map((stat) => (
-          <div key={stat.label}>
-            <dt className={`${MONO} text-[11px] leading-none tracking-[.04em] text-[#8f897e]`}>{stat.label}</dt>
-            <dd className={`${SERIF} m-0 mt-2.5 text-[30px] leading-none`}>{stat.value}</dd>
-          </div>
-        ))}
-        <div>
-          <dt className={`${MONO} text-[11px] leading-none tracking-[.04em] text-[#8f897e]`}>Snapshot</dt>
-          <dd className={`${SERIF} m-0 mt-2.5 text-[30px] leading-none`}>
-            <time dateTime={capturedAt.toISOString()}>
-              {DAY.format(capturedAt)}, {CLOCK.format(capturedAt)} <span className="text-lg text-[#8f897e]">UTC</span>
-            </time>
-          </dd>
-        </div>
-      </dl>
-    </section>
-  );
-}
-
-function HowItWorks() {
-  return (
-    <section id="how" className={`bg-[rgba(4,10,6,.86)] py-[120px] backdrop-blur-[2px] ${GUTTER}`}>
-      <div className="mb-14 flex flex-wrap items-baseline justify-between gap-5">
-        <h2 className={`${SERIF} m-0 text-[clamp(44px,6vw,96px)] leading-[.95]`}>How Nest works</h2>
-        <span className={`${MONO} text-xs text-[#8f897e]`}>Research → Compare → Act</span>
-      </div>
-      <Step
-        numeral="i."
-        title="Research"
-        body="Ask in plain language. Answers come from dated snapshots, with the source on every number."
-      >
-        <div className={`${MONO} text-[13px] leading-[1.6] text-[#cfc9bd]`}>
-          <div className="text-[#8f897e]">you › which lending venue holds the most TVL?</div>
-          {topLending ? (
-            <>
-              <div className={`${SERIF} mt-3 text-[26px] leading-[1.2] text-[#f1ece2]`}>
-                {topLending.name} · {formatUsd(topLending.stellarTvlUsd)}
-              </div>
-              <div className="mt-2 text-[#8f897e]">
-                DefiLlama · {DATE.format(new Date(topLending.observedAt))}
-                {topLending.change.day === null
-                  ? ''
-                  : ` · ${formatPercentPoints(topLending.change.day).replace('-', '−')} 1d, protocol-wide`}
-              </div>
-            </>
-          ) : null}
-        </div>
-      </Step>
-      <Step
-        numeral="ii."
-        title="Compare"
-        body="Base return, incentives, fees and withdrawal terms stay separate, so nothing is double-counted."
-      >
-        <div
-          className={`${MONO} grid grid-cols-[minmax(0,1fr)_auto_auto] items-baseline gap-x-5 gap-y-4 text-[13px] leading-none`}
-        >
-          {compareRows.map((row) => (
-            <div key={row.label} className="contents">
-              <span>{row.label}</span>
-              <span className={`${SERIF} text-2xl leading-none`}>{row.apy}</span>
-              <span className={row.caution ? 'text-[#e0a35c]' : 'text-[#8f897e]'}>{row.note}</span>
-            </div>
-          ))}
-        </div>
-      </Step>
-      <Step
-        numeral="iii."
-        title="Act"
-        body="The agent drafts. Your policy checks caps, venues and quote freshness. Your wallet signs."
-        last
-      >
-        <div className={`${MONO} text-[13px] leading-[2.1] text-[#cfc9bd]`}>
-          <div>
-            <span className="text-[#ff7a45]">✓</span> within $500 cap
-          </div>
-          <div>
-            <span className="text-[#ff7a45]">✓</span> venue on allowlist · Blend
-          </div>
-          <div>
-            <span className="text-[#ff7a45]">✓</span> quote 12s old
-          </div>
-          <div className={`${SERIF} mt-2 text-[26px] leading-[1.2] text-[#f1ece2]`}>Ready for your signature.</div>
-        </div>
-      </Step>
-    </section>
-  );
-}
-
-function Step({
-  numeral,
-  title,
-  body,
-  last = false,
-  children,
-}: {
-  numeral: string;
-  title: string;
-  body: string;
-  last?: boolean;
-  children: React.ReactNode;
-}) {
-  return (
-    <div
-      className={`grid grid-cols-[repeat(auto-fit,minmax(min(100%,300px),1fr))] items-start gap-x-12 gap-y-6 border-t py-10 ${RULE} ${last ? 'border-b' : ''}`}
-    >
-      <div className="flex items-baseline gap-7">
-        <span className={`${SERIF} text-[64px] leading-[.8] text-[#ff7a45] italic`} aria-hidden="true">
-          {numeral}
-        </span>
-        <div>
-          <h3 className={`${SERIF} m-0 text-[40px] leading-none`}>{title}</h3>
-          <p className="mt-3.5 mb-0 max-w-[380px] text-base leading-[1.6] font-light text-[#cfc9bd]">{body}</p>
-        </div>
-      </div>
-      <div className={`border-l pl-6 ${RULE}`}>{children}</div>
-    </div>
-  );
-}
-
-function Safety() {
   return (
     <section
-      id="safety"
-      className={`grid grid-cols-[repeat(auto-fit,minmax(min(100%,420px),1fr))] gap-14 bg-[rgba(4,10,6,.86)] pt-10 pb-[140px] ${GUTTER}`}
+      className={`flex min-h-[calc(100svh-160px)] flex-col justify-end gap-6 pb-[clamp(56px,9vh,100px)] sm:min-h-[calc(100svh-100px)] ${GUTTER}`}
     >
-      <h2 className={`${SERIF} m-0 text-[clamp(52px,7vw,112px)] leading-[.92] tracking-[-.02em]`}>
-        The agent holds <em className="text-[#ff7a45]">no keys.</em>
+      <p className={`${MONO} m-0 text-[11px] tracking-[.16em] text-[#b9b3a8]`}>NEST / AGENT HARNESS</p>
+      <h1 className={`${SERIF} m-0 max-w-[1000px] text-[clamp(72px,11.5vw,176px)] leading-[.88] tracking-[-.025em]`}>
+        Stellar DeFi.
+        <br />
+        <em className="text-[#ff7a45]">One harness.</em>
+      </h1>
+    </section>
+  );
+}
+
+function Purpose() {
+  return (
+    <section className={`py-[clamp(80px,13vh,144px)] ${GUTTER}`} aria-labelledby="nest-purpose">
+      <h2
+        id="nest-purpose"
+        className={`${SERIF} m-0 max-w-[1080px] text-[clamp(36px,4.8vw,72px)] leading-[1.06] tracking-[-.015em] text-pretty`}
+      >
+        Nest unifies Stellar DeFi <em className="text-[#ff7a45]">research and execution.</em>
       </h2>
-      <ul className="m-0 flex list-none flex-col p-0">
-        {SAFETY.map(([title, detail], index) => (
-          <li key={title} className={`border-t py-[22px] ${RULE} ${index === SAFETY.length - 1 ? 'border-b' : ''}`}>
-            <div className="text-[17px]">{title}</div>
-            <div className="mt-1.5 text-[15px] leading-[1.55] font-light text-[#b9b3a8]">{detail}</div>
+      <div className="mt-8 grid gap-x-20 gap-y-6 md:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
+        <p className="m-0 max-w-[700px] text-[clamp(18px,1.8vw,24px)] leading-[1.5] font-light text-pretty text-[#cfc9bd]">
+          Discover trading, credit and yield opportunities for your goals and capital. Queue multi-step transactions
+          across venues for your review and signature.
+        </p>
+        <p
+          className={`${SERIF} m-0 max-w-[380px] text-[clamp(25px,2.4vw,36px)] leading-[1.16] text-pretty text-[#cfc9bd]`}
+        >
+          Clearer decisions. More opportunities to capture alpha. <em>Your capital stays yours.</em>
+        </p>
+      </div>
+      <p className={`${MONO} mt-9 mb-0 text-[11px] leading-[1.8] tracking-[.02em] text-[#8f9b88]`}>
+        Pi-powered conversations · Raven MCP ecosystem research · Protocol-specific execution
+      </p>
+    </section>
+  );
+}
+
+function Features() {
+  return (
+    <section
+      id="how"
+      className={`scroll-mt-6 bg-[rgba(4,10,6,.90)] py-[clamp(64px,9vw,120px)] ${GUTTER}`}
+      aria-labelledby="nest-features"
+    >
+      <div className="mb-10 flex flex-wrap items-baseline justify-between gap-4">
+        <h2 id="nest-features" className={`${SERIF} m-0 text-[clamp(44px,5.5vw,80px)] leading-none`}>
+          The full workspace.
+        </h2>
+        <span className={`${MONO} text-[11px] tracking-[.14em] text-[#8f9b88]`}>V1 SCOPE</span>
+      </div>
+      <ul className={`m-0 list-none border-t p-0 ${RULE}`}>
+        {FEATURES.map((feature) => (
+          <li
+            key={feature.title}
+            className={`grid items-start gap-x-10 gap-y-3 border-b py-7 md:grid-cols-[minmax(0,.85fr)_minmax(0,1.3fr)] xl:grid-cols-[minmax(0,.8fr)_minmax(0,1.3fr)_minmax(0,.8fr)] ${RULE}`}
+          >
+            <h3 className={`${SERIF} m-0 text-[clamp(30px,2.8vw,40px)] leading-[1.05]`}>
+              <Link
+                to={feature.to}
+                className="inline-flex min-h-11 items-center hover:text-[#ff7a45] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff7a45]"
+              >
+                {feature.title}
+              </Link>
+            </h3>
+            <p className="m-0 max-w-[610px] text-[16px] leading-[1.55] font-light text-[#cfc9bd]">
+              {feature.description}
+            </p>
+            <p className={`${MONO} m-0 text-[11px] leading-[1.9] text-[#8f9b88] md:col-start-2 xl:col-start-auto`}>
+              {feature.detail}
+            </p>
           </li>
         ))}
       </ul>
+    </section>
+  );
+}
+
+function Harness() {
+  return (
+    <section
+      id="safety"
+      className={`scroll-mt-6 bg-[rgba(4,10,6,.75)] py-[clamp(72px,11vw,144px)] ${GUTTER}`}
+      aria-label="A persistent agent harness"
+    >
+      <p className={`${MONO} mt-0 mb-12 text-[11px] tracking-[.14em] text-[#8f9b88]`}>
+        A CUSTOM, SELF-IMPROVING HARNESS
+      </p>
+      <div className="grid gap-x-[clamp(40px,9vw,140px)] gap-y-16 md:grid-cols-2">
+        <article className={`border-t pt-8 ${RULE}`}>
+          <h2 className={`${SERIF} mt-0 mb-6 text-[clamp(40px,4.8vw,68px)] leading-[1.02] tracking-[-.01em]`}>
+            Your <em className="text-[#ff7a45]">eyes</em>
+            <br />
+            while you’re away.
+          </h2>
+          <p className="m-0 max-w-[460px] text-lg leading-[1.55] font-light text-[#cfc9bd]">
+            Monitor positions, markets and protocol conditions against your thesis. Surface changes, alerts and
+            proposals for review.
+          </p>
+          <div className={`mt-8 border-l pl-5 ${RULE}`}>
+            <p className={`${MONO} m-0 text-[10px] tracking-[.1em] text-[#8f9b88]`}>EXAMPLE CONDITION</p>
+            <p className={`${MONO} mt-3 mb-1 text-[13px] leading-[1.6] text-[#f1ece2]`}>XLM/USDC price gap &gt; 1%</p>
+            <p className="mt-0 mb-3 text-sm text-[#b9b3a8]">Aquarius ↔ Soroswap</p>
+            <span className={`${MONO} text-[11px] text-[#ff7a45]`}>Queue a proposal → Your review</span>
+          </div>
+        </article>
+        <article className={`border-t pt-8 ${RULE}`}>
+          <h2 className={`${SERIF} mt-0 mb-6 text-[clamp(40px,4.8vw,68px)] leading-[1.02] tracking-[-.01em]`}>
+            Your persistent
+            <br />
+            <em className="text-[#ff7a45]">brain.</em>
+          </h2>
+          <p className="m-0 max-w-[460px] text-lg leading-[1.55] font-light text-[#cfc9bd]">
+            Retain your theses, preferences and action history. Test ideas against evidence and refine a harness built
+            around you.
+          </p>
+          <ol
+            className={`${MONO} mt-8 mb-0 grid list-none gap-3 p-0 text-[11px] text-[#b9b3a8]`}
+            aria-label="Learning from context"
+          >
+            <li>
+              <span className="mr-3 text-[#ff7a45]">01</span>Keep context
+            </li>
+            <li>
+              <span className="mr-3 text-[#ff7a45]">02</span>Backtest ideas
+            </li>
+            <li>
+              <span className="mr-3 text-[#ff7a45]">03</span>Learn from decisions and outcomes
+            </li>
+          </ol>
+        </article>
+      </div>
+      <div className={`mt-16 flex flex-wrap items-baseline justify-between gap-x-12 gap-y-3 border-t pt-7 ${RULE}`}>
+        <p className="m-0 max-w-[850px] text-sm leading-[1.7] text-[#b9b3a8]">
+          Your preset guardrails. Pre-execution simulation. Your review and Freighter signature.
+        </p>
+        <p className={`${SERIF} m-0 text-[26px] italic text-[#f1ece2]`}>Nest holds no keys.</p>
+      </div>
     </section>
   );
 }
@@ -295,17 +273,22 @@ function AskNest() {
 
   function ask(event: FormEvent) {
     event.preventDefault();
-    // The question lands in the chat composer; the user still sends it.
-    void navigate({ to: '/chat', search: { ask: question.trim() || SUGGESTED_QUESTION.replace('…', '') } });
+    void navigate({ to: '/chat', search: { ask: question.trim() || SUGGESTED_QUESTION } });
   }
 
   return (
-    <section className={`pt-[18vh] pb-16 text-center ${GUTTER}`}>
-      <h2 className={`${SERIF} m-0 text-[clamp(88px,16vw,260px)] leading-[.85] tracking-[-.03em] italic`}>Ask Nest.</h2>
-      <form
-        onSubmit={ask}
-        className="mx-auto mt-12 flex max-w-[720px] items-center gap-3 border-b border-[rgba(241,236,226,.4)] pb-3.5"
+    <section className={`pt-[clamp(80px,14vh,160px)] pb-12 text-center ${GUTTER}`}>
+      <h2 className={`${SERIF} m-0 text-[clamp(80px,13vw,184px)] leading-[.85] tracking-[-.03em] italic`}>Ask Nest.</h2>
+      <button
+        type="button"
+        onClick={() => setQuestion(SUGGESTED_QUESTION)}
+        className={`${MONO} mx-auto mt-9 block max-w-[720px] cursor-pointer border-0 bg-transparent px-0 py-3 text-[11px] leading-[1.9] text-[#b9b3a8] hover:text-[#f1ece2] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#ff7a45]`}
+        aria-label="Use example: 5,000 USDC for 30 days, over 5% APR, accessible withdrawals"
       >
+        5,000 USDC <span className="mx-2 text-[#ff7a45]">·</span> 30 days <span className="mx-2 text-[#ff7a45]">·</span>{' '}
+        &gt;5% APR <span className="mx-2 text-[#ff7a45]">·</span> Accessible withdrawals
+      </button>
+      <form onSubmit={ask} className={`mx-auto mt-4 flex max-w-[720px] items-center gap-3 border-b pb-3.5 ${RULE}`}>
         <label htmlFor={id} className="sr-only">
           Ask Nest a question
         </label>
@@ -314,15 +297,15 @@ function AskNest() {
           value={question}
           onChange={(event) => setQuestion(event.currentTarget.value)}
           maxLength={4000}
-          placeholder={SUGGESTED_QUESTION}
+          placeholder="Tell Nest your goal…"
           className="min-w-0 flex-1 bg-transparent text-left text-[clamp(16px,1.6vw,20px)] leading-[1.4] font-light text-[#f1ece2] outline-none placeholder:text-[#8f897e]"
         />
-        <button type="submit" className={`${SOLID_PILL} cursor-pointer border-0 py-[13px]`}>
+        <button type="submit" className={`${SOLID_PILL} min-h-11 cursor-pointer border-0`}>
           Ask →
         </button>
       </form>
-      <p className={`${MONO} mx-0 mt-24 mb-0 text-xs leading-[1.6] text-[#8f897e]`}>
-        © {capturedAt.getUTCFullYear()} Nest · Research snapshots are dated observations, not executable quotes.
+      <p className={`${MONO} mx-0 mt-20 mb-0 text-[11px] leading-[1.6] text-[#8f9b88]`}>
+        © {new Date().getFullYear()} Nest · Built on Stellar.
       </p>
     </section>
   );
