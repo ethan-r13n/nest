@@ -1,0 +1,133 @@
+.nest-ecosystem-rows {
+  display: grid;
+  gap: 18px;
+  overflow: hidden;
+  margin-top: 40px;
+  padding-block: 12px;
+  mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+}
+
+.nest-ecosystem-row {
+  --row-offset: 0s;
+  --row-duration: 44s;
+  --row-delay: 0s;
+  min-width: 0;
+  opacity: 0;
+  transform: translateX(80px);
+}
+
+.nest-ecosystem-row:nth-child(2) {
+  --row-offset: -14s;
+  --row-duration: 48s;
+  --row-delay: 100ms;
+}
+
+.nest-ecosystem-row:nth-child(3) {
+  --row-offset: -9s;
+  --row-duration: 42s;
+  --row-delay: 200ms;
+}
+
+.nest-ecosystem-row:nth-child(4) {
+  --row-offset: -24s;
+  --row-duration: 50s;
+  --row-delay: 300ms;
+}
+
+.nest-ecosystem-row:nth-child(5) {
+  --row-offset: -20s;
+  --row-duration: 46s;
+  --row-delay: 400ms;
+}
+
+.nest-ecosystem[data-visible="true"] .nest-ecosystem-row {
+  animation: nest-logo-arrive 900ms cubic-bezier(0.16, 1, 0.3, 1) var(--row-delay) both;
+}
+
+.nest-ecosystem-track {
+  display: flex;
+  width: max-content;
+  animation: nest-logo-drift var(--row-duration) linear var(--row-offset) infinite;
+  animation-play-state: paused;
+}
+
+.nest-ecosystem[data-visible="true"][data-paused="false"] .nest-ecosystem-track {
+  animation-play-state: running;
+}
+
+.nest-ecosystem[data-visible="true"] .nest-ecosystem-row:hover .nest-ecosystem-track {
+  animation-play-state: paused;
+}
+
+.nest-ecosystem-group {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 12px;
+  margin: 0;
+  padding: 0 12px 0 0;
+  list-style: none;
+}
+
+.nest-ecosystem-logo {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 16px 20px;
+  border: 1px solid rgb(241 236 226 / 10%);
+  border-radius: 10px;
+  background: linear-gradient(125deg, rgb(241 236 226 / 3%), rgb(241 236 226 / 1%));
+  color: #cfc9bd;
+  font-family: "Geist Mono", monospace;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.nest-ecosystem-logo img {
+  flex-shrink: 0;
+  border-radius: 50%;
+  object-fit: contain;
+}
+
+.nest-ecosystem-tool {
+  box-sizing: content-box;
+  padding: 4px;
+  color: #ff7a45;
+}
+
+@keyframes nest-logo-arrive {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes nest-logo-drift {
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nest-ecosystem-rows {
+    mask-image: none;
+  }
+
+  .nest-ecosystem-row,
+  .nest-ecosystem[data-visible="true"] .nest-ecosystem-row {
+    overflow-x: auto;
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .nest-ecosystem-track {
+    animation: none;
+  }
+
+  .nest-ecosystem-group[aria-hidden="true"],
+  .nest-ecosystem-control {
+    display: none;
+  }
+}
