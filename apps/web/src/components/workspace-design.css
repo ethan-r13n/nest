@@ -8,6 +8,16 @@
   container-name: workspace;
 }
 
+/* Pages that do and do not overflow keep the same content width. */
+#workspace-scroll {
+  scrollbar-gutter: stable;
+}
+
+/* The select keeps a hidden input after its trigger, so `space-y-*` would push the trigger above its neighbours. */
+.nest-workspace [data-slot="select-trigger"]:has(+ input:last-child) {
+  margin-block-end: 0;
+}
+
 .nest-workspace .workspace-primary-link {
   position: relative;
   display: flex;
