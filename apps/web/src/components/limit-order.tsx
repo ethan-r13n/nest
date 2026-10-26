@@ -46,7 +46,15 @@ const STATUS_LABELS: Record<LimitOrderRow['status'], string> = {
  * A limit order placed as a one-sided Aquarius concentrated-liquidity position, or the withdrawal
  * of one. Everything shown comes from Nest's records and the live pool; the wallet signs.
  */
-export function LimitOrderCard({ intentId, onClosed }: { intentId: string; onClosed?(): void }) {
+export function LimitOrderCard({
+  intentId,
+  onClosed,
+  onInteractionLock,
+}: {
+  intentId: string;
+  onClosed?(): void;
+  onInteractionLock?: (locked: boolean) => void;
+}) {
   const wallet = useWallet();
   const queryClient = useQueryClient();
   const [phase, setPhase] = useState<Phase>('comparing');
@@ -58,12 +66,15 @@ export function LimitOrderCard({ intentId, onClosed }: { intentId: string; onClo
     phase === 'compared' ? offer?.expiresAt : phase === 'review' ? plan?.prepared?.validUntil : undefined,
   );
   const mounted = useRef(true);
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
       mounted.current = false;
-    },
-    [],
-  );
+    };
+  }, []);
+  useEffect(() => {
+    onInteractionLock?.(phase === 'preparing' || phase === 'signing' || phase === 'confirming');
+  }, [phase, onInteractionLock]);
 
   const fail = useCallback((caught: unknown) => {
     setError(
@@ -290,7 +301,7 @@ export function LimitOrderCard({ intentId, onClosed }: { intentId: string; onClo
 }
 
 /** The Trade page's limit order form over the live pool, and the wallet's open orders. */
-export function LimitOrderPanel() {
+export function LimitOrderPanel({ onInteractionLock }: { onInteractionLock?: (locked: boolean) => void }) {
   const wallet = useWallet();
   const amountId = useId();
   const priceId = useId();
@@ -301,6 +312,12 @@ export function LimitOrderPanel() {
   const [closeId, setCloseId] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [orderLocked, setOrderLocked] = useState(false);
+  const [closeLocked, setCloseLocked] = useState(false);
+  const locked = orderLocked || closeLocked;
+  useEffect(() => {
+    onInteractionLock?.(locked);
+  }, [locked, onInteractionLock]);
   const pool = useQuery({ queryKey: ['limit-pool'], queryFn: execution.limitPool, refetchInterval: POOL_REFRESH_MS });
   const orders = useQuery({
     queryKey: ['limit-orders', wallet.address],
@@ -358,8 +375,8 @@ export function LimitOrderPanel() {
       </p>
       {intentId ? (
         <div className="space-y-2">
-          <LimitOrderCard intentId={intentId} />
-          <Button variant="ghost" size="sm" onClick={() => setIntentId(null)}>
+          <LimitOrderCard intentId={intentId} onInteractionLock={setOrderLocked} />
+          <Button variant="ghost" size="sm" disabled={locked} onClick={() => setIntentId(null)}>
             New limit order
           </Button>
         </div>
@@ -450,7 +467,7 @@ export function LimitOrderPanel() {
                 </span>
                 <span className="flex items-center gap-2">
                   <Badge variant={row.status === 'filled' ? 'default' : 'outline'}>{STATUS_LABELS[row.status]}</Badge>
-                  <Button size="sm" variant="outline" onClick={() => withdraw(row)}>
+                  <Button size="sm" variant="outline" disabled={locked} onClick={() => withdraw(row)}>
                     Withdraw
                   </Button>
                 </span>
@@ -458,7 +475,16 @@ export function LimitOrderPanel() {
             ))}
           </ul>
         )}
-        {closeId ? <LimitOrderCard intentId={closeId} onClosed={() => setCloseId(null)} /> : null}
+        {closeId ? (
+          <LimitOrderCard
+            intentId={closeId}
+            onInteractionLock={setCloseLocked}
+            onClosed={() => {
+              setCloseId(null);
+              setCloseLocked(false);
+            }}
+          />
+        ) : null}
       </section>
     </div>
   );

@@ -26,6 +26,8 @@ export function TradePage() {
   const [amount, setAmount] = useState('');
   const [chartContext, setChartContext] = useState<ChartContext | null>(null);
   const [interactionLocked, setInteractionLocked] = useState(false);
+  const [limitInteractionLocked, setLimitInteractionLocked] = useState(false);
+  const orderLocked = interactionLocked || limitInteractionLocked;
   const supportedPair =
     (inputAsset === 'XLM' && outputAsset === 'USDC') || (inputAsset === 'USDC' && outputAsset === 'XLM');
   const swapAsset = inputAsset === 'XLM' || inputAsset === 'USDC' ? inputAsset : null;
@@ -95,7 +97,7 @@ export function TradePage() {
             compact
             label="Choose market asset"
             value={marketAsset}
-            disabled={interactionLocked}
+            disabled={orderLocked}
             assets={MARKET_SYMBOLS}
             onChange={chooseMarket}
           />
@@ -140,147 +142,157 @@ export function TradePage() {
           </div>
         </section>
         <section className="workspace-panel trade-ticket min-w-0" aria-labelledby="trade-ticket-title">
-          <div className="trade-ticket-heading">
-            <h2 id="trade-ticket-title">Market swap</h2>
-          </div>
-          <div className="space-y-5 p-5">
-            <div className="trade-asset-box">
-              <p className="mb-3 text-[11px] text-subtle">You pay</p>
-              <div className="flex items-center gap-3">
-                <label className="sr-only" htmlFor="trade-amount">
-                  Amount
-                </label>
-                <input
-                  id="trade-amount"
-                  inputMode="decimal"
-                  autoComplete="off"
-                  placeholder="0"
-                  disabled={interactionLocked}
-                  value={amount}
-                  onChange={(event) => setAmount(event.currentTarget.value)}
-                  className="trade-amount-input"
-                />
-                <AssetPicker label="You pay" value={inputAsset} disabled={interactionLocked} onChange={chooseInput} />
+          <Tabs defaultValue="market" className="gap-0">
+            <h2 id="trade-ticket-title" className="sr-only">
+              Trade order ticket
+            </h2>
+            <div className="trade-ticket-heading">
+              <TabsList variant="line" className="trade-ticket-tabs" aria-label="Order type">
+                <TabsTrigger value="market" disabled={orderLocked}>
+                  Market swap
+                </TabsTrigger>
+                <TabsTrigger value="limit" disabled={orderLocked}>
+                  Limit order
+                </TabsTrigger>
+              </TabsList>
+            </div>
+            <TabsContent value="market" keepMounted className="space-y-5 p-5">
+              <div className="trade-asset-box">
+                <p className="mb-3 text-[11px] text-subtle">You pay</p>
+                <div className="flex items-center gap-3">
+                  <label className="sr-only" htmlFor="trade-amount">
+                    Amount
+                  </label>
+                  <input
+                    id="trade-amount"
+                    inputMode="decimal"
+                    autoComplete="off"
+                    placeholder="0"
+                    disabled={orderLocked}
+                    value={amount}
+                    onChange={(event) => setAmount(event.currentTarget.value)}
+                    className="trade-amount-input"
+                  />
+                  <AssetPicker label="You pay" value={inputAsset} disabled={orderLocked} onChange={chooseInput} />
+                </div>
+                <p className="mt-3 text-[10px] leading-5 text-subtle">
+                  {swapAsset
+                    ? balanceHint(wallet.address, balances.data, spendable, swapAsset, balances.isError)
+                    : 'Research asset · execution is not connected.'}
+                </p>
               </div>
-              <p className="mt-3 text-[10px] leading-5 text-subtle">
-                {swapAsset
-                  ? balanceHint(wallet.address, balances.data, spendable, swapAsset, balances.isError)
-                  : 'Research asset · execution is not connected.'}
-              </p>
-            </div>
-            {maximum ? (
-              <Button variant="ghost" size="sm" disabled={interactionLocked} onClick={() => setAmount(maximum)}>
-                Use max
-              </Button>
-            ) : null}
-            <div className="flex justify-center">
-              <Button
-                variant="outline"
-                size="icon"
-                className="size-11"
-                disabled={interactionLocked}
-                aria-label="Reverse input and output assets"
-                onClick={reversePair}
-              >
-                <ArrowDownUp />
-              </Button>
-            </div>
-            <div className="trade-asset-box">
-              <p className="mb-3 flex justify-between gap-3 text-[11px] text-subtle">
-                <span>Estimated receive</span>
-                <span>{quote ? (secondsLeft === 0 ? 'Expired quote' : 'Current quote') : 'Quote required'}</span>
-              </p>
-              <div className="flex items-center gap-3">
-                <output
-                  className="min-w-0 flex-1 overflow-wrap-anywhere font-mono text-[28px]"
-                  aria-label="Estimated receive"
-                >
-                  {quote && secondsLeft !== 0 ? quote.expectedOut.amount : '—'}
-                </output>
-                <AssetPicker
-                  label="You receive"
-                  value={outputAsset}
-                  disabled={interactionLocked}
-                  onChange={chooseOutput}
-                />
-              </div>
-              <p className="mt-3 text-[10px] leading-5 text-subtle">
-                Final asset changes come from your reviewed transaction.
-              </p>
-            </div>
-            <fieldset className="grid grid-cols-4 gap-1" aria-label="Amount shortcuts">
-              {['100', '500', '1000', '5000'].map((value) => (
-                <Button
-                  key={value}
-                  variant="outline"
-                  size="sm"
-                  disabled={interactionLocked}
-                  onClick={() => setAmount(value)}
-                >
-                  {Number(value).toLocaleString('en-US')}
+              {maximum ? (
+                <Button variant="ghost" size="sm" disabled={orderLocked} onClick={() => setAmount(maximum)}>
+                  Use max
                 </Button>
-              ))}
-            </fieldset>
-            <dl className="trade-order-facts">
-              <div>
-                <dt>Minimum received</dt>
-                <dd>{quote ? `${quote.minimumOut.amount} ${quote.minimumOut.symbol}` : '—'}</dd>
+              ) : null}
+              <div className="flex justify-center">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="size-11"
+                  disabled={orderLocked}
+                  aria-label="Reverse input and output assets"
+                  onClick={reversePair}
+                >
+                  <ArrowDownUp />
+                </Button>
               </div>
-              <div>
-                <dt>Max slippage</dt>
-                <dd>{quote ? `${quote.slippageBps / 100}%` : 'From fresh quote'}</dd>
+              <div className="trade-asset-box">
+                <p className="mb-3 flex justify-between gap-3 text-[11px] text-subtle">
+                  <span>Estimated receive</span>
+                  <span>{quote ? (secondsLeft === 0 ? 'Expired quote' : 'Current quote') : 'Quote required'}</span>
+                </p>
+                <div className="flex items-center gap-3">
+                  <output
+                    className="min-w-0 flex-1 overflow-wrap-anywhere font-mono text-[28px]"
+                    aria-label="Estimated receive"
+                  >
+                    {quote && secondsLeft !== 0 ? quote.expectedOut.amount : '—'}
+                  </output>
+                  <AssetPicker label="You receive" value={outputAsset} disabled={orderLocked} onChange={chooseOutput} />
+                </div>
+                <p className="mt-3 text-[10px] leading-5 text-subtle">
+                  Final asset changes come from your reviewed transaction.
+                </p>
               </div>
-              <div>
-                <dt>Price impact</dt>
-                <dd>
-                  {quote?.priceImpactBps === null || quote?.priceImpactBps === undefined
-                    ? 'Unavailable'
-                    : `${quote.priceImpactBps / 100}%`}
-                </dd>
-              </div>
-              <div>
-                <dt>Maximum fees</dt>
-                <dd>Shown before signing</dd>
-              </div>
-              <div>
-                <dt>Quote validity</dt>
-                <dd>
-                  {quote
-                    ? secondsLeft === 0
-                      ? 'Refresh required'
-                      : `${secondsLeft ?? '—'}s remaining`
-                    : 'Quote required'}
-                </dd>
-              </div>
-            </dl>
-            <p className="text-xs text-subtle">
-              Balances and maximum fees are verified during transaction preparation. A chart price is context only.
-            </p>
-            {!supportedPair ? (
+              <fieldset className="grid grid-cols-4 gap-1" aria-label="Amount shortcuts">
+                {['100', '500', '1000', '5000'].map((value) => (
+                  <Button
+                    key={value}
+                    variant="outline"
+                    size="sm"
+                    disabled={orderLocked}
+                    onClick={() => setAmount(value)}
+                  >
+                    {Number(value).toLocaleString('en-US')}
+                  </Button>
+                ))}
+              </fieldset>
+              <dl className="trade-order-facts">
+                <div>
+                  <dt>Minimum received</dt>
+                  <dd>{quote ? `${quote.minimumOut.amount} ${quote.minimumOut.symbol}` : '—'}</dd>
+                </div>
+                <div>
+                  <dt>Max slippage</dt>
+                  <dd>{quote ? `${quote.slippageBps / 100}%` : 'From fresh quote'}</dd>
+                </div>
+                <div>
+                  <dt>Price impact</dt>
+                  <dd>
+                    {quote?.priceImpactBps === null || quote?.priceImpactBps === undefined
+                      ? 'Unavailable'
+                      : `${quote.priceImpactBps / 100}%`}
+                  </dd>
+                </div>
+                <div>
+                  <dt>Maximum fees</dt>
+                  <dd>Shown before signing</dd>
+                </div>
+                <div>
+                  <dt>Quote validity</dt>
+                  <dd>
+                    {quote
+                      ? secondsLeft === 0
+                        ? 'Refresh required'
+                        : `${secondsLeft ?? '—'}s remaining`
+                      : 'Quote required'}
+                  </dd>
+                </div>
+              </dl>
               <p className="text-xs text-subtle">
-                Execution is unavailable for this pair. You can still inspect its captured chart and research.
+                Balances and maximum fees are verified during transaction preparation. A chart price is context only.
               </p>
-            ) : intentId ? (
-              <SwapProposalCard
-                key={intentId}
-                intentId={intentId}
-                onQuote={draft.setQuote}
-                onSettled={refreshWallet}
-                onInteractionLock={setInteractionLocked}
-              />
-            ) : draft.waiting ? (
-              <p className="flex items-center gap-2 text-sm text-muted-foreground">
-                <LoaderCircle className="size-4 animate-spin" /> Getting a live quote…
-              </p>
-            ) : draft.error ? (
-              <p role="alert" className="text-sm text-destructive">
-                {draft.error}
-              </p>
-            ) : (
-              <p className="text-xs text-subtle">Enter an amount to get a live quote.</p>
-            )}
-            <ReviewRequirements />
-          </div>
+              {!supportedPair ? (
+                <p className="text-xs text-subtle">
+                  Execution is unavailable for this pair. You can still inspect its captured chart and research.
+                </p>
+              ) : intentId ? (
+                <SwapProposalCard
+                  key={intentId}
+                  intentId={intentId}
+                  onQuote={draft.setQuote}
+                  onSettled={refreshWallet}
+                  onInteractionLock={setInteractionLocked}
+                />
+              ) : draft.waiting ? (
+                <p className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <LoaderCircle className="size-4 animate-spin" /> Getting a live quote…
+                </p>
+              ) : draft.error ? (
+                <p role="alert" className="text-sm text-destructive">
+                  {draft.error}
+                </p>
+              ) : (
+                <p className="text-xs text-subtle">Enter an amount to get a live quote.</p>
+              )}
+              <ReviewRequirements />
+            </TabsContent>
+            <TabsContent value="limit" keepMounted className="trade-limit-ticket p-5">
+              <LimitOrderPanel onInteractionLock={setLimitInteractionLocked} />
+            </TabsContent>
+          </Tabs>
         </section>
         <section className="workspace-panel trade-positions" aria-labelledby="trade-positions-title">
           <h2 id="trade-positions-title" className="border-b px-6 py-5 font-serif text-xl font-semibold">
@@ -330,12 +342,6 @@ export function TradePage() {
           </Tabs>
         </section>
       </div>
-      <section className="workspace-panel w-full max-w-3xl self-start p-5" aria-labelledby="limit-order-title">
-        <h2 id="limit-order-title" className="mb-4 font-serif text-xl font-semibold">
-          Limit orders
-        </h2>
-        <LimitOrderPanel />
-      </section>
     </div>
   );
 }
