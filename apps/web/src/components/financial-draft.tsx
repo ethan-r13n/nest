@@ -17,11 +17,13 @@ export function AssetSelect({
   value,
   onChange,
   disabled = false,
+  assets = DRAFT_ASSETS,
 }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  assets?: readonly string[];
 }) {
   const id = useId();
   return (
@@ -32,7 +34,7 @@ export function AssetSelect({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {DRAFT_ASSETS.map((asset) => (
+          {assets.map((asset) => (
             <SelectItem className="min-h-11" key={asset} value={asset}>
               {asset}
             </SelectItem>

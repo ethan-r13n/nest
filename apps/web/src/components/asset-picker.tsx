@@ -18,17 +18,21 @@ export function AssetPicker({
   onChange,
   disabled = false,
   compact = false,
+  assets: symbols = ASSETS.map((asset) => asset.symbol),
 }: {
   value: string;
   label: string;
   onChange(value: string): void;
   disabled?: boolean;
   compact?: boolean;
+  assets?: readonly string[];
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const assets = ASSETS.filter((asset) =>
-    `${asset.symbol} ${asset.name}`.toLowerCase().includes(query.toLowerCase().trim()),
+  const assets = ASSETS.filter(
+    (asset) =>
+      symbols.includes(asset.symbol) &&
+      `${asset.symbol} ${asset.name}`.toLowerCase().includes(query.toLowerCase().trim()),
   );
   return (
     <Dialog

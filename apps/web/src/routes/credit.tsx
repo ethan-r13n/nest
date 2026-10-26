@@ -17,6 +17,7 @@ import {
 } from '../components/financial-draft.tsx';
 import { LendingProposalCard } from '../components/lending-proposal.tsx';
 import { LiveLendingRates } from '../components/live-lending.tsx';
+import { SelectionCommand } from '../components/selection-command.tsx';
 import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
 import { useWorkspaceSession } from '../components/workspace-session.tsx';
 import { amountDraftIssue } from '../lib/draft-validation.ts';
@@ -313,7 +314,9 @@ export function CreditPage() {
         </section>
       </div>
       <section className="credit-comparison space-y-5" aria-label="Borrow comparison">
-        <LiveLendingRates />
+        <SelectionCommand>
+          <LiveLendingRates />
+        </SelectionCommand>
         <div className="workspace-panel p-6">
           <h2 className="mb-3 font-serif text-2xl font-semibold">One review, wherever you start.</h2>
           <p className="mb-4 text-xs leading-6 text-muted-foreground">
@@ -461,7 +464,9 @@ export function SupplyPage() {
           {intentId ? (
             <LendingProposalCard key={intentId} intentId={intentId} onInteractionLock={setInteractionLocked} />
           ) : (
-            <LiveLendingRates />
+            <SelectionCommand>
+              <LiveLendingRates />
+            </SelectionCommand>
           )}
           <p className="mt-4 text-xs leading-6 text-subtle">
             Templar and XOXNO are research coverage; their execution adapters are not connected. No rates or

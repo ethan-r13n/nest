@@ -104,3 +104,9 @@
     @apply font-serif;
   }
 }
+
+/* Keeps text the user selected marked while a command box is open, after focus has left it. */
+::highlight(nest-selection) {
+  background-color: color-mix(in oklab, var(--primary) 32%, transparent);
+  color: var(--foreground);
+}
