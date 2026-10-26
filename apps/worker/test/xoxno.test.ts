@@ -291,6 +291,31 @@ describe('XOXNO borrowing', () => {
     expect((await borrowPlan(h, intent.id)).plan).toMatchObject({ status: 'blocked', errorCode: 'ARGUMENTS_MISMATCH' });
   });
 
+  it('refuses another venue for the same loan after XOXNO collateral confirms, scoped to the account', async () => {
+    const h = createFixture();
+    const intent = await createLendingIntent(h.deps, { kind: 'borrow', asset: 'USDC', amount: '1000', source: 'chat' });
+    const first = await borrowPlan(h, intent.id);
+    expect(await signAndSubmit(h, first.plan)).toMatchObject({ status: 'confirmed' });
+    const blend = first.compared.quotes.find((offer) => offer.venue === 'blend');
+    if (!blend) throw new Error('Missing Blend comparison fixture.');
+    await expect(
+      createPlan(h.deps, {
+        intentId: intent.id,
+        quoteId: blend.id,
+        accountId: h.user.publicKey(),
+        idempotencyKey: crypto.randomUUID(),
+      }),
+    ).rejects.toMatchObject({ code: 'CONFLICT', message: 'Continue this loan on XOXNO, where its collateral is.' });
+    expect(
+      await createPlan(h.deps, {
+        intentId: intent.id,
+        quoteId: blend.id,
+        accountId: Keypair.random().publicKey(),
+        idempotencyKey: crypto.randomUUID(),
+      }),
+    ).toMatchObject({ status: 'policy_checked' });
+  });
+
   it('borrows on XOXNO only: lending and exits there go through Blend', async () => {
     const h = createFixture();
     for (const kind of ['supply', 'repay', 'withdraw'] as const) {

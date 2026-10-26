@@ -16,6 +16,7 @@ import {
   planProblem,
   signAndSubmit,
 } from '../lib/execution.ts';
+import { continuationQuote } from '../lib/lending-continuation.ts';
 import { shortAddress, useWallet } from '../lib/wallet.tsx';
 import { Fact, useCountdown } from './swap-proposal.tsx';
 import { TrustlineStep } from './trustline-step.tsx';
@@ -69,6 +70,7 @@ export function LendingProposalCard({
   const [plan, setPlan] = useState<LendingPlan | null>(null);
   /** The confirmed XOXNO collateral deposit, kept while its loan is reviewed. */
   const [collateralPlan, setCollateralPlan] = useState<LendingPlan | null>(null);
+  const continuationPoolId = useRef<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
   const offer = comparison?.quotes.find((quote) => quote.id === selectedId) ?? null;
   const secondsLeft = useCountdown(
@@ -93,7 +95,8 @@ export function LendingProposalCard({
 
   /** Compares again; returns the fresh offer from `poolId` when given, else the best one. */
   const compare = useCallback(
-    async (poolId?: string): Promise<string | null> => {
+    async (poolId = continuationPoolId.current): Promise<string | null> => {
+      continuationPoolId.current = poolId;
       setPhase('comparing');
       setError(null);
       setPlan(null);
@@ -105,8 +108,15 @@ export function LendingProposalCard({
           return null;
         }
         const compared = await execution.compareLending(intentId, wallet.address ?? undefined);
-        const chosen = compared.quotes.find((quote) => quote.pool.id === poolId)?.id ?? compared.selectedQuoteId;
         setComparison(compared);
+        const continuation = poolId ? continuationQuote(compared, poolId) : null;
+        if (continuation && 'stop' in continuation) {
+          setSelectedId(null);
+          setError(continuation.stop);
+          setPhase('stopped');
+          return null;
+        }
+        const chosen = continuation?.quoteId ?? compared.selectedQuoteId;
         setSelectedId(chosen);
         setPhase('compared');
         return chosen;
@@ -367,7 +377,14 @@ export function LendingProposalCard({
           onAdded={() => continueOn(plan.offer.pool.id)}
         />
       ) : null}
-      {error ? <p className="text-destructive">{error}</p> : null}
+      {error ? (
+        <p className="text-destructive">
+          {error}
+          {phase === 'stopped' && collateralPlan?.offer.venue === 'xoxno'
+            ? ' Your collateral stays deposited on XOXNO; compare again to continue there.'
+            : null}
+        </p>
+      ) : null}
       {plan?.explorerUrl ? (
         <a
           href={plan.explorerUrl}
@@ -383,7 +400,7 @@ export function LendingProposalCard({
         {secondsLeft !== null && !expired ? (
           <span className="text-xs text-subtle">Valid for {secondsLeft}s</span>
         ) : null}
-        {((phase === 'compared' || phase === 'review') && expired) || (phase === 'stopped' && !error) ? (
+        {((phase === 'compared' || phase === 'review') && expired) || phase === 'stopped' ? (
           <Button variant="outline" size="sm" onClick={() => compare()}>
             <RefreshCw /> Compare again
           </Button>

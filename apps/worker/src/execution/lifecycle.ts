@@ -73,6 +73,20 @@ export async function createPlan(
   const intent = await loadIntent(deps, input.intentId);
   const quote = await loadQuote(deps, input.quoteId);
   if (quote.intent_id !== intent.id) throw new AppError('INVALID_REQUEST', 'That quote belongs to another request.');
+  if (intent.kind === 'borrow' && quote.venue !== 'xoxno') {
+    const collateral = await deps.db
+      .prepare(
+        `SELECT plans.id FROM plans JOIN quotes ON quotes.id = plans.quote_id
+         WHERE plans.intent_id = ? AND plans.account_id = ? AND plans.network = ?
+           AND plans.status = 'confirmed' AND quotes.venue = 'xoxno'
+           AND json_extract(plans.prepared_facts, '$.step') = 'collateral' LIMIT 1`,
+      )
+      .bind(intent.id, input.accountId, intent.network)
+      .first<{ id: string }>();
+    if (collateral) {
+      throw new AppError('CONFLICT', 'Continue this loan on XOXNO, where its collateral is.');
+    }
+  }
   const now = deps.now();
   const policyOf = {
     swap: swapPlanPolicy,

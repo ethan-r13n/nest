@@ -80,7 +80,13 @@ export function usePortfolio(address: string | null) {
   const failed = [balances, positions, limits].some((query) => query.isError);
   return {
     rows,
-    valuation: !enabled || loading || failed ? null : valuationOf(rows),
+    valuation:
+      !enabled || loading || failed
+        ? null
+        : valuationOf(rows, {
+            lending: positions.data?.blend.available === false || positions.data?.xoxno.available === false,
+            limits: limits.data?.available === false,
+          }),
     activity: activity.data?.items ?? ([] as ActivityItem[]),
     activityLoading: enabled && activity.isPending,
     loading,
@@ -193,17 +199,18 @@ export function positionRows(
   return rows;
 }
 
-export function valuationOf(rows: PositionRow[]): Valuation {
+export function valuationOf(rows: PositionRow[], unknown: { lending: boolean; limits: boolean }): Valuation {
   const sum = (filter: (row: PositionRow) => boolean) =>
     rows
       .filter(filter)
       .reduce<number | null>((total, row) => (total === null || row.usd === null ? null : total + row.usd), 0);
+  const assetsUnknown = unknown.lending || unknown.limits;
   const wallet = sum((row) => row.venue === 'Wallet');
-  const gross = sum((row) => row.side === 'asset');
-  const debt = sum((row) => row.side === 'debt');
+  const gross = assetsUnknown ? null : sum((row) => row.side === 'asset');
+  const debt = unknown.lending ? null : sum((row) => row.side === 'debt');
   return {
     wallet,
-    supplied: sum((row) => row.side === 'asset' && row.venue !== 'Wallet'),
+    supplied: assetsUnknown ? null : sum((row) => row.side === 'asset' && row.venue !== 'Wallet'),
     gross,
     debt,
     net: gross === null || debt === null ? null : gross - debt,

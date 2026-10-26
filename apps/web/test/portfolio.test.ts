@@ -31,6 +31,7 @@ const POSITIONS: LendingPositions = {
   },
 };
 const NO_ORDERS: LimitOrders = { available: true, currentPrice: 0.17, orders: [] };
+const KNOWN = { lending: false, limits: false };
 
 test('lists wallet balances and the XOXNO loan, with debt kept apart from assets', () => {
   const rows = positionRows(BALANCES, POSITIONS, NO_ORDERS, 0.17);
@@ -46,7 +47,7 @@ test('lists wallet balances and the XOXNO loan, with debt kept apart from assets
 });
 
 test('values XLM at the reference price and USDC at $1, net of debt', () => {
-  const valuation = valuationOf(positionRows(BALANCES, POSITIONS, NO_ORDERS, 0.17));
+  const valuation = valuationOf(positionRows(BALANCES, POSITIONS, NO_ORDERS, 0.17), KNOWN);
   // Wallet 7363.75 × 0.17 + 1000; collateral 12635.0553108 × 0.17; debt 1000.
   assert.equal(valuation.wallet?.toFixed(2), '2251.84');
   assert.equal(valuation.supplied?.toFixed(2), '2147.96');
@@ -55,8 +56,37 @@ test('values XLM at the reference price and USDC at $1, net of debt', () => {
 });
 
 test('leaves a value unknown rather than zero without a price', () => {
-  const valuation = valuationOf(positionRows(BALANCES, POSITIONS, NO_ORDERS, null));
+  const valuation = valuationOf(positionRows(BALANCES, POSITIONS, NO_ORDERS, null), KNOWN);
   assert.equal(valuation.wallet, null);
   assert.equal(valuation.net, null);
   assert.equal(valuation.debt, 1000);
+});
+
+test('unknown XOXNO positions leave lending totals unknown while preserving the wallet value', () => {
+  const positions: LendingPositions = {
+    ...POSITIONS,
+    xoxno: { available: false, reason: 'Positions unavailable', accounts: [] },
+  };
+  const valuation = valuationOf(positionRows(BALANCES, positions, NO_ORDERS, 0.17), {
+    lending: positions.blend.available === false || positions.xoxno.available === false,
+    limits: false,
+  });
+  assert.equal(valuation.wallet?.toFixed(2), '2251.84');
+  assert.equal(valuation.supplied, null);
+  assert.equal(valuation.gross, null);
+  assert.equal(valuation.debt, null);
+  assert.equal(valuation.net, null);
+});
+
+test('unknown limit orders leave asset totals unknown without hiding known debt', () => {
+  const limits: LimitOrders = { available: false, reason: 'Orders unavailable', orders: [] };
+  const valuation = valuationOf(positionRows(BALANCES, POSITIONS, limits, 0.17), {
+    lending: false,
+    limits: limits.available === false,
+  });
+  assert.equal(valuation.wallet?.toFixed(2), '2251.84');
+  assert.equal(valuation.supplied, null);
+  assert.equal(valuation.gross, null);
+  assert.equal(valuation.debt, 1000);
+  assert.equal(valuation.net, null);
 });
