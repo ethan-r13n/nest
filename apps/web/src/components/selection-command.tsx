@@ -15,14 +15,16 @@ import {
   useState,
 } from 'react';
 
-import { parseLendingCommand, type SelectionContext } from '../lib/command.ts';
+import { type LendingCommand, parseLendingCommand, parseSelectionBase, type SelectionContext } from '../lib/command.ts';
 import { execution } from '../lib/execution.ts';
+import { formatUtc } from '../lib/format.ts';
 import { LendingProposalCard } from './lending-proposal.tsx';
 import { useWorkspaceSession } from './workspace-session.tsx';
 
 const HIGHLIGHT = 'nest-selection';
 const QUOTE_CHARS = 90;
 const SelectionCommandContext = createContext<((element: Element) => void) | null>(null);
+type ResolveLendingCommand = (command: LendingCommand, context: SelectionContext | null) => Promise<LendingCommand>;
 
 interface Opened {
   id: number;
@@ -36,7 +38,15 @@ interface Opened {
  * ("lend 100 usdc") become a reviewed Blend proposal in place; anything else goes to Ask Nest with the
  * selection quoted. Rows mark what they show with `data-nest-context`, and rates with `data-nest-rate`.
  */
-export function SelectionCommand({ children, className }: { children: ReactNode; className?: string }) {
+export function SelectionCommand({
+  children,
+  className,
+  resolveLendingCommand,
+}: {
+  children: ReactNode;
+  className?: string;
+  resolveLendingCommand?: ResolveLendingCommand;
+}) {
   const [opened, setOpened] = useState<Opened | null>(null);
   const count = useRef(0);
 
@@ -62,6 +72,7 @@ export function SelectionCommand({ children, className }: { children: ReactNode;
   function onPointerUp(event: PointerEvent<HTMLDivElement>) {
     const target = event.target instanceof Element ? event.target : null;
     if (target?.closest('input, textarea, select, [contenteditable="true"]')) return;
+    if (target?.closest('button, a, [role="button"]') && !target.closest('[data-nest-rate]')) return;
     const selection = window.getSelection();
     if (selection && !selection.isCollapsed && selection.rangeCount > 0) {
       const range = selection.getRangeAt(0);
@@ -86,7 +97,14 @@ export function SelectionCommand({ children, className }: { children: ReactNode;
         {children}
       </div>
       <Popover open={opened !== null} onOpenChange={(next) => (next ? null : setOpened(null))}>
-        {opened ? <CommandBox key={opened.id} opened={opened} onDone={() => setOpened(null)} /> : null}
+        {opened ? (
+          <CommandBox
+            key={opened.id}
+            opened={opened}
+            onDone={() => setOpened(null)}
+            resolveLendingCommand={resolveLendingCommand}
+          />
+        ) : null}
       </Popover>
     </SelectionCommandContext.Provider>
   );
@@ -97,7 +115,15 @@ export function useOpenSelectionCommand() {
   return useContext(SelectionCommandContext);
 }
 
-function CommandBox({ opened, onDone }: { opened: Opened; onDone: () => void }) {
+function CommandBox({
+  opened,
+  onDone,
+  resolveLendingCommand,
+}: {
+  opened: Opened;
+  onDone: () => void;
+  resolveLendingCommand?: ResolveLendingCommand | undefined;
+}) {
   const { chat, setAssistantOpen } = useWorkspaceSession();
   const inputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState('');
@@ -121,7 +147,8 @@ function CommandBox({ opened, onDone }: { opened: Opened; onDone: () => void }) 
     }
     setCreating(true);
     try {
-      const intent = await execution.createLending(parsed);
+      const resolved = resolveLendingCommand ? await resolveLendingCommand(parsed, context) : parsed;
+      const intent = await execution.createLending(resolved);
       setIntentId(intent.id);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : 'The request could not be created.');
@@ -184,7 +211,7 @@ function CommandBox({ opened, onDone }: { opened: Opened; onDone: () => void }) 
             ) : command ? (
               <>
                 {describe(command.kind)} {command.amount} {command.asset}
-                {command.poolId ? ` in ${context?.poolName}` : ', comparing every Blend pool'}. Review before signing.
+                {commandDestination(command, context)}. Review before signing.
               </>
             ) : (
               <span className="inline-flex items-center gap-1">
@@ -218,6 +245,25 @@ function CommandBox({ opened, onDone }: { opened: Opened; onDone: () => void }) 
 
 function SelectionQuote({ opened }: { opened: Opened }) {
   const { context, text } = opened;
+  if (context?.source)
+    return (
+      <div className="space-y-2">
+        <p className="text-sm">
+          <span className="font-mono text-base text-primary">{text}</span>{' '}
+          <span className="text-muted-foreground">
+            {context.source.metric ?? 'reference'} for {context.asset} in {context.poolName}
+          </span>
+        </p>
+        <p className="text-xs text-subtle">Captured Mainnet · {formatUtc(context.source.observedAt)} · not a quote.</p>
+        <p className="text-xs text-muted-foreground">
+          {context.source.executionNetwork === 'mainnet'
+            ? `Execution: Mainnet. Fresh ${context.poolName} terms are checked before review.`
+            : context.source.executionNetwork === 'testnet'
+              ? 'Execution: Testnet. Fresh Testnet pools are compared; the Mainnet reference is not used as its rate.'
+              : 'The current execution network and fresh pool terms are checked before review.'}
+        </p>
+      </div>
+    );
   if (context?.rate && context.apyPct !== null)
     return (
       <p className="text-sm">
@@ -241,13 +287,17 @@ function readContext(range: Range): SelectionContext | null {
   const row = element?.closest<HTMLElement>('[data-nest-context]');
   if (!row?.dataset.nestContext) return null;
   try {
-    const base = JSON.parse(row.dataset.nestContext) as Omit<SelectionContext, 'rate' | 'apyPct'>;
+    const decoded: unknown = JSON.parse(row.dataset.nestContext);
+    const base = parseSelectionBase(decoded);
+    if (!base) return null;
     const rate = element?.closest<HTMLElement>('[data-nest-rate]');
     const kind = rate?.dataset.nestRate;
+    const apy = rate?.dataset.nestApy ? Number(rate.dataset.nestApy) : null;
+    if (base.source && rate?.dataset.nestMetric) base.source.metric = rate.dataset.nestMetric.slice(0, 40);
     return {
       ...base,
       rate: kind === 'supply' || kind === 'borrow' ? kind : null,
-      apyPct: rate?.dataset.nestApy ? Number(rate.dataset.nestApy) : null,
+      apyPct: apy !== null && Number.isFinite(apy) ? apy : null,
     };
   } catch {
     return null;
@@ -267,7 +317,19 @@ function agentPrompt(typed: string, opened: Opened): string {
   const where = context
     ? `the ${context.asset} row of ${context.poolName} on Blend${context.rate && context.apyPct !== null ? ` (${context.rate} APY ${context.apyPct.toFixed(2)}%)` : ''}`
     : 'the Research page';
-  return `${typed}\n\nI highlighted "${text.slice(0, 280)}" in ${where}.`;
+  const source = context?.source
+    ? ` This is a captured Mainnet ${context.source.metric ?? 'reference'} from ${context.source.observedAt}, not a quote. Execution network: ${context.source.executionNetwork ?? 'check before quoting'}.`
+    : '';
+  return `${typed}\n\nI highlighted "${text.slice(0, 280)}" in ${where}.${source}`;
+}
+
+function commandDestination(command: LendingCommand, context: SelectionContext | null): string {
+  if (context?.source) {
+    return context.source.executionNetwork === 'mainnet' && command.asset === context.asset
+      ? ` in ${context.poolName}, after checking fresh Mainnet terms`
+      : `, comparing fresh ${context.source.executionNetwork ?? 'current-network'} Blend pools`;
+  }
+  return command.poolId ? ` in ${context?.poolName}` : ', comparing every Blend pool';
 }
 
 function describe(kind: string): string {
