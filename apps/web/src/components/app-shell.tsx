@@ -24,6 +24,7 @@ import { type ReactNode, Suspense, useEffect, useLayoutEffect, useRef, useState 
 import './workspace-design.css';
 import './workspace-credit.css';
 import './workspace-research.css';
+import './workspace-protocol.css';
 import './workspace-trade.css';
 import './workspace-earn.css';
 import './workspace-conversation.css';

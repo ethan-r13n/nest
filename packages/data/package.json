@@ -8,7 +8,8 @@
     "./research": "./src/research.ts",
     "./aquarius": "./src/aquarius.ts",
     "./vault-strategies": "./src/vault-strategies.ts",
-    "./project-evidence": "./src/project-evidence.ts"
+    "./project-evidence": "./src/project-evidence.ts",
+    "./protocol-details": "./src/protocol-details.ts"
   },
   "scripts": {
     "typecheck": "tsc",

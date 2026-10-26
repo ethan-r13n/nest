@@ -1,10 +1,4 @@
-import {
-  type ProtocolRow,
-  type RavenCatalog,
-  type ResearchSource,
-  safeResearchUrl,
-  type YieldPoolRow,
-} from '@nest/data/research';
+import { type ProtocolRow, type RavenCatalog, type ResearchSource, safeResearchUrl } from '@nest/data/research';
 import { Badge } from '@nest/ui/components/badge';
 import { Button } from '@nest/ui/components/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nest/ui/components/card';
@@ -17,6 +11,7 @@ import { ArrowDownUp, Download, ExternalLink, Search } from 'lucide-react';
 import { type ReactNode, useId, useState } from 'react';
 
 import { AssetIcon } from '../components/asset-icon.tsx';
+import { ProtocolResearchDetail } from '../components/protocol-detail.tsx';
 import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { ResearchDataTable } from '../components/research-data-table.tsx';
 import { ResearchHistoryChart } from '../components/research-history.tsx';
@@ -272,16 +267,17 @@ export function RwaPage() {
           columns={[
             {
               id: 'identity',
-              label: 'Asset',
+              label: 'Asset / ticker',
               cell: (asset) => (
                 <>
-                  <Link
-                    to="/assets/$assetId"
-                    params={{ assetId: rwaAssetRouteId(asset.id) }}
+                  <a
+                    href={safeResearchUrl(asset.assetUrl ?? '') ?? 'https://app.rwa.xyz/networks/stellar'}
+                    target="_blank"
+                    rel="noreferrer"
                     className="font-medium hover:text-primary"
                   >
                     {asset.name}
-                  </Link>
+                  </a>
                   <span className="block font-mono text-xs text-subtle">{asset.ticker}</span>
                 </>
               ),
@@ -289,7 +285,7 @@ export function RwaPage() {
             { id: 'platform', label: 'Platform', cell: (asset) => asset.platform },
             {
               id: 'class',
-              label: 'Class / type',
+              label: 'Asset class',
               cell: (asset) => (
                 <>
                   {asset.assetClass}
@@ -304,7 +300,13 @@ export function RwaPage() {
               cell: (asset) => asset.totalValueDisplay ?? UNAVAILABLE,
             },
             { id: 'holders', label: 'Holders', numeric: true, cell: (asset) => asset.holdersDisplay ?? UNAVAILABLE },
-            { id: 'domicile', label: 'Domicile', cell: (asset) => asset.domicile ?? UNAVAILABLE },
+            { id: 'access', label: 'Access', cell: (asset) => asset.regulatoryFramework ?? UNAVAILABLE },
+            { id: 'type', label: 'Type', cell: (asset) => asset.tokenizationType },
+            {
+              id: 'source',
+              label: 'Identity',
+              cell: (asset) => <WebsiteLink url={asset.contractExplorerUrl ?? ''}>Source identity</WebsiteLink>,
+            },
           ]}
         />
       </section>
@@ -546,79 +548,7 @@ function VenueMap() {
 }
 
 export function ProtocolDetailPage({ protocolId }: { protocolId: string }) {
-  const protocol = findProtocol(protocolId);
-  if (!protocol) return <MissingRecord title="Protocol not found" />;
-  const pools = research.yieldPools.filter((pool) => pool.project === protocol.slug);
-  return (
-    <div className="space-y-7">
-      <Breadcrumb to="protocols" />
-      <PageHeader
-        title={protocol.name}
-        description="Inspect the reported protocol scope and market observations before considering an action."
-        kicker="Research / Protocol"
-        actions={<Badge variant="outline">Dated snapshot</Badge>}
-      />
-      <SnapshotNotice />
-      <div className="grid gap-3 sm:grid-cols-3">
-        <StatCard
-          label="Stellar TVL"
-          value={formatUsd(protocol.stellarTvlUsd)}
-          detail="Chain-specific reported value"
-        />
-        <StatCard
-          label="Protocol change · 1d"
-          value={formatPercentPoints(protocol.change.day)}
-          detail="All-chain protocol scope"
-        />
-        <StatCard
-          label="Protocol change · 7d"
-          value={formatPercentPoints(protocol.change.week)}
-          detail="All-chain protocol scope"
-        />
-      </div>
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Reported markets</CardTitle>
-            <CardDescription>Matched by the provider's project identifier.</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {pools.length ? (
-              <PoolTable rows={pools} />
-            ) : (
-              <EmptyState
-                title="No pool observations in this dataset"
-                description="Missing coverage does not establish that a protocol has no active markets."
-              />
-            )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle>Protocol facts</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <FactList
-              facts={[
-                ['Category', protocol.category],
-                ['Provider identifier', protocol.slug],
-                ['Observed at', formatUtc(protocol.observedAt)],
-                ['Execution status', 'Not verified'],
-                ['Audit / admin / oracle coverage', 'Unavailable in this dataset'],
-              ]}
-            />
-            <WebsiteLink url={protocol.url}>Visit protocol website</WebsiteLink>
-          </CardContent>
-        </Card>
-      </div>
-      <Card>
-        <EmptyState
-          title="Protocol-specific history unavailable"
-          description="Chain-level history cannot stand in for this protocol's own historical series."
-        />
-      </Card>
-    </div>
-  );
+  return <ProtocolResearchDetail protocolId={protocolId} />;
 }
 
 export function RwaDetailPage({ assetId }: { assetId: string }) {
@@ -709,168 +639,13 @@ export function RwaDetailPage({ assetId }: { assetId: string }) {
 }
 
 export function VenueDetailPage({ venueId }: { venueId: string }) {
-  const venue = VENUES.find((row) => row.id === venueId);
-  if (!venue) return <MissingRecord title="Venue not found" />;
-  const protocol = venue.slug ? findProtocol(venue.slug) : undefined;
-  const pools = venue.slug ? research.yieldPools.filter((pool) => pool.project === venue.slug) : [];
-  return (
-    <div className="space-y-7">
-      <Breadcrumb to="venues" />
-      <PageHeader
-        title={venue.name}
-        description={venue.description}
-        kicker={`Venue map / ${venue.role}`}
-        actions={<Badge variant="outline">Live availability unverified</Badge>}
-      />
-      <SnapshotNotice />
-      <div className="grid gap-3 sm:grid-cols-3">
-        <StatCard label="Role" value={venue.role} detail="Design integration record" />
-        <StatCard
-          label="Observed Stellar TVL"
-          value={formatUsd(protocol?.stellarTvlUsd ?? null)}
-          detail={protocol ? 'DefiLlama snapshot' : 'No matched protocol observation'}
-        />
-        <StatCard
-          label="Current action availability"
-          value={UNAVAILABLE}
-          detail="Deployment and capability checks are pending"
-        />
-      </div>
-      <div className="grid gap-5 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Market observations</CardTitle>
-          </CardHeader>
-          <CardContent>
-            {pools.length ? (
-              <PoolTable rows={pools} />
-            ) : (
-              <EmptyState
-                title="No matched pool data"
-                description="Venue-native rates, assets and withdrawal terms are not available from the current connection."
-              />
-            )}
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Prepare with the full lifecycle in view</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <FactList
-              facts={[
-                ['Read coverage', 'Published research observations only'],
-                ['Quotes / native safety', 'Not connected'],
-                ['Build / simulate / approve', 'Unavailable'],
-                ['Withdrawal timing', 'Must be disclosed before a deposit'],
-                [
-                  'Settlement',
-                  venue.id === 'templar'
-                    ? 'Multi-step; funding confirmation is not borrow completion'
-                    : 'Verify the selected product lifecycle',
-                ],
-              ]}
-            />
-            <div className="flex flex-wrap gap-2">
-              <Button
-                nativeButton={false}
-                variant="outline"
-                render={
-                  <Link to={venue.group === 'Spot' ? '/trade' : venue.group === 'Lending' ? '/credit' : '/vaults'} />
-                }
-              >
-                Open manual form
-              </Button>
-              {protocol ? (
-                <Button
-                  nativeButton={false}
-                  variant="ghost"
-                  render={<Link to="/protocols/$protocolId" params={{ protocolId: protocol.slug }} />}
-                >
-                  Protocol observation
-                </Button>
-              ) : null}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-      <DraftNotice>
-        A curator, platform and access provider may describe one product. Verify canonical identity before joining
-        records, comparing execution or aggregating exposure.
-      </DraftNotice>
-    </div>
-  );
+  const venue = VENUES.find((item) => item.id === venueId);
+  return venue ? <ProtocolResearchDetail protocolId={venue.slug} /> : <MissingRecord title="Venue not found" />;
 }
 
 export function MarketDetailPage({ marketId }: { marketId: string }) {
   const pool = findPool(marketId);
-  if (!pool) return <MissingRecord title="Market not found" />;
-  return (
-    <div className="min-w-0 space-y-7">
-      <Breadcrumb to="markets" />
-      <PageHeader
-        title={pool.symbol}
-        description={pool.meta ?? 'A dated yield-market observation.'}
-        kicker={`Market / ${pool.project}`}
-        actions={<Badge variant="outline">Research only</Badge>}
-      />
-      <SnapshotNotice />
-      <div className="grid gap-3 sm:grid-cols-4">
-        <StatCard label="Observed TVL" value={formatUsd(pool.tvlUsd)} />
-        <StatCard label="Base APY" value={percent(pool.baseApyPct)} />
-        <StatCard label="Reward APY" value={percent(pool.rewardApyPct)} />
-        <StatCard label="Total APY" value={percent(pool.totalApyPct)} />
-      </div>
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Terms and identity</CardTitle>
-            <CardDescription>
-              Rates are dated observations, not an executable comparison or guaranteed net yield.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <FactList
-              facts={[
-                ['Observed at', formatUtc(pool.observedAt)],
-                ['Source', 'DefiLlama yield pools'],
-                ['Base borrow APY', percent(pool.baseBorrowApyPct)],
-                ['Reward borrow APY', percent(pool.rewardBorrowApyPct)],
-                ['Reported available borrow', formatUsd(pool.availableBorrowUsd)],
-                ['Native risk interpretation', 'Unavailable; no common health factor inferred'],
-                ['Withdrawals / lockup / queue', 'Not collected'],
-              ]}
-            />
-            <details className="mt-5 rounded-lg border p-3">
-              <summary className="cursor-pointer text-sm">Source token identifiers · not execution identities</summary>
-              <ul className="mt-3 space-y-2 break-all font-mono text-xs text-muted-foreground">
-                {pool.underlyingTokens.map((token) => (
-                  <li key={token}>{token}</li>
-                ))}
-              </ul>
-            </details>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-2xl">Compare at your size</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <DraftNotice>
-              Fresh rates, available liquidity, fees and withdrawal terms are not connected. This observation cannot
-              produce a transaction.
-            </DraftNotice>
-            <Button nativeButton={false} className="w-full" variant="outline" render={<Link to="/credit/supply" />}>
-              Open supply form
-            </Button>
-            <Button className="w-full" disabled>
-              Review action unavailable
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
+  return pool ? <ProtocolResearchDetail protocolId={pool.project} /> : <MissingRecord title="Market not found" />;
 }
 
 export function SavedResearchPage() {
@@ -881,6 +656,17 @@ export function SavedResearchPage() {
         description="Keep protocols, assets, filters and theses together once wallet-verified saving is available."
         kicker="Research / Saved"
       />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Input
+          disabled
+          className="min-h-11 w-full sm:max-w-sm"
+          aria-label="Search bookmarks"
+          placeholder="Search bookmarks…"
+        />
+        <Button disabled variant="outline">
+          Export bookmarks
+        </Button>
+      </div>
       <Card>
         <EmptyState
           title="Your research library is not connected"
@@ -1096,6 +882,12 @@ function ProtocolDirectory() {
               </span>
             ),
           },
+          {
+            id: 'all-chains',
+            label: 'All-chain TVL',
+            numeric: true,
+            cell: (protocol) => formatUsd(protocol.allChainsTvlUsd ?? null),
+          },
         ]}
       />
       <p className="mt-2 text-xs leading-relaxed text-subtle">
@@ -1103,48 +895,6 @@ function ProtocolDirectory() {
         component. CEX rows are excluded from this DeFi ranking. Do not sum overlapping rows into a new chain total.
       </p>
     </section>
-  );
-}
-
-function PoolTable({ rows, compact = false }: { rows: YieldPoolRow[]; compact?: boolean }) {
-  return (
-    <ResearchDataTable
-      tableKey="venue-markets"
-      label="Markets"
-      rows={rows}
-      getRowId={(pool) => pool.id}
-      compact={compact}
-      columns={[
-        {
-          id: 'identity',
-          label: 'Market',
-          cell: (pool) => (
-            <>
-              <Link to="/markets/$marketId" params={{ marketId: pool.id }} className="font-medium hover:text-primary">
-                {pool.symbol}
-              </Link>
-              <span className="block text-xs text-subtle">
-                {pool.project}
-                {pool.meta ? ` · ${pool.meta}` : ''}
-              </span>
-            </>
-          ),
-        },
-        { id: 'tvl', label: 'TVL', numeric: true, cell: (pool) => formatUsd(pool.tvlUsd) },
-        ...(!compact
-          ? [
-              { id: 'base', label: 'Base APY', numeric: true, cell: (pool: YieldPoolRow) => percent(pool.baseApyPct) },
-              {
-                id: 'reward',
-                label: 'Reward APY',
-                numeric: true,
-                cell: (pool: YieldPoolRow) => percent(pool.rewardApyPct),
-              },
-            ]
-          : []),
-        { id: 'total', label: 'Total APY', numeric: true, cell: (pool) => percent(pool.totalApyPct) },
-      ]}
-    />
   );
 }
 
@@ -1687,10 +1437,6 @@ function ResearchCaveats() {
       </ul>
     </details>
   );
-}
-
-function percent(value: number | null) {
-  return value === null ? UNAVAILABLE : `${value.toFixed(2)}%`;
 }
 
 function displayNumber(value: string | null) {
