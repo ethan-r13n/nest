@@ -10,3 +10,6 @@ STELLAR_TESTNET_RPC_URL=
 # Execution remains off unless explicitly enabled in this ignored local file.
 EXECUTION_ENABLED=false
 ENABLED_WRITE_ADAPTERS=
+
+# Operator-only access to hosted Raven connect/tools endpoints; use a random value of at least 32 characters.
+RAVEN_OPERATOR_KEY=

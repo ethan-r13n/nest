@@ -7,6 +7,8 @@ import { hex } from '../stellar/inspect.ts';
 
 const API_URL = 'https://api.defindex.io';
 const TIMEOUT_MS = 20_000;
+const catalogs = new Map<string, { expiresAt: number; value: Promise<VaultView[]> }>();
+const vaultReads = new Map<string, { expiresAt: number; value: Promise<VaultView> }>();
 
 /**
  * sha256 of the DeFindex vault contract Nest accepts on each network, from `hashes.defindex_vault`
@@ -61,6 +63,7 @@ export interface VaultView {
   vaultFeeBps: number;
   defindexFeeBps: number;
   strategies: { name: string; paused: boolean }[];
+  retrievedAt?: string;
 }
 
 export class DefindexError extends Error {
@@ -78,31 +81,80 @@ export function createDefindexClient(options: { apiKey: string; network: Stellar
   const send = options.fetch ?? fetch;
   async function get<T>(path: string, schema: z.ZodType<T>): Promise<T> {
     const separator = path.includes('?') ? '&' : '?';
-    const response = await send(`${API_URL}${path}${separator}network=${options.network}`, {
-      headers: { authorization: `Bearer ${options.apiKey}` },
-      signal: AbortSignal.timeout(TIMEOUT_MS),
-    });
-    const parsed = schema.safeParse(await response.json().catch(() => null));
-    if (!response.ok || !parsed.success) {
-      throw new DefindexError(`DeFindex answered ${response.status} for ${path.split('?')[0]}.`, response.status);
+    for (let attempt = 0; attempt < 3; attempt++) {
+      const response = await send(`${API_URL}${path}${separator}network=${options.network}`, {
+        headers: { authorization: `Bearer ${options.apiKey}` },
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+      });
+      const body: unknown = await response.json().catch(() => null);
+      if (response.status === 429 && attempt < 2) {
+        const retryAfter =
+          body && typeof body === 'object' && 'retryAfter' in body && typeof body.retryAfter === 'number'
+            ? body.retryAfter
+            : 1;
+        if (retryAfter >= 0 && retryAfter <= 2) {
+          await new Promise((resolve) => setTimeout(resolve, Math.max(1000, retryAfter * 1000)));
+          continue;
+        }
+      }
+      const parsed = schema.safeParse(body);
+      if (!response.ok || !parsed.success) {
+        throw new DefindexError(`DeFindex answered ${response.status} for ${path.split('?')[0]}.`, response.status);
+      }
+      return parsed.data;
     }
-    return parsed.data;
+    throw new DefindexError('DeFindex is rate limited right now.', 429);
   }
 
   async function vault(address: string): Promise<VaultView> {
     if (!VAULT_ID.test(address)) throw new DefindexError('Not a vault contract address.', null);
-    return vaultView(options.network, address, await get(`/vault/${address}`, VaultSchema));
+    const key = `${options.network}:${options.apiKey}:${address}`;
+    const cached = options.fetch ? undefined : vaultReads.get(key);
+    if (cached && cached.expiresAt > Date.now()) return cached.value;
+    const value = get(`/vault/${address}`, VaultSchema).then((data) => ({
+      ...vaultView(options.network, address, data),
+      retrievedAt: new Date().toISOString(),
+    }));
+    if (!options.fetch) {
+      vaultReads.set(key, { expiresAt: Date.now() + 10_000, value });
+      if (vaultReads.size > 64) {
+        const oldest = vaultReads.keys().next().value;
+        if (oldest) vaultReads.delete(oldest);
+      }
+      void value.catch(() => {
+        if (vaultReads.get(key)?.value === value) vaultReads.delete(key);
+      });
+    }
+    return value;
   }
 
+  async function loadCatalog(): Promise<VaultView[]> {
+    const addresses =
+      options.network === 'testnet'
+        ? TESTNET_VAULTS
+        : (await get('/vault/discover', DiscoverSchema)).vaults.map((entry) => entry.address);
+    const rows: VaultView[] = [];
+    for (const address of addresses) rows.push(await vault(address));
+    return rows;
+  }
   return {
     vault,
     async vaults(): Promise<VaultView[]> {
-      const addresses =
-        options.network === 'testnet'
-          ? TESTNET_VAULTS
-          : (await get('/vault/discover', DiscoverSchema)).vaults.map((entry) => entry.address);
-      const results = await Promise.allSettled(addresses.map(vault));
-      return results.flatMap((result) => (result.status === 'fulfilled' ? [result.value] : []));
+      const key = `${options.network}:${options.apiKey}`;
+      const cached = options.fetch ? undefined : catalogs.get(key);
+      if (cached && cached.expiresAt > Date.now()) return cached.value;
+      const value = loadCatalog();
+      if (!options.fetch) {
+        catalogs.set(key, { expiresAt: Date.now() + 30_000, value });
+        if (catalogs.size > 8) {
+          const oldest = catalogs.keys().next().value;
+          if (oldest) catalogs.delete(oldest);
+        }
+        void value.catch(() => {
+          if (catalogs.get(key)?.value === value) catalogs.delete(key);
+        });
+      }
+      return value;
     },
   };
 }

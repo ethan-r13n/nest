@@ -32,9 +32,10 @@ export function GuardrailsDrawer() {
       </SheetTrigger>
       <SheetContent className="nest-workspace w-full sm:max-w-[440px]">
         <SheetHeader>
-          <SheetTitle>Guardrails</SheetTitle>
+          <SheetTitle>Guardrails · preview only</SheetTitle>
           <SheetDescription>
-            Review a draft. No preference applies until explicitly saved, and saving never approves a financial action.
+            These preference controls are a preview. They are not saved or enforced. Mandatory transaction checks and
+            venue requirements still apply.
           </SheetDescription>
         </SheetHeader>
         <div className="min-h-0 flex-1 overflow-y-auto px-4 pb-6">
@@ -54,10 +55,12 @@ export function GuardrailsEditor() {
   return (
     <div className="space-y-5">
       <div className="flex flex-wrap gap-2">
-        <Badge variant="outline">Suggested · not yet confirmed</Badge>
+        <Badge variant="outline">Preview only · not enforced</Badge>
         <Badge variant="secondary">Unsaved draft</Badge>
       </div>
-      <p className="text-xs text-subtle">No verified wallet or saved policy revision is loaded.</p>
+      <p className="text-xs text-subtle">
+        Editing these controls does not change quotes, transaction limits or execution permissions.
+      </p>
       <fieldset className="grid gap-4 sm:grid-cols-2">
         <legend className="mb-3 font-medium">Trade</legend>
         <div className="space-y-2">
@@ -143,8 +146,8 @@ export function GuardrailsEditor() {
         </AccordionItem>
       </Accordion>
       <DraftNotice>
-        Saving preferences is unavailable until wallet sign-in is connected. This draft never changes execution
-        permissions.
+        This preview does not save or enforce preferences. Actual transaction bounds are shown in each review and remain
+        independent of these controls.
       </DraftNotice>
       <Button className="w-full" disabled>
         Save preferences

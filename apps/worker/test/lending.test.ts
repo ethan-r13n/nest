@@ -4,6 +4,7 @@ import type { MarketView, PoolPositions, ReserveView } from '@nest/adapters/blen
 import { BLEND_REQUEST_TYPES, type LendingRequest } from '@nest/adapters/blend/submit';
 import { NETWORK_PASSPHRASES } from '@nest/adapters/stellar/networks';
 import { VenueRefusal } from '@nest/adapters/venue';
+import { XOXNO } from '@nest/adapters/xoxno/lending';
 import { Account, Address, Keypair, nativeToScVal, Operation, TransactionBuilder, xdr } from '@stellar/stellar-sdk';
 import { describe, expect, it } from 'vitest';
 
@@ -410,6 +411,7 @@ describe('repay and withdraw', () => {
     const { compared, plan } = await preparedExit(h, { kind: 'repay', asset: 'USDC', amount: 'all', source: 'chat' });
     expect(compared.excluded).toEqual([
       { poolId: YIELDBLOX, name: 'Blend YieldBlox', reason: 'You have no USDC debt here.' },
+      { poolId: XOXNO.mainnet.controller, name: 'XOXNO', reason: 'XOXNO positions cannot be read right now.' },
     ]);
     expect(compared.quotes[0]).toMatchObject({ position: { kind: 'debt', held: { amount: '100' } } });
     if (!plan.prepared || !('requests' in plan.prepared)) throw new Error(`not prepared: ${plan.errorCode}`);

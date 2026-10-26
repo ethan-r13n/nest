@@ -13,8 +13,9 @@ Nest combines sourced protocol research with an embedded Pi agent and a determin
 | Automations | Live XLM/USDC pool comparison, reviewed arbitrage monitors, one-minute checks, and deduplicated in-app alerts. Monitoring reads pool state and never executes trades. |
 | Swap | Soroswap on mainnet; the Stellar DEX on Testnet. Debounced quotes, policy checks, transaction inspection, Freighter signing, and confirmation. The approved candlestick chart retains its captured reference series and full research-asset window; connected wallets expose spendable balances and recorded activity. Live Stellar history endpoints remain available separately. |
 | Limit orders | A compact Aquarius XLM/USDC range-position ticket with reviewed placement and withdrawal. Wallet signatures and the adapter's execution gate remain required; automated price crossing does not submit another transaction. |
-| Credit | Blend supply, collateralized borrowing, repay, withdrawal, and a separate USDC trustline step. Pool exclusions and withdrawal conditions remain visible. |
-| Vaults | Live DeFindex vault reads and wallet-approved XLM/USDC deposits. Withdrawal execution and chat deposit proposals are not implemented. |
+| Credit | Blend supply, borrowing, repay and withdrawal; XOXNO two-step borrowing plus partial/full repayment and collateral withdrawal. Position management binds the registered pool and owned lending account. Separate USDC trustline reviews preserve issuer identity. |
+| Vaults | Live DeFindex reads, wallet-approved XLM/USDC deposits, owned-share reads, and partial/full withdrawal with share decimals and minimum underlying receipts checked on chain. Chat vault proposals remain unavailable. |
+| Portfolio | Live wallet balances, lending collateral/debt/supply, vault shares and Aquarius range positions, with direct management actions. Incomplete sources leave dependent valuations unknown. |
 | Landing | Standalone introduction with dated metrics and a question form that fills an unsent chat draft. |
 
 Additional venue integrations, saved wallet-authenticated history, generic background automations, strategy backtesting, and card spending are product targets or interface previews. They are not claims of working financial execution. See the [implementation specification](docs/technical-spec.md) for the target contracts and [architecture decisions](docs/architecture-decisions.md) for the current runtime.
@@ -84,7 +85,7 @@ For a signing demonstration, explicitly set the following in the ignored `apps/w
 ```dotenv
 STELLAR_NETWORK=testnet
 EXECUTION_ENABLED=true
-ENABLED_WRITE_ADAPTERS=sdex,blend
+ENABLED_WRITE_ADAPTERS=sdex,blend,xoxno,defindex,aquarius_range
 ```
 
 Restart the dev server after changing those settings. Confirm the header reports Testnet. The committed configuration remains disabled on both networks.
@@ -108,7 +109,7 @@ pnpm --filter @nest/worker cron:local http://127.0.0.1:5173
 
 Open Lab → Automations, choose Soroswap and Stellar AMM, and inspect the live preview at your USDC trade size. Save a draft, review its settings, then activate that revision. Checks run about once a minute. A matching gap alerts once and stays disarmed until the condition becomes false; unreadable inputs remain unknown. Displayed profit includes pool fees and price impact, excludes network fees, and is not an executed fill.
 
-Monitor records currently have no wallet-ownership isolation and are shared within the deployment. Keep the demo private. The local cron process only invokes the local scheduled handler; no remote migration or deployment is part of this setup.
+Monitor records are shared within each demo deployment, with no wallet-ownership isolation. Mainnet and Testnet monitors use separate databases. The local cron process only invokes the local scheduled handler; it also polls pending transaction receipts without submitting transactions.
 
 ## Safety model
 
@@ -118,6 +119,9 @@ Monitor records currently have no wallet-ownership isolation and are shared with
 - D1 owns idempotency, state transitions, and receipts. Ambiguous submission is reconciled by the same transaction hash rather than creating a new financial action.
 - Lending previews include health checks and withdrawal constraints. Simulation checks the proposed transaction; it does not predict future profitability.
 - Keys and connector grants stay server-side and out of Git. Freighter remains the user-controlled signer.
+- Guardrails preferences are explicitly a UI preview and are not saved or enforced. Protocol validity, transaction inspection, fee bounds, health and wallet signatures remain enforced independently.
+
+See [network readiness and testing](docs/mainnet-readiness.md) for deployment preparation, supported adapters, entry/exit tests and remaining wallet-signed verification.
 
 ## New Cloudflare databases
 
@@ -128,7 +132,7 @@ pnpm --filter @nest/worker exec wrangler d1 create nest-mainnet
 pnpm --filter @nest/worker exec wrangler d1 create nest-testnet
 ```
 
-Put each returned `database_id` in the corresponding binding in `apps/worker/wrangler.jsonc`, then regenerate Worker types. The default Worker is named `nest`; Testnet uses its named environment. Keep remote migrations and deployment as explicit, separately reviewed operations. See [Cloudflare configuration](docs/cloudflare-setup.md).
+Keep local placeholder bindings unchanged when existing local databases must be preserved. After `pnpm build`, generate a separate ignored deployment configuration with `node scripts/prepare-deployment.mjs mainnet DATABASE_ID` (or `testnet`). It selects the real database, distinct Worker name and built assets without changing local state identities. Execution stays off unless `--enable-execution` is explicitly supplied. Use the generated configuration for secrets, remote migrations and deployment. See [Cloudflare configuration](docs/cloudflare-setup.md) and [network readiness](docs/mainnet-readiness.md).
 
 ## Repository map
 

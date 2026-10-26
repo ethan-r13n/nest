@@ -218,3 +218,79 @@ describe('DeFindex on Testnet (live)', () => {
     60_000,
   );
 });
+
+function catalogVault() {
+  return {
+    name: 'DeFindex-Vault-Test',
+    assets: [{ address: usdc, strategies: [] }],
+    totalManagedFunds: [{ asset: usdc, idle_amount: '1', invested_amount: '0', total_amount: '1' }],
+    feesBps: { vaultFee: 0, defindexFee: 0 },
+  };
+}
+
+describe('DeFindex provider bounds', () => {
+  it('reads catalog details serially rather than sending a provider-breaking fanout', async () => {
+    let active = 0;
+    let maximum = 0;
+    const client = createDefindexClient({
+      apiKey: 'test',
+      network: 'mainnet',
+      fetch: async (input) => {
+        if (String(input).includes('/discover'))
+          return Response.json({ vaults: [{ address: VAULT }, { address: OTHER_VAULT }] });
+        active += 1;
+        maximum = Math.max(maximum, active);
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        active -= 1;
+        return Response.json(catalogVault());
+      },
+    });
+    const vaults = await client.vaults();
+    expect(vaults).toHaveLength(2);
+    expect(maximum).toBe(1);
+    expect(vaults.every((vault) => typeof vault.retrievedAt === 'string')).toBe(true);
+  });
+
+  it('does not mark a catalog complete when any discovered vault is unavailable', async () => {
+    const client = createDefindexClient({
+      apiKey: 'test',
+      network: 'mainnet',
+      fetch: async (input) => {
+        if (String(input).includes('/discover'))
+          return Response.json({ vaults: [{ address: VAULT }, { address: OTHER_VAULT }] });
+        return String(input).includes(OTHER_VAULT)
+          ? Response.json({ error: 'unavailable' }, { status: 503 })
+          : Response.json(catalogVault());
+      },
+    });
+    await expect(client.vaults()).rejects.toThrow('DeFindex answered 503');
+  });
+
+  it('honors a bounded rate-limit retry and decodes the recovered response', async () => {
+    let calls = 0;
+    const client = createDefindexClient({
+      apiKey: 'test',
+      network: 'mainnet',
+      fetch: async () => {
+        calls += 1;
+        return calls === 1 ? Response.json({ retryAfter: 1 }, { status: 429 }) : Response.json(catalogVault());
+      },
+    });
+    expect((await client.vault(VAULT)).address).toBe(VAULT);
+    expect(calls).toBe(2);
+  });
+
+  it('stops instead of retrying sooner than a long provider backoff', async () => {
+    let calls = 0;
+    const client = createDefindexClient({
+      apiKey: 'test',
+      network: 'mainnet',
+      fetch: async () => {
+        calls += 1;
+        return Response.json({ retryAfter: 60 }, { status: 429 });
+      },
+    });
+    await expect(client.vault(VAULT)).rejects.toMatchObject({ status: 429 });
+    expect(calls).toBe(1);
+  });
+});

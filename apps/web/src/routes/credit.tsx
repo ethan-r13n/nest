@@ -1,24 +1,16 @@
 import { Button } from '@nest/ui/components/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@nest/ui/components/card';
 import { Input } from '@nest/ui/components/input';
 import { Label } from '@nest/ui/components/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@nest/ui/components/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@nest/ui/components/tabs';
-import { Link } from '@tanstack/react-router';
 import { ArrowRight, ArrowUpRight, ChevronRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AssetIcon } from '../components/asset-icon.tsx';
-import {
-  AssetSelect,
-  CreditNavigation,
-  DecimalField,
-  ReviewRequirements,
-  WithdrawalTiming,
-} from '../components/financial-draft.tsx';
+import { CreditPositions } from '../components/credit-positions.tsx';
+import { AssetSelect, CreditNavigation, DecimalField, WithdrawalTiming } from '../components/financial-draft.tsx';
 import { LendingProposalCard } from '../components/lending-proposal.tsx';
 import { LiveLendingRates } from '../components/live-lending.tsx';
 import { SelectionCommand } from '../components/selection-command.tsx';
-import { EmptyState, PageHeader, StatCard } from '../components/workspace.tsx';
+import { PageHeader } from '../components/workspace.tsx';
 import { useWorkspaceSession } from '../components/workspace-session.tsx';
 import { amountDraftIssue } from '../lib/draft-validation.ts';
 import { execution } from '../lib/execution.ts';
@@ -462,7 +454,6 @@ export function SupplyPage() {
 }
 
 export function PositionsPage() {
-  const [amount, setAmount] = useState('');
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <PageHeader
@@ -471,87 +462,7 @@ export function PositionsPage() {
         description="Monitor exposure, collateral and debt, then use each venue's supported repayment and exit actions."
       />
       <CreditNavigation current="positions" />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        {['Confirmed collateral', 'Outstanding debt', 'Net credit value', 'Supplied liquidity'].map((label) => (
-          <StatCard key={label} label={label} value="—" detail="No verified position loaded" />
-        ))}
-      </div>
-      <div className="flex min-w-0 flex-col gap-6">
-        <div className="min-w-0 space-y-5">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-2xl">Open positions</CardTitle>
-              <CardDescription>Confirmed positions are separate from pending settlement.</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <EmptyState
-                title="Position access is not connected"
-                description="No balances, debt or collateral have been loaded. An empty screen is not a claim that your wallet has no positions."
-              >
-                <div className="flex flex-wrap justify-center gap-3">
-                  <Link to="/credit" className="inline-flex min-h-11 items-center text-sm text-primary hover:underline">
-                    Explore borrowing
-                  </Link>
-                  <Link
-                    to="/credit/supply"
-                    className="inline-flex min-h-11 items-center text-sm text-primary hover:underline"
-                  >
-                    Explore supply
-                  </Link>
-                </div>
-              </EmptyState>
-            </CardContent>
-          </Card>
-        </div>
-        <Card className="min-w-0 w-full">
-          <CardHeader>
-            <CardTitle className="text-2xl">Manage position</CardTitle>
-            <CardDescription>Choose a verified position first.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-5">
-            <Tabs defaultValue="add">
-              <TabsList className="h-auto w-full justify-start overflow-x-auto whitespace-nowrap">
-                <TabsTrigger className="min-h-11" value="add">
-                  Add collateral
-                </TabsTrigger>
-                <TabsTrigger className="min-h-11" value="repay">
-                  Repay
-                </TabsTrigger>
-                <TabsTrigger className="min-h-11" value="withdraw">
-                  Withdraw
-                </TabsTrigger>
-                <TabsTrigger className="min-h-11" value="close">
-                  Close
-                </TabsTrigger>
-              </TabsList>
-              <TabsContent value="add" className="space-y-4">
-                <DecimalField label="Collateral amount" value={amount} onChange={setAmount} disabled />
-                <WithdrawalTiming />
-              </TabsContent>
-              <TabsContent value="repay">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Exact principal, accrual, debt rounding and fees are needed before a repayment amount can be reviewed.
-                </p>
-              </TabsContent>
-              <TabsContent value="withdraw">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Withdrawable collateral depends on current debt, liquidity and the venue's native safety constraints.
-                </p>
-              </TabsContent>
-              <TabsContent value="close">
-                <p className="text-sm leading-relaxed text-muted-foreground">
-                  Full close may require repayment followed by separately reviewed collateral release and settlement
-                  steps.
-                </p>
-              </TabsContent>
-            </Tabs>
-            <Button disabled className="min-h-11 w-full">
-              Review position action
-            </Button>
-            <ReviewRequirements />
-          </CardContent>
-        </Card>
-      </div>
+      <CreditPositions />
     </div>
   );
 }

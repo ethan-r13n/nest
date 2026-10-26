@@ -110,7 +110,9 @@ export function WalletProvider({ children }: { children: ReactNode }) {
       const current = await kit().getNetwork();
       if (current.networkPassphrase !== networkPassphrase) {
         setState((previous) => ({ ...previous, networkPassphrase: current.networkPassphrase }));
-        throw new Error('Your wallet is set to a different network than this swap. Switch networks in your wallet.');
+        throw new Error(
+          'Your wallet is set to a different network than this transaction. Switch networks in your wallet.',
+        );
       }
       try {
         const { signedTxXdr } = await kit().signTransaction(xdr, { networkPassphrase, address: state.address });

@@ -72,6 +72,7 @@ export function LendingProposalCard({
   const [collateralPlan, setCollateralPlan] = useState<LendingPlan | null>(null);
   const continuationPoolId = useRef<string | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
+  const [polling, setPolling] = useState(false);
   const offer = comparison?.quotes.find((quote) => quote.id === selectedId) ?? null;
   const secondsLeft = useCountdown(
     phase === 'compared' ? offer?.expiresAt : phase === 'review' ? plan?.prepared?.validUntil : undefined,
@@ -158,6 +159,7 @@ export function LendingProposalCard({
     if (!plan?.prepared) return;
     setError(null);
     setPhase('signing');
+    setPolling(true);
     try {
       const settled = await signAndSubmit(plan, {
         sign: wallet.sign,
@@ -174,6 +176,27 @@ export function LendingProposalCard({
     } catch (caught) {
       fail(caught);
       setPhase('review');
+    } finally {
+      setPolling(false);
+    }
+  }
+
+  async function checkConfirmation() {
+    if (!plan || !isPending(plan) || polling) return;
+    setError(null);
+    setPolling(true);
+    try {
+      const latest = await execution.read<LendingPlan>(plan.id);
+      setPlan(latest);
+      setPhase(latest.status === 'confirmed' ? 'done' : isPending(latest) ? 'confirming' : 'stopped');
+      if (latest.status === 'confirmed' && latest.prepared?.step === 'collateral') {
+        setCollateralPlan(latest);
+        await continueOn(latest.offer.pool.id);
+      }
+    } catch (caught) {
+      fail(caught);
+    } finally {
+      setPolling(false);
     }
   }
 
@@ -357,9 +380,14 @@ export function LendingProposalCard({
       ) : null}
 
       {phase === 'confirming' ? (
-        <p className="flex items-center gap-2 text-muted-foreground">
-          <LoaderCircle className="size-4 animate-spin" /> Submitted. Waiting for the network to confirm…
-        </p>
+        <div className="space-y-2">
+          <p className="flex items-center gap-2 text-muted-foreground">
+            <LoaderCircle className="size-4 animate-spin" /> Submitted. Waiting for the network to confirm…
+          </p>
+          <Button variant="outline" size="sm" onClick={checkConfirmation} disabled={polling}>
+            Check confirmation
+          </Button>
+        </div>
       ) : null}
       {phase === 'done' && plan ? (
         <p className="flex items-center gap-2">
@@ -447,7 +475,8 @@ function OfferOption({
   selected: boolean;
   onSelect(): void;
 }) {
-  const apy = offer.kind === 'supply' || offer.kind === 'withdraw' ? offer.supplyApyPct : offer.borrowApyPct;
+  const supplyYield = offer.kind === 'supply' || offer.kind === 'withdraw' || offer.kind === 'withdraw_collateral';
+  const apy = supplyYield ? offer.supplyApyPct : offer.borrowApyPct;
   return (
     <button
       type="button"
@@ -471,9 +500,7 @@ function OfferOption({
       </span>
       <span className="text-right font-mono tabular-nums">
         {apy.toFixed(2)}%
-        <span className="block font-sans text-xs text-subtle">
-          {offer.kind === 'supply' || offer.kind === 'withdraw' ? 'supply APY' : 'borrow APY'}
-        </span>
+        <span className="block font-sans text-xs text-subtle">{supplyYield ? 'supply APY' : 'borrow APY'}</span>
       </span>
     </button>
   );

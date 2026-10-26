@@ -43,6 +43,13 @@
       "when": 1792972847017,
       "tag": "0005_limit_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "6",
+      "when": 1793002300975,
+      "tag": "0006_public_romulus",
+      "breakpoints": true
     }
   ]
 }

@@ -36,9 +36,10 @@ function sendMessage(conversationId: string, text: string, messageId: string = c
 }
 
 /** Reads the stream until the server closes it at a terminal event. */
-async function readEvents(conversationId: string, runId: string, after: number) {
+async function readEvents(conversationId: string, runId: string, after: number, lastEventId?: number) {
   const response = await exports.default.fetch(
     `${ORIGIN}/api/agent/conversations/${conversationId}/runs/${runId}/events?after=${after}`,
+    lastEventId === undefined ? {} : { headers: { 'last-event-id': String(lastEventId) } },
   );
   expect(response.headers.get('content-type')).toBe('text/event-stream');
   const raw = await response.text();
@@ -160,6 +161,20 @@ describe('agent conversations', () => {
 
     const replay = await readEvents(conversationId, first.admitted.runId, first.admitted.afterEventId);
     expect(replay.map((event) => event.type)).toEqual(['settled']);
+  });
+
+  it('resumes after Last-Event-ID without duplicating events or starting another turn', async () => {
+    const conversationId = await createConversation();
+    const first = await ask(conversationId, 'Compare Stellar lending');
+    const cursor = first.events.find((event) => event.type === 'tool_completed')?.id;
+    expect(cursor).toBeDefined();
+    const before = await (await exports.default.fetch(`${ORIGIN}/api/agent/conversations/${conversationId}`)).json();
+    const replay = await readEvents(conversationId, first.admitted.runId, first.admitted.afterEventId, cursor);
+    expect(replay).toEqual(first.events.filter((event) => event.id > (cursor ?? 0)));
+    expect(replay.filter((event) => event.type === 'settled')).toHaveLength(1);
+    expect(await (await exports.default.fetch(`${ORIGIN}/api/agent/conversations/${conversationId}`)).json()).toEqual(
+      before,
+    );
   });
 
   it('replays the same run for a repeated message id instead of starting another', async () => {

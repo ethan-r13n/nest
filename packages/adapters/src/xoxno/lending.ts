@@ -13,6 +13,7 @@ import {
   TransactionBuilder,
   xdr,
 } from '@stellar/stellar-sdk';
+import { z } from 'zod';
 
 import { loadClassicAccount, requireFunds } from '../stellar/accounts.ts';
 import { fail, hex, parseTransaction, validUntil } from '../stellar/inspect.ts';
@@ -84,6 +85,9 @@ export interface XoxnoReserve {
   hubId: number;
   /** Oracle price in USD, or null when the controller reports the price invalid or stale. */
   priceUsd: number | null;
+  priceWad?: bigint | null;
+  liquidationThresholdBps?: bigint;
+  loanToValueBps?: bigint;
   borrowApyPct: number;
   supplyApyPct: number;
   utilizationPct: number;
@@ -103,6 +107,7 @@ export interface XoxnoMarket {
   reserves: Record<XoxnoSymbol, XoxnoReserve>;
   /** An account with debt must keep at least this much LTV-weighted collateral, in USD. */
   minBorrowCollateralUsd: number;
+  minBorrowCollateralWad?: bigint;
   observedAtMs: number;
 }
 
@@ -123,7 +128,7 @@ export interface XoxnoAmount {
 /** A controller call Nest builds. Account 0 in a supply opens a new account (a position NFT). */
 export type XoxnoCall =
   | { method: 'supply'; accountId: bigint; spokeId: number; assets: readonly XoxnoAmount[] }
-  | { method: 'borrow'; accountId: bigint; assets: readonly XoxnoAmount[] };
+  | { method: 'borrow' | 'repay' | 'withdraw'; accountId: bigint; assets: readonly XoxnoAmount[] };
 
 export interface XoxnoReaderOptions {
   network: StellarNetwork;
@@ -139,7 +144,21 @@ const VALIDITY_SECONDS = 180;
 // Simulation needs a source account but never signs; any valid address will do.
 const READ_SOURCE = 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF';
 /** More accounts than this per wallet are not read; the first ones are the oldest. */
-const MAX_ACCOUNTS = 10;
+const MAX_ACCOUNTS = 50;
+const NonnegativeRaw = z.bigint().nonnegative();
+const Indexes = z.array(
+  z.object({ asset: z.string(), price_wad: NonnegativeRaw, valid: z.boolean(), stale: z.boolean() }),
+);
+const Spoke = z.object({
+  is_collateralizable: z.boolean(),
+  is_borrowable: z.boolean(),
+  paused: z.boolean(),
+  frozen: z.boolean(),
+  loan_to_value: z.number().int().min(0).max(10_000),
+  liquidation_threshold: z.number().int().min(0).max(10_000),
+});
+const AssetRead = z.tuple([NonnegativeRaw, NonnegativeRaw, NonnegativeRaw, NonnegativeRaw, Spoke]);
+const Attributes = z.object({ spoke_id: z.number().int().positive() });
 /** Controller error codes (common/src/errors.rs in github.com/XOXNO/rs-lending-xlm). */
 const REFUSALS: Record<number, [code: string, message: string]> = {
   100: ['HEALTH_TOO_LOW', 'XOXNO refused: the collateral does not cover this loan.'],
@@ -186,41 +205,38 @@ export async function readXoxnoMarket(options: XoxnoReaderOptions): Promise<Xoxn
       ]);
     }),
   ]);
-  const prices = indexes as { asset: string; price_wad: bigint; valid: boolean; stale: boolean }[];
-  const reserves = Object.fromEntries(
-    symbols.map((symbol, index) => {
-      const [borrowRate, depositRate, utilisation, available, spoke] = perAsset[index] as [
-        bigint,
-        bigint,
-        bigint,
-        bigint,
-        SpokeAssetRaw,
-      ];
-      const { contractId, hubId } = deployment.assets[symbol];
-      const price = prices.find((entry) => entry.asset === contractId);
-      const reserve: XoxnoReserve = {
-        symbol,
-        contractId,
-        hubId,
-        priceUsd: price?.valid && !price.stale ? Number(price.price_wad) / WAD : null,
-        borrowApyPct: apyPctFromRay(borrowRate),
-        supplyApyPct: apyPctFromRay(depositRate),
-        utilizationPct: (Number(utilisation) / RAY) * 100,
-        availableRaw: available,
-        loanToValue: spoke.loan_to_value / 10_000,
-        liquidationThreshold: spoke.liquidation_threshold / 10_000,
-        canCollateral: spoke.is_collateralizable && !spoke.paused && !spoke.frozen,
-        canBorrow: spoke.is_borrowable && !spoke.paused && !spoke.frozen,
-      };
-      return [symbol, reserve];
-    }),
-  ) as Record<XoxnoSymbol, XoxnoReserve>;
+  const prices = Indexes.parse(indexes);
+  function reserveOf(symbol: XoxnoSymbol, index: number): XoxnoReserve {
+    const [borrowRate, depositRate, utilisation, available, spoke] = AssetRead.parse(perAsset[index]);
+    const { contractId, hubId } = deployment.assets[symbol];
+    const price = prices.find((entry) => entry.asset === contractId);
+    const priceWad = price?.valid && !price.stale && price.price_wad > 0n ? price.price_wad : null;
+    return {
+      symbol,
+      contractId,
+      hubId,
+      priceWad,
+      priceUsd: priceWad === null ? null : Number(priceWad) / WAD,
+      liquidationThresholdBps: BigInt(spoke.liquidation_threshold),
+      loanToValueBps: BigInt(spoke.loan_to_value),
+      borrowApyPct: apyPctFromRay(borrowRate),
+      supplyApyPct: apyPctFromRay(depositRate),
+      utilizationPct: (Number(utilisation) / RAY) * 100,
+      availableRaw: available,
+      loanToValue: spoke.loan_to_value / 10_000,
+      liquidationThreshold: spoke.liquidation_threshold / 10_000,
+      canCollateral: spoke.is_collateralizable && !spoke.paused && !spoke.frozen,
+      canBorrow: spoke.is_borrowable && !spoke.paused && !spoke.frozen,
+    };
+  }
+  const reserves = { XLM: reserveOf('XLM', 0), USDC: reserveOf('USDC', 1) };
   return {
     controller: deployment.controller,
     name: `XOXNO ${deployment.spokeName}`,
     spokeId: deployment.spokeId,
     reserves,
-    minBorrowCollateralUsd: Number(minimum as bigint) / WAD,
+    minBorrowCollateralUsd: Number(NonnegativeRaw.parse(minimum)) / WAD,
+    minBorrowCollateralWad: NonnegativeRaw.parse(minimum),
     observedAtMs: (options.now ?? Date.now)(),
   };
 }
@@ -229,40 +245,87 @@ export async function readXoxnoMarket(options: XoxnoReaderOptions): Promise<Xoxn
 export async function readXoxnoAccounts(owner: string, options: XoxnoReaderOptions): Promise<XoxnoAccount[]> {
   const deployment = XOXNO[options.network];
   const ownerArg = new Address(owner).toScVal();
-  const count = Number((await simulate(options, deployment.positionNft, 'balance', [ownerArg])) as number);
+  const count = z
+    .number()
+    .int()
+    .nonnegative()
+    .parse(await simulate(options, deployment.positionNft, 'balance', [ownerArg]));
+  if (count > MAX_ACCOUNTS)
+    throw new VenueRefusal('POSITIONS_UNAVAILABLE', 'Too many XOXNO accounts to read completely.');
   const ids = await Promise.all(
-    Array.from({ length: Math.min(count, MAX_ACCOUNTS) }, (_, index) =>
+    Array.from({ length: count }, (_, index) =>
       simulate(options, deployment.positionNft, 'get_owner_token_id', [
         ownerArg,
         nativeToScVal(index, { type: 'u32' }),
       ]),
     ),
   );
-  return Promise.all(ids.map((id) => readAccount(BigInt(id as number), options)));
+  return Promise.all(
+    ids.map(async (id) => {
+      const tokenId = z.number().int().positive().max(0xffffffff).parse(id);
+      const actualOwner = await simulate(options, deployment.positionNft, 'owner_of', [
+        nativeToScVal(tokenId, { type: 'u32' }),
+      ]);
+      if (actualOwner !== owner)
+        throw new VenueRefusal('ACCOUNT_MISMATCH', 'The XOXNO lending account changed ownership.');
+      return readAccount(BigInt(tokenId), options);
+    }),
+  );
 }
 
 async function readAccount(accountId: bigint, options: XoxnoReaderOptions): Promise<XoxnoAccount> {
   const deployment = XOXNO[options.network];
   const id = nativeToScVal(accountId, { type: 'u64' });
   const amount = (method: string, symbol: XoxnoSymbol) =>
-    simulate(options, deployment.controller, method, [id, hubAsset(options.network, symbol)]) as Promise<bigint>;
+    simulate(options, deployment.controller, method, [id, hubAsset(options.network, symbol)]).then((raw) =>
+      NonnegativeRaw.parse(raw),
+    );
   const [attributes, health, xlmIn, usdcIn, xlmOut, usdcOut] = await Promise.all([
-    simulate(options, deployment.controller, 'get_account_attributes', [id]) as Promise<{ spoke_id: number }>,
-    simulate(options, deployment.controller, 'get_health_factor', [id]) as Promise<bigint>,
+    simulate(options, deployment.controller, 'get_account_attributes', [id]).then((raw) => Attributes.parse(raw)),
+    simulate(options, deployment.controller, 'get_health_factor', [id]).then((raw) => NonnegativeRaw.parse(raw)),
     amount('get_collateral_amount', 'XLM'),
     amount('get_collateral_amount', 'USDC'),
     amount('get_borrow_amount', 'XLM'),
     amount('get_borrow_amount', 'USDC'),
+    requireSupportedPositions(accountId, options),
   ]);
-  const hasDebt = xlmOut > 0n || usdcOut > 0n;
   return {
     accountId,
     spokeId: Number(attributes.spoke_id),
     collateralRaw: { XLM: xlmIn, USDC: usdcIn },
     debtRaw: { XLM: xlmOut, USDC: usdcOut },
     // With no debt the controller returns i128::MAX.
-    healthFactor: hasDebt ? Number(health) / WAD : null,
+    healthFactor: health === (1n << 127n) - 1n ? null : Number(health) / WAD,
   };
+}
+
+async function requireSupportedPositions(accountId: bigint, options: XoxnoReaderOptions): Promise<void> {
+  const deployment = XOXNO[options.network];
+  const value = await simulateScVal(options, deployment.controller, 'get_account_positions', [
+    nativeToScVal(accountId, { type: 'u64' }),
+  ]);
+  if (value.type !== 'scvVec')
+    throw new VenueRefusal('POSITIONS_UNAVAILABLE', 'XOXNO returned an unsupported position format.');
+  const maps = value.vec;
+  if (maps?.length !== 2) throw new VenueRefusal('POSITIONS_UNAVAILABLE', 'XOXNO returned incomplete positions.');
+  for (const map of maps) {
+    if (map.type !== 'scvMap')
+      throw new VenueRefusal('POSITIONS_UNAVAILABLE', 'XOXNO returned an unsupported position format.');
+    for (const entry of map.map ?? []) {
+      const key = z.strictObject({ asset: z.string(), hub_id: z.number().int() }).parse(scValToNative(entry.key));
+      if (
+        !XOXNO_SYMBOLS.some(
+          (symbol) =>
+            deployment.assets[symbol].contractId === key.asset && deployment.assets[symbol].hubId === key.hub_id,
+        )
+      ) {
+        throw new VenueRefusal(
+          'UNSUPPORTED_POSITION',
+          'This XOXNO account contains assets Nest cannot value or safely manage yet.',
+        );
+      }
+    }
+  }
 }
 
 /**
@@ -290,6 +353,32 @@ export function healthAfter(
   return debt === 0 ? null : weighted / debt;
 }
 
+/** Exact oracle/threshold check for a collateral decrease; missing prices fail closed with debt. */
+export function xoxnoWithdrawalHealth(
+  market: XoxnoMarket,
+  account: XoxnoAccount,
+  withdrawal: XoxnoAmount,
+): { solvent: boolean; health: number | null } {
+  let weighted = 0n;
+  let debt = 0n;
+  const hasDebt = XOXNO_SYMBOLS.some((symbol) => account.debtRaw[symbol] > 0n);
+  if (!hasDebt && account.healthFactor === null) return { solvent: true, health: null };
+  for (const symbol of XOXNO_SYMBOLS) {
+    const reserve = market.reserves[symbol];
+    const held = account.collateralRaw[symbol];
+    const removed = withdrawal.symbol === symbol ? withdrawal.amount : 0n;
+    const remaining = held > removed ? held - removed : 0n;
+    if (remaining === 0n && account.debtRaw[symbol] === 0n) continue;
+    if (reserve.priceWad == null || reserve.liquidationThresholdBps === undefined) {
+      return { solvent: false, health: Number.NaN };
+    }
+    weighted += remaining * reserve.priceWad * reserve.liquidationThresholdBps;
+    debt += account.debtRaw[symbol] * reserve.priceWad * 10_000n;
+  }
+  if (debt === 0n) return { solvent: false, health: Number.NaN };
+  return { solvent: weighted > debt, health: Number(weighted) / Number(debt) };
+}
+
 /**
  * Builds one controller call after checking the account can fund a supply and hold what a borrow
  * pays out, and lets the RPC simulate and assemble it.
@@ -307,10 +396,13 @@ export async function buildXoxnoCall(input: {
   const classicOf = (symbol: XoxnoSymbol) => xoxnoAsset(input.network, symbol).classic;
   requireFunds(classic, {
     spend:
-      input.call.method === 'supply'
+      input.call.method === 'supply' || input.call.method === 'repay'
         ? input.call.assets.map((asset) => ({ asset: classicOf(asset.symbol), amount: asset.amount }))
         : [],
-    receive: input.call.method === 'borrow' ? input.call.assets.map((asset) => classicOf(asset.symbol)) : [],
+    receive:
+      input.call.method === 'borrow' || input.call.method === 'withdraw'
+        ? input.call.assets.map((asset) => classicOf(asset.symbol))
+        : [],
     feeStroops: 10_000_000n,
   });
 
@@ -384,7 +476,7 @@ export function inspectXoxnoCall(
   }
 
   const allowance = new Map<string, bigint>();
-  if (expected.call.method === 'supply') {
+  if (expected.call.method === 'supply' || expected.call.method === 'repay') {
     for (const asset of expected.call.assets) {
       const contractId = deployment.assets[asset.symbol].contractId;
       allowance.set(contractId, (allowance.get(contractId) ?? 0n) + asset.amount);
@@ -424,6 +516,7 @@ function spend(node: InvocationTree, expected: { account: string; pool: string }
     from !== expected.account ||
     to !== expected.pool ||
     typeof amount !== 'bigint' ||
+    amount < 0n ||
     left === undefined ||
     amount > left
   ) {
@@ -432,16 +525,10 @@ function spend(node: InvocationTree, expected: { account: string; pool: string }
   allowance.set(invocation.source, left - amount);
 }
 
-interface SpokeAssetRaw {
-  is_collateralizable: boolean;
-  is_borrowable: boolean;
-  paused: boolean;
-  frozen: boolean;
-  loan_to_value: number;
-  liquidation_threshold: number;
-}
-
 function argsOf(network: StellarNetwork, account: string, call: XoxnoCall): xdr.ScVal[] {
+  if (call.assets.length !== 1 || call.assets.some((asset) => asset.amount <= 0n)) {
+    fail('ARGUMENTS_MISMATCH', 'The XOXNO call needs one positive, bounded asset amount.');
+  }
   const caller = new Address(account).toScVal();
   const id = nativeToScVal(call.accountId, { type: 'u64' });
   const assets = xdr.ScVal.scvVec(
@@ -450,7 +537,8 @@ function argsOf(network: StellarNetwork, account: string, call: XoxnoCall): xdr.
     ),
   );
   if (call.method === 'supply') return [caller, id, nativeToScVal(call.spokeId, { type: 'u32' }), assets];
-  // `to` None pays the loan to the caller.
+  if (call.method === 'repay') return [caller, id, assets];
+  // `to` None pays a borrow or withdrawal to the caller.
   return [caller, id, assets, xdr.ScVal.scvVoid()];
 }
 
@@ -463,7 +551,21 @@ function hubAsset(network: StellarNetwork, symbol: XoxnoSymbol): xdr.ScVal {
   ]);
 }
 
-async function simulate(options: XoxnoReaderOptions, contractId: string, method: string, args: xdr.ScVal[] = []) {
+async function simulate(
+  options: XoxnoReaderOptions,
+  contractId: string,
+  method: string,
+  args: xdr.ScVal[] = [],
+): Promise<unknown> {
+  return scValToNative(await simulateScVal(options, contractId, method, args));
+}
+
+async function simulateScVal(
+  options: XoxnoReaderOptions,
+  contractId: string,
+  method: string,
+  args: xdr.ScVal[] = [],
+): Promise<xdr.ScVal> {
   const server = new rpc.Server(options.rpcUrl);
   const tx = new TransactionBuilder(new Account(READ_SOURCE, '0'), {
     fee: '100',
@@ -477,7 +579,7 @@ async function simulate(options: XoxnoReaderOptions, contractId: string, method:
     const detail = rpc.Api.isSimulationError(simulation) ? simulation.error.slice(0, 200) : 'no result';
     throw new Error(`Reading XOXNO ${method} failed in simulation: ${detail}`);
   }
-  return scValToNative(simulation.result.retval) as unknown;
+  return simulation.result.retval;
 }
 
 function canonical(values: unknown[]): string {

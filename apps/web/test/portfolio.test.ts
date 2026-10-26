@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
-import type { LendingPositions, LimitOrders, SwapBalances } from '../src/lib/execution.ts';
+import type { LendingPositions, LimitOrders, SwapBalances, VaultPositions } from '../src/lib/execution.ts';
 import { positionRows, valuationOf } from '../src/lib/portfolio.ts';
 
 // The Testnet wallet after borrowing 1000 USDC on XOXNO against 12,635 XLM, 2026-10-26.
@@ -89,4 +89,31 @@ test('unknown limit orders leave asset totals unknown without hiding known debt'
   assert.equal(valuation.gross, null);
   assert.equal(valuation.debt, 1000);
   assert.equal(valuation.net, null);
+});
+
+test('vault shares contribute their underlying once, and an unavailable vault source never becomes zero', () => {
+  const vaults: VaultPositions = {
+    network: 'testnet',
+    available: true,
+    positions: [
+      {
+        vault: { id: 'vault', name: 'USDC vault' },
+        shares: { symbol: 'shares', amount: '5', raw: '500000000', decimals: 8 },
+        underlying: { symbol: 'USDC', amount: '6', raw: '60000000' },
+        assetContract: 'asset',
+        withdrawalTiming: { lockup: 'none', cooldown: 'none', summary: 'Subject to strategy liquidity.' },
+        verified: true,
+      },
+    ],
+  };
+  const rows = positionRows(BALANCES, POSITIONS, NO_ORDERS, 0.17, vaults);
+  const known = valuationOf(rows, { ...KNOWN, vaults: false });
+  const unavailable = valuationOf(positionRows(BALANCES, POSITIONS, NO_ORDERS, 0.17), { ...KNOWN, vaults: true });
+  assert.equal(known.vaults, 6);
+  assert.equal(known.net?.toFixed(2), '3405.80');
+  assert.equal(known.supplied?.toFixed(2), '2147.96');
+  assert.equal(unavailable.vaults, null);
+  assert.equal(unavailable.gross, null);
+  assert.equal(unavailable.net, null);
+  assert.equal(unavailable.debt, 1000);
 });

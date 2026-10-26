@@ -14,6 +14,14 @@ import type { HealthEstimate, MarketView, PoolPositions } from '@nest/adapters/b
 import { buildBlendSubmit, type LendingRequest } from '@nest/adapters/blend/submit';
 import { buildVaultDeposit, type VaultDeposit } from '@nest/adapters/defindex/deposit';
 import { createDefindexClient, isDefindexVault, type VaultView } from '@nest/adapters/defindex/vaults';
+import {
+  buildVaultWithdrawal,
+  readVaultShareAmount,
+  readVaultShareDecimals,
+  readVaultSharePosition,
+  type VaultSharePosition,
+  type VaultWithdrawal,
+} from '@nest/adapters/defindex/withdraw';
 import { createSoroswapVenue, SoroswapError } from '@nest/adapters/soroswap/client';
 import { createSdexVenue } from '@nest/adapters/stellar/sdex';
 import { buildTrustline } from '@nest/adapters/stellar/trustline';
@@ -62,6 +70,10 @@ interface VaultVenue {
   /** Whether the contract runs DeFindex's published vault code. */
   verify(address: string): Promise<boolean>;
   build(input: VaultDeposit): Promise<string>;
+  shareDecimals?(address: string): Promise<number>;
+  position?(address: string, account: string): Promise<VaultSharePosition>;
+  shareAmount?(address: string, shares: bigint): Promise<bigint>;
+  withdraw?(input: VaultWithdrawal): Promise<string>;
 }
 
 /** Aquarius concentrated-pool reads and builds, injected so tests run without a network. */
@@ -150,6 +162,19 @@ function vaultVenue(config: ExecutionConfig, rpcUrl: string | null): VaultVenue 
     vaults: client.vaults,
     vault: client.vault,
     verify: (address) => isDefindexVault(network, rpcUrl, address),
+    shareDecimals: (address) => readVaultShareDecimals(address, { network, rpcUrl }),
+    position: (address, account) => readVaultSharePosition(address, account, { network, rpcUrl }),
+    shareAmount: (address, shares) => readVaultShareAmount(address, shares, { network, rpcUrl }),
+    withdraw: (input) => {
+      const symbol = input.assetContract === lendingAsset(network, 'XLM').contractId ? 'XLM' : 'USDC';
+      return buildVaultWithdrawal({
+        ...input,
+        network,
+        rpcUrl,
+        asset: lendingAsset(network, symbol).classic,
+        nowMs: Date.now(),
+      });
+    },
     build: async (input) => {
       const symbol = input.assetContract === lendingAsset(network, 'XLM').contractId ? 'XLM' : 'USDC';
       return buildVaultDeposit({
@@ -189,6 +214,8 @@ export interface IntentRow {
   market_id: string | null;
   collateral_asset: string | null;
   collateral_amount_raw: string | null;
+  lending_account_id?: string | null;
+  vault_share_decimals?: number | null;
   /** Repay and withdraw: 1 for the whole position. */
   whole_position: number;
   /** Limit orders: USDC per XLM, and the band chosen (or, for a close, withdrawn). */
@@ -255,8 +282,9 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
   await deps.db
     .prepare(
       `INSERT INTO intents (id, network, kind, sell_asset, buy_asset, sell_amount_raw, source, market_id,
-         collateral_asset, collateral_amount_raw, whole_position, limit_price, tick_lower, tick_upper, created_at_ms)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         collateral_asset, collateral_amount_raw, whole_position, limit_price, tick_lower, tick_upper, created_at_ms,
+         lending_account_id, vault_share_decimals)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     )
     .bind(
       row.id,
@@ -274,6 +302,8 @@ export async function insertIntent(deps: ExecutionDeps, row: IntentRow): Promise
       row.tick_lower,
       row.tick_upper,
       row.created_at_ms,
+      row.lending_account_id ?? null,
+      row.vault_share_decimals ?? null,
     )
     .run();
 }

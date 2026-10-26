@@ -42,7 +42,8 @@
       "APP_ENCRYPTION_KEY",
       "SOROSWAP_API_KEY",
       "DEFINDEX_API_KEY",
-      "STELLAR_MAINNET_RPC_URL"
+      "STELLAR_MAINNET_RPC_URL",
+      "RAVEN_OPERATOR_KEY"
     ]
   },
   "durable_objects": {
@@ -80,7 +81,13 @@
         "STELLAR_TESTNET_RPC_URL": "https://soroban-testnet.stellar.org"
       },
       "secrets": {
-        "required": ["OPENROUTER_API_KEY", "APP_ENCRYPTION_KEY", "SOROSWAP_API_KEY", "DEFINDEX_API_KEY"]
+        "required": [
+          "OPENROUTER_API_KEY",
+          "APP_ENCRYPTION_KEY",
+          "SOROSWAP_API_KEY",
+          "DEFINDEX_API_KEY",
+          "RAVEN_OPERATOR_KEY"
+        ]
       },
       "durable_objects": {
         "bindings": [

@@ -5,7 +5,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Link } from '@tanstack/react-router';
 import { ArrowDownLeft, ArrowUpRight, Bell, CreditCard, Download, Wallet } from 'lucide-react';
 import { useState } from 'react';
-
+import { LendingPositionAction, VaultPositionAction } from '../components/position-actions.tsx';
 import { ProtocolLogo } from '../components/protocol-logo.tsx';
 import { DraftNotice, EmptyState, PageHeader, UnavailableBadge } from '../components/workspace.tsx';
 import { useHealth } from '../lib/health.ts';
@@ -44,7 +44,11 @@ export function PortfolioPage() {
             value: valuation?.supplied ?? null,
             note: share(valuation?.supplied ?? null) ?? 'Blend, XOXNO and limit orders',
           },
-          { label: 'Vault receipts', value: null, note: 'DeFindex shares are not read here yet' },
+          {
+            label: 'Vault receipts',
+            value: valuation?.vaults ?? null,
+            note: 'DeFindex shares valued by current underlying',
+          },
         ]
       : [
           { label: 'Gross assets', value: valuation?.gross ?? null, note: 'Wallet, supply, collateral and orders' },
@@ -125,7 +129,7 @@ export function PortfolioPage() {
         {!wallet.address ? (
           <EmptyState
             title="Connect a wallet to see its positions"
-            description="Wallet balances, Blend supply and collateral, XOXNO loans and Aquarius limit orders appear here, read live."
+            description="Wallet balances, Blend supply and collateral, XOXNO loans, vault shares and Aquarius limit orders appear here, read live."
           >
             <Button onClick={wallet.connect} disabled={wallet.connecting}>
               <Wallet /> {wallet.connecting ? 'Connecting…' : 'Connect wallet'}
@@ -142,7 +146,7 @@ export function PortfolioPage() {
             description={
               portfolio.failed
                 ? 'A source did not answer. Missing data is not a zero balance; try again shortly.'
-                : 'This wallet holds no XLM, USDC, lending positions or limit orders that Nest reads.'
+                : 'This wallet holds no XLM, USDC, lending positions, vault shares or limit orders that Nest reads.'
             }
           />
         ) : (
@@ -171,9 +175,15 @@ export function PortfolioPage() {
                   </TableCell>
                   <TableCell className="text-sm text-muted-foreground">{row.accounting}</TableCell>
                   <TableCell className="text-right">
-                    <Link to={row.manage.to} className="inline-flex min-h-11 items-center text-sm text-primary">
-                      {row.manage.label} <ArrowUpRight className="ml-1 size-3.5" />
-                    </Link>
+                    {row.lendingAction ? (
+                      <LendingPositionAction position={row.lendingAction} />
+                    ) : row.vault && portfolio.network && wallet.address ? (
+                      <VaultPositionAction position={row.vault} network={portfolio.network} owner={wallet.address} />
+                    ) : (
+                      <Link to={row.manage.to} className="inline-flex min-h-11 items-center text-sm text-primary">
+                        {row.manage.label} <ArrowUpRight className="ml-1 size-3.5" />
+                      </Link>
+                    )}
                   </TableCell>
                 </TableRow>
               ))}
@@ -242,7 +252,9 @@ export function PortfolioPage() {
               wallet.address
                 ? portfolio.activityLoading
                   ? 'Reading activity…'
-                  : 'No activity yet'
+                  : portfolio.activityFailed
+                    ? 'Activity could not be read'
+                    : 'No activity yet'
                 : 'Connect a wallet to see its activity'
             }
             description="Swaps, loans, deposits and limit orders this wallet signs through Nest appear here once they reach the network."

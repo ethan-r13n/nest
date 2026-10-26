@@ -118,6 +118,7 @@ export const INTENT_KINDS = [
   'withdraw',
   'withdraw_collateral',
   'vault_deposit',
+  'vault_withdraw',
   'limit_order',
   'limit_close',
 ] as const;
@@ -151,6 +152,8 @@ export const intents = sqliteTable(
     marketId: text('market_id'),
     collateralAsset: text('collateral_asset'),
     collateralAmountRaw: text('collateral_amount_raw'),
+    lendingAccountId: text('lending_account_id'),
+    vaultShareDecimals: integer('vault_share_decimals'),
     // Repay and withdraw: 1 means the whole position, sized when compared; sell_amount_raw is then 0.
     wholePosition: integer('whole_position').notNull().default(0),
     // Limit orders: the price in USDC per XLM as a decimal string, and the tick band chosen for it.

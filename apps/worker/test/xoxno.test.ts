@@ -25,6 +25,9 @@ function xoxnoReserve(symbol: 'XLM' | 'USDC', overrides: Partial<XoxnoReserve> =
     contractId: DEPLOYMENT.assets[symbol].contractId,
     hubId: 1,
     priceUsd: symbol === 'USDC' ? 1 : 0.1685,
+    priceWad: symbol === 'USDC' ? 1_000_000_000_000_000_000n : 168_500_000_000_000_000n,
+    liquidationThresholdBps: symbol === 'USDC' ? 8000n : 7800n,
+    loanToValueBps: symbol === 'USDC' ? 7600n : 7500n,
     borrowApyPct: symbol === 'USDC' ? 2.56 : 0.01,
     supplyApyPct: symbol === 'USDC' ? 1.07 : 0,
     utilizationPct: 46.6,
@@ -38,19 +41,20 @@ function xoxnoReserve(symbol: 'XLM' | 'USDC', overrides: Partial<XoxnoReserve> =
 }
 
 function blendMarket(): MarketView {
-  const reserve = (symbol: 'USDC' | 'XLM', contractId: string): ReserveView =>
-    ({
-      symbol,
-      contractId,
-      enabled: true,
-      supplyApyPct: 5,
-      borrowApyPct: 7.99,
-      utilizationPct: 60,
-      availableRaw: 1_000_000_000_000n,
-      collateralFactor: 0.75,
-      liabilityFactor: 1.05,
-      priceUsd: symbol === 'USDC' ? 1 : 0.1685,
-    }) as ReserveView;
+  const reserve = (symbol: 'USDC' | 'XLM', contractId: string): ReserveView => ({
+    symbol,
+    contractId,
+    enabled: true,
+    supplyApyPct: 5,
+    borrowApyPct: 7.99,
+    utilizationPct: 60,
+    availableRaw: 1_000_000_000_000n,
+    suppliedRaw: 2_500_000_000_000n,
+    borrowedRaw: 1_500_000_000_000n,
+    collateralFactor: 0.75,
+    liabilityFactor: 1.05,
+    priceUsd: symbol === 'USDC' ? 1 : 0.1685,
+  });
   return {
     poolId: 'CCCCIQSDILITHMM7PBSLVDT5MISSY7R26MNZXCX4H7J5JQ5FPIYOGYFS',
     name: 'Blend YieldBlox',
@@ -63,7 +67,7 @@ function blendMarket(): MarketView {
       reserve('XLM', 'CAS3J7GYLGXMF6TDJBBYYSE3HQ6BBSMLNUQ34T6TZMYMW2EVH34XOWMA'),
     ],
     observedAtMs: START_MS,
-  } as MarketView;
+  };
 }
 
 function hubAsset(contractId: string) {
@@ -88,14 +92,16 @@ function controllerCall(account: string, call: XoxnoCall, nowMs: number) {
   const args =
     call.method === 'supply'
       ? [caller, id, nativeToScVal(call.spokeId, { type: 'u32' }), assets]
-      : [caller, id, assets, xdr.ScVal.scvVoid()];
+      : call.method === 'repay'
+        ? [caller, id, assets]
+        : [caller, id, assets, xdr.ScVal.scvVoid()];
   const invoke = new xdr.InvokeContractArgs({
     contractAddress: new Address(DEPLOYMENT.controller).toScAddress(),
     functionName: call.method,
     args,
   });
   const transfers =
-    call.method === 'supply'
+    call.method === 'supply' || call.method === 'repay'
       ? call.assets.map(
           (asset) =>
             new xdr.SorobanAuthorizedInvocation({
@@ -144,6 +150,7 @@ function createFixture() {
     spokeId: 1,
     reserves: { USDC: state.usdc, XLM: xoxnoReserve('XLM') },
     minBorrowCollateralUsd: 5,
+    minBorrowCollateralWad: 5_000_000_000_000_000_000n,
     observedAtMs: clock.now,
   });
   const deps: ExecutionDeps = {
@@ -192,7 +199,7 @@ function createFixture() {
 }
 
 async function borrowPlan(h: ReturnType<typeof createFixture>, intentId: string) {
-  const compared = await compareLending(h.deps, await loadIntent(h.deps, intentId));
+  const compared = await compareLending(h.deps, await loadIntent(h.deps, intentId), h.user.publicKey());
   const quote = compared.quotes.find((offer) => offer.venue === 'xoxno');
   if (!quote) throw new Error(`no XOXNO offer: ${JSON.stringify(compared.excluded)}`);
   const plan = await createPlan(h.deps, {
@@ -316,9 +323,9 @@ describe('XOXNO borrowing', () => {
     ).toMatchObject({ status: 'policy_checked' });
   });
 
-  it('borrows on XOXNO only: lending and exits there go through Blend', async () => {
+  it('keeps direct lending on Blend while XOXNO supports loan entry and exits', async () => {
     const h = createFixture();
-    for (const kind of ['supply', 'repay', 'withdraw'] as const) {
+    for (const kind of ['supply', 'withdraw'] as const) {
       await expect(
         createLendingIntent(h.deps, {
           kind,
@@ -327,7 +334,7 @@ describe('XOXNO borrowing', () => {
           poolId: DEPLOYMENT.controller,
           source: 'form',
         }),
-      ).rejects.toThrow('Nest borrows on XOXNO');
+      ).rejects.toThrow('Nest lends through Blend');
     }
     const intent = await createLendingIntent(h.deps, {
       kind: 'borrow',
@@ -338,6 +345,106 @@ describe('XOXNO borrowing', () => {
     });
     const compared = await compareLending(h.deps, await loadIntent(h.deps, intent.id));
     expect(compared.quotes.map((offer) => offer.venue)).toEqual(['xoxno']);
+  });
+
+  it('repays accrued debt with a finite refundable maximum, then withdraws all collateral', async () => {
+    const h = createFixture();
+    const accrued = USDC_1000 / 10n + 1234n;
+    const account: XoxnoAccount = {
+      accountId: 41n,
+      spokeId: 1,
+      collateralRaw: { XLM: 100_000_000_000n, USDC: 0n },
+      debtRaw: { XLM: 0n, USDC: accrued },
+      healthFactor: 12.6,
+    };
+    h.state.accounts = [account];
+    const repay = await createLendingIntent(h.deps, {
+      kind: 'repay',
+      asset: 'USDC',
+      amount: 'all',
+      poolId: DEPLOYMENT.controller,
+      lendingAccountId: '41',
+      source: 'form',
+    });
+    const first = await borrowPlan(h, repay.id);
+    expect(h.state.built[0]).toEqual({
+      method: 'repay',
+      accountId: 41n,
+      assets: [{ symbol: 'USDC', amount: accrued + accrued / 1000n + 1n }],
+    });
+    expect(first.plan.prepared).toMatchObject({ step: 'repay', accountId: '41', health: { after: null } });
+    expect(await signAndSubmit(h, first.plan)).toMatchObject({ status: 'confirmed' });
+    h.state.accounts = [{ ...account, debtRaw: { XLM: 0n, USDC: 0n }, healthFactor: null }];
+    const withdraw = await createLendingIntent(h.deps, {
+      kind: 'withdraw_collateral',
+      asset: 'XLM',
+      amount: 'all',
+      poolId: DEPLOYMENT.controller,
+      lendingAccountId: '41',
+      source: 'form',
+    });
+    const second = await borrowPlan(h, withdraw.id);
+    expect(h.state.built[1]).toEqual({
+      method: 'withdraw',
+      accountId: 41n,
+      assets: [{ symbol: 'XLM', amount: 100_100_000_001n }],
+    });
+    expect(second.plan.prepared).toMatchObject({ step: 'withdraw', accountId: '41' });
+    expect(await signAndSubmit(h, second.plan)).toMatchObject({ status: 'confirmed' });
+  });
+
+  it('prepares a partial collateral exit but blocks unsafe health and changed ownership', async () => {
+    const h = createFixture();
+    const account: XoxnoAccount = {
+      accountId: 41n,
+      spokeId: 1,
+      collateralRaw: { XLM: 20_000_000_000n, USDC: 0n },
+      debtRaw: { XLM: 0n, USDC: 1_000_000_000n },
+      healthFactor: 2.6,
+    };
+    h.state.accounts = [account];
+    const partial = await createLendingIntent(h.deps, {
+      kind: 'withdraw_collateral',
+      asset: 'XLM',
+      amount: '100',
+      poolId: DEPLOYMENT.controller,
+      lendingAccountId: '41',
+      source: 'form',
+    });
+    expect((await borrowPlan(h, partial.id)).plan).toMatchObject({
+      status: 'awaiting_review',
+      prepared: { step: 'withdraw' },
+    });
+    const unsafe = await createLendingIntent(h.deps, {
+      kind: 'withdraw_collateral',
+      asset: 'XLM',
+      amount: '1900',
+      poolId: DEPLOYMENT.controller,
+      lendingAccountId: '41',
+      source: 'form',
+    });
+    expect((await borrowPlan(h, unsafe.id)).plan).toMatchObject({ status: 'blocked', errorCode: 'HEALTH_TOO_LOW' });
+    const compared = await compareLending(h.deps, await loadIntent(h.deps, partial.id), h.user.publicKey());
+    const quote = compared.quotes[0];
+    if (!quote) throw new Error('Missing owned exit quote.');
+    const plan = await createPlan(h.deps, {
+      intentId: partial.id,
+      quoteId: quote.id,
+      accountId: h.user.publicKey(),
+      idempotencyKey: crypto.randomUUID(),
+    });
+    h.state.accounts = [];
+    expect(await preparePlan(h.deps, plan.id)).toMatchObject({ status: 'blocked', errorCode: 'ACCOUNT_MISMATCH' });
+    await expect(
+      createLendingIntent(h.deps, {
+        kind: 'repay',
+        asset: 'USDC',
+        amount: 'all',
+        poolId: DEPLOYMENT.controller,
+        lendingAccountId: '0',
+        source: 'form',
+      }),
+    ).rejects.toThrow('valid XOXNO lending account');
   });
 
   it('lists the wallet’s XOXNO accounts next to its Blend positions', async () => {

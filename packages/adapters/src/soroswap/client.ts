@@ -1,7 +1,7 @@
 import type { StellarNetwork } from '@nest/domain/network';
 import { z } from 'zod';
 
-import type { SwapVenue } from '../venue.ts';
+import { type SwapVenue, VenueRefusal } from '../venue.ts';
 
 const BASE_URL = 'https://api.soroswap.finance';
 const TIMEOUT_MS = 30_000;
@@ -64,6 +64,7 @@ const QuoteSchema = z.looseObject({
 });
 
 const BuildSchema = z.looseObject({ xdr: z.string().min(1) });
+const TrustlineActionSchema = z.looseObject({ action: z.literal('CREATE_TRUSTLINE') });
 
 export function createSoroswapClient(options: { apiKey: string; fetch?: typeof fetch }) {
   const send = options.fetch ?? fetch;
@@ -76,8 +77,20 @@ export function createSoroswapClient(options: { apiKey: string; fetch?: typeof f
       signal: AbortSignal.timeout(TIMEOUT_MS),
     });
     const text = await response.text();
-    if (!response.ok)
+    if (!response.ok) {
+      if (path === '/quote/build' && response.status === 428) {
+        let body: unknown;
+        try {
+          body = JSON.parse(text);
+        } catch {
+          body = null;
+        }
+        if (TrustlineActionSchema.safeParse(body).success) {
+          throw new VenueRefusal('TRUSTLINE_MISSING', 'Add the swap’s USDC trustline, then compare again.');
+        }
+      }
       throw new SoroswapError(`Soroswap ${path} answered ${response.status}: ${text.slice(0, 300)}`, response.status);
+    }
     try {
       return JSON.parse(text);
     } catch {
